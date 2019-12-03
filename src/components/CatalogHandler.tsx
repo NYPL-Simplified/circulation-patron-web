@@ -4,7 +4,7 @@ import * as tinycolor from "tinycolor2";
 import { State } from "opds-web-client/lib/state";
 import DataFetcher from "opds-web-client/lib/DataFetcher";
 import { Router, Route, browserHistory } from "react-router";
-const OPDSCatalog = require("opds-web-client");
+import OPDSCatalog from "opds-web-client";
 import Header from "./Header";
 import Footer from "./Footer";
 import BookDetailsContainer from "./BookDetailsContainer";

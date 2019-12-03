@@ -25,9 +25,9 @@ export default class ReportProblemLink extends React.Component<
 
     return (
       <div>
-        <a href="javascript:void(0);" {...props} onClick={this.openForm}>
+        <button href="javascript:void(0);" {...props} onClick={this.openForm}>
           Report a Problem
-        </a>
+        </button>
         {this.state.showForm && (
           <ReportProblemForm
             reportUrl={this.props.reportUrl}

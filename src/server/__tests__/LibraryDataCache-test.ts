@@ -134,6 +134,7 @@ describe("LibraryDataCache", () => {
           rel: "stylesheet"
         }
       ],
+      // eslint-disable-next-line
       web_color_scheme: {
         background: "#000000",
         foreground: "#ffffff"
@@ -210,6 +211,7 @@ describe("LibraryDataCache", () => {
             rel: "logo"
           }
         ],
+        // eslint-disable-next-line
         web_color_scheme: {
           background: "#000000",
           foreground: "#ffffff"

@@ -14,6 +14,7 @@ export interface RegistryEntry {
 export interface AuthDocument {
   title: string;
   links: Link[];
+  // eslint-disable-next-line
   web_color_scheme?: {
     background?: string;
     foreground?: string;

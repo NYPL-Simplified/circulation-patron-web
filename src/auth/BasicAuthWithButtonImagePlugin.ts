@@ -5,6 +5,7 @@ import BasicAuthButtonWithImage from "./components/BasicAuthButtonWithImage";
 const BasicAuthWithButtonImagePlugin: AuthPlugin = {
   type: "http://opds-spec.org/auth/basic",
 
+  // eslint-disable-next-line
   lookForCredentials: () => {},
 
   formComponent: BasicAuthForm,

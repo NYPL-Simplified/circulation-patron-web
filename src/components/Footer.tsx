@@ -33,7 +33,7 @@ export default class Footer extends React.Component<FooterProps, {}> {
       <ul aria-label="about links" className="list-inline">
         {this.links().map(link => (
           <li key={link.url}>
-            <a href={link.url} target="_blank">
+            <a href={link.url} target="_blank" rel="noopener noreferrer">
               {link.text}
             </a>
           </li>

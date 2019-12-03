@@ -26,6 +26,11 @@ module.exports = {
     "plugin:prettier/recommended"
   ],
   rules: {
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { functions: false, variables: false }
+    ],
+    "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/class-name-casing": "error",
     "@typescript-eslint/prefer-namespace-keyword": "error",
     camelcase: "error",
