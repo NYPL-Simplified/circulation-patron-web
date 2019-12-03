@@ -13,7 +13,7 @@ module.exports = {
     // "@typescript-eslint/tslint",
     "jsx-a11y"
   ],
-  extends: ["plugin:jsx-a11y/strict"],
+  extends: ["plugin:jsx-a11y/strict", "plugin:prettier/recommended"],
   rules: {
     "@typescript-eslint/class-name-casing": "error",
     // must disable base rule to not cause conflicts
