@@ -10,7 +10,7 @@ import BorrowButton from "opds-web-client/lib/components/BorrowButton";
 import ReportProblemLink from "../ReportProblemLink";
 import RevokeButton from "../RevokeButton";
 
-let book = {
+const book = {
   id: "urn:librarysimplified.org/terms/id/3M%20ID/crrmnr9",
   url: "http://circulation.librarysimplified.org/works/3M/crrmnr9",
   title: "The Mayan Secrets",
@@ -89,10 +89,10 @@ let book = {
 
 describe("BookDetails", () => {
   let wrapper;
-  let noop = stub().returns(new Promise((resolve, reject) => resolve()));
-  let fetchComplaintTypes = noop;
-  let postComplaint = noop;
-  let problemTypes = ["type1", "type2"];
+  const noop = stub().returns(new Promise((resolve, reject) => resolve()));
+  const fetchComplaintTypes = noop;
+  const postComplaint = noop;
+  const problemTypes = ["type1", "type2"];
 
   beforeEach(() => {
     wrapper = shallow(
@@ -109,29 +109,31 @@ describe("BookDetails", () => {
   });
 
   it("shows audience and target age", () => {
-    let audience = wrapper.find(".audience");
+    const audience = wrapper.find(".audience");
     expect(audience.text()).to.equal("Audience: Children (age 10-12)");
   });
 
   it("shows categories", () => {
-    let categories = wrapper.find(".categories");
+    const categories = wrapper.find(".categories");
     expect(categories.text()).to.equal("Categories: Adventure, Fantasy");
   });
 
   it("doesn't show categories when there aren't any", () => {
-    let bookCopy = Object.assign({}, book, { raw: { category: [], link: [] } });
+    const bookCopy = Object.assign({}, book, {
+      raw: { category: [], link: [] }
+    });
     wrapper.setProps({ book: bookCopy });
-    let categories = wrapper.find(".categories");
+    const categories = wrapper.find(".categories");
     expect(categories.length).to.equal(0);
   });
 
   it("shows distributor", () => {
-    let distributor = wrapper.find(".distributed-by");
+    const distributor = wrapper.find(".distributed-by");
     expect(distributor.text()).to.equal("Distributed By: Overdrive");
   });
 
   it("shows report problem link", () => {
-    let link = wrapper.find(ReportProblemLink);
+    const link = wrapper.find(ReportProblemLink);
     expect(link.length).to.equal(1);
     expect(link.props().reportUrl).to.equal("http://example.com/report");
     expect(link.props().fetchTypes).to.equal(fetchComplaintTypes);
@@ -140,14 +142,14 @@ describe("BookDetails", () => {
   });
 
   it("shows revoke button if book is open access", () => {
-    let button = wrapper.find(RevokeButton);
+    const button = wrapper.find(RevokeButton);
     expect(button.length).to.equal(1);
     expect(button.props().revoke).to.equal(wrapper.instance().revoke);
     expect(button.props().children).to.equal("Return Now");
   });
 
   it("doesn't show revoke button if book isn't open access", () => {
-    let bookCopy = Object.assign({}, book, { openAccessLinks: [] });
+    const bookCopy = Object.assign({}, book, { openAccessLinks: [] });
     wrapper = shallow(
       <BookDetails
         book={bookCopy}
@@ -159,12 +161,12 @@ describe("BookDetails", () => {
         problemTypes={problemTypes}
       />
     );
-    let button = wrapper.find(RevokeButton);
+    const button = wrapper.find(RevokeButton);
     expect(button.length).to.equal(0);
   });
 
   it("shows app info for borrowed book", () => {
-    let bookCopy = Object.assign({}, book, {
+    const bookCopy = Object.assign({}, book, {
       openAccessLinks: [],
       fulfillmentLinks: ["http://fulfill"],
       availability: { status: "available" }
@@ -180,7 +182,7 @@ describe("BookDetails", () => {
         problemTypes={problemTypes}
       />
     );
-    let appInfo = wrapper.find(".app-info");
+    const appInfo = wrapper.find(".app-info");
     expect(appInfo.length).to.equal(1);
     expect(appInfo.text()).to.contain("app");
   });

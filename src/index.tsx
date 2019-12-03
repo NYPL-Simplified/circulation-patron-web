@@ -6,7 +6,7 @@ import { singleLibraryRoutes, multiLibraryRoutes } from "./routes";
 
 class CirculationPatronWeb {
   constructor(config) {
-    let divId = "circulation-patron-web";
+    const divId = "circulation-patron-web";
 
     ReactDOM.render(
       <ContextProvider {...config}>

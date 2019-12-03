@@ -28,7 +28,9 @@ export default class ReportProblemForm extends React.Component<
   }
 
   render() {
-    let title = this.state.submitted ? "Problem Reported" : "Report a Problem";
+    const title = this.state.submitted
+      ? "Problem Reported"
+      : "Report a Problem";
 
     return (
       <div className="problem-form">
@@ -92,7 +94,7 @@ export default class ReportProblemForm extends React.Component<
 
   submit() {
     if (this.typeSelected()) {
-      let data = {
+      const data = {
         type: (this.refs as any).type.value,
         detail: (this.refs as any).detail.value
       };

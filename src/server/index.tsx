@@ -18,7 +18,7 @@ const initialize = async () => {
   let registryBase = process.env.REGISTRY_BASE;
 
   const circManagerBase = process.env.SIMPLIFIED_CATALOG_BASE;
-  let routes = circManagerBase ? singleLibraryRoutes : multiLibraryRoutes;
+  const routes = circManagerBase ? singleLibraryRoutes : multiLibraryRoutes;
 
   const config = {};
   const configFile = process.env.CONFIG_FILE;
@@ -35,9 +35,9 @@ const initialize = async () => {
     } else {
       configText = fs.readFileSync(configFile, "utf8");
     }
-    for (let entry of configText.split("\n")) {
+    for (const entry of configText.split("\n")) {
       if (entry && entry.charAt(0) !== "#") {
-        let [path, circManagerUrl] = entry.split("|");
+        const [path, circManagerUrl] = entry.split("|");
         config[path] = circManagerUrl;
       }
     }
@@ -57,7 +57,7 @@ const initialize = async () => {
     registryBase = "http://localhost:7000";
   }
 
-  const shortenUrls: boolean = !(process.env.SHORTEN_URLS === "false");
+  const shortenUrls = !(process.env.SHORTEN_URLS === "false");
 
   const distDir = process.env.SIMPLIFIED_PATRON_DIST || "dist";
   const cacheExpirationSeconds = parseInt(
@@ -87,13 +87,13 @@ const initialize = async () => {
             redirectLocation.pathname + redirectLocation.search
           );
         } else if (renderProps) {
-          let { library, collectionUrl, bookUrl } = renderProps.params;
+          const { library, collectionUrl, bookUrl } = renderProps.params;
 
           let libraryData;
           if (circManagerBase) {
             // We're using a single circ manager library instead of a registry.
-            let catalog = await cache.getCatalog(circManagerBase);
-            let authDocument = await cache.getAuthDocument(catalog);
+            const catalog = await cache.getCatalog(circManagerBase);
+            const authDocument = await cache.getAuthDocument(catalog);
             libraryData = {
               onlyLibrary: true,
               catalogUrl: circManagerBase,
@@ -107,11 +107,11 @@ const initialize = async () => {
               return;
             }
           }
-          let catalogUrl = libraryData.catalogUrl;
+          const catalogUrl = libraryData.catalogUrl;
 
           if (!collectionUrl && !bookUrl) {
-            let urlShortener = new UrlShortener(catalogUrl, shortenUrls);
-            let preparedCollectionUrl = urlShortener.prepareCollectionUrl(
+            const urlShortener = new UrlShortener(catalogUrl, shortenUrls);
+            const preparedCollectionUrl = urlShortener.prepareCollectionUrl(
               catalogUrl
             );
             // With short URLS, if the home URL is the library root URL, the prepared URL
@@ -175,16 +175,16 @@ const initialize = async () => {
     library: LibraryData,
     preloadedState: State
   ) {
-    let collectionTitle =
+    const collectionTitle =
       preloadedState.collection &&
       preloadedState.collection.data &&
       preloadedState.collection.data.title;
-    let bookTitle =
+    const bookTitle =
       preloadedState.book &&
       preloadedState.book.data &&
       preloadedState.book.data.title;
-    let details = bookTitle || collectionTitle;
-    let pageTitle = library.catalogName + (details ? " - " + details : "");
+    const details = bookTitle || collectionTitle;
+    const pageTitle = library.catalogName + (details ? " - " + details : "");
 
     return `
       <!doctype html>
@@ -214,9 +214,7 @@ const initialize = async () => {
       `;
   }
 
-  function renderErrorPage(
-    message: string = "There was a problem with this request."
-  ) {
+  function renderErrorPage(message = "There was a problem with this request.") {
     return `
       <!doctype html>
       <html lang="en">

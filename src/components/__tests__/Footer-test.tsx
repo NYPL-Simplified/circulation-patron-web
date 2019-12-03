@@ -7,7 +7,7 @@ import Footer from "../Footer";
 
 describe("Footer", () => {
   let wrapper;
-  let collection = {
+  const collection = {
     id: "collection",
     title: "Collection",
     url: "Collection",
@@ -27,10 +27,10 @@ describe("Footer", () => {
 
   describe("rendering", () => {
     it("displays links", () => {
-      let links = wrapper.find("a");
+      const links = wrapper.find("a");
       expect(links.length).to.equal(2);
-      let aboutLink = links.at(0);
-      let termsLink = links.at(1);
+      const aboutLink = links.at(0);
+      const termsLink = links.at(1);
       expect(aboutLink.props().href).to.equal("about");
       expect(termsLink.props().href).to.equal("terms");
       expect(aboutLink.text()).to.equal("About");

@@ -16,7 +16,7 @@ export default class OAuthButton extends React.Component<
   {}
 > {
   render() {
-    let currentUrl = window.location.origin + window.location.pathname;
+    const currentUrl = window.location.origin + window.location.pathname;
     let authUrl;
     let image;
     for (const link of this.props.provider.method.links || []) {
@@ -33,7 +33,7 @@ export default class OAuthButton extends React.Component<
         break;
       }
     }
-    let label = this.props.provider.method.description
+    const label = this.props.provider.method.description
       ? "Log in with " + this.props.provider.method.description
       : "Log in";
     return authUrl ? (

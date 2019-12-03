@@ -1,3 +1,3 @@
 // Ignore imported stylesheets.
-let noop = () => {};
+const noop = () => {};
 require.extensions[".scss"] = noop;

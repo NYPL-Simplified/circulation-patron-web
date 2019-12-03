@@ -11,10 +11,10 @@ describe("fetchComplaintTypes", () => {
     fetchMock.restore();
   });
 
-  let reportUrl = "http://example.com/report";
+  const reportUrl = "http://example.com/report";
 
   it("dispatches request, load, and success", async () => {
-    let dispatch = stub();
+    const dispatch = stub();
     fetchResponse = "type1\ntype2\ntype3";
     fetchMock.mock(reportUrl, fetchResponse);
 
@@ -32,7 +32,7 @@ describe("fetchComplaintTypes", () => {
   });
 
   it("dispatches failure", async () => {
-    let dispatch = stub();
+    const dispatch = stub();
     fetchMock.mock(reportUrl, Promise.reject({ message: "test error" }));
 
     try {
@@ -52,14 +52,14 @@ describe("fetchComplaintTypes", () => {
   });
 
   describe("postComplaint", () => {
-    let reportUrl = "http://example.com/report";
-    let data = {
+    const reportUrl = "http://example.com/report";
+    const data = {
       type: "bad-description",
       detail: "i would love it if this description were written as a sonnet"
     };
 
     it("dispatches request, load, and success", async () => {
-      let dispatch = stub();
+      const dispatch = stub();
       fetchResponse = null;
       fetchMock.mock(reportUrl, { status: 200, body: fetchResponse });
 
@@ -72,7 +72,7 @@ describe("fetchComplaintTypes", () => {
     });
 
     it("dispatches failure", async () => {
-      let dispatch = stub();
+      const dispatch = stub();
       fetchMock.mock(reportUrl, Promise.reject({ message: "test error" }));
 
       try {

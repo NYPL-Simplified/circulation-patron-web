@@ -11,10 +11,10 @@ export default class UrlShortener {
 
   private catalogBase(): string {
     // The origin and library short name in a catalog URL are safe to remove.
-    let url = new URL(this.catalogUrl);
-    let origin = url.origin;
-    let pathname = url.pathname;
-    let libraryShortName =
+    const url = new URL(this.catalogUrl);
+    const origin = url.origin;
+    const pathname = url.pathname;
+    const libraryShortName =
       pathname.split("/").length > 1 && pathname.split("/")[1];
     return origin + "/" + libraryShortName;
   }

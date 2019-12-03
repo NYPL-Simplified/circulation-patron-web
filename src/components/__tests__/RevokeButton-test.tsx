@@ -9,14 +9,14 @@ import ConfirmationPopup from "../ConfirmationPopup";
 
 describe("RevokeButton", () => {
   let wrapper;
-  let revoke = stub();
+  const revoke = stub();
 
   beforeEach(() => {
     wrapper = shallow(<RevokeButton revoke={revoke}>Revoke</RevokeButton>);
   });
 
   it("shows button", () => {
-    let button = wrapper.find("button");
+    const button = wrapper.find("button");
     expect(button.text()).to.equal("Revoke");
     expect(button.props().onClick).to.equal(
       wrapper.instance().showConfirmationPopup
@@ -24,9 +24,9 @@ describe("RevokeButton", () => {
   });
 
   it("shows popup when button is clicked", () => {
-    let button = wrapper.find("button");
+    const button = wrapper.find("button");
     button.simulate("click");
-    let popup = wrapper.find(ConfirmationPopup);
+    const popup = wrapper.find(ConfirmationPopup);
     expect(popup.props().confirm).to.equal(wrapper.instance().revoke);
     expect(popup.props().cancel).to.equal(
       wrapper.instance().hideConfirmationPopup

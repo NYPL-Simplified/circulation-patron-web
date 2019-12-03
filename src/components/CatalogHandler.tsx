@@ -46,8 +46,8 @@ export default class CatalogHandler extends React.Component<
   render() {
     let { collectionUrl, bookUrl } = this.props.params;
 
-    let pageTitleTemplate = (collectionTitle, bookTitle) => {
-      let details = bookTitle || collectionTitle;
+    const pageTitleTemplate = (collectionTitle, bookTitle) => {
+      const details = bookTitle || collectionTitle;
       return (
         this.context.library.catalogName + (details ? " - " + details : "")
       );
@@ -57,15 +57,15 @@ export default class CatalogHandler extends React.Component<
       this.context.urlShortener.expandCollectionUrl(collectionUrl) || null;
     bookUrl = this.context.urlShortener.expandBookUrl(bookUrl) || null;
 
-    let cssVariables = {};
+    const cssVariables = {};
     if (this.context.library.logoUrl) {
       cssVariables["--logo"] = `url('${this.context.library.logoUrl}')`;
     }
-    let background = tinycolor(
+    const background = tinycolor(
       (this.context.library.colors && this.context.library.colors.background) ||
         "#ffffff"
     );
-    let foreground = tinycolor(
+    const foreground = tinycolor(
       (this.context.library.colors && this.context.library.colors.foreground) ||
         "#000000"
     );

@@ -81,7 +81,7 @@ export default class LibraryDataCache {
     authDocument: AuthDocument,
     catalog: OPDSFeed
   ) {
-    let data = {
+    const data = {
       catalogName: authDocument["title"],
       colors: authDocument["web_color_scheme"],
       logoUrl: null,

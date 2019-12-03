@@ -23,7 +23,7 @@ export default class BasicAuthButtonWithImage extends React.Component<
         break;
       }
     }
-    let label = this.props.provider.method.description
+    const label = this.props.provider.method.description
       ? "Log in with " + this.props.provider.method.description
       : "Log in";
     return (

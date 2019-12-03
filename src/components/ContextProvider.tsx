@@ -36,7 +36,7 @@ export default class ContextProvider extends React.Component<
         path += "/" + library;
       }
       if (collectionUrl) {
-        let preparedCollectionUrl = this.urlShortener.prepareCollectionUrl(
+        const preparedCollectionUrl = this.urlShortener.prepareCollectionUrl(
           collectionUrl
         );
         if (preparedCollectionUrl) {

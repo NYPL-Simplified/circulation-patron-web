@@ -68,7 +68,7 @@ export function postComplaint(url: string, data: ComplaintData) {
   return (dispatch): Promise<string[]> => {
     dispatch(postComplaintRequest(url));
     return new Promise((resolve, reject) => {
-      let options = {
+      const options = {
         method: "POST",
         headers: {
           Accept: "application/json",

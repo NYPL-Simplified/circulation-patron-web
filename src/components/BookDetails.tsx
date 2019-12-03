@@ -33,8 +33,8 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
   }
 
   fields() {
-    let fields = super.fields();
-    let categoriesIndex = fields.findIndex(
+    const fields = super.fields();
+    const categoriesIndex = fields.findIndex(
       field => field.name === "Categories"
     );
     fields[categoriesIndex].value = this.categories();
@@ -54,13 +54,13 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
       return null;
     }
 
-    let categories = this.props.book.raw.category;
+    const categories = this.props.book.raw.category;
 
     if (!categories) {
       return null;
     }
 
-    let audience = categories.find(
+    const audience = categories.find(
       category =>
         category["$"]["scheme"] &&
         category["$"]["scheme"]["value"] === "http://schema.org/audience"
@@ -76,14 +76,14 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
       return audienceStr;
     }
 
-    let targetAge = categories.find(
+    const targetAge = categories.find(
       category =>
         category["$"]["scheme"] &&
         category["$"]["scheme"]["value"] === "http://schema.org/typicalAgeRange"
     );
 
     if (targetAge) {
-      let targetAgeStr =
+      const targetAgeStr =
         targetAge["$"]["label"] && targetAge["$"]["label"]["value"];
       audienceStr += " (age " + targetAgeStr + ")";
     }
@@ -96,12 +96,12 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
       return null;
     }
 
-    let audienceSchemas = [
+    const audienceSchemas = [
       "http://schema.org/audience",
       "http://schema.org/typicalAgeRange"
     ];
-    let fictionScheme = "http://librarysimplified.org/terms/fiction/";
-    let rawCategories = this.props.book.raw.category;
+    const fictionScheme = "http://librarysimplified.org/terms/fiction/";
+    const rawCategories = this.props.book.raw.category;
 
     let categories = rawCategories
       .filter(
@@ -133,12 +133,12 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
       return null;
     }
 
-    let rawDistributionTags = this.props.book.raw["bibframe:distribution"];
+    const rawDistributionTags = this.props.book.raw["bibframe:distribution"];
     if (!rawDistributionTags || rawDistributionTags.length < 1) {
       return null;
     }
 
-    let distributor = rawDistributionTags[0]["$"]["bibframe:ProviderName"];
+    const distributor = rawDistributionTags[0]["$"]["bibframe:ProviderName"];
     if (!distributor) {
       return null;
     }
@@ -147,7 +147,7 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
   }
 
   reportUrl() {
-    let reportLink = this.props.book.raw.link.find(
+    const reportLink = this.props.book.raw.link.find(
       link => link["$"]["rel"]["value"] === "issues"
     );
 
@@ -159,7 +159,7 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
   }
 
   revokeUrl() {
-    let revokeLink = this.props.book.raw.link.find(
+    const revokeLink = this.props.book.raw.link.find(
       link =>
         link["$"]["rel"]["value"] ===
         "http://librarysimplified.org/terms/rel/revoke"
@@ -173,12 +173,12 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
   }
 
   revoke() {
-    let revokeUrl = this.revokeUrl();
+    const revokeUrl = this.revokeUrl();
     return this.props.updateBook(revokeUrl);
   }
 
   circulationLinks() {
-    let links = super.circulationLinks();
+    const links = super.circulationLinks();
     if (this.isBorrowed()) {
       links.push(
         <div className="app-info">
@@ -203,7 +203,7 @@ export class BookDetails extends DefaultBookDetails<BookDetailsProps> {
   }
 
   rightColumnLinks() {
-    let reportUrl = this.reportUrl();
+    const reportUrl = this.reportUrl();
     return reportUrl ? (
       <ReportProblemLink
         className="btn btn-link"

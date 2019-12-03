@@ -47,18 +47,18 @@ describe("Header", () => {
 
   describe("rendering", () => {
     it("displays library name", () => {
-      let brand = wrapper.find(Navbar.Brand);
+      const brand = wrapper.find(Navbar.Brand);
       expect(brand.containsMatchingElement(context.library.catalogName)).to.be
         .true;
     });
 
     it("adds class if there's a logo", () => {
-      let brand = wrapper.find(Navbar.Brand);
+      const brand = wrapper.find(Navbar.Brand);
       expect(brand.props().className).to.contain("with-logo");
     });
 
     it("displays link to catalog", () => {
-      let link = wrapper
+      const link = wrapper
         .find(CatalogLink)
         .filterWhere(link => link.children().text() === "Catalog");
       expect(link.prop("collectionUrl")).to.equal("home url");
@@ -66,21 +66,21 @@ describe("Header", () => {
 
     it("displays link to loans when currently signed in", () => {
       wrapper.setProps({ isSignedIn: true });
-      let link = wrapper
+      const link = wrapper
         .find(CatalogLink)
         .filterWhere(link => link.children().text() === "My Books");
       expect(link.prop("collectionUrl")).to.equal("loans url");
     });
 
     it("hides link to loans when signed out", () => {
-      let link = wrapper
+      const link = wrapper
         .find(CatalogLink)
         .filterWhere(link => link.children().text() === "My Books");
       expect(link.length).to.equal(0);
     });
 
     it("displays link to sign in if not currently signed in", () => {
-      let link = wrapper
+      const link = wrapper
         .find("a")
         .filterWhere(link => link.text() === "Sign In");
       expect(link.prop("onClick")).to.equal(wrapper.instance().signIn);
@@ -88,7 +88,7 @@ describe("Header", () => {
 
     it("displays link to sign out if currently signed in", () => {
       wrapper.setProps({ isSignedIn: true });
-      let link = wrapper
+      const link = wrapper
         .find("a")
         .filterWhere(link => link.text() === "Sign Out");
       expect(link.text()).to.equal("Sign Out");
@@ -96,11 +96,11 @@ describe("Header", () => {
     });
 
     it("displays header links from context", () => {
-      let link1 = wrapper
+      const link1 = wrapper
         .find("a")
         .filterWhere(link => link.text() === "link 1");
       expect(link1.props().href).to.equal("http://link1");
-      let link2 = wrapper
+      const link2 = wrapper
         .find("a")
         .filterWhere(link => link.text() === "link 2");
       expect(link2.props().href).to.equal("http://link2");
@@ -109,7 +109,7 @@ describe("Header", () => {
 
   describe("behavior", () => {
     it("fetches loans when sign in link is clicked", () => {
-      let link = wrapper
+      const link = wrapper
         .find("a")
         .filterWhere(link => link.text() === "Sign In");
       link.simulate("click");
@@ -119,7 +119,7 @@ describe("Header", () => {
 
     it("clears auth credentials and loads catalog when sign out link is clicked", () => {
       wrapper.setProps({ isSignedIn: true });
-      let link = wrapper
+      const link = wrapper
         .find("a")
         .filterWhere(link => link.text() === "Sign Out");
       link.simulate("click");

@@ -2,7 +2,7 @@ import { CollectionData, LinkData } from "opds-web-client/lib/interfaces";
 import { hierarchyComputeBreadcrumbs } from "opds-web-client/lib/components/Breadcrumbs";
 
 // Custom URL comparator to ignore trailing slashes.
-let urlComparator = (url1: string, url2: string): boolean => {
+const urlComparator = (url1: string, url2: string): boolean => {
   if (url1.endsWith("/")) {
     url1 = url1.slice(0, -1);
   }
@@ -25,7 +25,7 @@ export default (
     collection.raw["simplified:breadcrumbs"][0] &&
     collection.raw["simplified:breadcrumbs"][0].link
   ) {
-    let rawLinks = collection.raw["simplified:breadcrumbs"][0].link;
+    const rawLinks = collection.raw["simplified:breadcrumbs"][0].link;
     links = rawLinks.map(link => {
       return {
         url: link["$"].href.value,

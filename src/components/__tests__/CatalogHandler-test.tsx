@@ -14,7 +14,7 @@ describe("CatalogHandler", () => {
   let params;
   let context;
   let child;
-  let name = "Example";
+  const name = "Example";
 
   beforeEach(() => {
     store = buildStore();
@@ -38,7 +38,7 @@ describe("CatalogHandler", () => {
   it("renders OPDSCatalog", () => {
     wrapper = shallow(<CatalogHandler params={params} />, { context });
 
-    let catalog = wrapper.find(OPDSCatalog);
+    const catalog = wrapper.find(OPDSCatalog);
     expect(catalog.prop("collectionUrl")).to.equal("collectionurl");
     expect(catalog.prop("bookUrl")).to.equal("library/bookurl");
     expect(catalog.prop("Header").name).to.equal("Header");
@@ -48,7 +48,7 @@ describe("CatalogHandler", () => {
     );
     expect(catalog.prop("initialState")).to.equal(store.getState());
     expect(catalog.prop("computeBreadcrumbs")).to.be.ok;
-    let pageTitleTemplate = catalog.prop("pageTitleTemplate");
+    const pageTitleTemplate = catalog.prop("pageTitleTemplate");
     expect(pageTitleTemplate("Collection", "Book")).to.equal("Example - Book");
     expect(pageTitleTemplate("Collection", null)).to.equal(
       "Example - Collection"
@@ -79,7 +79,7 @@ describe("CatalogHandler", () => {
     expect(cssVariables["--pagetextcolorlight"]).to.equal("#000000");
     expect(cssVariables["--highlightcolor"]).to.equal("#000000");
 
-    let library = {
+    const library = {
       ...context.library,
       colors: { background: "#000000", foreground: "#ffffff" }
     };

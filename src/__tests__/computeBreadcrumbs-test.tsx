@@ -3,7 +3,7 @@ import { expect } from "chai";
 import computeBreadcrumbs from "../computeBreadcrumbs";
 
 describe("computeBreadcrumbs", () => {
-  let collection = {
+  const collection = {
     id: "id",
     url: "url",
     title: "title",
@@ -11,10 +11,10 @@ describe("computeBreadcrumbs", () => {
     books: [],
     navigationLinks: []
   };
-  let history = [];
+  const history = [];
 
   it("uses breadcrumbs if they're in the raw collection data", () => {
-    let raw = {
+    const raw = {
       "simplified:breadcrumbs": [
         {
           link: [
@@ -28,8 +28,8 @@ describe("computeBreadcrumbs", () => {
         }
       ]
     };
-    let data = Object.assign({}, collection, { raw });
-    let expected = [
+    const data = Object.assign({}, collection, { raw });
+    const expected = [
       { url: "breadcrumb url", text: "breadcrumb title" },
       { url: collection.url, text: collection.title }
     ];

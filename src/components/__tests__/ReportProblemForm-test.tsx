@@ -31,14 +31,14 @@ describe("ReportProblemForm", () => {
 
   describe("rendering", () => {
     it("displays title", () => {
-      let title = wrapper.find("h3");
+      const title = wrapper.find("h3");
       expect(title.text()).to.equal("Report a Problem");
     });
 
     it("displays type dropdown", () => {
-      let options = wrapper.find("select").find("option");
-      let values = options.map(option => option.props().value);
-      let names = options.map(option => option.text());
+      const options = wrapper.find("select").find("option");
+      const values = options.map(option => option.props().value);
+      const names = options.map(option => option.text());
       expect(values).to.deep.equal([""].concat(types));
       expect(names).to.deep.equal(
         ["choose a type"].concat(
@@ -48,19 +48,19 @@ describe("ReportProblemForm", () => {
     });
 
     it("displays details input", () => {
-      let details = wrapper.find("textarea");
+      const details = wrapper.find("textarea");
       expect(details.props().placeholder).to.equal("details");
     });
 
     it("displays submit button", () => {
-      let button = wrapper
+      const button = wrapper
         .find("button")
         .filterWhere(button => button.text() === "Submit");
       expect(button.props().onClick).to.equal(wrapper.instance().submit);
     });
 
     it("displays cancel button", () => {
-      let button = wrapper
+      const button = wrapper
         .find("button")
         .filterWhere(button => button.text() === "Cancel");
       expect(button.props().onClick).to.equal(close);
@@ -74,11 +74,11 @@ describe("ReportProblemForm", () => {
     });
 
     it("displays error if submitted without type", () => {
-      let button = wrapper
+      const button = wrapper
         .find("button")
         .filterWhere(button => button.text() === "Submit");
       button.simulate("click");
-      let error = wrapper.find(".error");
+      const error = wrapper.find(".error");
       expect(error.text()).to.equal("You must select a type");
     });
 
@@ -87,7 +87,7 @@ describe("ReportProblemForm", () => {
         type: { value: "bad-description" },
         detail: { value: "what an imperfect description!" }
       };
-      let button = wrapper
+      const button = wrapper
         .find("button")
         .filterWhere(button => button.text() === "Submit");
       button.simulate("click");
@@ -106,15 +106,15 @@ describe("ReportProblemForm", () => {
       };
       await wrapper.instance().submit();
 
-      let title = wrapper.find("h3");
+      const title = wrapper.find("h3");
       expect(title.text()).to.equal("Problem Reported");
-      let closeButton = wrapper.find("button").at(1);
+      const closeButton = wrapper.find("button").at(1);
       expect(closeButton.props().onClick).to.equal(close);
     });
 
     it("closes", () => {
       wrapper.setState({ submitted: true });
-      let closeButton = wrapper
+      const closeButton = wrapper
         .find("button")
         .filterWhere(button => button.text() === "Close");
       closeButton.simulate("click");

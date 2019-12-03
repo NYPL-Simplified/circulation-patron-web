@@ -15,12 +15,12 @@ export default class BookDetailsContainer extends React.Component<
   };
 
   render() {
-    let child = React.Children.only(this.props.children);
-    let bookProps = Object.assign({}, child.props, {
+    const child = React.Children.only(this.props.children);
+    const bookProps = Object.assign({}, child.props, {
       store: this.context.store
     });
-    let book = React.createElement(BookDetails, child.props);
-    let relatedUrl = this.relatedUrl();
+    const book = React.createElement(BookDetails, child.props);
+    const relatedUrl = this.relatedUrl();
 
     return (
       <div className="book-details-container">
@@ -41,13 +41,13 @@ export default class BookDetailsContainer extends React.Component<
   }
 
   relatedUrl(): string {
-    let { book } = this.props;
+    const { book } = this.props;
     if (!book) return null;
 
-    let links = book.raw.link;
+    const links = book.raw.link;
     if (!links) return null;
 
-    let relatedLink = links.find(link => link.$.rel.value === "related");
+    const relatedLink = links.find(link => link.$.rel.value === "related");
     if (!relatedLink) return null;
 
     return relatedLink.$.href.value;
