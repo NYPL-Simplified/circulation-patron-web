@@ -11,33 +11,13 @@ module.exports = {
   plugins: [
     "@typescript-eslint",
     // "@typescript-eslint/tslint",
-    "jsx-a11y"
+    "jsx-a11y",
+    "prettier"
   ],
   extends: ["plugin:jsx-a11y/strict", "plugin:prettier/recommended"],
   rules: {
     "@typescript-eslint/class-name-casing": "error",
-    // must disable base rule to not cause conflicts
-    indent: "off",
-    "@typescript-eslint/indent": ["error", 2],
-    "@typescript-eslint/member-delimiter-style": [
-      "error",
-      {
-        multiline: {
-          delimiter: "none",
-          requireLast: true
-        },
-        singleline: {
-          delimiter: "semi",
-          requireLast: false
-        }
-      }
-    ],
     "@typescript-eslint/prefer-namespace-keyword": "error",
-    "@typescript-eslint/quotes": ["error", "double"],
-    // must disable base semi rule and use @typescript-eslint/semi instead
-    semi: "off",
-    "@typescript-eslint/semi": ["error"],
-    "@typescript-eslint/type-annotation-spacing": "error",
     camelcase: "error",
     eqeqeq: ["error", "smart"],
     "id-blacklist": [
@@ -55,10 +35,8 @@ module.exports = {
     "id-match": "error",
     "no-eval": "error",
     "no-redeclare": "error",
-    "no-trailing-spaces": "error",
     "no-underscore-dangle": "error",
-    "no-var": "error",
-    "spaced-comment": "error"
+    "no-var": "error"
 
     // a11y rules that are being replaced by "jsx-a11y"
     // "@typescript-eslint/tslint/config": [
