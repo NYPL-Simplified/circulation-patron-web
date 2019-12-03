@@ -9,6 +9,7 @@ module.exports = {
     sourceType: "module"
   },
   plugins: [
+    "react",
     "@typescript-eslint",
     // "@typescript-eslint/tslint",
     "jsx-a11y",
@@ -18,10 +19,11 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
     "plugin:jsx-a11y/strict",
-    "plugin:prettier/recommended",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   rules: {
     "@typescript-eslint/class-name-casing": "error",
@@ -87,5 +89,10 @@ module.exports = {
     //         }
     //     }
     // ]
+  },
+  settings: {
+    react: {
+      version: "detect"
+    }
   }
 };
