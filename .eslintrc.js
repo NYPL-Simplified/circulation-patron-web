@@ -16,6 +16,16 @@ module.exports = {
   ],
   extends: ["plugin:jsx-a11y/strict", "plugin:prettier/recommended"],
   rules: {
+    // must disable base rules when supplanting with typescript-eslint variation
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        vars: "all",
+        args: "after-used",
+        argsIgnorePattern: "^_"
+      }
+    ],
     "@typescript-eslint/class-name-casing": "error",
     "@typescript-eslint/prefer-namespace-keyword": "error",
     camelcase: "error",
