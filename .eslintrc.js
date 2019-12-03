@@ -14,18 +14,16 @@ module.exports = {
     "jsx-a11y",
     "prettier"
   ],
-  extends: ["plugin:jsx-a11y/strict", "plugin:prettier/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/strict",
+    "plugin:prettier/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
   rules: {
-    // must disable base rules when supplanting with typescript-eslint variation
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        vars: "all",
-        args: "after-used",
-        argsIgnorePattern: "^_"
-      }
-    ],
     "@typescript-eslint/class-name-casing": "error",
     "@typescript-eslint/prefer-namespace-keyword": "error",
     camelcase: "error",
