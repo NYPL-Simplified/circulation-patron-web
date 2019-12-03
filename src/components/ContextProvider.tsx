@@ -14,7 +14,10 @@ export interface ContextProviderProps extends React.Props<ContextProvider> {
   initialState?: CatalogState;
 }
 
-export default class ContextProvider extends React.Component<ContextProviderProps, {}> {
+export default class ContextProvider extends React.Component<
+  ContextProviderProps,
+  {}
+> {
   store: Store<State>;
   pathFor: PathFor;
   urlShortener: UrlShortener;
@@ -23,14 +26,19 @@ export default class ContextProvider extends React.Component<ContextProviderProp
     super(props);
     this.store = buildStore();
     const library = this.props.library.id;
-    this.urlShortener = new UrlShortener(this.props.library.catalogUrl, this.props.shortenUrls);
+    this.urlShortener = new UrlShortener(
+      this.props.library.catalogUrl,
+      this.props.shortenUrls
+    );
     this.pathFor = (collectionUrl: string, bookUrl: string, tab?: string) => {
       let path = "";
       if (library) {
         path += "/" + library;
       }
       if (collectionUrl) {
-        let preparedCollectionUrl = this.urlShortener.prepareCollectionUrl(collectionUrl);
+        let preparedCollectionUrl = this.urlShortener.prepareCollectionUrl(
+          collectionUrl
+        );
         if (preparedCollectionUrl) {
           path += `/collection/${preparedCollectionUrl}`;
         }
@@ -65,5 +73,5 @@ export default class ContextProvider extends React.Component<ContextProviderProp
 
   render() {
     return React.Children.only(this.props.children);
-  };
-};
+  }
+}

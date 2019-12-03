@@ -14,5 +14,4 @@ export const multiLibraryRoutes = [
   }
 ];
 
-
 export default multiLibraryRoutes;

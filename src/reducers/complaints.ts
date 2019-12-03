@@ -15,7 +15,10 @@ const initState: ComplaintsState = {
   error: null
 };
 
-export default (state: ComplaintsState = initState, action): ComplaintsState => {
+export default (
+  state: ComplaintsState = initState,
+  action
+): ComplaintsState => {
   switch (action.type) {
     case "FETCH_COMPLAINT_TYPES_REQUEST":
       return Object.assign({}, state, {

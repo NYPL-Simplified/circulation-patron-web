@@ -22,11 +22,7 @@ describe("Footer", () => {
   };
 
   beforeEach(() => {
-    wrapper = shallow(
-      <Footer
-        collection={collection}
-        />
-    );
+    wrapper = shallow(<Footer collection={collection} />);
   });
 
   describe("rendering", () => {

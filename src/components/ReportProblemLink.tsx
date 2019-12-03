@@ -9,7 +9,10 @@ export interface ReportProblemLinkProps extends React.HTMLProps<any> {
   types: string[];
 }
 
-export default class ReportProblemLink extends React.Component<ReportProblemLinkProps, any> {
+export default class ReportProblemLink extends React.Component<
+  ReportProblemLinkProps,
+  any
+> {
   constructor(props) {
     super(props);
     this.state = { showForm: false };
@@ -22,16 +25,18 @@ export default class ReportProblemLink extends React.Component<ReportProblemLink
 
     return (
       <div>
-        <a href="javascript:void(0);" {...props} onClick={this.openForm}>Report a Problem</a>
-        { this.state.showForm &&
+        <a href="javascript:void(0);" {...props} onClick={this.openForm}>
+          Report a Problem
+        </a>
+        {this.state.showForm && (
           <ReportProblemForm
             reportUrl={this.props.reportUrl}
             report={this.props.report}
             fetchTypes={this.props.fetchTypes}
             close={this.closeForm}
             types={this.props.types}
-            />
-        }
+          />
+        )}
       </div>
     );
   }

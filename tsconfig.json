@@ -8,8 +8,5 @@
     "types": ["mocha", "node"],
     "jsx": "react"
   },
-  "exclude": [
-    "lib",
-    "node_modules"
-  ]
+  "exclude": ["lib", "node_modules"]
 }

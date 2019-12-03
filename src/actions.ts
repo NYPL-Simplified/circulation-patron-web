@@ -14,31 +14,36 @@ export function fetchComplaintTypes(url: string) {
   return (dispatch): Promise<string[]> => {
     dispatch(this.fetchComplaintTypesRequest(url));
     return new Promise((resolve, reject) => {
-      fetch(url).then(response => {
-        if (response.ok) {
-          return response.text().then(text => text.split("\n")).catch(err => {
-            throw({
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            return response
+              .text()
+              .then(text => text.split("\n"))
+              .catch(err => {
+                throw {
+                  status: response.status,
+                  response: "Could not parse complaint types",
+                  url: url
+                };
+              });
+          } else {
+            throw {
               status: response.status,
-              response: "Could not parse complaint types",
+              response: "Could not fetch complaint types",
               url: url
-            });
-          });
-        } else {
-          throw({
-            status: response.status,
-            response: "Could not fetch complaint types",
-            url: url
-          });
-        }
-      })
-      .then((types: string[]) => {
-        dispatch(fetchComplaintTypesSuccess());
-        dispatch(loadComplaintTypes(types));
-        resolve(types);
-      }).catch(err => {
-        dispatch(fetchComplaintTypesFailure(err));
-        reject(err);
-      });
+            };
+          }
+        })
+        .then((types: string[]) => {
+          dispatch(fetchComplaintTypesSuccess());
+          dispatch(loadComplaintTypes(types));
+          resolve(types);
+        })
+        .catch(err => {
+          dispatch(fetchComplaintTypesFailure(err));
+          reject(err);
+        });
     });
   };
 }
@@ -66,30 +71,32 @@ export function postComplaint(url: string, data: ComplaintData) {
       let options = {
         method: "POST",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json"
         } as { [index: string]: string },
         body: JSON.stringify(data),
         credentials: "same-origin" as RequestCredentials
       };
-      fetch(url, options).then(response => {
-        if (response.ok) {
-          return;
-        } else {
-          throw({
-            status: response.status,
-            response: "Could not post complaint",
-            url: url
-          });
-        }
-      })
-      .then(() => {
-        dispatch(postComplaintSuccess());
-        resolve();
-      }).catch(err => {
-        dispatch(postComplaintFailure(err));
-        reject(err);
-      });
+      fetch(url, options)
+        .then(response => {
+          if (response.ok) {
+            return;
+          } else {
+            throw {
+              status: response.status,
+              response: "Could not post complaint",
+              url: url
+            };
+          }
+        })
+        .then(() => {
+          dispatch(postComplaintSuccess());
+          resolve();
+        })
+        .catch(err => {
+          dispatch(postComplaintFailure(err));
+          reject(err);
+        });
     });
   };
 }

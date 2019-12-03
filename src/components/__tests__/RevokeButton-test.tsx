@@ -12,19 +12,15 @@ describe("RevokeButton", () => {
   let revoke = stub();
 
   beforeEach(() => {
-    wrapper = shallow(
-      <RevokeButton
-        revoke={revoke}
-        >
-        Revoke
-      </RevokeButton>
-    );
+    wrapper = shallow(<RevokeButton revoke={revoke}>Revoke</RevokeButton>);
   });
 
   it("shows button", () => {
     let button = wrapper.find("button");
     expect(button.text()).to.equal("Revoke");
-    expect(button.props().onClick).to.equal(wrapper.instance().showConfirmationPopup);
+    expect(button.props().onClick).to.equal(
+      wrapper.instance().showConfirmationPopup
+    );
   });
 
   it("shows popup when button is clicked", () => {
@@ -32,7 +28,9 @@ describe("RevokeButton", () => {
     button.simulate("click");
     let popup = wrapper.find(ConfirmationPopup);
     expect(popup.props().confirm).to.equal(wrapper.instance().revoke);
-    expect(popup.props().cancel).to.equal(wrapper.instance().hideConfirmationPopup);
+    expect(popup.props().cancel).to.equal(
+      wrapper.instance().hideConfirmationPopup
+    );
     expect(popup.props().text).to.contain("return");
   });
 

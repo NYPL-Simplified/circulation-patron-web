@@ -14,13 +14,17 @@ export default class UrlShortener {
     let url = new URL(this.catalogUrl);
     let origin = url.origin;
     let pathname = url.pathname;
-    let libraryShortName = pathname.split("/").length > 1 && pathname.split("/")[1];
+    let libraryShortName =
+      pathname.split("/").length > 1 && pathname.split("/")[1];
     return origin + "/" + libraryShortName;
   }
 
   prepareCollectionUrl(url: string): string {
     if (this.enabled) {
-      url = url.replace(this.catalogBase(), "").replace(/\/$/, "").replace(/^\//, "");
+      url = url
+        .replace(this.catalogBase(), "")
+        .replace(/\/$/, "")
+        .replace(/^\//, "");
     }
     return encodeURIComponent(url);
   }
@@ -34,13 +38,17 @@ export default class UrlShortener {
 
   expandCollectionUrl(collectionUrl): string {
     if (this.enabled) {
-      return collectionUrl ? this.catalogBase() + "/" + collectionUrl : this.catalogBase();
+      return collectionUrl
+        ? this.catalogBase() + "/" + collectionUrl
+        : this.catalogBase();
     } else {
       return collectionUrl;
     }
   }
 
   expandBookUrl(bookUrl): string {
-    return bookUrl && this.enabled ? this.catalogBase() + "/works/" + bookUrl : bookUrl;
+    return bookUrl && this.enabled
+      ? this.catalogBase() + "/works/" + bookUrl
+      : bookUrl;
   }
 }

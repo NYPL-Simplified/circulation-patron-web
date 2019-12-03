@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { stub } from "sinon";
 
 import * as actions from "../actions";
-const fetchMock =  require("fetch-mock");
+const fetchMock = require("fetch-mock");
 
 let fetchResponse = null;
 
@@ -21,8 +21,12 @@ describe("fetchComplaintTypes", () => {
     const types = await actions.fetchComplaintTypes(reportUrl)(dispatch);
 
     expect(dispatch.callCount).to.equal(3);
-    expect(dispatch.args[0][0].type).to.equal(actions.FETCH_COMPLAINT_TYPES_REQUEST);
-    expect(dispatch.args[1][0].type).to.equal(actions.FETCH_COMPLAINT_TYPES_SUCCESS);
+    expect(dispatch.args[0][0].type).to.equal(
+      actions.FETCH_COMPLAINT_TYPES_REQUEST
+    );
+    expect(dispatch.args[1][0].type).to.equal(
+      actions.FETCH_COMPLAINT_TYPES_SUCCESS
+    );
     expect(dispatch.args[2][0].type).to.equal(actions.LOAD_COMPLAINT_TYPES);
     expect(types).to.deep.equal(["type1", "type2", "type3"]);
   });
@@ -37,8 +41,12 @@ describe("fetchComplaintTypes", () => {
       expect(false).to.equal(true);
     } catch (err) {
       expect(dispatch.callCount).to.equal(2);
-      expect(dispatch.args[0][0].type).to.equal(actions.FETCH_COMPLAINT_TYPES_REQUEST);
-      expect(dispatch.args[1][0].type).to.equal(actions.FETCH_COMPLAINT_TYPES_FAILURE);
+      expect(dispatch.args[0][0].type).to.equal(
+        actions.FETCH_COMPLAINT_TYPES_REQUEST
+      );
+      expect(dispatch.args[1][0].type).to.equal(
+        actions.FETCH_COMPLAINT_TYPES_FAILURE
+      );
       expect(err).to.deep.equal({ message: "test error" });
     }
   });
@@ -73,8 +81,12 @@ describe("fetchComplaintTypes", () => {
         expect(false).to.equal(true);
       } catch (err) {
         expect(dispatch.callCount).to.equal(2);
-        expect(dispatch.args[0][0].type).to.equal(actions.POST_COMPLAINT_REQUEST);
-        expect(dispatch.args[1][0].type).to.equal(actions.POST_COMPLAINT_FAILURE);
+        expect(dispatch.args[0][0].type).to.equal(
+          actions.POST_COMPLAINT_REQUEST
+        );
+        expect(dispatch.args[1][0].type).to.equal(
+          actions.POST_COMPLAINT_FAILURE
+        );
         expect(err).to.deep.equal({ message: "test error" });
       }
     });

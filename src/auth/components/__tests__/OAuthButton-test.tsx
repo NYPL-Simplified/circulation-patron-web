@@ -10,15 +10,17 @@ describe("OAuthButton", () => {
   let provider;
 
   beforeEach(() => {
-    let method = { type: "method",
-                   description: "description",
-                   links: [{ "rel": "authenticate", "href": "auth" },
-                           { "rel": "logo", "href": "logo.png" } ] };
+    let method = {
+      type: "method",
+      description: "description",
+      links: [
+        { rel: "authenticate", href: "auth" },
+        { rel: "logo", href: "logo.png" }
+      ]
+    };
     provider = { method };
 
-    wrapper = shallow(
-      <OAuthButton provider={provider} />
-    );
+    wrapper = shallow(<OAuthButton provider={provider} />);
   });
 
   it("shows button with image", () => {
@@ -40,29 +42,26 @@ describe("OAuthButton", () => {
     let method: OAuthMethod = { type: "method" };
     provider = { method };
 
-    wrapper = shallow(
-      <OAuthButton provider={provider} />
-    );
+    wrapper = shallow(<OAuthButton provider={provider} />);
     let button = wrapper.find("a");
     expect(button.length).to.equal(0);
 
     method = { type: "method", links: [] };
     provider = { method };
 
-    wrapper = shallow(
-      <OAuthButton provider={provider} />
-    );
+    wrapper = shallow(<OAuthButton provider={provider} />);
     button = wrapper.find("a");
     expect(button.length).to.equal(0);
   });
 
   it("doesn't show image if auth document is missing link", () => {
-    let method: OAuthMethod = { type: "method", links: [{ "rel": "authenticate", "href": "auth" }] };
+    let method: OAuthMethod = {
+      type: "method",
+      links: [{ rel: "authenticate", href: "auth" }]
+    };
     provider = { method };
 
-    wrapper = shallow(
-      <OAuthButton provider={provider} />
-    );
+    wrapper = shallow(<OAuthButton provider={provider} />);
     let button = wrapper.find("a");
     let image = button.find("img");
     expect(image.length).to.equal(0);

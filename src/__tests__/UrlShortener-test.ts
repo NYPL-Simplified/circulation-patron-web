@@ -12,12 +12,16 @@ describe("UrlShortener", () => {
 
     it("prepares collection url", () => {
       let url = host + collectionUrl;
-      expect(shortener.prepareCollectionUrl(url)).to.equal("http%3A%2F%2Fexample.com%2Flibrary%2Fcollection%2Furl");
+      expect(shortener.prepareCollectionUrl(url)).to.equal(
+        "http%3A%2F%2Fexample.com%2Flibrary%2Fcollection%2Furl"
+      );
     });
 
     it("prepares book url", () => {
       let url = host + bookUrl;
-      expect(shortener.prepareBookUrl(url)).to.equal("http%3A%2F%2Fexample.com%2Flibrary%2Fbook%2Furl");
+      expect(shortener.prepareBookUrl(url)).to.equal(
+        "http%3A%2F%2Fexample.com%2Flibrary%2Fbook%2Furl"
+      );
     });
 
     it("expands collection url", () => {

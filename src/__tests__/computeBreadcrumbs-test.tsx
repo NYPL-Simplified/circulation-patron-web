@@ -15,14 +15,18 @@ describe("computeBreadcrumbs", () => {
 
   it("uses breadcrumbs if they're in the raw collection data", () => {
     let raw = {
-      "simplified:breadcrumbs": [{
-        link: [{
-          "$": {
-            href: { value: "breadcrumb url" },
-            title: { value: "breadcrumb title" }
-          }
-        }]
-      }]
+      "simplified:breadcrumbs": [
+        {
+          link: [
+            {
+              $: {
+                href: { value: "breadcrumb url" },
+                title: { value: "breadcrumb title" }
+              }
+            }
+          ]
+        }
+      ]
     };
     let data = Object.assign({}, collection, { raw });
     let expected = [

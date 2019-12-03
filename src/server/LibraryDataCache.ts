@@ -27,7 +27,6 @@ export interface CacheEntry {
   timestamp: number;
 }
 
-
 export default class LibraryDataCache {
   // An in-memory cache of registry entries and authentication documents.
   // Registry entries don't change very often, and it's fine to fetch them
@@ -47,7 +46,11 @@ export default class LibraryDataCache {
     expirationSeconds: The number of seconds to cache registry entries and auth documents.
     config: A pre-configured mapping from library paths to circulation manager URLs.
   */
-  constructor(registryBase: string, expirationSeconds: number = 60 * 60 * 24, config?: {[key: string]: string}) {
+  constructor(
+    registryBase: string,
+    expirationSeconds: number = 60 * 60 * 24,
+    config?: { [key: string]: string }
+  ) {
     this.registryBase = registryBase;
     this.expirationSeconds = expirationSeconds;
     this.config = config;
@@ -60,7 +63,9 @@ export default class LibraryDataCache {
         const registryCatalog = await registryResponse.json();
         const links = registryCatalog.links;
         for (const link of links) {
-          if (link.rel === "http://librarysimplified.org/rel/registry/library") {
+          if (
+            link.rel === "http://librarysimplified.org/rel/registry/library"
+          ) {
             this.libraryUrlTemplate = link.href;
             break;
           }
@@ -72,38 +77,33 @@ export default class LibraryDataCache {
     return this.libraryUrlTemplate;
   }
 
-  getDataFromAuthDocumentAndCatalog(authDocument: AuthDocument, catalog: OPDSFeed) {
-
+  getDataFromAuthDocumentAndCatalog(
+    authDocument: AuthDocument,
+    catalog: OPDSFeed
+  ) {
     let data = {
-      catalogName:  authDocument["title"],
-      colors:       authDocument["web_color_scheme"],
-      logoUrl:      null,
-      headerLinks:  [],
-      cssLinks:     []
+      catalogName: authDocument["title"],
+      colors: authDocument["web_color_scheme"],
+      logoUrl: null,
+      headerLinks: [],
+      cssLinks: []
     };
 
     for (const link of authDocument.links) {
-
       if (link.rel === "logo") {
         data.logoUrl = link.href;
-
       } else if (link.rel === "stylesheet") {
         data.cssLinks.push(link);
-
       }
-
     }
 
     for (const link of catalog["links"]) {
-
       if (link.role === "navigation") {
         data.headerLinks.push(link);
       }
-
     }
 
     return data;
-
   }
 
   async getLibraryData(library: string): Promise<LibraryData> {
@@ -126,7 +126,10 @@ export default class LibraryDataCache {
       id: library,
       catalogUrl,
       catalogName,
-      ...this.getDataFromAuthDocumentAndCatalog(entry.authDocument, entry.catalog)
+      ...this.getDataFromAuthDocumentAndCatalog(
+        entry.authDocument,
+        entry.catalog
+      )
     };
   }
 
@@ -135,7 +138,10 @@ export default class LibraryDataCache {
     const currentEntry = this.CACHE[library];
     const now = new Date().getTime();
 
-    if (!currentEntry || (currentEntry.timestamp + this.expirationSeconds * 1000 < now)) {
+    if (
+      !currentEntry ||
+      currentEntry.timestamp + this.expirationSeconds * 1000 < now
+    ) {
       let registryEntry;
       let catalogUrl;
       if (this.registryBase) {
@@ -176,7 +182,12 @@ export default class LibraryDataCache {
         console.warn(authDocError);
       }
 
-      this.CACHE[library] = { registryEntry, catalog, authDocument, timestamp: new Date().getTime() };
+      this.CACHE[library] = {
+        registryEntry,
+        catalog,
+        authDocument,
+        timestamp: new Date().getTime()
+      };
     }
 
     return this.CACHE[library];
@@ -189,7 +200,8 @@ export default class LibraryDataCache {
       const registryResponse = await fetch(libraryUrl);
       const registryCatalog = await registryResponse.json();
       if (!registryCatalog.catalogs || registryCatalog.catalogs.length !== 1) {
-        throw "Registry did not return a catalog for this library id: " + library;
+        throw "Registry did not return a catalog for this library id: " +
+          library;
       }
       const registryEntry = registryCatalog.catalogs[0];
       return registryEntry;

@@ -25,7 +25,7 @@ describe("ReportProblemForm", () => {
         fetchTypes={fetchTypes}
         close={close}
         types={types}
-        />
+      />
     );
   });
 
@@ -40,9 +40,11 @@ describe("ReportProblemForm", () => {
       let values = options.map(option => option.props().value);
       let names = options.map(option => option.text());
       expect(values).to.deep.equal([""].concat(types));
-      expect(names).to.deep.equal(["choose a type"].concat(
-        types.map(type => wrapper.instance().displayType(type))
-      ));
+      expect(names).to.deep.equal(
+        ["choose a type"].concat(
+          types.map(type => wrapper.instance().displayType(type))
+        )
+      );
     });
 
     it("displays details input", () => {
@@ -51,12 +53,16 @@ describe("ReportProblemForm", () => {
     });
 
     it("displays submit button", () => {
-      let button = wrapper.find("button").filterWhere(button => button.text() === "Submit");
+      let button = wrapper
+        .find("button")
+        .filterWhere(button => button.text() === "Submit");
       expect(button.props().onClick).to.equal(wrapper.instance().submit);
     });
 
     it("displays cancel button", () => {
-      let button = wrapper.find("button").filterWhere(button => button.text() === "Cancel");
+      let button = wrapper
+        .find("button")
+        .filterWhere(button => button.text() === "Cancel");
       expect(button.props().onClick).to.equal(close);
     });
   });
@@ -68,7 +74,9 @@ describe("ReportProblemForm", () => {
     });
 
     it("displays error if submitted without type", () => {
-      let button = wrapper.find("button").filterWhere(button => button.text() === "Submit");
+      let button = wrapper
+        .find("button")
+        .filterWhere(button => button.text() === "Submit");
       button.simulate("click");
       let error = wrapper.find(".error");
       expect(error.text()).to.equal("You must select a type");
@@ -79,7 +87,9 @@ describe("ReportProblemForm", () => {
         type: { value: "bad-description" },
         detail: { value: "what an imperfect description!" }
       };
-      let button = wrapper.find("button").filterWhere(button => button.text() === "Submit");
+      let button = wrapper
+        .find("button")
+        .filterWhere(button => button.text() === "Submit");
       button.simulate("click");
       expect(report.callCount).to.equal(1);
       expect(report.args[0][0]).to.equal("report url");
@@ -104,7 +114,9 @@ describe("ReportProblemForm", () => {
 
     it("closes", () => {
       wrapper.setState({ submitted: true });
-      let closeButton = wrapper.find("button").filterWhere(button => button.text() === "Close");
+      let closeButton = wrapper
+        .find("button")
+        .filterWhere(button => button.text() === "Close");
       closeButton.simulate("click");
       expect(close.callCount).to.equal(1);
     });

@@ -11,14 +11,20 @@ export interface OAuthMethod extends AuthMethod {
   links?: AuthLink[];
 }
 
-export default class OAuthButton extends React.Component<AuthButtonProps<OAuthMethod>, {}> {
+export default class OAuthButton extends React.Component<
+  AuthButtonProps<OAuthMethod>,
+  {}
+> {
   render() {
     let currentUrl = window.location.origin + window.location.pathname;
     let authUrl;
     let image;
     for (const link of this.props.provider.method.links || []) {
       if (link.rel === "authenticate") {
-        authUrl = link.href + "&redirect_uri=" + encodeURIComponent(encodeURIComponent(currentUrl));
+        authUrl =
+          link.href +
+          "&redirect_uri=" +
+          encodeURIComponent(encodeURIComponent(currentUrl));
       }
       if (link.rel === "logo") {
         image = link.href;
@@ -27,13 +33,13 @@ export default class OAuthButton extends React.Component<AuthButtonProps<OAuthMe
         break;
       }
     }
-    let label = this.props.provider.method.description ? "Log in with " + this.props.provider.method.description : "Log in";
-    return (
-      authUrl ?
+    let label = this.props.provider.method.description
+      ? "Log in with " + this.props.provider.method.description
+      : "Log in";
+    return authUrl ? (
       <a href={authUrl} className="oauth-button" aria-label={label}>
-        { image && <img src={image} alt={label} /> }
-      </a> :
-      null
-    );
+        {image && <img src={image} alt={label} />}
+      </a>
+    ) : null;
   }
 }

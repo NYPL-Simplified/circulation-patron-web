@@ -16,7 +16,7 @@ export default class Header extends React.Component<HeaderProps, {}> {
   static contextTypes = {
     library: PropTypes.object.isRequired,
     router: PropTypes.object.isRequired,
-    pathFor: PropTypes.func.isRequired,
+    pathFor: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -29,46 +29,53 @@ export default class Header extends React.Component<HeaderProps, {}> {
     return (
       <Navbar fluid={true} role="navigation">
         <Navbar.Header>
-          <Navbar.Brand className={this.context.library.logoUrl ? "with-logo" : ""}>
+          <Navbar.Brand
+            className={this.context.library.logoUrl ? "with-logo" : ""}
+          >
             <span>{this.context.library.catalogName}</span>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
 
         <Navbar.Collapse>
-
           <Nav>
-            { this.context.library.headerLinks && this.context.library.headerLinks.map(link =>
-              <li>
-                <a href={link.href} title={link.title}>{link.title}</a>
-              </li>
-            ) }
+            {this.context.library.headerLinks &&
+              this.context.library.headerLinks.map(link => (
+                <li>
+                  <a href={link.href} title={link.title}>
+                    {link.title}
+                  </a>
+                </li>
+              ))}
             <li>
               <CatalogLink
                 collectionUrl={this.context.library.catalogUrl}
-                bookUrl={null}>
+                bookUrl={null}
+              >
                 Catalog
               </CatalogLink>
             </li>
-            { this.props.loansUrl && this.props.isSignedIn &&
+            {this.props.loansUrl && this.props.isSignedIn && (
               <li>
-                <CatalogLink
-                  collectionUrl={this.props.loansUrl}
-                  bookUrl={null}>
+                <CatalogLink collectionUrl={this.props.loansUrl} bookUrl={null}>
                   My Books
                 </CatalogLink>
               </li>
-            }
-            { this.props.loansUrl && this.props.isSignedIn &&
+            )}
+            {this.props.loansUrl && this.props.isSignedIn && (
               <li>
-                <a role="button" onClick={this.signOut}>Sign Out</a>
+                <a role="button" onClick={this.signOut}>
+                  Sign Out
+                </a>
               </li>
-            }
-            { this.props.loansUrl && !this.props.isSignedIn &&
+            )}
+            {this.props.loansUrl && !this.props.isSignedIn && (
               <li>
-                <a role="button" onClick={this.signIn}>Sign In</a>
+                <a role="button" onClick={this.signIn}>
+                  Sign In
+                </a>
               </li>
-            }
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -83,6 +90,8 @@ export default class Header extends React.Component<HeaderProps, {}> {
 
   signOut() {
     this.props.clearAuthCredentials();
-    this.context.router.push(this.context.pathFor(this.context.library.catalogUrl, null));
+    this.context.router.push(
+      this.context.pathFor(this.context.library.catalogUrl, null)
+    );
   }
 }

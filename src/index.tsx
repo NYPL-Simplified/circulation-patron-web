@@ -10,10 +10,11 @@ class CirculationPatronWeb {
 
     ReactDOM.render(
       <ContextProvider {...config}>
-        { config.library.onlyLibrary ?
-          <Router history={browserHistory} routes={singleLibraryRoutes} /> :
+        {config.library.onlyLibrary ? (
+          <Router history={browserHistory} routes={singleLibraryRoutes} />
+        ) : (
           <Router history={browserHistory} routes={multiLibraryRoutes} />
-        }
+        )}
       </ContextProvider>,
       document.getElementById(divId)
     );

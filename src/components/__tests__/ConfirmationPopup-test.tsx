@@ -21,7 +21,7 @@ describe("ConfirmationPopup", () => {
         text="are you sure"
         confirmText="confirm"
         cancelText="cancel"
-        />
+      />
     );
   });
 

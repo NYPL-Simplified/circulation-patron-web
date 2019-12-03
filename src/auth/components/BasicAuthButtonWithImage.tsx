@@ -11,7 +11,10 @@ export interface BasicAuthWithImageMethod extends BasicAuthMethod {
   links?: AuthLink[];
 }
 
-export default class BasicAuthButtonWithImage extends React.Component<AuthButtonProps<BasicAuthWithImageMethod>, {}> {
+export default class BasicAuthButtonWithImage extends React.Component<
+  AuthButtonProps<BasicAuthWithImageMethod>,
+  {}
+> {
   render() {
     let image;
     for (const link of this.props.provider.method.links || []) {
@@ -20,10 +23,17 @@ export default class BasicAuthButtonWithImage extends React.Component<AuthButton
         break;
       }
     }
-    let label = this.props.provider.method.description ? "Log in with " + this.props.provider.method.description : "Log in";
+    let label = this.props.provider.method.description
+      ? "Log in with " + this.props.provider.method.description
+      : "Log in";
     return (
-      <button className="basic-auth-button" aria-label={label} autoFocus={true} onClick={this.props.onClick}>
-        { image ? <img src={image} alt={label} /> : label }
+      <button
+        className="basic-auth-button"
+        aria-label={label}
+        autoFocus={true}
+        onClick={this.props.onClick}
+      >
+        {image ? <img src={image} alt={label} /> : label}
       </button>
     );
   }

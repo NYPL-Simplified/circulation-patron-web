@@ -4,7 +4,9 @@ import { stub } from "sinon";
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import BasicAuthButtonWithImage, { BasicAuthWithImageMethod } from "../BasicAuthButtonWithImage";
+import BasicAuthButtonWithImage, {
+  BasicAuthWithImageMethod
+} from "../BasicAuthButtonWithImage";
 import BasicAuthWithButtonImagePlugin from "../../BasicAuthWithButtonImagePlugin";
 
 describe("BasicAuthButtonWithImage", () => {
@@ -13,10 +15,10 @@ describe("BasicAuthButtonWithImage", () => {
   let onClick;
 
   beforeEach(() => {
-    let method: BasicAuthWithImageMethod = { 
+    let method: BasicAuthWithImageMethod = {
       type: "method",
       description: "description",
-      labels: { login: "login", "password": "password" }
+      labels: { login: "login", password: "password" }
     };
     provider = { id: "method", method, plugin: BasicAuthWithButtonImagePlugin };
     onClick = stub();
@@ -35,17 +37,15 @@ describe("BasicAuthButtonWithImage", () => {
   });
 
   it("shows button with image", () => {
-    let method: BasicAuthWithImageMethod = { 
+    let method: BasicAuthWithImageMethod = {
       type: "method",
       description: "description",
-      labels: { login: "login", "password": "password" },
-      links: [{ "rel": "logo", "href": "logo.png" }]
+      labels: { login: "login", password: "password" },
+      links: [{ rel: "logo", href: "logo.png" }]
     };
     provider = { id: "method", method, plugin: BasicAuthWithButtonImagePlugin };
 
-    wrapper = shallow(
-      <BasicAuthButtonWithImage provider={provider} />
-    );
+    wrapper = shallow(<BasicAuthButtonWithImage provider={provider} />);
 
     let button = wrapper.find("button");
     expect(button.length).to.equal(1);

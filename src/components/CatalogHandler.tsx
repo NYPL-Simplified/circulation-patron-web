@@ -31,7 +31,10 @@ export interface CatalogHandlerContext {
   initialState?: State;
 }
 
-export default class CatalogHandler extends React.Component<CatalogHandlerProps, any> {
+export default class CatalogHandler extends React.Component<
+  CatalogHandlerProps,
+  any
+> {
   context: CatalogHandlerContext;
 
   static contextTypes: React.ValidationMap<CatalogHandlerContext> = {
@@ -45,26 +48,47 @@ export default class CatalogHandler extends React.Component<CatalogHandlerProps,
 
     let pageTitleTemplate = (collectionTitle, bookTitle) => {
       let details = bookTitle || collectionTitle;
-      return this.context.library.catalogName + (details ? " - " + details : "");
+      return (
+        this.context.library.catalogName + (details ? " - " + details : "")
+      );
     };
 
-    collectionUrl = this.context.urlShortener.expandCollectionUrl(collectionUrl) || null;
+    collectionUrl =
+      this.context.urlShortener.expandCollectionUrl(collectionUrl) || null;
     bookUrl = this.context.urlShortener.expandBookUrl(bookUrl) || null;
 
     let cssVariables = {};
     if (this.context.library.logoUrl) {
       cssVariables["--logo"] = `url('${this.context.library.logoUrl}')`;
     }
-    let background = tinycolor((this.context.library.colors && this.context.library.colors.background) || "#ffffff");
-    let foreground = tinycolor((this.context.library.colors && this.context.library.colors.foreground) || "#000000");
+    let background = tinycolor(
+      (this.context.library.colors && this.context.library.colors.background) ||
+        "#ffffff"
+    );
+    let foreground = tinycolor(
+      (this.context.library.colors && this.context.library.colors.foreground) ||
+        "#000000"
+    );
 
     cssVariables["--pagecolor"] = background.toString();
     if (background.isLight()) {
-      cssVariables["--pagecolorlight"] = background.clone().darken(2).toString();
-      cssVariables["--footercolor"] = background.clone().darken(2).toString();
+      cssVariables["--pagecolorlight"] = background
+        .clone()
+        .darken(2)
+        .toString();
+      cssVariables["--footercolor"] = background
+        .clone()
+        .darken(2)
+        .toString();
     } else {
-      cssVariables["--pagecolorlight"] = background.clone().lighten(2).toString();
-      cssVariables["--footercolor"] = background.clone().lighten(2).toString();
+      cssVariables["--pagecolorlight"] = background
+        .clone()
+        .lighten(2)
+        .toString();
+      cssVariables["--footercolor"] = background
+        .clone()
+        .lighten(2)
+        .toString();
     }
     background.setAlpha(0.5);
     cssVariables["--transparentpagecolor"] = background.toString();
@@ -73,17 +97,49 @@ export default class CatalogHandler extends React.Component<CatalogHandlerProps,
 
     cssVariables["--linkcolor"] = foreground.toString();
     if (foreground.isDark()) {
-      cssVariables["--linkvisitedcolor"] = foreground.clone().lighten(20).toString();
-      cssVariables["--linkhovercolor"] = foreground.clone().lighten(10).toString();
-      cssVariables["--pagetextcolor"] = foreground.clone().desaturate(10).toString();
-      cssVariables["--pagetextcolorlight"] = foreground.clone().desaturate(10).darken(25).toString();
-      cssVariables["--highlightcolor"] = foreground.clone().desaturate(10).toString();
+      cssVariables["--linkvisitedcolor"] = foreground
+        .clone()
+        .lighten(20)
+        .toString();
+      cssVariables["--linkhovercolor"] = foreground
+        .clone()
+        .lighten(10)
+        .toString();
+      cssVariables["--pagetextcolor"] = foreground
+        .clone()
+        .desaturate(10)
+        .toString();
+      cssVariables["--pagetextcolorlight"] = foreground
+        .clone()
+        .desaturate(10)
+        .darken(25)
+        .toString();
+      cssVariables["--highlightcolor"] = foreground
+        .clone()
+        .desaturate(10)
+        .toString();
     } else {
-      cssVariables["--linkvisitedcolor"] = foreground.clone().darken(20).toString();
-      cssVariables["--linkhovercolor"] = foreground.clone().darken(10).toString();
-      cssVariables["--pagetextcolor"] = foreground.clone().desaturate(10).toString();
-      cssVariables["--pagetextcolorlight"] = foreground.clone().desaturate(10).lighten(25).toString();
-      cssVariables["--highlightcolor"] = foreground.clone().desaturate(10).toString();
+      cssVariables["--linkvisitedcolor"] = foreground
+        .clone()
+        .darken(20)
+        .toString();
+      cssVariables["--linkhovercolor"] = foreground
+        .clone()
+        .darken(10)
+        .toString();
+      cssVariables["--pagetextcolor"] = foreground
+        .clone()
+        .desaturate(10)
+        .toString();
+      cssVariables["--pagetextcolorlight"] = foreground
+        .clone()
+        .desaturate(10)
+        .lighten(25)
+        .toString();
+      cssVariables["--highlightcolor"] = foreground
+        .clone()
+        .desaturate(10)
+        .toString();
     }
 
     return (
@@ -98,7 +154,7 @@ export default class CatalogHandler extends React.Component<CatalogHandlerProps,
           computeBreadcrumbs={computeBreadcrumbs}
           initialState={this.context.initialState}
           authPlugins={[BasicAuthWithButtonImagePlugin, OAuthPlugin]}
-          />
+        />
       </div>
     );
   }

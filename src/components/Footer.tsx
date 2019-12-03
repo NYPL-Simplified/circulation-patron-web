@@ -3,7 +3,6 @@ import { FooterProps } from "opds-web-client/lib/components/Root";
 import { LinkData } from "opds-web-client/lib/interfaces";
 
 export default class Footer extends React.Component<FooterProps, {}> {
-
   constructor(props) {
     super(props);
     this.links = this.links.bind(this);
@@ -13,10 +12,10 @@ export default class Footer extends React.Component<FooterProps, {}> {
     let links = [];
 
     let labels = {
-      "about": "About",
+      about: "About",
       "terms-of-service": "Terms of Service",
       "privacy-policy": "Privacy Policy",
-      "copyright": "Copyright"
+      copyright: "Copyright"
     };
 
     Object.keys(labels).forEach(type => {
@@ -32,11 +31,13 @@ export default class Footer extends React.Component<FooterProps, {}> {
   render(): JSX.Element {
     return (
       <ul aria-label="about links" className="list-inline">
-        { this.links().map(link =>
+        {this.links().map(link => (
           <li key={link.url}>
-            <a href={link.url} target="_blank">{link.text}</a>
+            <a href={link.url} target="_blank">
+              {link.text}
+            </a>
           </li>
-        ) }
+        ))}
       </ul>
     );
   }

@@ -36,27 +36,39 @@ const initialize = async () => {
       configText = fs.readFileSync(configFile, "utf8");
     }
     for (let entry of configText.split("\n")) {
-      if ( entry && entry.charAt(0) !== "#" ) {
+      if (entry && entry.charAt(0) !== "#") {
         let [path, circManagerUrl] = entry.split("|");
         config[path] = circManagerUrl;
       }
     }
   }
 
-  if (registryBase && circManagerBase || registryBase && configFile || circManagerBase && configFile) {
-    console.warn("Only one of REGISTRY_BASE, SIMPLIFIED_CATALOG_BASE, and CONFIG_FILE should be used.");
+  if (
+    (registryBase && circManagerBase) ||
+    (registryBase && configFile) ||
+    (circManagerBase && configFile)
+  ) {
+    console.warn(
+      "Only one of REGISTRY_BASE, SIMPLIFIED_CATALOG_BASE, and CONFIG_FILE should be used."
+    );
   }
 
   if (!registryBase && !circManagerBase && !configFile) {
-   registryBase = "http://localhost:7000";
+    registryBase = "http://localhost:7000";
   }
-
 
   const shortenUrls: boolean = !(process.env.SHORTEN_URLS === "false");
 
   const distDir = process.env.SIMPLIFIED_PATRON_DIST || "dist";
-  const cacheExpirationSeconds = parseInt(process.env.CACHE_EXPIRATION_SECONDS, 10);
-  const cache = new LibraryDataCache(registryBase, cacheExpirationSeconds, config);
+  const cacheExpirationSeconds = parseInt(
+    process.env.CACHE_EXPIRATION_SECONDS,
+    10
+  );
+  const cache = new LibraryDataCache(
+    registryBase,
+    cacheExpirationSeconds,
+    config
+  );
 
   // This is fired every time the server side receives a request
   app.use("/js", express.static(distDir));
@@ -64,91 +76,113 @@ const initialize = async () => {
   app.use(handleRender);
 
   function handleRender(req, res) {
-    match({ routes, location: req.url }, async (error, redirectLocation, renderProps: any) => {
-      if (error) {
-        res.status(500).send(renderErrorPage());
-      } else if (redirectLocation) {
-        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-      } else if (renderProps) {
-        let { library, collectionUrl, bookUrl } = renderProps.params;
-
-        let libraryData;
-        if (circManagerBase) {
-          // We're using a single circ manager library instead of a registry.
-          let catalog = await cache.getCatalog(circManagerBase);
-          let authDocument = await cache.getAuthDocument(catalog);
-          libraryData = {
-            onlyLibrary: true,
-            catalogUrl: circManagerBase,
-            ...cache.getDataFromAuthDocumentAndCatalog(authDocument, catalog)
-          };
-        } else {
-          try {
-            libraryData = await cache.getLibraryData(library);
-          } catch (error) {
-            res.status(404).send(renderErrorPage(error));
-            return;
-          }
-        }
-        let catalogUrl = libraryData.catalogUrl;
-
-        if (!collectionUrl && !bookUrl) {
-          let urlShortener = new UrlShortener(catalogUrl, shortenUrls);
-          let preparedCollectionUrl = urlShortener.prepareCollectionUrl(catalogUrl);
-          // With short URLS, if the home URL is the library root URL, the prepared URL
-          // will be empty, and we don't need to redirect.
-          if (!shortenUrls || preparedCollectionUrl) {
-            if (library) {
-              res.redirect(302, "/" + library + "/collection/" + preparedCollectionUrl);
-            } else {
-              res.redirect(302, "/collection/" + preparedCollectionUrl);
-            }
-            return;
-          }
-        }
-
-        buildInitialState(collectionUrl, bookUrl).then((state: State) => {
-
-          const html = renderToString(
-            <ContextProvider
-              library={libraryData}
-              shortenUrls={shortenUrls}
-              initialState={state}>
-              <RouterContext {...renderProps} />
-            </ContextProvider>
+    match(
+      { routes, location: req.url },
+      async (error, redirectLocation, renderProps: any) => {
+        if (error) {
+          res.status(500).send(renderErrorPage());
+        } else if (redirectLocation) {
+          res.redirect(
+            302,
+            redirectLocation.pathname + redirectLocation.search
           );
+        } else if (renderProps) {
+          let { library, collectionUrl, bookUrl } = renderProps.params;
 
-          res.status(200).send(renderFullPage(html, libraryData, state));
+          let libraryData;
+          if (circManagerBase) {
+            // We're using a single circ manager library instead of a registry.
+            let catalog = await cache.getCatalog(circManagerBase);
+            let authDocument = await cache.getAuthDocument(catalog);
+            libraryData = {
+              onlyLibrary: true,
+              catalogUrl: circManagerBase,
+              ...cache.getDataFromAuthDocumentAndCatalog(authDocument, catalog)
+            };
+          } else {
+            try {
+              libraryData = await cache.getLibraryData(library);
+            } catch (error) {
+              res.status(404).send(renderErrorPage(error));
+              return;
+            }
+          }
+          let catalogUrl = libraryData.catalogUrl;
 
-        }).catch(err => {
-
-          // if error, render catalog root
-          buildInitialState(null, null).then((state: State) => {
-            const html = renderToString(
-              <ContextProvider
-                library={libraryData}
-                shortenUrls={shortenUrls}
-                initialState={state}>
-                <RouterContext {...renderProps} />
-              </ContextProvider>
+          if (!collectionUrl && !bookUrl) {
+            let urlShortener = new UrlShortener(catalogUrl, shortenUrls);
+            let preparedCollectionUrl = urlShortener.prepareCollectionUrl(
+              catalogUrl
             );
+            // With short URLS, if the home URL is the library root URL, the prepared URL
+            // will be empty, and we don't need to redirect.
+            if (!shortenUrls || preparedCollectionUrl) {
+              if (library) {
+                res.redirect(
+                  302,
+                  "/" + library + "/collection/" + preparedCollectionUrl
+                );
+              } else {
+                res.redirect(302, "/collection/" + preparedCollectionUrl);
+              }
+              return;
+            }
+          }
 
-            res.status(200).send(renderFullPage(html, libraryData, state));
+          buildInitialState(collectionUrl, bookUrl)
+            .then((state: State) => {
+              const html = renderToString(
+                <ContextProvider
+                  library={libraryData}
+                  shortenUrls={shortenUrls}
+                  initialState={state}
+                >
+                  <RouterContext {...renderProps} />
+                </ContextProvider>
+              );
 
-          }).catch(err => res.status(500).send(renderErrorPage()));
+              res.status(200).send(renderFullPage(html, libraryData, state));
+            })
+            .catch(err => {
+              // if error, render catalog root
+              buildInitialState(null, null)
+                .then((state: State) => {
+                  const html = renderToString(
+                    <ContextProvider
+                      library={libraryData}
+                      shortenUrls={shortenUrls}
+                      initialState={state}
+                    >
+                      <RouterContext {...renderProps} />
+                    </ContextProvider>
+                  );
 
-        });
-
-      } else {
-        res.status(404).send(renderErrorPage("This page doesn't exist."));
-
+                  res
+                    .status(200)
+                    .send(renderFullPage(html, libraryData, state));
+                })
+                .catch(err => res.status(500).send(renderErrorPage()));
+            });
+        } else {
+          res.status(404).send(renderErrorPage("This page doesn't exist."));
+        }
       }
-    });
+    );
   }
 
-  function renderFullPage(html: string, library: LibraryData, preloadedState: State) {
-    let collectionTitle = preloadedState.collection && preloadedState.collection.data && preloadedState.collection.data.title;
-    let bookTitle = preloadedState.book && preloadedState.book.data && preloadedState.book.data.title;
+  function renderFullPage(
+    html: string,
+    library: LibraryData,
+    preloadedState: State
+  ) {
+    let collectionTitle =
+      preloadedState.collection &&
+      preloadedState.collection.data &&
+      preloadedState.collection.data.title;
+    let bookTitle =
+      preloadedState.book &&
+      preloadedState.book.data &&
+      preloadedState.book.data.title;
     let details = bookTitle || collectionTitle;
     let pageTitle = library.catalogName + (details ? " - " + details : "");
 
@@ -159,9 +193,11 @@ const initialize = async () => {
           <title>${pageTitle}</title>
           <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
           <link href="/css/CirculationPatronWeb.css" rel="stylesheet" crossorigin="anonymous">
-          ${library.cssLinks.map(link => {
-            return `<link href="${link.href}" rel="${link.rel}" crossorigin="anonymous">`;
-          }).join("\n")}
+          ${library.cssLinks
+            .map(link => {
+              return `<link href="${link.href}" rel="${link.rel}" crossorigin="anonymous">`;
+            })
+            .join("\n")}
         </head>
         <body>
           <div id="circulation-patron-web">${html}</div>
@@ -178,7 +214,9 @@ const initialize = async () => {
       `;
   }
 
-  function renderErrorPage(message: string = "There was a problem with this request.") {
+  function renderErrorPage(
+    message: string = "There was a problem with this request."
+  ) {
     return `
       <!doctype html>
       <html lang="en">

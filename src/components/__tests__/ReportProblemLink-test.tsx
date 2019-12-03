@@ -20,7 +20,7 @@ describe("ReportProblemLink", () => {
         report={report}
         fetchTypes={fetchTypes}
         types={types}
-        />
+      />
     );
   });
 

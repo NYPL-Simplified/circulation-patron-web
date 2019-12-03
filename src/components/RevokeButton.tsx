@@ -10,7 +10,10 @@ export interface RevokeButtonState {
   showConfirmationPopup: boolean;
 }
 
-export default class RevokeButton extends React.Component<RevokeButtonProps, RevokeButtonState> {
+export default class RevokeButton extends React.Component<
+  RevokeButtonProps,
+  RevokeButtonState
+> {
   constructor(props) {
     super(props);
     this.state = { showConfirmationPopup: false };
@@ -27,18 +30,19 @@ export default class RevokeButton extends React.Component<RevokeButtonProps, Rev
         <button
           className="btn btn-default"
           {...props}
-          onClick={this.showConfirmationPopup}>
+          onClick={this.showConfirmationPopup}
+        >
           {this.props.children}
         </button>
-        { this.state.showConfirmationPopup &&
+        {this.state.showConfirmationPopup && (
           <ConfirmationPopup
             confirm={this.revoke}
             cancel={this.hideConfirmationPopup}
             text="Are you sure you want to return this book?"
             confirmText="Return Now"
             cancelText="Cancel"
-            />
-        }
+          />
+        )}
       </div>
     );
   }
