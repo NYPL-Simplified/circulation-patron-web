@@ -1,14 +1,12 @@
 # build environment
-FROM node:12.2.0-alpine as builder
-# we first copy just the package.json and run npm ci
-# to take advantage of layer caching
+FROM node:12.2.0-alpine as build
 COPY package*.json ./
+# CI is a faster npm install for use in CI environments
 RUN npm ci
-# then copy the rest of the files and run the build command
 COPY . ./
 RUN npm run build:prod
-# we are going to copy the node_modules over to the minimal image
-# for the server to use, but we prune them first
+# we are going to copy the node_modules over for the server,
+# but should prune them first
 RUN npm prune --production
 
 # production environment
