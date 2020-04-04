@@ -1,0 +1,13 @@
+version: "2"
+services:
+  patron-web:
+    container_name: patron-web
+    # image: lyrasis/patron-web:latest
+    build: ./
+    environment:
+      CONFIG_FILE: /config/cm_libraries.txt
+      NODE_ENV: production
+    volumes:
+      - ./config:/config
+    ports:
+      - 3000:3000

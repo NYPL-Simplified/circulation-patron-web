@@ -1,0 +1,11 @@
+node_modules
+typings
+*~
+npm-debug.log
+.yalc
+yalc.lock
+wallaby.js
+.git
+.vscode
+dist
+lib
