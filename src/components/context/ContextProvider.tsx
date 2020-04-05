@@ -9,7 +9,6 @@ import OPDSStore from "opds-web-client/lib/components/context/StoreContext";
 import { RecommendationsProvider } from "./RecommendationsContext";
 import { ActionsProvider } from "opds-web-client/lib/components/context/ActionsContext";
 import { Provider as ReakitProvider } from "reakit";
-import { HelmetProvider } from "react-helmet-async";
 import { ViewProvider } from "./ViewContext";
 import { State } from "opds-web-client/lib/state";
 import { Store } from "redux";
@@ -34,7 +33,6 @@ const AppContextProvider: React.FC<ProviderProps> = ({
   library,
   shortenUrls,
   initialState,
-  helmetContext,
   store,
   actions,
   fetcher
@@ -46,32 +44,30 @@ const AppContextProvider: React.FC<ProviderProps> = ({
   const computedActions = actions ?? new ActionsCreator(computedFetcher);
 
   return (
-    <HelmetProvider context={helmetContext}>
-      <ReakitProvider>
-        <RouterProvider>
-          <PathForProvider pathFor={pathFor}>
-            <OPDSStore
-              initialState={initialState}
-              store={store}
-              authPlugins={[basicAuthPlugin]}
-            >
-              <RecommendationsProvider>
-                <ActionsProvider
-                  actions={computedActions}
-                  fetcher={computedFetcher}
-                >
-                  <LibraryProvider library={library}>
-                    <UrlShortenerProvider urlShortener={urlShortener}>
-                      <ViewProvider>{children}</ViewProvider>
-                    </UrlShortenerProvider>
-                  </LibraryProvider>
-                </ActionsProvider>
-              </RecommendationsProvider>
-            </OPDSStore>
-          </PathForProvider>
-        </RouterProvider>
-      </ReakitProvider>
-    </HelmetProvider>
+    <ReakitProvider>
+      <RouterProvider>
+        <PathForProvider pathFor={pathFor}>
+          <OPDSStore
+            initialState={initialState}
+            store={store}
+            authPlugins={[basicAuthPlugin]}
+          >
+            <RecommendationsProvider>
+              <ActionsProvider
+                actions={computedActions}
+                fetcher={computedFetcher}
+              >
+                <LibraryProvider library={library}>
+                  <UrlShortenerProvider urlShortener={urlShortener}>
+                    <ViewProvider>{children}</ViewProvider>
+                  </UrlShortenerProvider>
+                </LibraryProvider>
+              </ActionsProvider>
+            </RecommendationsProvider>
+          </OPDSStore>
+        </PathForProvider>
+      </RouterProvider>
+    </ReakitProvider>
   );
 };
 

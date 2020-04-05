@@ -13,7 +13,6 @@ import theme from "../theme";
 import Auth from "../components/Auth";
 import Layout from "../components/Layout";
 import ErrorBoundary from "../components/ErrorBoundary";
-import Helmet from "react-helmet";
 import Head from "next/head";
 
 const MyApp = ({

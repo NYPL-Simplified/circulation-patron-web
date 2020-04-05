@@ -2,7 +2,7 @@
 import { jsx, Styled } from "theme-ui";
 import * as React from "react";
 import { NavButton } from "./Button";
-import { Helmet } from "react-helmet-async";
+import Head from "next/head";
 
 const NoMatch = () => {
   return (
@@ -15,9 +15,9 @@ const NoMatch = () => {
         alignItems: "center"
       }}
     >
-      <Helmet>
+      <Head>
         <title>404 Page not found</title>
-      </Helmet>
+      </Head>
       <Styled.h1>404: Page not found</Styled.h1>
       <p>
         We&apos;re sorry, but the page you are looking for does not exist.

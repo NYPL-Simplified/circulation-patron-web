@@ -14,8 +14,8 @@ import Button from "./Button";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { ListView, GalleryView } from "./BookList";
 import { PageLoader } from "./LoadingIndicator";
-import { Helmet } from "react-helmet-async";
 import useView from "./context/ViewContext";
+import Head from "next/head";
 
 export const MyBooks: React.FC<{
   setCollectionAndBook: SetCollectionAndBook;
@@ -43,9 +43,9 @@ export const MyBooks: React.FC<{
           flexDirection: "column"
         }}
       >
-        <Helmet>
+        <Head>
           <title>My Books</title>
-        </Helmet>
+        </Head>
         <Styled.h4>You need to be signed in to view this page.</Styled.h4>
       </div>
     );
@@ -57,9 +57,9 @@ export const MyBooks: React.FC<{
     );
     return (
       <React.Fragment>
-        <Helmet>
+        <Head>
           <title>My Books</title>
-        </Helmet>
+        </Head>
         {view === "LIST" ? (
           <ListView
             books={collection.data?.books}
@@ -88,9 +88,9 @@ export const MyBooks: React.FC<{
         flexDirection: "column"
       }}
     >
-      <Helmet>
+      <Head>
         <title>My Books</title>
-      </Helmet>
+      </Head>
       <Styled.h3 sx={{ color: "primaries.medium" }}>
         Your books will show up here when you have any loaned or on hold.
       </Styled.h3>

@@ -18,11 +18,11 @@ import FulfillmentCard from "./FulfillmentCard";
 import BreadcrumbBar from "../BreadcrumbBar";
 import truncateString from "../../utils/truncate";
 import useNormalizedBook from "../../hooks/useNormalizedBook";
-import { Helmet } from "react-helmet-async";
 import DetailField from "../BookMetaDetail";
 import ReportProblem from "./ReportProblem";
 import useTypedSelector from "../../hooks/useTypedSelector";
 import { NavButton } from "../Button";
+import Head from "next/head";
 
 export interface BookDetailsPropsNew {
   setCollectionAndBook: SetCollectionAndBook;
@@ -46,9 +46,9 @@ export const BookDetails: React.FC<BookDetailsPropsNew> = ({
   if (!book) return <PageLoader />;
   return (
     <section aria-label="Book details">
-      <Helmet>
+      <Head>
         <title>{book.title}</title>
-      </Helmet>
+      </Head>
       <BreadcrumbBar currentLocation={truncateString(book.title, 20, false)} />
       <div
         sx={{
@@ -214,10 +214,10 @@ const Error: React.FC<{ error: FetchErrorData }> = ({ error }) => {
         alignItems: "center"
       }}
     >
-      <Helmet>
+      <Head>
         <title>Book error</title>
-      </Helmet>
-      <div sx={{ maxWidth: "70%" }}>
+      </Head>
+      <div>
         <p>
           There was a problem fetching this book. Please refresh the page or
           return home.
@@ -230,9 +230,6 @@ const Error: React.FC<{ error: FetchErrorData }> = ({ error }) => {
           <span sx={{ fontWeight: "bold" }}>Error Message: </span>
           {detail}
         </div>
-        <NavButton sx={{ mt: 3 }} collectionUrl={undefined}>
-          Return Home
-        </NavButton>
       </div>
     </section>
   );
