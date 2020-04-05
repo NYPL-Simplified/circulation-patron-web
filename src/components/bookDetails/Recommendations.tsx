@@ -86,7 +86,7 @@ const RecommendationsLane: React.FC<{ lane: LaneData; selfId: string }> = ({
         }}
       >
         <Styled.h2 sx={{ fontSize: 2 }}>{title}</Styled.h2>
-        <NavButton to={laneLink}>More...</NavButton>
+        <NavButton href={laneLink}>More...</NavButton>
       </div>
 
       <div
@@ -105,7 +105,7 @@ const RecommendationsLane: React.FC<{ lane: LaneData; selfId: string }> = ({
             book.id !== selfId &&
             book.url && (
               <Link
-                to={getCatalogLink(book.url)}
+                href={getCatalogLink(book.url)}
                 key={book.id}
                 sx={{ flex: "1 0 auto", maxWidth: 110, m: 2 }}
               >

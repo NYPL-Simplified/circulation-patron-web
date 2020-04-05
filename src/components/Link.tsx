@@ -1,46 +1,49 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui";
+import { jsx, Styled } from "theme-ui";
 import * as React from "react";
-import {
-  Link as BaseLink,
-  LinkProps as RouterLinkProps
-} from "react-router-dom";
+import BaseLink from "next/link";
 import { useGetCatalogLink } from "../hooks/useCatalogLink";
 
-type CatalogLinkProps = Omit<RouterLinkProps, "to"> & {
+type BaseLinkProps = React.ComponentProps<typeof BaseLink>;
+
+type CatalogLinkProps = Omit<BaseLinkProps, "href"> & {
   collectionUrl?: string | null;
   bookUrl?: string | null;
 };
-type LinkProps = { ref?: React.Ref<any> } & (
-  | RouterLinkProps
-  | CatalogLinkProps
-);
+type LinkProps = {
+  ref?: React.Ref<any>;
+  children?: React.ReactNode;
+  className?: string;
+} & (BaseLinkProps | CatalogLinkProps);
 
-function isBaseLinkProps(props: LinkProps): props is RouterLinkProps {
-  return !!(props as RouterLinkProps).to;
+function isBaseLinkProps(props: LinkProps): props is BaseLinkProps {
+  return !!(props as BaseLinkProps).href;
 }
+
 /**
  * Extends the react router link to:
  *  - add styles
  *  - allow user to optionally pass in a collectionUrl/bookUrl combo
  *    and let the link compute the "to" prop
  */
+
 const Link: React.FC<LinkProps> = React.forwardRef(
-  ({ ...props }: LinkProps, ref: React.Ref<any>) => {
+  ({ children, className, ...props }, ref: React.Ref<any>) => {
     const getCatalogLink = useGetCatalogLink();
-    const computedTo = isBaseLinkProps(props)
-      ? props.to
+    const computedHref = isBaseLinkProps(props)
+      ? props.href
       : getCatalogLink(props.bookUrl, props.collectionUrl);
 
-    delete (props as CatalogLinkProps).collectionUrl;
-    delete (props as CatalogLinkProps).bookUrl;
     return (
-      <BaseLink
-        to={computedTo}
-        sx={{ textDecoration: "none", color: "inherit" }}
-        ref={ref}
-        {...props}
-      />
+      <BaseLink href={computedHref}>
+        <Styled.a
+          ref={ref}
+          sx={{ textDecoration: "none", color: "inherit" }}
+          className={className}
+        >
+          {children}
+        </Styled.a>
+      </BaseLink>
     );
   }
 );

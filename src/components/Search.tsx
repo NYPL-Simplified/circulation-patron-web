@@ -4,7 +4,7 @@ import * as React from "react";
 import TextInput from "./TextInput";
 import Button from "./Button";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
-import { useHistory } from "react-router-dom";
+import Router from "next/router";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { usePathFor } from "opds-web-client/lib/components/context/PathForContext";
 
@@ -20,7 +20,6 @@ interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
  */
 const Search: React.FC<SearchProps> = ({ ...props }) => {
   const [value, setValue] = React.useState("");
-  const history = useHistory();
   const searchData = useTypedSelector(state => state?.collection?.data?.search);
   const { actions, dispatch } = useActions();
   const pathFor = usePathFor();
@@ -37,7 +36,7 @@ const Search: React.FC<SearchProps> = ({ ...props }) => {
     e.preventDefault();
     const searchTerms = encodeURIComponent(value);
     const url = searchData?.searchData?.template(searchTerms);
-    history.push(pathFor(url, null));
+    Router.push(pathFor(url, null));
   };
 
   return (

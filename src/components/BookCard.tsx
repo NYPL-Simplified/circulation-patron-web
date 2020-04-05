@@ -42,7 +42,7 @@ const BookCard = React.forwardRef<
         textAlign: "center"
       }}
     >
-      <Link to={link}>
+      <Link href={link}>
         <BookCover book={book} sx={{ mx: 4 }} />
         <Styled.h2
           sx={{

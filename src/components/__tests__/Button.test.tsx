@@ -28,7 +28,7 @@ test("disabled style", () => {
   expect(button).toMatchSnapshot();
 });
 test("NavButton renders correct element", () => {
-  const node = render(<NavButton to="/somewhere">child</NavButton>);
+  const node = render(<NavButton href="/somewhere">child</NavButton>);
   const button = node.getByText("child");
   expect(button).toHaveAttribute("href", "/somewhere");
   expect(button).toMatchSnapshot();

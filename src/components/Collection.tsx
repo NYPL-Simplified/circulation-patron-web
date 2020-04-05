@@ -82,6 +82,4 @@ const Connected = connect(
   mergeRootProps
 )(Collection);
 
-// // we have to do this due to a typing error in react-router-dom
-const Wrapper = props => <Connected {...props} />;
-export default Wrapper;
+export default Connected;

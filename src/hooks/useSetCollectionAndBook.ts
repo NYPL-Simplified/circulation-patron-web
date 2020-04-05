@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
 import { SetCollectionAndBook } from "../interfaces";
 import useUrlShortener from "../components/context/UrlShortenerContext";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useAuth from "./useAuth";
+import { useRouter } from "next/router";
 
 /**
  * Currently have to pass in setCollectionAndBook, which we get from
@@ -16,7 +16,7 @@ const useSetCollectionAndBook = (
   // my-books page has to override this and send in a hard coded collectionUrl
   collectionUrlOverride?: string
 ) => {
-  const { bookUrl, collectionUrl } = useParams();
+  const { bookUrl, collectionUrl } = useRouter().query;
   const finalCollectionUrl = collectionUrlOverride ?? collectionUrl;
   const { actions, dispatch } = useActions();
   const { isSignedIn } = useAuth();

@@ -136,7 +136,7 @@ const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
       <div sx={{ mx: 1, flex: "0 1 40%", display: "flex" }}>
         <BookCover book={book} sx={{ width: 70, height: 105 }} />
         <div sx={{ ml: 3 }}>
-          <Link to={url}>
+          <Link href={url}>
             <Styled.h2 sx={{ my: 2, variant: "text.bookTitle" }}>
               {truncateString(book.title, 50, true)}
             </Styled.h2>

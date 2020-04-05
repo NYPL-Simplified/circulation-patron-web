@@ -44,7 +44,7 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
           textAlign: "center",
           padding: [2, 4]
         }}
-        to={homeUrl}
+        href={homeUrl}
       >
         <Styled.h2
           sx={{
@@ -93,7 +93,7 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
           {/* <NavButton
             sx={{ m: 1, mb: [1, 0] }}
             variant="primary"
-            to={"/settings"}
+            href={"/settings"}
           >
             <SettingsIcon sx={{ fontSize: 5 }} /> Settings
           </NavButton> */}

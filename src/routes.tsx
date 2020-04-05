@@ -18,7 +18,7 @@ export const singleLibraryRoutes = [
     path: "/collection/loans",
     exact: true,
     // eslint-disable-next-line react/display-name
-    component: () => <Redirect to="/loans" />
+    component: () => <Redirect href="/loans" />
   },
   {
     path: "/loans",
@@ -57,7 +57,7 @@ export const multiLibraryRoutes = [
     exact: true,
     // eslint-disable-next-line react/display-name
     component: (props: RouteComponentProps<{ library: string }>) => (
-      <Redirect to={`/${props.match.params.library}/loans`} />
+      <Redirect href={`/${props.match.params.library}/loans`} />
     )
   },
   {

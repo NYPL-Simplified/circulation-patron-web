@@ -7,7 +7,7 @@ import { usePathFor } from "opds-web-client/lib/components/context/PathForContex
 import { LibraryData } from "interfaces";
 import { State } from "opds-web-client/lib/state";
 import { createMemoryHistory } from "history";
-import { Router } from "react-router-dom";
+// import { Router } from "react-router-dom";
 import useLibraryContext from "../LibraryContext";
 
 const TestComponent: React.FC = () => <div>test child</div>;
@@ -39,15 +39,15 @@ const makeContextWrapper = (config: MakeContextConfig = {}) => ({
     initialEntries: [route]
   });
   return (
-    <Router history={history}>
-      <AppContextProvider
-        library={library}
-        initialState={initialState}
-        shortenUrls={shortenUrls}
-      >
-        {children}
-      </AppContextProvider>
-    </Router>
+    // <Router history={history}>
+    <AppContextProvider
+      library={library}
+      initialState={initialState}
+      shortenUrls={shortenUrls}
+    >
+      {children}
+    </AppContextProvider>
+    // </Router>
   );
 };
 

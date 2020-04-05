@@ -1,8 +1,8 @@
-import { useHistory } from "react-router-dom";
 import * as React from "react";
 import useTypedSelector from "./useTypedSelector";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useCatalogLink from "./useCatalogLink";
+import { useRouter } from "next/router";
 
 /**
  * Will get auth data from cookies and make sure it's saved to redux
@@ -10,16 +10,16 @@ import useCatalogLink from "./useCatalogLink";
  * the calculated isSignedIn value
  */
 function useAuth() {
+  const router = useRouter();
   const authState = useTypedSelector(state => state.auth);
   const isSignedIn = !!authState?.credentials;
   const { fetcher, actions, dispatch } = useActions();
-  const history = useHistory();
   const homeUrl = useCatalogLink(undefined, undefined);
 
   const signOut = () => dispatch(actions.clearAuthCredentials());
   const signOutAndGoHome = () => {
     signOut();
-    history.push(homeUrl);
+    router.push(homeUrl);
   };
   /**
    * On mount, we need to check for auth data in cookies. This used
