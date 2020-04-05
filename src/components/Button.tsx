@@ -7,7 +7,11 @@ import Link from "./Link";
 import { Box, PolymorphicComponentProps } from "./PolymorphicBox";
 
 type Variant = VariantProp<ButtonVariants>;
-type ButtonOwnProps = { variant?: Variant; disabled?: boolean };
+type ButtonOwnProps = {
+  variant?: Variant;
+  disabled?: boolean;
+  className?: string;
+};
 type ButtonProps<E extends React.ElementType> = PolymorphicComponentProps<
   E,
   ButtonOwnProps
@@ -32,9 +36,13 @@ function Button<E extends React.ElementType = typeof defaultComponent>({
   );
 }
 
+/**
+ * The nav button renders a Link, which already takes an "as" prop, so
+ * we need to pass that through the PolymorphicBox via some other name
+ */
 type NavButtonProps = React.ComponentProps<typeof Link> & ButtonOwnProps;
-export function NavButton(props: NavButtonProps) {
-  return <Button as={Link} {...props} />;
+export function NavButton({ as, ...props }: NavButtonProps) {
+  return <Button as={Link} internalAs={as} {...props} />;
 }
 
 type AnchorButtonProps = React.ComponentProps<typeof Styled.a> & ButtonOwnProps;

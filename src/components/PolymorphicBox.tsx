@@ -4,6 +4,7 @@ import React from "react";
 
 export interface BoxOwnProps<E extends React.ElementType = React.ElementType> {
   as?: E;
+  internalAs?: any;
 }
 
 export type BoxProps<E extends React.ElementType> = BoxOwnProps<E> &
@@ -15,14 +16,17 @@ const defaultElement = "div";
  * This component allows us to create components that use an "as" prop
  * with full type-safety. It is somewhat fragile, refer to <Button> to see
  * usage.
+ *
+ * The internalAs prop is in case the component we want the box to render takes
+ * an "as" prop, which is the case when using it to render a link `as={Link}`
  */
 // eslint-disable-next-line react/display-name
 export const Box = React.forwardRef(
   (
-    { as: Element = defaultElement, ...restProps }: BoxOwnProps,
+    { as: Element = defaultElement, internalAs, ...restProps }: BoxOwnProps,
     ref: React.Ref<Element>
   ) => {
-    return <Element ref={ref} {...restProps} />;
+    return <Element ref={ref} as={internalAs} {...restProps} />;
   }
 ) as <E extends React.ElementType = typeof defaultElement>(
   props: BoxProps<E>
