@@ -1,6 +1,7 @@
-import App, { AppContext, AppProps } from "next/app";
+import React from "react";
+import { AppProps } from "next/app";
 import ContextProvider from "../components/context/ContextProvider";
-import { shortenUrls, isServer } from "../utils/env";
+import { shortenUrls, isServer, isDevelopment } from "../utils/env";
 import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
 import getLibraryData, { setLibraryData } from "../dataflow/getLibraryData";
@@ -11,6 +12,9 @@ import { ThemeProvider } from "theme-ui";
 import theme from "../theme";
 import Auth from "../components/Auth";
 import Layout from "../components/Layout";
+import ErrorBoundary from "../components/ErrorBoundary";
+import Helmet from "react-helmet";
+import Head from "next/head";
 
 const MyApp = ({
   Component,
@@ -26,15 +30,25 @@ const MyApp = ({
   const store = getOrCreateStore(pathFor, initialState);
   setLibraryData(library);
   return (
-    <ContextProvider shortenUrls={shortenUrls} library={library} store={store}>
-      <ThemeProvider theme={theme}>
-        <Auth>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Auth>
-      </ThemeProvider>
-    </ContextProvider>
+    <ErrorBoundary fallback={AppErrorFallback}>
+      <Head>
+        {/* define the default title */}
+        <title>Library.catalogName</title>
+      </Head>
+      <ContextProvider
+        shortenUrls={shortenUrls}
+        library={library}
+        store={store}
+      >
+        <ThemeProvider theme={theme}>
+          <Auth>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Auth>
+        </ThemeProvider>
+      </ContextProvider>
+    </ErrorBoundary>
   );
 };
 
@@ -70,6 +84,24 @@ MyApp.getInitialProps = async appContext => {
     pathFor,
     library: libraryData
   };
+};
+
+/**
+ * Accessibility tool - outputs to devtools console on dev only and client-side only.
+ * @see https://github.com/dequelabs/react-axe
+ */
+if (isDevelopment && !isServer) {
+  const ReactDOM = require("react-dom");
+  const axe = require("react-axe");
+  axe(React, ReactDOM, 1000);
+}
+
+const AppErrorFallback: React.FC<{ message: string }> = ({ message }) => {
+  return (
+    <div>
+      <p sx={{ textAlign: "center" }}>{message}</p>
+    </div>
+  );
 };
 
 export default MyApp;
