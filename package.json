@@ -12,6 +12,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "jest --watch",
+    "test:ci": "jest --ci",
     "generate-icons": "npx @svgr/cli --template src/icons/_template.js --typescript --icon --ext tsx -d src/icons src/icons",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -56,8 +58,11 @@
     "@types/react": "^16.9.32",
     "@types/react-helmet": "^5.0.15",
     "@types/theme-ui": "^0.3.1",
+    "babel-jest": "^25.2.6",
     "fetch-mock-jest": "^1.2.4",
+    "jest": "^25.2.7",
     "prettier": "1.19.1",
+    "react-test-renderer": "^16.13.1",
     "typescript": "^3.8.3"
   },
   "prettier": {
