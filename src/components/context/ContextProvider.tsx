@@ -17,6 +17,7 @@ import DataFetcher from "opds-web-client/lib/DataFetcher";
 import ActionsCreator from "opds-web-client/lib/actions";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import basicAuthPlugin from "../../auth/basicAuthPlugin";
+import getPathFor from "../../utils/getPathFor";
 
 type ProviderProps = PreloadedData & {
   // we allow custom store and actions
@@ -40,27 +41,7 @@ const AppContextProvider: React.FC<ProviderProps> = ({
 }) => {
   const libraryId = library.id;
   const urlShortener = new UrlShortener(library.catalogUrl, shortenUrls);
-  const pathFor: PathFor = (collectionUrl, bookUrl) => {
-    let path = "";
-    if (libraryId) {
-      path += "/" + libraryId;
-    }
-    if (collectionUrl) {
-      const preparedCollectionUrl = urlShortener.prepareCollectionUrl(
-        collectionUrl
-      );
-      if (preparedCollectionUrl) {
-        path += `/collection/${preparedCollectionUrl}`;
-      }
-    }
-    if (bookUrl) {
-      path += `/book/${urlShortener.prepareBookUrl(bookUrl)}`;
-    }
-    if (!path) {
-      path = "/";
-    }
-    return path;
-  };
+  const pathFor: PathFor = getPathFor(urlShortener, libraryId);
   const computedFetcher = fetcher ?? new DataFetcher({ adapter });
   const computedActions = actions ?? new ActionsCreator(computedFetcher);
 
