@@ -243,5 +243,4 @@ const Connected = connect(
 
 // am doing this because typescript throws an error when trying to use
 // redux ConnectedComponent inside of Route
-const Wrapper = props => <Connected {...props} />;
-export default Wrapper;
+export default Connected;
