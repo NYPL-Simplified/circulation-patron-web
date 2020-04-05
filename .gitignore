@@ -1,10 +1,35 @@
-lib/*
-dist/*
-node_modules/*
-typings/*
-*~
-npm-debug.log
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config_file.txt
 config/cm_libraries.txt
+
+# local developer files
 .yalc
 yalc.lock
 wallaby.js
