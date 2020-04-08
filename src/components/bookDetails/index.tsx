@@ -184,7 +184,9 @@ const DownloadRequirements: React.FC<{ className?: string }> = ({
             Adobe Digital Editions
           </ExternalLink>
           <br />
-          <ExternalLink href="">Bluefire Reader</ExternalLink>
+          <ExternalLink href="http://www.bluefirereader.com/bluefire-reader.html">
+            Bluefire Reader
+          </ExternalLink>
           <br />
           <span>* Or another Adobe-compatible application</span>
         </li>
