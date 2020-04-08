@@ -10,12 +10,8 @@ import { FacetGroupData } from "opds-web-client/lib/interfaces";
 import Select, { Label } from "./Select";
 
 /**
- * This filter depends on the "Formats" facetGroup, which should have
- * at least two facets with labels:
- *  - Audiobooks
- *  - eBooks
- * It can optionally have an additional "All" facet. Note that the facet
- * labels must match the spelling and capitalization exactly.
+ * This filter depends on the "Sort by" and "Availability" facet groups.
+ * They must be named exactly that in the CM in order to show up here.
  */
 const ListFilters: React.FC = () => {
   return (

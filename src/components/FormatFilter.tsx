@@ -30,10 +30,17 @@ const FormatFilter: React.FC = () => {
   const allFacet = formatFacetGroup?.facets.find(
     facet => facet.label === "All"
   );
-
   if (!ebookFacet || !audiobookFacet) return null;
   return (
-    <Route path={["/", "/collection/:collectionUrl"]} exact>
+    <Route
+      path={[
+        "/",
+        "/collection/:collectionUrl",
+        "/:library/",
+        "/:library/collection/:collectionUrl"
+      ]}
+      exact
+    >
       <Group role="tablist" sx={{ display: "flex", py: 0 }}>
         {allFacet && (
           <FilterButton
