@@ -3,7 +3,7 @@ import { jsx, Styled } from "theme-ui";
 import * as React from "react";
 import { BookData, LaneData } from "opds-web-client/lib/interfaces";
 import BreadcrumbBar from "./BreadcrumbBar";
-import useCatalogLink, { useGetCatalogLink } from "../hooks/useCatalogLink";
+import useCatalogLink from "../hooks/useCatalogLink";
 import BookCover from "./BookCover";
 import truncateString from "../utils/truncate";
 import { getAuthors } from "../utils/book";
@@ -13,7 +13,9 @@ import DetailField from "./BookMetaDetail";
 import useBorrow from "../hooks/useBorrow";
 import Button from "./Button";
 import { useBreakpointIndex } from "@theme-ui/match-media";
-import BookCard, { BOOK_HEIGHT } from "./BookCard";
+import BookCard from "./BookCard";
+import LoadingIndicator from "./LoadingIndicator";
+import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
 /**
  * In a collection you can:
@@ -22,15 +24,34 @@ import BookCard, { BOOK_HEIGHT } from "./BookCard";
  *    - Switch between list and gallery in this case
  */
 
+const ListLoadingIndicator = () => (
+  <div
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      fontSize: 2,
+      fontWeight: "heading",
+      p: 3
+    }}
+  >
+    <LoadingIndicator /> Loading more books...
+  </div>
+);
+
 export const GalleryView: React.FC<{
   books: BookData[];
   breadcrumb?: React.ReactNode;
   showBorrowButton?: boolean;
 }> = ({ books, breadcrumb, showBorrowButton = false }) => {
+  // this hook will refetch the page when we reach the bottom of the screen
+  const { listRef, isFetchingPage } = useInfiniteScroll();
+
   return (
     <div>
       <BreadcrumbBar>{breadcrumb}</BreadcrumbBar>
       <ul
+        ref={listRef}
         data-testid="gallery-list"
         sx={{
           display: "flex",
@@ -50,6 +71,7 @@ export const GalleryView: React.FC<{
           />
         ))}
       </ul>
+      {isFetchingPage && <ListLoadingIndicator />}
     </div>
   );
 };
@@ -59,6 +81,8 @@ export const ListView: React.FC<{
   breadcrumb?: React.ReactNode;
   showBorrowButton?: boolean;
 }> = ({ books, breadcrumb, showBorrowButton = false }) => {
+  // this hook will refetch the page when we reach the bottom of the screen
+  const { listRef, isFetchingPage } = useInfiniteScroll();
   const breakpoint = useBreakpointIndex();
   // if we are on mobile, show the gallery instead
   if (breakpoint < 1) {
@@ -73,11 +97,12 @@ export const ListView: React.FC<{
   return (
     <React.Fragment>
       <BreadcrumbBar>{breadcrumb}</BreadcrumbBar>
-      <ul sx={{ p: 0, m: 0 }} data-testid="listview-list">
+      <ul ref={listRef} sx={{ p: 0, m: 0 }} data-testid="listview-list">
         {books.map(book => (
           <BookListItem key={book.id} book={book} />
         ))}
       </ul>
+      {isFetchingPage && <ListLoadingIndicator />}
     </React.Fragment>
   );
 };
