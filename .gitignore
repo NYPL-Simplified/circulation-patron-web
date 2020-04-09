@@ -8,3 +8,4 @@ config/cm_libraries.txt
 .yalc
 yalc.lock
 wallaby.js
+config/*
