@@ -1,5 +1,5 @@
 # build environment
-FROM node:12.2.0-alpine as build
+FROM node:12.2.0-alpine as builder
 # we first copy just the package.json and run npm ci
 # to take advantage of layer caching
 COPY package*.json ./
@@ -22,9 +22,9 @@ EXPOSE $PORT
 COPY ./build /build
 
 WORKDIR /app/
-COPY --from=build /node_modules node_modules
-COPY --from=build /lib lib
-COPY --from=build /dist dist
+COPY --from=builder /node_modules node_modules
+COPY --from=builder /lib lib
+COPY --from=builder /dist dist
 
 RUN /build/build.sh
 
