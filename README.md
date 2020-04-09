@@ -144,3 +144,49 @@ test("fetches search description", async () => {
 - `npm run lint` - Will lint all code and show errors/warnings in the console.
 - `npm run lint:ts:fix` - Will lint the ts and tsx files and apply automatic fixes where possible.
 - `npm run generate-icons` - You can place svg files in `src/icons` and then run this command, and it will generate react components that can be imported and rendered normally.
+
+# Deploying
+
+This repository includes a Dockerfile, and the master branch is built as an image in Docker Hub in the Hub repository [nypl/patron-web](https://hub.docker.com/r/nypl/patron-web). You can deploy the application simply by running the image from Docker Hub.
+
+Alternatively, you can build your own container from local changes as described below. If you would like to deploy from Docker Hub, skip to [Running a container from the image](#running-a-container-from-the-image).
+
+## Build a docker container
+
+When you have code changes you wish to review locally, you will need to build a local Docker image with your changes included. There are a few steps to get a working build:
+
+1. Clone this repository and make some changes.
+
+2. Build the image
+   ```
+   docker build -t patronweb  .
+   ```
+
+If you wanted to customize the image, you could create an additional Dockerfile (e.g., Dockerfile.second) and simply specify its name in the docker build commands. The Docker file you specify will guide the image build. For this image, the build takes about 4-6 minutes, depending on your Internet speed and load on the Node package servers, to complete the final image. Eg: `docker build -f Dockerfile.second -t patronweb .`
+
+## Running the docker container
+
+Whether running the container from a Docker Hub image, or a local one, you will need to provide at least one environment variable to specify the circulation manager backend, as described in [Application Startup Configurations](#Application-Startup-Configurations). You can also provide the other optional environment variables when running your docker container. There are two ways to run the container: (1) via the command line, and (2) via `docker-compose` with a `docker-compose.yml` file.
+
+When running the image with the `CONFIG_FILE` option, you will want to provide the file's directory to the container as a volume, so the container can access the file on your host machine. We do this in both examples below.
+
+### From the command line
+
+This command will download the image from NYPL's Docker Hub repo, and then run it with the `CONFIG_FILE` option and the name `patronweb`. If you would like to run your locally built image, subtitle `nypl/patron-web` with the name of the image you built previously (also `patronweb` in the example above).
+
+```
+docker run --rm --name patronweb -d \
+  --restart=unless-stopped \
+  -e "CONFIG_FILE=/config/cm-libraries.conf" \
+  -v "./config:/config" nypl/patron-web
+```
+
+### Using `docker-compose`
+
+Instead of using the `docker run` command at the command line, it's also possible to use the `docker-compose` utility to create the container. Using docker-compose provides the advantage of encapsulating the run parameters in a configuration file that can be committed to source control. We've added an example `docker-compose.yml` file in this repository, which you can adjust as needed with parameters that fit your development.
+
+To create the container using the `docker-compose.yml` file in this repository, simply issue the following command:
+
+```
+docker-compose up
+```
