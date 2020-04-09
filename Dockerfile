@@ -22,7 +22,6 @@ EXPOSE $PORT
 COPY ./build /build
 
 WORKDIR /app/
-# copy our entrypoint file
 COPY --from=build /node_modules node_modules
 COPY --from=build /lib lib
 COPY --from=build /dist dist
