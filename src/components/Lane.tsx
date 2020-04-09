@@ -122,7 +122,9 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
       setIsBrowserScrolling(false);
     }, browserScrollTime);
 
-    return () => timeoutRef.current && clearTimeout(timeoutRef.current);
+    return () => {
+      timeoutRef.current && clearTimeout(timeoutRef.current);
+    };
   }, [currentBook, filteredBooks, bookRefs]);
 
   const getBookWidth = () => {
