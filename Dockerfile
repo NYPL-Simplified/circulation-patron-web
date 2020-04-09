@@ -14,19 +14,13 @@ RUN npm prune --production
 # production environment
 FROM node:12.2.0-alpine
 ENV PORT=3000 \
-    NODE_ENV=production \
-    UID=990 \
-    GID=99
+    NODE_ENV=production
 EXPOSE $PORT
-
-COPY ./build /build
 
 WORKDIR /app/
 COPY --from=builder /node_modules node_modules
 COPY --from=builder /lib lib
 COPY --from=builder /dist dist
 
-RUN /build/build.sh
-
 USER node
-CMD ./entrypoint.sh
+CMD ["node", "lib/server/index.js"]
