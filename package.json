@@ -106,7 +106,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "opds-feed-parser": "0.0.16",
-    "opds-web-client": "^0.3.7",
+    "opds-web-client": "^0.4.0",
     "react": "^16.13.1",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.13.1",
