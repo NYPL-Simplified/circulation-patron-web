@@ -22,7 +22,5 @@ COPY --from=builder /node_modules node_modules
 COPY --from=builder /lib lib
 COPY --from=builder /dist dist
 
-RUN /build/build.sh
-
 USER node
-CMD ./entrypoint.sh
+CMD ["node", "lib/server/index.js"]
