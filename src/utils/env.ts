@@ -5,6 +5,7 @@ export const shortenUrls = !(process.env.SHORTEN_URLS === "false");
 export const REGISTRY_BASE = process.env.REGISTRY_BASE;
 export const CIRCULATION_MANAGER_BASE = process.env.SIMPLIFIED_CATALOG_BASE;
 export const CONFIG_FILE = process.env.CONFIG_FILE;
+export const REACT_AXE = process.env.REACT_AXE;
 export const CACHE_EXPIRATION_SECONDS = parseInt(
   process.env.CACHE_EXPIRATION_SECONDS ?? "10",
   10
