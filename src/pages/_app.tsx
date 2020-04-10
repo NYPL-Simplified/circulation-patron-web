@@ -33,7 +33,7 @@ function is404(props: MyAppProps): props is NotFoundProps {
   return !!(props as NotFoundProps).statusCode;
 }
 
-const MyApp: NextPage<MyAppProps> = (props: MyAppProps & AppProps) => {
+const MyApp = (props: MyAppProps & AppProps) => {
   /**
    * If there was no library or initialState provided, render the error page
    */
@@ -85,10 +85,12 @@ const getLibraryFromQuery = (
     : undefined;
 };
 
-MyApp.getInitialProps = async ({ query }) => {
+MyApp.getInitialProps = async ({ ctx, err }) => {
   isServer
     ? console.log("Running _app getInitialProps on server")
     : console.log("Running _app getInitialProps on client");
+  console.log(ctx);
+  const { query } = ctx;
 
   /**
    * Get libraryData from the DataCache, which we will then set
@@ -97,6 +99,7 @@ MyApp.getInitialProps = async ({ query }) => {
    *  LIBRARY_REGISTRY
    */
   const parsedLibrary = getLibraryFromQuery(query);
+  console.log("Library is ", query);
   const libraryData = await getLibraryData(parsedLibrary);
 
   if (!libraryData) return { statusCode: 404 };

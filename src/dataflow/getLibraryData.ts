@@ -101,7 +101,7 @@ const getLibraryData = async (
   library?: string
 ): Promise<LibraryData | null> => {
   if (isServer) {
-    return fetchLibraryData(library);
+    return await fetchLibraryData(library);
   }
   /**
    * we are on the client and library data should be available
@@ -115,7 +115,7 @@ const getLibraryData = async (
   //   window[__LIBRARY_DATA__] = data;
   // }
   // return our cached store
-  return window[__LIBRARY_DATA__];
+  return Promise.resolve(window[__LIBRARY_DATA__]);
 };
 
 /**
@@ -125,7 +125,7 @@ const getLibraryData = async (
 const fetchLibraryData = async (
   library?: string
 ): Promise<LibraryData | null> => {
-  console.log("Fetching library data");
+  console.log("Fetching library data 2");
 
   // first make sure the cache is ready
   const cache = await cachePromise;
@@ -151,7 +151,7 @@ const fetchLibraryData = async (
   if (library) {
     return await cache.getLibraryData(library);
   }
-
+  console.error("Running with multiple libraries and no library was provided!");
   // otherwise there was no library provided, return null
   return null;
 };

@@ -13,8 +13,5 @@ module.exports = {
     }
 
     return config;
-  },
-  env: {
-    SIMPLIFIED_CATALOG_BASE: "http://simplye-dev-cm.amigos.org/xyzlib"
   }
 };
