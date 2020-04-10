@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "strictNullChecks": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "config/srv"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
