@@ -12,28 +12,6 @@ import { matchPath, StaticRouter, RouteProps } from "react-router-dom";
 import App from "../../App";
 import LibraryDataCache from "../LibraryDataCache";
 
-/**
- * A function that takes in library data and returns a function to
- * render html from the request.
- *
- *  - match with a route
- *  - handle 404s, redirects
- *  - get library data
- *  - build initial state
- *  - render the html and send it
- *  - handle errors
- */
-
-/**
- * Possibilities
- *  - no url match
- *  - no params on url
- *  - can't get library data from cache
- *  - no collectionUrl or bookUrl, we need to redirect
- *  - app renders a redirect itself
- *  - building the page fails
- */
-
 type Url = string;
 
 type Params = {
@@ -48,6 +26,26 @@ type SSRProps = {
   shortenUrls: boolean;
   circManagerBase: string | undefined;
 };
+
+/**
+ * A function that takes in library data and returns a function to
+ * render html from the request.
+ *
+ *  - match with a route
+ *  - handle 404s, redirects
+ *  - get library data
+ *  - build initial state
+ *  - render the html and send it
+ *  - handle errors
+ *
+ * Possibilities:
+ *  - no url match
+ *  - no params on url
+ *  - can't get library data from cache
+ *  - no collectionUrl or bookUrl, we need to redirect
+ *  - app renders a redirect itself
+ *  - building the page fails
+ */
 
 const ssr = ({
   shortenUrls,
