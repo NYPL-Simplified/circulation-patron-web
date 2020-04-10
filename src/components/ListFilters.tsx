@@ -1,12 +1,9 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
 import useTypedSelector from "../hooks/useTypedSelector";
-import { useHistory, Route, useRouteMatch } from "react-router-dom";
-import useCatalogLink, { useGetCatalogLink } from "../hooks/useCatalogLink";
-import { Book, Headset } from "../icons";
-import FilterButton from "./FilterButton";
-import { FacetGroupData } from "opds-web-client/lib/interfaces";
+import { useHistory } from "react-router-dom";
+import { useGetCatalogLink } from "../hooks/useCatalogLink";
 import Select, { Label } from "./Select";
 
 /**

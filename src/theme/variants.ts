@@ -1,4 +1,4 @@
-import { darken, alpha, lighten } from "@theme-ui/color";
+import { darken, alpha } from "@theme-ui/color";
 
 const buttonBase = {
   appearance: "none",

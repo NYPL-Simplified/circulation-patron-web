@@ -111,6 +111,7 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CMDefinedHeaderLinks: React.FC<{ library: LibraryData }> = ({
   library
 }) => {

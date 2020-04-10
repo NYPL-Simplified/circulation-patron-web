@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as express from "express";
-// import { match, RouterContext } from "react-router";
 import UrlShortener from "../../UrlShortener";
 import buildInitialState from "opds-web-client/lib/state";
 import { renderToString } from "react-dom/server";
@@ -9,13 +8,7 @@ import { LibraryData } from "../../interfaces";
 import renderErrorPage from "./renderErrorPage";
 import getAssets from "./getAssets";
 import Html, { DOCTYPE } from "./html";
-import {
-  matchPath,
-  StaticRouter,
-  match as Match,
-  Route,
-  RouteProps
-} from "react-router-dom";
+import { matchPath, StaticRouter, RouteProps } from "react-router-dom";
 import App from "../../App";
 import LibraryDataCache from "../LibraryDataCache";
 

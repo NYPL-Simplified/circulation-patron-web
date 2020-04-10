@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BookData, RequiredKeys } from "opds-web-client/lib/interfaces";
+import { BookData } from "opds-web-client/lib/interfaces";
 import useTypedSelector from "./useTypedSelector";
 import { getErrorMsg, getAvailabilityString } from "../utils/book";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";

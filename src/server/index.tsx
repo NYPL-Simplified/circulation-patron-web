@@ -1,6 +1,4 @@
 import express from "express";
-import * as React from "react";
-import * as path from "path";
 import webpackDevMiddleware from "./wdm";
 import ssr from "./ssr";
 import loadCache from "./loadCache";

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Flex } from "theme-ui";
+import { jsx } from "theme-ui";
 import { Group } from "reakit";
 import * as React from "react";
 import useTypedSelector from "../hooks/useTypedSelector";

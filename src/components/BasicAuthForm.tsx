@@ -3,7 +3,7 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import Button from "./Button";
 import useTypedSelector from "../hooks/useTypedSelector";
-import { useForm, OnSubmit } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import FormInput from "./form/FormInput";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { generateCredentials } from "opds-web-client/lib/utils/auth";

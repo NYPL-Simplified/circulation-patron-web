@@ -26,7 +26,7 @@ const TextInput = React.forwardRef<
 export const TextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.InputHTMLAttributes<HTMLTextAreaElement>
->(({ type = "text", ...props }, ref) => {
+>((props, ref) => {
   return <textarea ref={ref} sx={styles} {...props} />;
 });
 
