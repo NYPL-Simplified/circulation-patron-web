@@ -4,3 +4,5 @@
  */
 
 Element.prototype.scrollTo = jest.fn();
+
+export default {};
