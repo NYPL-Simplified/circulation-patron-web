@@ -1,10 +1,8 @@
-import { useRouter } from "next/router";
+import { NextPage, GetServerSideProps } from "next";
+import Collection from "../../components/Collection";
 
-const Home = () => {
-  const router = useRouter();
-  const params = router.query;
-  console.log(params);
-  return <div>Welcome to library/home</div>;
+const LibraryHome: NextPage = () => {
+  return <Collection />;
 };
 
-export default Home;
+export default LibraryHome;
