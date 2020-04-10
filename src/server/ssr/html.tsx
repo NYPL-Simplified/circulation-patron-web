@@ -1,8 +1,7 @@
 import * as React from "react";
-import * as Redux from "redux";
 import { LibraryData, WebpackAssets, PreloadedData } from "../../interfaces";
 import { State } from "opds-web-client/lib/state";
-import getAssets, { renderCSS, renderJS } from "./getAssets";
+import { renderCSS, renderJS } from "./getAssets";
 
 interface HtmlProps {
   content?: string;
@@ -21,19 +20,6 @@ const Html = ({
   assets,
   helmetContext
 }: HtmlProps) => {
-  const collectionTitle =
-    preloadedState.collection &&
-    preloadedState.collection.data &&
-    preloadedState.collection.data.title;
-
-  const bookTitle =
-    preloadedState.book &&
-    preloadedState.book.data &&
-    preloadedState.book.data.title;
-
-  const details = bookTitle || collectionTitle;
-  // const pageTitle = library.catalogName + (details ? " - " + details : "");
-
   const preloadedData: PreloadedData = {
     library,
     shortenUrls,
