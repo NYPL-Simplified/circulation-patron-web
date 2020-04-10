@@ -13,6 +13,8 @@ import {
 import fs from "fs";
 
 async function setupCache() {
+  // we don't want this to be run on the client
+  if (!isServer) return Promise.resolve(null);
   if (
     (REGISTRY_BASE && CIRCULATION_MANAGER_BASE) ||
     (REGISTRY_BASE && CONFIG_FILE) ||
@@ -24,7 +26,7 @@ async function setupCache() {
   }
   if (REGISTRY_BASE) {
     console.log("Running with Library Registry at: ", REGISTRY_BASE);
-    return new LibraryDataCache(REGISTRY_BASE, 10);
+    return new LibraryDataCache(REGISTRY_BASE, CACHE_EXPIRATION_SECONDS);
   }
 
   if (CONFIG_FILE) {
@@ -50,7 +52,7 @@ async function setupCache() {
         config[path] = circManagerUrl;
       }
     }
-    return new LibraryDataCache(undefined, 10, config);
+    return new LibraryDataCache(undefined, CACHE_EXPIRATION_SECONDS, config);
   }
 
   if (CIRCULATION_MANAGER_BASE) {
@@ -58,7 +60,9 @@ async function setupCache() {
       "Running with Circulation Manager Base at: ",
       CIRCULATION_MANAGER_BASE
     );
-    return new LibraryDataCache(undefined, 10, {});
+    // when running with a single circ manager, you pass no library
+    // registry and an empty config object.
+    return new LibraryDataCache(undefined, CACHE_EXPIRATION_SECONDS, {});
   }
 
   console.log(
@@ -97,12 +101,15 @@ const getLibraryData = async (): Promise<LibraryData> => {
   }
   /**
    * we are on the client and library data should be available
-   * on the window, but if it's not for some reason then fetch it.
+   * on the window. If it is not, something has gone wrong and we should
+   * trigger a re-render from the server or display an error page.
+   * We cannot fetch library data on client because it depends on
+   * reading the config file on server with "fs" module.
    */
-  if (!window[__LIBRARY_DATA__]) {
-    const data = await fetchLibraryData();
-    window[__LIBRARY_DATA__] = data;
-  }
+  // if (!window[__LIBRARY_DATA__]) {
+  //   const data = await fetchLibraryData();
+  //   window[__LIBRARY_DATA__] = data;
+  // }
   // return our cached store
   return window[__LIBRARY_DATA__];
 };
@@ -116,6 +123,11 @@ const fetchLibraryData = async (): Promise<LibraryData> => {
 
   // first make sure the cache is ready
   const cache = await cachePromise;
+
+  // if the cache is not loaded, we are client side and can't proceed.
+  if (!cache) {
+    throw new Error("Cannot fetch library data on client");
+  }
 
   if (!CIRCULATION_MANAGER_BASE) {
     // we currently only support when there is a CIRCULATION_MANAGER_BASE.
