@@ -1,7 +1,7 @@
 import React from "react";
 import { AppProps } from "next/app";
 import ContextProvider from "../components/context/ContextProvider";
-import { shortenUrls, isServer, isDevelopment } from "../utils/env";
+import { shortenUrls, isServer, isDevelopment, REACT_AXE } from "../utils/env";
 import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
 import getLibraryData, { setLibraryData } from "../dataflow/getLibraryData";
@@ -14,16 +14,35 @@ import Auth from "../components/Auth";
 import Layout from "../components/Layout";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
+import Error from "next/error";
+import { NextPage } from "next";
+import { ParsedUrlQuery } from "querystring";
 
-const MyApp = ({
-  Component,
-  pageProps,
-  library,
-  initialState
-}: AppProps & {
+type NotFoundProps = {
+  statusCode: number;
+};
+
+type InitialData = {
   library: LibraryData;
   initialState: State;
-}) => {
+};
+
+type MyAppProps = InitialData | NotFoundProps;
+
+function is404(props: MyAppProps): props is NotFoundProps {
+  return !!(props as NotFoundProps).statusCode;
+}
+
+const MyApp: NextPage<MyAppProps> = (props: MyAppProps & AppProps) => {
+  /**
+   * If there was no library or initialState provided, render the error page
+   */
+  if (is404(props)) {
+    return <Error statusCode={props.statusCode} />;
+  }
+
+  const { library, initialState, Component, pageProps } = props;
+
   const urlShortener = new UrlShortener(library.catalogUrl, shortenUrls);
   const pathFor = getPathFor(urlShortener, library.id);
   const store = getOrCreateStore(pathFor, initialState);
@@ -51,7 +70,22 @@ const MyApp = ({
   );
 };
 
-MyApp.getInitialProps = async appContext => {
+/**
+ * The query object type doesn't protect against undefined values, and
+ * the "library" variable could be an array if you pass ?library=xxx&library=zzz
+ */
+const getLibraryFromQuery = (
+  query: ParsedUrlQuery | undefined
+): string | undefined => {
+  const libraryQuery: string | string[] | undefined = query?.library;
+  return libraryQuery
+    ? typeof libraryQuery === "string"
+      ? libraryQuery
+      : libraryQuery[0]
+    : undefined;
+};
+
+MyApp.getInitialProps = async ({ query }) => {
   isServer
     ? console.log("Running _app getInitialProps on server")
     : console.log("Running _app getInitialProps on client");
@@ -62,7 +96,10 @@ MyApp.getInitialProps = async appContext => {
    *  CONFIG_FILE
    *  LIBRARY_REGISTRY
    */
-  const libraryData = await getLibraryData();
+  const parsedLibrary = getLibraryFromQuery(query);
+  const libraryData = await getLibraryData(parsedLibrary);
+
+  if (!libraryData) return { statusCode: 404 };
 
   /**
    * Create the resources we need to complete a server render
@@ -89,7 +126,7 @@ MyApp.getInitialProps = async appContext => {
  * Accessibility tool - outputs to devtools console on dev only and client-side only.
  * @see https://github.com/dequelabs/react-axe
  */
-if (isDevelopment && !isServer) {
+if (isDevelopment && !isServer && REACT_AXE) {
   const ReactDOM = require("react-dom");
   const axe = require("react-axe");
   axe(React, ReactDOM, 1000);

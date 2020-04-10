@@ -1,11 +1,9 @@
-import {
-  isServer,
-  __LIBRARY_DATA__,
-  CACHE_EXPIRATION_SECONDS
-} from "./../utils/env";
 import { LibraryData } from "./../interfaces";
 import LibraryDataCache from "./LibraryDataCache";
 import {
+  isServer,
+  __LIBRARY_DATA__,
+  CACHE_EXPIRATION_SECONDS,
   REGISTRY_BASE,
   CIRCULATION_MANAGER_BASE,
   CONFIG_FILE
@@ -15,13 +13,17 @@ import fs from "fs";
 async function setupCache() {
   // we don't want this to be run on the client
   if (!isServer) return Promise.resolve(null);
+
   if (
     (REGISTRY_BASE && CIRCULATION_MANAGER_BASE) ||
     (REGISTRY_BASE && CONFIG_FILE) ||
     (CIRCULATION_MANAGER_BASE && CONFIG_FILE)
   ) {
     console.error(
-      "Only one of REGISTRY_BASE, SIMPLIFIED_CATALOG_BASE, and CONFIG_FILE should be used."
+      "Only one of REGISTRY_BASE, SIMPLIFIED_CATALOG_BASE, and CONFIG_FILE should be used.",
+      REGISTRY_BASE,
+      CIRCULATION_MANAGER_BASE,
+      CONFIG_FILE
     );
   }
   if (REGISTRY_BASE) {
@@ -92,12 +94,14 @@ export const setLibraryData = (library: LibraryData) => {
 };
 
 /**
- * will get the library data from the window when we are
- * on the client, otherwise it will fetch it via the api
+ * Get the library data from the window when we are
+ * on the client, otherwise fetch it via the api
  */
-const getLibraryData = async (): Promise<LibraryData> => {
+const getLibraryData = async (
+  library?: string
+): Promise<LibraryData | null> => {
   if (isServer) {
-    return fetchLibraryData();
+    return fetchLibraryData(library);
   }
   /**
    * we are on the client and library data should be available
@@ -118,7 +122,9 @@ const getLibraryData = async (): Promise<LibraryData> => {
  * uses the datacache to get library data
  * handles the logic around config files and env vars
  */
-const fetchLibraryData = async (): Promise<LibraryData> => {
+const fetchLibraryData = async (
+  library?: string
+): Promise<LibraryData | null> => {
   console.log("Fetching library data");
 
   // first make sure the cache is ready
@@ -129,21 +135,25 @@ const fetchLibraryData = async (): Promise<LibraryData> => {
     throw new Error("Cannot fetch library data on client");
   }
 
-  if (!CIRCULATION_MANAGER_BASE) {
-    // we currently only support when there is a CIRCULATION_MANAGER_BASE.
-    // this will need to be updated for production
-    throw new Error("You must have a CIRCULATION_MANAGER_BASE set");
-  }
-  // We're using a single circ manager library instead of a registry.
-  const catalog = await cache.getCatalog(CIRCULATION_MANAGER_BASE);
-  const authDocument = await cache.getAuthDocument(catalog);
-  const libraryData = {
-    onlyLibrary: true,
-    catalogUrl: CIRCULATION_MANAGER_BASE,
-    ...cache.getDataFromAuthDocumentAndCatalog(authDocument, catalog)
-  };
+  if (CIRCULATION_MANAGER_BASE) {
+    // We're using a single circ manager library instead of a registry.
+    const catalog = await cache.getCatalog(CIRCULATION_MANAGER_BASE);
+    const authDocument = await cache.getAuthDocument(catalog);
+    const libraryData = {
+      onlyLibrary: true,
+      catalogUrl: CIRCULATION_MANAGER_BASE,
+      ...cache.getDataFromAuthDocumentAndCatalog(authDocument, catalog)
+    };
 
-  return libraryData;
+    return libraryData;
+  }
+  // otherwise we are using a config file or registry.
+  if (library) {
+    return await cache.getLibraryData(library);
+  }
+
+  // otherwise there was no library provided, return null
+  return null;
 };
 
 export default getLibraryData;
