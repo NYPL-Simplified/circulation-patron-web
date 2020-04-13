@@ -139,7 +139,11 @@ const ssr = ({
     // we need to expand the bookUrl before making a request to it, otherwise
     // we get an error
     const fullBookUrl = urlShortener.expandBookUrl(bookUrl);
-    // build the page and send it
+    /**
+     * Try to build the page and send it. If that fails, build try building
+     * the root of the catalog and sending that instead. To build the root,
+     * pass undefined as collectionUrl and fullBookUrl.
+     */
     try {
       const fullPage = await buildPage(
         collectionUrl,
@@ -151,7 +155,7 @@ const ssr = ({
       );
       res.status(200).send(fullPage);
     } catch (e) {
-      const fullPage = await buildPage(
+      const rootPage = await buildPage(
         undefined,
         undefined,
         libraryData,
@@ -159,7 +163,7 @@ const ssr = ({
         req,
         res
       );
-      res.status(200).send(fullPage);
+      res.status(200).send(rootPage);
     }
   } catch (error) {
     console.error("Could not SSR");
