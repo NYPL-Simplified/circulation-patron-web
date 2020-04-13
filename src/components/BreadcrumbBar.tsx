@@ -46,7 +46,7 @@ const BreadcrumbBar: React.FC<{
                 to={getCatalogLink(undefined, breadcrumb.url)}
                 key={breadcrumb.url}
               >
-                <Styled.h1
+                <Styled.h2
                   sx={{
                     m: 0,
                     display: "flex",
@@ -55,7 +55,7 @@ const BreadcrumbBar: React.FC<{
                   }}
                 >
                   {breadcrumb.text} <ArrowRight sx={{ fill: "white" }} />
-                </Styled.h1>
+                </Styled.h2>
               </Link>
             )
         )}
