@@ -10,7 +10,6 @@ const consoleErrorSpy = jest.spyOn(global.console, "warn");
 consoleErrorSpy.mockImplementation(() => null);
 
 import LibraryDataCache, {
-  RegistryEntry,
   AuthDocument,
   CacheEntry
 } from "../LibraryDataCache";
