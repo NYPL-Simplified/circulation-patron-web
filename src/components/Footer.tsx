@@ -47,20 +47,20 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
         <div sx={{ m: 4, mb: 2 }}>
           <Styled.h5 sx={{ m: 0 }}>Patron Support</Styled.h5>
           <Styled.ul>
-            <Styled.li>
-              {helpEmail && (
+            {helpEmail && (
+              <Styled.li>
                 <FooterExternalLink href={helpEmail.href}>
                   Email Support
                 </FooterExternalLink>
-              )}
-            </Styled.li>
-            <Styled.li>
-              {helpWebsite && (
+              </Styled.li>
+            )}
+            {helpWebsite && (
+              <Styled.li>
                 <FooterExternalLink href={helpWebsite.href}>
                   Help Website
                 </FooterExternalLink>
-              )}
-            </Styled.li>
+              </Styled.li>
+            )}
           </Styled.ul>
         </div>
       </div>
