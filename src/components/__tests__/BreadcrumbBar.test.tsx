@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, prettyDOM } from "../../test-utils";
+import { render, fixtures } from "../../test-utils";
 import BreadcrumbBar from "../BreadcrumbBar";
 import merge from "deepmerge";
 import { State } from "opds-web-client/lib/state";
@@ -101,5 +101,5 @@ test("renders children", () => {
       initialState: stateWithCrumbs
     }
   );
-  const child = node.getByText("Hi Im here");
+  expect(node.getByText("Hi Im here")).toBeInTheDocument();
 });
