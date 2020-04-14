@@ -15,7 +15,7 @@ const mockSetCollectionAndBook = jest.fn().mockResolvedValue({});
  * We need to mock actions.fetchCollection so that
  * ReportProblem doesn't actually fetch anything
  */
-const mockFetchCollection = jest
+jest
   .spyOn(actions, "fetchCollection")
   .mockImplementation(() => () => Promise.resolve({} as CollectionData));
 
@@ -232,7 +232,7 @@ describe("report problem", () => {
      * turned out to be quite difficult.
      */
     const complaintTypes = ["complaint-type-a", "complaint-type-b"];
-    fetchComplaintTypesSpy.mockImplementationOnce(dispatch => url => {
+    fetchComplaintTypesSpy.mockImplementationOnce(dispatch => _url => {
       dispatch({
         type: "FETCH_COMPLAINT_TYPES_SUCCESS",
         types: complaintTypes
@@ -272,7 +272,7 @@ describe("report problem", () => {
 
   test("displays thank you after submitting", async () => {
     const complaintTypes = ["complaint-type-a", "complaint-type-b"];
-    fetchComplaintTypesSpy.mockImplementationOnce(dispatch => url => {
+    fetchComplaintTypesSpy.mockImplementationOnce(dispatch => _url => {
       dispatch({
         type: "FETCH_COMPLAINT_TYPES_SUCCESS",
         types: complaintTypes

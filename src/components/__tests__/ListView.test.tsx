@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, logRoles } from "../../test-utils";
+import { render, fixtures } from "../../test-utils";
 import { ListView } from "../BookList";
 import { useBreakpointIndex } from "@theme-ui/match-media";
 import merge from "deepmerge";

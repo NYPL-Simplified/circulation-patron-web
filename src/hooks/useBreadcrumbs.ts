@@ -1,4 +1,3 @@
-import * as React from "react";
 import computeBreadcrumbs from "../computeBreadcrumbs";
 import useTypedSelector from "./useTypedSelector";
 

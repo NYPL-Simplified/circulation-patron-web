@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as fs from "fs";
 import * as util from "util";
-import * as path from "path";
 import * as express from "express";
 import * as _ from "lodash";
 import isDevelopment from "../isDevelopment";

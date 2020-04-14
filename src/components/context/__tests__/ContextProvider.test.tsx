@@ -85,7 +85,6 @@ describe("ContextProvider", () => {
   describe("pathFor", () => {
     const collectionUrl = "collection/url";
     const bookUrl = "book/url";
-    const host = "http://example.com";
 
     test("returns a path with collection and book", () => {
       const { result } = renderHook(() => usePathFor(), {

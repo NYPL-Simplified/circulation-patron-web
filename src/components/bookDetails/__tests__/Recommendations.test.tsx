@@ -1,6 +1,5 @@
 import * as React from "react";
 import { render, fixtures, actions } from "../../../test-utils";
-import merge from "deepmerge";
 import { CollectionData } from "opds-web-client/lib/interfaces";
 import { RecommendationsStateContext } from "../../context/RecommendationsContext";
 import { wait } from "@testing-library/react";

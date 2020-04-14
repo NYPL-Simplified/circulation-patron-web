@@ -47,7 +47,7 @@ export function fetchComplaintTypes(
             return response
               .text()
               .then(text => text.split("\n"))
-              .catch(err => {
+              .catch(_err => {
                 throw {
                   status: response.status,
                   response: "Could not parse complaint types",

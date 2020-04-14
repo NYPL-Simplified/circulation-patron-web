@@ -1,6 +1,5 @@
-import * as React from "react";
-import useTypedSelector from "./useTypedSelector";
 import { loanedBookData } from "opds-web-client/lib/utils";
+import useTypedSelector from "./useTypedSelector";
 
 /**
  * A hook to give you the book state that has been updated with

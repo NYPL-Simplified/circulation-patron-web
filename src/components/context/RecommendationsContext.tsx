@@ -42,7 +42,7 @@ export const RecommendationsProvider: React.FC = ({ children }) => {
 function useRecommendationsState() {
   const state = React.useContext(RecommendationsStateContext);
   const dispatch = React.useContext(RecommendationsDispatchContext);
-  const { actions, dispatch: _unusedOpdsDispatch } = useActions();
+  const { actions } = useActions();
 
   if (typeof state === "undefined" || typeof dispatch === "undefined") {
     throw new Error(

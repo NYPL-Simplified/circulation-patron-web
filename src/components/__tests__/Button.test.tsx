@@ -1,16 +1,7 @@
 import * as React from "react";
-import {
-  render,
-  fixtures,
-  actions,
-  fireEvent,
-  prettyDOM
-} from "../../test-utils";
-import merge from "deepmerge";
+import { render } from "../../test-utils";
 import Button, { NavButton, AnchorButton } from "../Button";
 import userEvent from "@testing-library/user-event";
-import theme from "../../theme";
-import { darken, alpha, lighten } from "@theme-ui/color";
 
 describe("variants", () => {
   test("primary (default)", () => {

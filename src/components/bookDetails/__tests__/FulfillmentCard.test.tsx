@@ -9,7 +9,8 @@ import {
 } from "opds-web-client/lib/interfaces";
 import userEvent from "@testing-library/user-event";
 import { State } from "opds-web-client/lib/state";
-import _moment from "moment";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import moment from "moment";
 
 jest.mock("moment", () => () => ({
   fromNow: () => "two days"

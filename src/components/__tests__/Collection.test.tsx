@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, fireEvent, prettyDOM } from "../../test-utils";
+import { render, fixtures, fireEvent } from "../../test-utils";
 import { Collection } from "../Collection";
 import merge from "deepmerge";
 import { State } from "opds-web-client/lib/state";

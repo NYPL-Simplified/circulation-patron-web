@@ -48,7 +48,7 @@ describe("Layout nav + structure", () => {
   });
 
   test("provides global styles", () => {
-    const node = render(<Layout>Some children</Layout>);
+    render(<Layout>Some children</Layout>);
     expect(document.body).toHaveStyle("margin: 0;");
   });
 });

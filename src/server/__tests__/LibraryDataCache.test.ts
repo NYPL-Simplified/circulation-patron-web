@@ -16,11 +16,6 @@ import LibraryDataCache, {
 import { OPDSFeed } from "opds-feed-parser";
 
 describe("LibraryDataCache", () => {
-  const config = {
-    a: "http://a",
-    b: "http://b"
-  };
-
   let getCatalog;
   let getAuthDocument;
   class LibraryDataCacheWithCatalogAndAuthDocument extends LibraryDataCache {
@@ -480,7 +475,7 @@ describe("LibraryDataCache", () => {
       const cache = new LibraryDataCacheWithTemplate("/base-url");
       getCatalog.mockRejectedValue();
 
-      const mockFetch = jest.fn().mockResolvedValue({
+      jest.fn().mockResolvedValue({
         json: () => {
           return { catalogs: [registryEntry] };
         }
@@ -727,7 +722,6 @@ describe("LibraryDataCache", () => {
     });
 
     test("returns an error if the catalog does not have an auth document url", async () => {
-      const mockFetch = jest.fn();
       const feedWithoutAuthDoc = new OPDSFeed({
         id: "1",
         title: "Library",
