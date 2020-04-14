@@ -113,6 +113,15 @@ const variants = {
       border: "solid",
       borderColor: "primary"
     }
+  },
+  lists: {
+    unstyled: {
+      m: 0,
+      p: 0,
+      "&>li": {
+        listStyle: "none"
+      }
+    }
   }
 };
 export default variants;

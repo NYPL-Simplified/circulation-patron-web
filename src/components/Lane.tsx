@@ -168,6 +168,7 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
 
         <ul
           ref={scrollContainer}
+          data-testid="lane-list"
           sx={{
             p: 0,
             my: 2,

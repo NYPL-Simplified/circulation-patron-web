@@ -54,7 +54,7 @@ test("shows gallery on mobile instead of list", () => {
   mockeduseBreakpointsIndex.mockReturnValueOnce(0);
   const node = render(<ListView books={books} />);
 
-  const list = node.getByRole("list");
+  const list = node.getByTestId("gallery-list");
 
   expect(list).toHaveStyle("display: flex; flex-wrap: wrap;");
 });
@@ -62,7 +62,7 @@ test("shows gallery on mobile instead of list", () => {
 test("shows list not gallery on desktop", () => {
   const node = render(<ListView books={books} />);
 
-  const list = node.getByRole("list");
+  const list = node.getByTestId("listview-list");
 
   expect(list).toHaveStyle("display: block;");
 });

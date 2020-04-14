@@ -31,38 +31,43 @@ const BreadcrumbBar: React.FC<{
         justifyContent: "space-between"
       }}
     >
-      <div
+      <ul
         sx={{
           display: "flex",
           alignItems: "center",
-          textTransform: "uppercase"
+          textTransform: "uppercase",
+          variant: "lists.unstyled"
         }}
       >
         {breadcrumbs.map(
           breadcrumb =>
             breadcrumb.text &&
             breadcrumb.url && (
-              <Link
-                to={getCatalogLink(undefined, breadcrumb.url)}
-                key={breadcrumb.url}
-              >
-                <Styled.h2
-                  sx={{
-                    m: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: [1, 3]
-                  }}
+              <li>
+                <Link
+                  to={getCatalogLink(undefined, breadcrumb.url)}
+                  key={breadcrumb.url}
                 >
-                  {breadcrumb.text} <ArrowRight sx={{ fill: "white" }} />
-                </Styled.h2>
-              </Link>
+                  <Styled.h2
+                    sx={{
+                      m: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: [1, 3]
+                    }}
+                  >
+                    {breadcrumb.text} <ArrowRight sx={{ fill: "white" }} />
+                  </Styled.h2>
+                </Link>
+              </li>
             )
         )}
-        <Styled.h3 sx={{ m: 0, fontWeight: "light", fontSize: [1, 3] }}>
-          {lastItem}
-        </Styled.h3>
-      </div>
+        <li>
+          <Styled.h3 sx={{ m: 0, fontWeight: "light", fontSize: [1, 3] }}>
+            {lastItem}
+          </Styled.h3>
+        </li>
+      </ul>
       {children}
     </div>
   );

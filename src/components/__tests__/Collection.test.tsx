@@ -111,7 +111,7 @@ test("renders books in list/gallery view if no lanes", () => {
   );
 
   // the default display is gallery, so it should be in a gallery now
-  const list = node.getByRole("list");
+  const list = node.getByTestId("gallery-list");
   expect(list).toBeInTheDocument();
   expect(node.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
   expect(
