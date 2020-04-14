@@ -41,14 +41,14 @@ module.exports = {
     // disabling this bc it is checked by typescript so it is
     // redundant and doesn't function properly
     "react/prop-types": 0,
-    // update the no unused var rule to allow _var
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
         vars: "all",
         args: "after-used",
         // ignore underscore _vars or jsx imports or React imports
-        argsIgnorePattern: "^_.*|^jsx|",
+        argsIgnorePattern: "^_.*",
+        varsIgnorePattern: "^jsx",
         ignoreRestSiblings: true
       }
     ],
