@@ -68,6 +68,72 @@ The following environment variables can also be set to further configure the app
 - Set `CACHE_EXPIRATION_SECONDS` to control how often the app will check for changes to registry entries and circ manager authentication documents.
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 
+## Testing
+
+The code is tested using Jest as a test runner and mocking library, and a combination of [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Enzyme](https://enzymejs.github.io/enzyme/). New tests are generally written with React Testing Library while the legacy tests were written with Enzyme. React Testing Library is good because it encourages devs not to test implementation details, but instead test the expected user experience. This results in tests that provide more confidence and change less frequently (they are implementation agnostic), therefore requiring less maintenance. In general, we have favored integration over unit tests, and testing components higher up the tree instead of in complete isolation. Similarly we have chosen to mock as few values and modules as possible. Both of these decisions will lead to higher confidence that the app works as expected for users.
+
+### Context and useful spies
+
+Because many components depend on context values, such as the redux store or the theme, the `src/test-utils/index.tsx` file augments React Testing Library's `render` function to wrap the passed in component with our standard context providers. The custom `render` function also provides a way to pass in an `initialState` so you can set the redux state at the time of render in the test. We also mock and/or spy on some values, such as `pathFor`, and redux's `dispatch`, the latter of which is passed to the test in the `render` result so it can be asserted on.
+
+Inside of `src/test-utils/fixtures` are some useful data fixtures. Typically they are used to create an initial state for the application which is passed as an option to the render function.
+
+### Running tests
+
+You can run `npm run test` to run the test suite once. Alternatively, and recommended, is keeping the test suite running in watch mode while developing with `npm run test:watch`. The CLI output for that function will also provide instructions to filter the tests to a specific file for speed, if you'd like.
+
+### Example
+
+An annotated example from `Search.text.tsx`:
+
+```js
+/**
+ *  our custom render, our fixtures, the actions creator, and
+ *  all other react-testing-library exports can be imported from test-utils
+ */
+import { render, fixtures, fireEvent, actions } from "../../test-utils";
+
+test("fetches search description", async () => {
+  /**
+   * use merge to create an initial state specific for this test. Merge is useful
+   * not only because it will deep merge the objects, but it copies them to a new
+   * object, so if the app alters the passed in state object, it won't break other
+   * tests that rely on it. This is a common source of flakiness where one test fails
+   * only if another one runs. Merge should solve it.
+   */
+  const initialState: State = merge(fixtures.initialState, {
+    collection: {
+      data: {
+        search: {
+          url: "/search-url"
+        }
+      }
+    }
+  });
+
+  // spy on a specific action in the ActionsCreator.
+  const mockedFetchSearchDescription = jest.spyOn(
+    actions,
+    "fetchSearchDescription"
+  );
+  /**
+   * node will contain
+   *  - the result of render
+   *  - the redux store
+   *  - the history object
+   *  - the spied on dispatch function
+   */
+  const node = render(<Search />, {
+    initialState
+  });
+
+  expect(mockedFetchSearchDescription).toHaveBeenCalledTimes(1);
+  expect(mockedFetchSearchDescription).toHaveBeenCalledWith("/search-url");
+  // we can assert on the app's dispatch like this
+  expect(node.dispatch).toHaveBeenCalledTimes(1);
+});
+```
+
 ### Useful Scripts
 
 - `npm run test` - This will launch the test runner (jest) and run all tests.
