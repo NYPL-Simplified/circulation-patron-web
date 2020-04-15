@@ -43,11 +43,8 @@ const BreadcrumbBar: React.FC<{
           breadcrumb =>
             breadcrumb.text &&
             breadcrumb.url && (
-              <li>
-                <Link
-                  to={getCatalogLink(undefined, breadcrumb.url)}
-                  key={breadcrumb.url}
-                >
+              <li key={breadcrumb.url}>
+                <Link to={getCatalogLink(undefined, breadcrumb.url)}>
                   <Styled.h2
                     sx={{
                       m: 0,
