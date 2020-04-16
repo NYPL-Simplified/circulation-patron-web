@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+
 /**
  * A base component that can be easily customized within
  * the CPW design system
