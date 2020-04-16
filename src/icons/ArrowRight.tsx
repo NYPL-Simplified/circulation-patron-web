@@ -1,4 +1,3 @@
-import { jsx } from "theme-ui";
 import * as React from "react";
 
 const SvgArrowRight = (props: React.SVGProps<SVGSVGElement>) => (

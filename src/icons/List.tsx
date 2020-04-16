@@ -1,4 +1,3 @@
-import { jsx } from "theme-ui";
 import * as React from "react";
 
 const SvgList = (props: React.SVGProps<SVGSVGElement>) => (

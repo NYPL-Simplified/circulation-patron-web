@@ -1,4 +1,3 @@
-import { jsx } from "theme-ui";
 import * as React from "react";
 
 const SvgHeadset = (props: React.SVGProps<SVGSVGElement>) => (
