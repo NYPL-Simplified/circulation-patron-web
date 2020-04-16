@@ -183,7 +183,6 @@ describe("Gallery selectors", () => {
     const node = render(<Layout>Some children</Layout>, {
       initialState: stateWithBooks
     });
-    expect(node.getAllByRole("radio")).toHaveLength(2);
     expect(node.getByLabelText("Gallery View")).toBeInTheDocument();
     expect(node.getByLabelText("List View")).toBeInTheDocument();
   });

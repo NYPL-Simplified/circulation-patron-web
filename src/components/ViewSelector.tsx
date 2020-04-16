@@ -21,7 +21,7 @@ const ViewSelector: React.FC = () => {
     <Flex
       role="group"
       aria-label="View Selector"
-      sx={{ py: 0, fontSize: 5, "&>svg": {} }}
+      sx={{ py: 0, fontSize: 5, display: ["none", "flex"] }}
     >
       <FilterButton
         role="radio"
