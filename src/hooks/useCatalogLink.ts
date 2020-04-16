@@ -39,9 +39,9 @@ function useCatalogLink(
   bookUrl?: string | null,
   collectionUrlOverride?: string | null
 ) {
-  const getCalalogLink = useGetCatalogLink(collectionUrlOverride);
+  const getCatalogLink = useGetCatalogLink(collectionUrlOverride);
 
-  const location = getCalalogLink(bookUrl);
+  const location = getCatalogLink(bookUrl);
 
   return location;
 }

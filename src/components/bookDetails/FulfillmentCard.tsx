@@ -213,7 +213,7 @@ const CardWrapper: React.FC<{ className?: string }> = ({
 }) => {
   return (
     <div
-      arai-label="Borrow and download card"
+      aria-label="Borrow and download card"
       className={className}
       sx={{
         border: "1px solid",

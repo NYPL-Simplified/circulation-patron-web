@@ -22,8 +22,6 @@ const useSetCollectionAndBook = (
   const { isSignedIn } = useAuth();
   const urlShortener = useUrlShortener();
 
-  // we save setCollectionAndBook to a ref, because
-
   const fullCollectionUrl = decodeURIComponent(
     urlShortener.expandCollectionUrl(finalCollectionUrl)
   );

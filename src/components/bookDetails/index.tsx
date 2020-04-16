@@ -71,13 +71,14 @@ export const BookDetails: React.FC<BookDetailsPropsNew> = ({
           >
             <BookCover book={book} sx={{ m: 2 }} />
             {/* download requirements & download links */}
-            <FulfillmentCard
-              sx={{ m: 2, display: ["none", "none", "block"] }}
-              book={book}
-            />
-            <DownloadRequirements
-              sx={{ m: 2, display: ["none", "none", "block"] }}
-            />
+            <div
+              sx={{
+                display: ["none", "none", "block"]
+              }}
+            >
+              <FulfillmentCard sx={{ m: 2 }} book={book} />
+              <DownloadRequirements sx={{ m: 2 }} />
+            </div>
           </div>
 
           {/* title, details, summary */}
@@ -165,9 +166,9 @@ const DownloadRequirements: React.FC<{ className?: string }> = ({
       }}
       className={className}
     >
-      <Styled.h1 id="requirements-header" sx={{ fontSize: 2, m: 0, mb: 2 }}>
+      <Styled.h2 id="requirements-header" sx={{ fontSize: 2, m: 0, mb: 2 }}>
         Download Requirements:
-      </Styled.h1>
+      </Styled.h2>
       <ol
         sx={{ m: 0, p: 0, pl: 3, fontSize: 1 }}
         aria-labelledby="requirements-header"
