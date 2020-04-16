@@ -162,11 +162,12 @@ const DownloadCard: React.FC<{
           borderColor: "primary"
         }}
       >
-        <Label
+        <div
           sx={{ fontWeight: "semibold", display: "flex", alignItems: "center" }}
         >
-          TYPE
+          <Label htmlFor="format-select">TYPE</Label>
           <Select
+            id="format-select"
             value={selectedType}
             onBlur={handleTypeChange}
             onChange={handleTypeChange}
@@ -178,7 +179,7 @@ const DownloadCard: React.FC<{
               </option>
             ))}
           </Select>
-        </Label>
+        </div>
       </div>
       <div
         sx={{
