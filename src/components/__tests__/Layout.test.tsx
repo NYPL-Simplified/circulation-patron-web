@@ -5,7 +5,6 @@ import { State } from "opds-web-client/lib/state";
 import { FacetGroupData, LaneData } from "opds-web-client/lib/interfaces";
 import merge from "deepmerge";
 import userEvent from "@testing-library/user-event";
-import { LibraryData, Link } from "interfaces";
 
 describe("Layout nav + structure", () => {
   test("Library name button navigates home", () => {
@@ -219,43 +218,5 @@ describe("Gallery selectors", () => {
     expect(node.queryAllByRole("radio")).toHaveLength(0);
     expect(node.queryByLabelText("Gallery View")).toBeNull();
     expect(node.queryByLabelText("List View")).toBeNull();
-  });
-});
-
-const link: Link = {
-  href: "/wherever",
-  rel: "rel"
-};
-const libraryWithLinks: LibraryData = merge(fixtures.libraryData, {
-  libraryLinks: {
-    helpEmail: link,
-    helpWebsite: link,
-    privacyPolicy: link,
-    tos: link,
-    about: link,
-    registration: link,
-    libraryWebsite: link
-  }
-});
-
-describe("Footer", () => {
-  test("shows external links when present in state w/ apropriate attributes", () => {
-    const node = render(<Layout>Some children</Layout>, {
-      library: libraryWithLinks
-    });
-    const expectExternalLink = (name: string) => {
-      const lnk = node.queryByText(name);
-      expect(lnk).toBeInTheDocument();
-      expect(lnk).toHaveAttribute("href", "/wherever");
-      expect(lnk).toHaveAttribute("rel", "noopener noreferrer");
-      expect(lnk).toHaveAttribute("target", "__blank");
-    };
-    expectExternalLink("Library Website");
-    expectExternalLink("Patron Registration");
-    expectExternalLink("Email Support");
-    expectExternalLink("Help Website");
-    expectExternalLink("Privacy");
-    expectExternalLink("Terms of Use");
-    expectExternalLink("About");
   });
 });
