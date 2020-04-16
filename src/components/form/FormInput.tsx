@@ -36,9 +36,11 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
           }}
           {...props}
         />
-        <span id={describedById} sx={{ color: "warn", fontStyle: "italic" }}>
-          {error}
-        </span>
+        {error && (
+          <span id={describedById} sx={{ color: "warn", fontStyle: "italic" }}>
+            {error}
+          </span>
+        )}
       </div>
     );
   }

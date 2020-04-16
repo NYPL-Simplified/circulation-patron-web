@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders as expected 1`] = `
-.emotion-3 {
+.emotion-2 {
   margin-bottom: 8px;
 }
 
@@ -20,13 +20,8 @@ exports[`renders as expected 1`] = `
   display: block;
 }
 
-.emotion-2 {
-  color: var(--theme-ui-colors-warn,#d93025);
-  font-style: italic;
-}
-
 <div
-  class="emotion-3"
+  class="emotion-2"
   role="group"
 >
   <label
@@ -42,10 +37,6 @@ exports[`renders as expected 1`] = `
     id="input-name"
     name="input-name"
     type="text"
-  />
-  <span
-    class="emotion-2"
-    id="input-name-errors"
   />
 </div>
 `;
