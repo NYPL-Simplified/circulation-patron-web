@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+.emotion-3 {
+  margin-bottom: 8px;
+}
+
+.emotion-0 {
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.emotion-1 {
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: var(--theme-ui-colors-primary,#0467a6);
+  border-width: 2px;
+  padding: 4px;
+  font-size: 16px;
+  display: block;
+}
+
+.emotion-2 {
+  color: var(--theme-ui-colors-warn,#d93025);
+  font-style: italic;
+}
+
+<div
+  class="emotion-3"
+  role="group"
+>
+  <label
+    class="emotion-0"
+    for="input-name"
+  >
+    Email
+  </label>
+  <input
+    aria-describedby="input-name-errors"
+    aria-label="input-name input"
+    class="emotion-1"
+    id="input-name"
+    name="input-name"
+    type="text"
+  />
+  <span
+    class="emotion-2"
+    id="input-name-errors"
+  />
+</div>
+`;
+
+exports[`renders as expected 1`] = `
+.emotion-3 {
+  margin-bottom: 8px;
+}
+
+.emotion-0 {
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.emotion-1 {
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: var(--theme-ui-colors-primary,#0467a6);
+  border-width: 2px;
+  padding: 4px;
+  font-size: 16px;
+  display: block;
+}
+
+.emotion-2 {
+  color: var(--theme-ui-colors-warn,#d93025);
+  font-style: italic;
+}
+
+<div
+  class="emotion-3"
+  role="group"
+>
+  <label
+    class="emotion-0"
+    for="input-name"
+  >
+    Email
+  </label>
+  <input
+    aria-describedby="input-name-errors"
+    aria-label="input-name input"
+    class="emotion-1"
+    id="input-name"
+    name="input-name"
+    type="text"
+  />
+  <span
+    class="emotion-2"
+    id="input-name-errors"
+  />
+</div>
+`;
