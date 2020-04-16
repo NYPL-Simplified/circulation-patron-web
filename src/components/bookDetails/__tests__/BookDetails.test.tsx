@@ -29,128 +29,130 @@ const makeStateWithBook = (book: BookData = fixtures.book): State =>
     }
   });
 
-test("shows loading state", () => {
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: merge<State>(fixtures.initialState, {
-        book: {
-          isFetching: true,
-          url: "/book",
-          error: null,
-          data: null
-        }
-      })
-    }
-  );
-  expect(node.getByText("Loading...")).toBeInTheDocument();
-});
-
-test("handles error state", () => {
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: merge<State>(fixtures.initialState, {
-        book: {
-          isFetching: false,
-          url: "/book",
-          error: {
-            response: "Some error",
-            status: 401,
-            url: "/book-error-url"
-          },
-          data: null
-        }
-      })
-    }
-  );
-  /**
-   * We will snapshot test this component because it isn't complicated and should prettymuch remain the same.
-   */
-  expect(node.container).toMatchSnapshot();
-});
-
-test("shows categories", () => {
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: makeStateWithBook()
-    }
-  );
-  const categories = fixtures.book.categories?.join(", ") as string;
-  expect(node.getByText(categories));
-  expect(node.getByText("Categories:"));
-});
-
-test("doesn't show categories when there aren't any", () => {
-  const bookWithoutCategories: BookData = merge(fixtures.book, {
-    categories: null
+describe("book details page", () => {
+  test("shows loading state", () => {
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: merge<State>(fixtures.initialState, {
+          book: {
+            isFetching: true,
+            url: "/book",
+            error: null,
+            data: null
+          }
+        })
+      }
+    );
+    expect(node.getByText("Loading...")).toBeInTheDocument();
   });
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: makeStateWithBook(bookWithoutCategories)
-    }
-  );
-  expect(node.queryByText("Categories:")).toBeFalsy();
-});
 
-test("shows publisher", () => {
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: makeStateWithBook()
-    }
-  );
-  const publisher = fixtures.book.publisher as string;
+  test("handles error state", () => {
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: merge<State>(fixtures.initialState, {
+          book: {
+            isFetching: false,
+            url: "/book",
+            error: {
+              response: "Some error",
+              status: 401,
+              url: "/book-error-url"
+            },
+            data: null
+          }
+        })
+      }
+    );
+    /**
+     * We will snapshot test this component because it isn't complicated and should prettymuch remain the same.
+     */
+    expect(node.container).toMatchSnapshot();
+  });
 
-  expect(node.getByText(publisher)).toBeInTheDocument();
-  expect(node.getByText("Publisher:")).toBeInTheDocument();
-});
+  test("shows categories", () => {
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: makeStateWithBook()
+      }
+    );
+    const categories = fixtures.book.categories?.join(", ") as string;
+    expect(node.getByText(categories));
+    expect(node.getByText("Categories:"));
+  });
 
-test("shows fulfillment card", () => {
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: makeStateWithBook()
-    }
-  );
+  test("doesn't show categories when there aren't any", () => {
+    const bookWithoutCategories: BookData = merge(fixtures.book, {
+      categories: null
+    });
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: makeStateWithBook(bookWithoutCategories)
+      }
+    );
+    expect(node.queryByText("Categories:")).toBeFalsy();
+  });
 
-  // there are two download buttons in the document becuase we change
-  // which is displayed with media queries. But both are always rendered.
-  const downloadButtons = node.getAllByText("Download");
-  expect(downloadButtons).toHaveLength(2);
-});
+  test("shows publisher", () => {
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: makeStateWithBook()
+      }
+    );
+    const publisher = fixtures.book.publisher as string;
 
-test("shows download requirements", () => {
-  const node = render(
-    <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: makeStateWithBook()
-    }
-  );
+    expect(node.getByText(publisher)).toBeInTheDocument();
+    expect(node.getByText("Publisher:")).toBeInTheDocument();
+  });
 
-  /**
-   * There are two download requirement cards in the document
-   * because we display a different one depending on screen width
-   */
-  expect(node.getAllByText("Download Requirements:")).toHaveLength(2);
-});
+  test("shows fulfillment card", () => {
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: makeStateWithBook()
+      }
+    );
 
-test("shows recommendation lanes", () => {
-  const node = render(
-    <RecommendationsStateContext.Provider
-      value={{
-        ...fixtures.recommendationsState
-      }}
-    >
-      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />
-    </RecommendationsStateContext.Provider>,
-    {
-      initialState: makeStateWithBook()
-    }
-  );
-  expect(node.getByText("Jane Austen")).toBeInTheDocument();
+    // there are two download buttons in the document becuase we change
+    // which is displayed with media queries. But both are always rendered.
+    const downloadButtons = node.getAllByText("Download");
+    expect(downloadButtons).toHaveLength(2);
+  });
+
+  test("shows download requirements", () => {
+    const node = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: makeStateWithBook()
+      }
+    );
+
+    /**
+     * There are two download requirement cards in the document
+     * because we display a different one depending on screen width
+     */
+    expect(node.getAllByText("Download Requirements:")).toHaveLength(2);
+  });
+
+  test("shows recommendation lanes", () => {
+    const node = render(
+      <RecommendationsStateContext.Provider
+        value={{
+          ...fixtures.recommendationsState
+        }}
+      >
+        <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />
+      </RecommendationsStateContext.Provider>,
+      {
+        initialState: makeStateWithBook()
+      }
+    );
+    expect(node.getByText("Jane Austen")).toBeInTheDocument();
+  });
 });
 
 /**

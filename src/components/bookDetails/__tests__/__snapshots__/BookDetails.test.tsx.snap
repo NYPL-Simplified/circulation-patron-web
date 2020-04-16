@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handles error state 1`] = `
+exports[`book details page handles error state 1`] = `
 .emotion-3 {
   display: -webkit-box;
   display: -webkit-flex;
