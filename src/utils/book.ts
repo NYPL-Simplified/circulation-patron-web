@@ -65,10 +65,6 @@ export const getAvailabilityString = (book: BookData): string => {
 };
 
 export function getErrorMsg(error: FetchErrorData | null): string | null {
-  // const errorMsg = bookError?.response
-  //   ? // eslint-disable-next-line camelcase
-  //     JSON.parse(bookError?.response)?.debug_message
-  //   : null;
   const response = error?.response;
   if (response) {
     try {
