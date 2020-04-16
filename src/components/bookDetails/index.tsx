@@ -83,7 +83,7 @@ export const BookDetails: React.FC<BookDetailsPropsNew> = ({
 
           {/* title, details, summary */}
           <section aria-label="Book Info" sx={{ flex: 2, m: 2 }}>
-            <Styled.h1
+            <Styled.h2
               sx={{
                 variant: "text.bookTitle",
                 my: [3],
@@ -92,10 +92,10 @@ export const BookDetails: React.FC<BookDetailsPropsNew> = ({
             >
               {book.title}
               {book.subtitle && `: ${book.subtitle}`}
-            </Styled.h1>
-            <Styled.h2 sx={{ color: "primary", fontSize: [2, 2, 3] }}>
-              By {book.authors?.join(", ") ?? "Unknown"}
             </Styled.h2>
+            <Styled.h3 sx={{ color: "primary", fontSize: [2, 2, 3] }}>
+              By {book.authors?.join(", ") ?? "Unknown"}
+            </Styled.h3>
             <DetailField heading="Publisher" details={book.publisher} />
             <DetailField heading="Published" details={book.published} />
             <DetailField
@@ -130,7 +130,7 @@ const Summary: React.FC<{ book: BookData; className?: string }> = ({
   className
 }) => (
   <div sx={{ my: 2 }} className={className} aria-label="Book summary">
-    <Styled.h2 sx={{ mb: 3 }}>Summary</Styled.h2>
+    <Styled.h3 sx={{ mb: 3, fontSize: 4 }}>Summary</Styled.h3>
     <div
       dangerouslySetInnerHTML={{
         __html: book.summary ?? "Summary not provided."
@@ -166,9 +166,9 @@ const DownloadRequirements: React.FC<{ className?: string }> = ({
       }}
       className={className}
     >
-      <Styled.h2 id="requirements-header" sx={{ fontSize: 2, m: 0, mb: 2 }}>
+      <Styled.h3 id="requirements-header" sx={{ fontSize: 2, m: 0, mb: 2 }}>
         Download Requirements:
-      </Styled.h2>
+      </Styled.h3>
       <ol
         sx={{ m: 0, p: 0, pl: 3, fontSize: 1 }}
         aria-labelledby="requirements-header"

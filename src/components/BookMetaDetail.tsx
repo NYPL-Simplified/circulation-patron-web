@@ -7,7 +7,7 @@ const DetailField: React.FC<{ heading: string; details?: string }> = ({
   details
 }) =>
   details ? (
-    <div sx={{ fontSize: 1 }}>
+    <div sx={{ fontSize: [1, 2] }}>
       <b>{heading}: </b>
       <span>{details}</span>
     </div>
