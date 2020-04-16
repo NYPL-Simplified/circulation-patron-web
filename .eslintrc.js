@@ -48,7 +48,7 @@ module.exports = {
         args: "after-used",
         // ignore underscore _vars or jsx imports or React imports
         argsIgnorePattern: "^_.*",
-        varsIgnorePattern: "^jsx",
+        varsIgnorePattern: "^jsx$|^React$",
         ignoreRestSiblings: true
       }
     ],

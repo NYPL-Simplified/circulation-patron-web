@@ -4,7 +4,7 @@ import * as React from "react";
 import { NavButton } from "./Button";
 import { Helmet } from "react-helmet-async";
 
-const NoMatch: React.FC = () => {
+const NoMatch = () => {
   return (
     <div
       sx={{
