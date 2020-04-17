@@ -134,9 +134,7 @@ const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
       aria-label={`Book: ${book.title}`}
     >
       <div sx={{ mx: 1, flex: "0 1 40%", display: "flex" }}>
-        <Link to={url}>
-          <BookCover book={book} sx={{ width: 70, height: 105 }} />
-        </Link>
+        <BookCover book={book} sx={{ width: 70, height: 105 }} />
         <div sx={{ ml: 3 }}>
           <Link to={url}>
             <Styled.h2 sx={{ my: 2, variant: "text.bookTitle" }}>
