@@ -204,7 +204,7 @@ What are these commands doing?
 
 Instead of using the `docker run` command at the command line, it's also possible to use the `docker-compose` utility to create the container. Using docker-compose provides the advantage of encapsulating the run parameters in a configuration file that can be committed to source control. We've added an example `docker-compose.yml` file in this repository, which you can adjust as needed with parameters that fit your development.
 
-To create the container using the `docker-compose.yml` file in this repository, simply run `docker compose up`. This will build the image and start the container. To stop the container and remove it, run `docker compose down`. Similarly you can run `docker compose stop` to stop the container without removing it, and `docker compose start` to restart a stopped container.
+To create the container using the `docker-compose.yml` file in this repository, simply run `docker-compose up`. This will build the image and start the container. To stop the container and remove it, run `docker-compose down`. Similarly you can run `docker-compose stop` to stop the container without removing it, and `docker-compose start` to restart a stopped container.
 
 If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
 
