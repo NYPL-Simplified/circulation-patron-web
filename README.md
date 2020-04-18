@@ -168,25 +168,49 @@ If you wanted to customize the image, you could create an additional Dockerfile 
 
 Whether running the container from a Docker Hub image, or a local one, you will need to provide at least one environment variable to specify the circulation manager backend, as described in [Application Startup Configurations](#Application-Startup-Configurations). You can also provide the other optional environment variables when running your docker container. There are two ways to run the container: (1) via the command line, and (2) via `docker-compose` with a `docker-compose.yml` file.
 
-When running the image with the `CONFIG_FILE` option, you will want to provide the file's directory to the container as a volume, so the container can access the file on your host machine. We do this in both examples below.
+When running the image with the `CONFIG_FILE` option, you will want to provide the file's directory to the container as a volume, so the container can access the file on your host machine. When doing this, replace `$PATH_TO_LOCAL_VOLUME` with the absolute path to the `/config` directory on the host machine.
 
 ### From the command line
 
-This command will download the image from NYPL's Docker Hub repo, and then run it with the `CONFIG_FILE` option and the name `patronweb`. If you would like to run your locally built image, subtitle `nypl/patron-web` with the name of the image you built previously (also `patronweb` in the example above).
+This command will download the image from NYPL's Docker Hub repo, and then run it with the `CONFIG_FILE` option (using a file named `cm_libraries.txt`) and the name `patronweb`. If you would like to run your locally built image, substitute `nypl/patron-web` with the tag of the image you built previously (just `patronweb` in the example above).
 
 ```
-docker run --rm --name patronweb -d \
+docker run -d --name patronweb -p 3000:3000\
   --restart=unless-stopped \
-  -e "CONFIG_FILE=/config/cm-libraries.conf" \
-  -v "./config:/config" nypl/patron-web
+  -e "CONFIG_FILE=/config/cm_libraries.txt" \
+  -v $PATH_TO_LOCAL_VOLUME:/config \
+  nypl/patronweb
 ```
 
-### Using `docker-compose`
+To run the container with a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY` instead of a `CONFIG_FILE`, simply replace the env variable in the run command. You will also not need to provide the volume, since no config file is being read.
+
+```
+docker run --name patronweb -d -p 3000:3000\
+  --restart=unless-stopped \
+  -e "SIMPLIFIED_CATALOG_BASE=https://example.catalog-base.com/" \
+  nypl/patron-web
+```
+
+What are these commands doing?
+
+- `--name` - allows you to name your docker container
+- `-d` - detatches the docker container from the terminal. If running locally, you can still view the container with Docker Desktop.
+- `-p 3000:3000` - the default port exposed in the image during the build is 3000. This command maps that to port 3000 on the host machine so it can be accessed there.
+- `--restart=unless-stopped` - this will make the container restart if it exits erroneously.
+- `-e` - define environment variable(s).
+- `-v $PATH_TO_LOCAL_VOLUME:/config` - allows you to specify which directory on the host machine will contain your config.
+
+#### Using `docker-compose`
 
 Instead of using the `docker run` command at the command line, it's also possible to use the `docker-compose` utility to create the container. Using docker-compose provides the advantage of encapsulating the run parameters in a configuration file that can be committed to source control. We've added an example `docker-compose.yml` file in this repository, which you can adjust as needed with parameters that fit your development.
 
-To create the container using the `docker-compose.yml` file in this repository, simply issue the following command:
+To create the container using the `docker-compose.yml` file in this repository, simply run `docker compose up`. This will build the image and start the container. To stop the container and remove it, run `docker compose down`. Similarly you can run `docker compose stop` to stop the container without removing it, and `docker compose start` to restart a stopped container.
 
-```
-docker-compose up
-```
+If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
+
+#### Helpful commands
+
+- For debuggin purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
+  ```
+  docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
+  ```

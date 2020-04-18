@@ -16,7 +16,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build:server": "tsc",
-    "build:client:prod": "webpack -p --progress --config webpack.prod.config",
+    "build:client:prod": "webpack -p --progress --config webpack.prod.js",
     "build:prod": "NODE_ENV=production npm run build:server && npm run build:client:prod",
     "start": "NODE_ENV=production node lib/server/index.js",
     "dev": "npm run build:server && NODE_ENV=development node lib/server/index.js",

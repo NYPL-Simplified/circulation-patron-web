@@ -7,7 +7,7 @@ import * as express from "express";
 
 function wdm(app: express.Application) {
   console.log("Using webpack dev middleware");
-  const webpackConfig = require("../../webpack.dev.config");
+  const webpackConfig = require("../../webpack.dev.js");
   const webpackDevMiddleware = require("webpack-dev-middleware");
   const webpackHotMiddleware = require("webpack-hot-middleware");
   const webpack = require("webpack");
