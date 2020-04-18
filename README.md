@@ -4,6 +4,8 @@ A Circulation catalog web interface for library patrons.
 
 ## Background
 
+TEST
+
 The `circulation-patron-web` application serves as a way for libraries to view their collections on the web. A library _must_ be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and _can_ be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). Currently, in order for a library to be part of Library Simplified and show up in the SimplyE application, they must register with NYPL's Library Registry. A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format.
 
 The `circulation-patron-web` app can be used for single-library and multi-library scenarios. The most common scenario may be for a single-library where the app renders the _main_ library of a Circulation Manager. Alternatively, it's possible to use one instance of the `circulation-patron-web` app for multiple libraries, either from a single Circulation Manager or from multiple Circulation Managers.
