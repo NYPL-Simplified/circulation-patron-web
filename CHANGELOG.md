@@ -1,6 +1,6 @@
 ## CHANGELOG
 
-### 2.1.0
+### 2.0.0
 
 - Added Dockerfile and sample `docker-compose.yml` file directly in to repository.
 - Removed docker submodule
