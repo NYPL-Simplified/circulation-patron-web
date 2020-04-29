@@ -1,7 +1,7 @@
 import { LibraryData } from "./../interfaces";
 import LibraryDataCache from "./LibraryDataCache";
 import {
-  isServer,
+  IS_SERVER,
   __LIBRARY_DATA__,
   CACHE_EXPIRATION_SECONDS,
   REGISTRY_BASE,
@@ -12,7 +12,7 @@ import fs from "fs";
 
 async function setupCache() {
   // we don't want this to be run on the client
-  if (!isServer) return Promise.resolve(null);
+  if (!IS_SERVER) return Promise.resolve(null);
 
   if (
     (REGISTRY_BASE && CIRCULATION_MANAGER_BASE) ||
@@ -89,7 +89,7 @@ const cachePromise = setupCache();
  *    info that was previously saved on window.
  */
 export const setLibraryData = (library: LibraryData) => {
-  if (isServer) return;
+  if (IS_SERVER) return;
   window[__LIBRARY_DATA__] = library;
 };
 
@@ -100,7 +100,7 @@ export const setLibraryData = (library: LibraryData) => {
 const getLibraryData = async (
   library?: string
 ): Promise<LibraryData | null> => {
-  if (isServer) {
+  if (IS_SERVER) {
     return await fetchLibraryData(library);
   }
   /**
@@ -110,11 +110,6 @@ const getLibraryData = async (
    * We cannot fetch library data on client because it depends on
    * reading the config file on server with "fs" module.
    */
-  // if (!window[__LIBRARY_DATA__]) {
-  //   const data = await fetchLibraryData();
-  //   window[__LIBRARY_DATA__] = data;
-  // }
-  // return our cached store
   return Promise.resolve(window[__LIBRARY_DATA__]);
 };
 

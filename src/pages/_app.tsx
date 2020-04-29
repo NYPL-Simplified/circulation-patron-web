@@ -1,7 +1,12 @@
 import React from "react";
 import { AppProps } from "next/app";
 import ContextProvider from "../components/context/ContextProvider";
-import { shortenUrls, isServer, isDevelopment, REACT_AXE } from "../utils/env";
+import {
+  SHORTEN_URLS,
+  IS_SERVER,
+  IS_DEVELOPMENT,
+  REACT_AXE
+} from "../utils/env";
 import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
 import getLibraryData, { setLibraryData } from "../dataflow/getLibraryData";
@@ -43,7 +48,7 @@ const MyApp = (props: MyAppProps & AppProps) => {
 
   const { library, initialState, Component, pageProps } = props;
 
-  const urlShortener = new UrlShortener(library.catalogUrl, shortenUrls);
+  const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
   const pathFor = getPathFor(urlShortener, library.id);
   const store = getOrCreateStore(pathFor, initialState);
   setLibraryData(library);
@@ -54,7 +59,7 @@ const MyApp = (props: MyAppProps & AppProps) => {
         <title>Library.catalogName</title>
       </Head>
       <ContextProvider
-        shortenUrls={shortenUrls}
+        shortenUrls={SHORTEN_URLS}
         library={library}
         store={store}
       >
@@ -73,6 +78,7 @@ const MyApp = (props: MyAppProps & AppProps) => {
 /**
  * The query object type doesn't protect against undefined values, and
  * the "library" variable could be an array if you pass ?library=xxx&library=zzz
+ * so this is essentially a typeguard for a situation that shouldn't happen.
  */
 const getLibraryFromQuery = (
   query: ParsedUrlQuery | undefined
@@ -86,7 +92,7 @@ const getLibraryFromQuery = (
 };
 
 MyApp.getInitialProps = async ({ ctx, err }) => {
-  isServer
+  IS_SERVER
     ? console.log("Running _app getInitialProps on server")
     : console.log("Running _app getInitialProps on client");
   console.log(ctx);
@@ -107,7 +113,7 @@ MyApp.getInitialProps = async ({ ctx, err }) => {
   /**
    * Create the resources we need to complete a server render
    */
-  const urlShortener = new UrlShortener(libraryData.catalogUrl, shortenUrls);
+  const urlShortener = new UrlShortener(libraryData.catalogUrl, SHORTEN_URLS);
   const pathFor = getPathFor(urlShortener, libraryData.id);
   const store = getOrCreateStore(pathFor);
 
@@ -119,7 +125,7 @@ MyApp.getInitialProps = async ({ ctx, err }) => {
 
   return {
     initialState,
-    shortenUrls,
+    SHORTEN_URLS,
     pathFor,
     library: libraryData
   };
@@ -129,7 +135,7 @@ MyApp.getInitialProps = async ({ ctx, err }) => {
  * Accessibility tool - outputs to devtools console on dev only and client-side only.
  * @see https://github.com/dequelabs/react-axe
  */
-if (isDevelopment && !isServer && REACT_AXE) {
+if (IS_DEVELOPMENT && !IS_SERVER && REACT_AXE) {
   const ReactDOM = require("react-dom");
   const axe = require("react-axe");
   axe(React, ReactDOM, 1000);
