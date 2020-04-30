@@ -42,3 +42,27 @@ const FormatFilter: React.FC = () => {
 
   if (!isShowingCollection) return null;
   return (
+    <Group role="tablist" sx={{ display: "flex", py: 0 }}>
+      {allFacet && (
+        <FilterButton collectionUrl={allFacet.href} selected={allFacet.active}>
+          ALL
+        </FilterButton>
+      )}
+      <FilterButton
+        collectionUrl={ebookFacet.href}
+        selected={!!ebookFacet.active}
+        aria-label="Books"
+      >
+        <Book sx={{ fontSize: 4 }} />
+      </FilterButton>
+      <FilterButton
+        aria-label="Audiobooks"
+        collectionUrl={audiobookFacet.href}
+        selected={!!audiobookFacet.active}
+      >
+        <Headset sx={{ fontSize: 4, m: 0, p: 0 }} />
+      </FilterButton>
+    </Group>
+  );
+};
+export default FormatFilter;
