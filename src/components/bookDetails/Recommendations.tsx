@@ -5,7 +5,6 @@ import { BookData, LaneData } from "opds-web-client/lib/interfaces";
 import useRecommendationsState from "../context/RecommendationsContext";
 import BookCover from "../BookCover";
 import LoadingIndicator from "../LoadingIndicator";
-import { useGetCatalogLink } from "../../hooks/useCatalogLink";
 import Link from "../Link";
 import { NavButton } from "../Button";
 
@@ -70,12 +69,9 @@ const RecommendationsLane: React.FC<{ lane: LaneData; selfId: string }> = ({
   selfId,
   lane: { title, books, url }
 }) => {
-  const getCatalogLink = useGetCatalogLink();
-
   // if there are less than two books, show nothing
   if (books.length < 2) return null;
 
-  const laneLink = getCatalogLink(undefined, url);
   return (
     <div sx={{ variant: "cards.bookDetails", border: "none" }}>
       <div
@@ -86,7 +82,7 @@ const RecommendationsLane: React.FC<{ lane: LaneData; selfId: string }> = ({
         }}
       >
         <Styled.h2 sx={{ fontSize: 2 }}>{title}</Styled.h2>
-        <NavButton href={laneLink}>More...</NavButton>
+        <NavButton collectionUrl={url}>More...</NavButton>
       </div>
 
       <div
@@ -105,7 +101,7 @@ const RecommendationsLane: React.FC<{ lane: LaneData; selfId: string }> = ({
             book.id !== selfId &&
             book.url && (
               <Link
-                href={getCatalogLink(book.url)}
+                bookUrl={book.url}
                 key={book.id}
                 sx={{ flex: "1 0 auto", maxWidth: 110, m: 2 }}
               >

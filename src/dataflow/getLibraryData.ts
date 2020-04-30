@@ -120,8 +120,6 @@ const getLibraryData = async (
 const fetchLibraryData = async (
   library?: string
 ): Promise<LibraryData | null> => {
-  console.log("Fetching library data 2");
-
   // first make sure the cache is ready
   const cache = await cachePromise;
 

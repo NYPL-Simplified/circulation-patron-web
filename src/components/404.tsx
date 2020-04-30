@@ -23,9 +23,7 @@ const NoMatch = () => {
         We&apos;re sorry, but the page you are looking for does not exist.
         Please try a different URL or return to home.
       </p>
-      <NavButton collectionUrl={undefined} bookUrl={undefined}>
-        Return home
-      </NavButton>
+      <NavButton href="/">Return home</NavButton>
     </div>
   );
 };

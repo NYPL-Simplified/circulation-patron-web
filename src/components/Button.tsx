@@ -29,7 +29,7 @@ function Button<E extends React.ElementType = typeof defaultComponent>({
 }: ButtonProps<E>): JSX.Element {
   return (
     <Box
-      as={defaultComponent}
+      component={defaultComponent}
       sx={{ variant: `buttons.${variant}` }}
       {...props}
     />
@@ -41,12 +41,13 @@ function Button<E extends React.ElementType = typeof defaultComponent>({
  * we need to pass that through the PolymorphicBox via some other name
  */
 type NavButtonProps = React.ComponentProps<typeof Link> & ButtonOwnProps;
-export function NavButton({ as, ...props }: NavButtonProps) {
-  return <Button as={Link} internalAs={as} {...props} />;
+export function NavButton(props: NavButtonProps) {
+  return <Button component={Link} {...props} />;
 }
 
-type AnchorButtonProps = React.ComponentProps<typeof Styled.a> & ButtonOwnProps;
+type AnchorButtonProps = Omit<React.ComponentProps<"a">, "ref"> &
+  ButtonOwnProps;
 export function AnchorButton(props: AnchorButtonProps) {
-  return <Button as="a" {...props} />;
+  return <Button component="a" {...props} />;
 }
 export default Button;

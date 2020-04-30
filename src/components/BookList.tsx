@@ -3,7 +3,6 @@ import { jsx, Styled } from "theme-ui";
 import * as React from "react";
 import { BookData, LaneData } from "opds-web-client/lib/interfaces";
 import BreadcrumbBar from "./BreadcrumbBar";
-import useCatalogLink from "../hooks/useCatalogLink";
 import BookCover from "./BookCover";
 import truncateString from "../utils/truncate";
 import { getAuthors } from "../utils/book";
@@ -115,7 +114,8 @@ const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
     isReserved,
     isBorrowable
   } = useBorrow(book);
-  const url = useCatalogLink(book.url);
+  // if there is no book url, it doesn't make sense to display it.
+  if (!book.url) return null;
   return (
     <li
       sx={{
@@ -136,7 +136,7 @@ const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
       <div sx={{ mx: 1, flex: "0 1 40%", display: "flex" }}>
         <BookCover book={book} sx={{ width: 70, height: 105 }} />
         <div sx={{ ml: 3 }}>
-          <Link href={url}>
+          <Link bookUrl={book.url}>
             <Styled.h2 sx={{ my: 2, variant: "text.bookTitle" }}>
               {truncateString(book.title, 50, true)}
             </Styled.h2>

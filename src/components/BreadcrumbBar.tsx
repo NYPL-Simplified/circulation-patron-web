@@ -3,7 +3,6 @@ import { jsx, Styled } from "theme-ui";
 import * as React from "react";
 import useBreadCrumbs from "../hooks/useBreadcrumbs";
 import { ArrowRight } from "../icons";
-import { useGetCatalogLink } from "../hooks/useCatalogLink";
 import Link from "./Link";
 
 /**
@@ -17,7 +16,6 @@ const BreadcrumbBar: React.FC<{
 }> = ({ children, className, currentLocation }) => {
   const breadcrumbs = useBreadCrumbs();
   const lastItem = currentLocation ?? breadcrumbs.pop()?.text;
-  const getCatalogLink = useGetCatalogLink();
   return (
     <div
       className={className}
@@ -44,7 +42,7 @@ const BreadcrumbBar: React.FC<{
             breadcrumb.text &&
             breadcrumb.url && (
               <li key={breadcrumb.url}>
-                <Link href={getCatalogLink(undefined, breadcrumb.url)}>
+                <Link collectionUrl={breadcrumb.url}>
                   <Styled.h2
                     sx={{
                       m: 0,

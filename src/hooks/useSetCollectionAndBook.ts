@@ -1,9 +1,9 @@
 import * as React from "react";
 import { SetCollectionAndBook } from "../interfaces";
-import useUrlShortener from "../components/context/UrlShortenerContext";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useAuth from "./useAuth";
 import { useRouter } from "next/router";
+import useLinkUtils from "../components/context/LinkUtilsContext";
 
 /**
  * Currently have to pass in setCollectionAndBook, which we get from
@@ -20,7 +20,7 @@ const useSetCollectionAndBook = (
   const finalCollectionUrl = collectionUrlOverride ?? collectionUrl;
   const { actions, dispatch } = useActions();
   const { isSignedIn } = useAuth();
-  const urlShortener = useUrlShortener();
+  const { urlShortener } = useLinkUtils();
 
   const fullCollectionUrl = decodeURIComponent(
     urlShortener.expandCollectionUrl(finalCollectionUrl)

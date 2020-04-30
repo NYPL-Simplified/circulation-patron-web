@@ -1,8 +1,8 @@
 import * as React from "react";
 import useTypedSelector from "./useTypedSelector";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
-import useCatalogLink from "./useCatalogLink";
 import { useRouter } from "next/router";
+import useLinkUtils from "../components/context/LinkUtilsContext";
 
 /**
  * Will get auth data from cookies and make sure it's saved to redux
@@ -14,12 +14,12 @@ function useAuth() {
   const authState = useTypedSelector(state => state.auth);
   const isSignedIn = !!authState?.credentials;
   const { fetcher, actions, dispatch } = useActions();
-  const homeUrl = useCatalogLink(undefined, undefined);
+  const { buildMultiLibraryLink } = useLinkUtils();
 
   const signOut = () => dispatch(actions.clearAuthCredentials());
   const signOutAndGoHome = () => {
     signOut();
-    router.push(homeUrl);
+    router.push(buildMultiLibraryLink({ href: "/" }));
   };
   /**
    * On mount, we need to check for auth data in cookies. This used

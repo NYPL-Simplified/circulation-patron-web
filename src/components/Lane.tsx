@@ -2,7 +2,6 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { LaneData, BookData } from "opds-web-client/lib/interfaces";
-import useCatalogLink from "../hooks/useCatalogLink";
 import ArrowRight from "../icons/ArrowRight";
 import { Tabbable } from "reakit/Tabbable";
 import { NavButton } from "./Button";
@@ -148,11 +147,10 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
     setCurrentBook({ index: currentIndex, snap: false });
   };
 
-  const laneUrl = useCatalogLink(undefined, url);
   return (
     <div>
       <BreadcrumbBar currentLocation={title}>
-        <NavButton href={laneUrl} sx={{ fontSize: 1, fontWeight: 2 }}>
+        <NavButton collectionUrl={url} sx={{ fontSize: 1, fontWeight: 2 }}>
           View all {title}
         </NavButton>
       </BreadcrumbBar>

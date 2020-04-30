@@ -2,9 +2,9 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import useTypedSelector from "../hooks/useTypedSelector";
-import { useGetCatalogLink } from "../hooks/useCatalogLink";
 import Select, { Label } from "./Select";
 import Router from "next/router";
+import useLinkUtils from "./context/LinkUtilsContext";
 
 /**
  * This filter depends on the "Sort by" and "Availability" facet groups.
@@ -25,8 +25,7 @@ const FacetSelector: React.FC<{ facetLabel: string }> = ({ facetLabel }) => {
       facetGroup => facetGroup.label === facetLabel
     )
   );
-  const getCatalogLink = useGetCatalogLink();
-
+  const linkUtils = useLinkUtils();
   if (!facetGroup) return null;
 
   const { label, facets } = facetGroup;
@@ -38,7 +37,9 @@ const FacetSelector: React.FC<{ facetLabel: string }> = ({ facetLabel }) => {
     const facetLabel = e.currentTarget.value;
     const facet = facets.find(facet => facet.label === facetLabel);
 
-    if (facet?.href) Router.push(getCatalogLink(undefined, facet.href));
+    if (!facet?.href) return;
+    const link = linkUtils.buildCollectionLink(facet.href);
+    Router.push(link.href, link.as);
   };
   return (
     <React.Fragment>

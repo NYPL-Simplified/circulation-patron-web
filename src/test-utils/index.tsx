@@ -7,7 +7,6 @@ import ContextProvider from "../components/context/ContextProvider";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
 import library from "./fixtures/library";
-// import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import BasicAuthPlugin from "../auth/basicAuthPlugin";
 import buildStore from "opds-web-client/lib/store";

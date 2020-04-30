@@ -2,40 +2,54 @@
 import { jsx, Styled } from "theme-ui";
 import * as React from "react";
 import BaseLink from "next/link";
-import { useGetCatalogLink } from "../hooks/useCatalogLink";
+import useLinkUtils, { LinkUtils } from "./context/LinkUtilsContext";
+import { NextLinkConfig } from "../interfaces";
 
-type BaseLinkProps = React.ComponentProps<typeof BaseLink>;
-
-type CatalogLinkProps = Omit<BaseLinkProps, "href"> & {
-  collectionUrl?: string | null;
-  bookUrl?: string | null;
+type CollectionLinkProps = {
+  collectionUrl: string;
 };
-type LinkProps = {
-  ref?: React.Ref<any>;
-  children?: React.ReactNode;
+type BookLinkProps = {
+  bookUrl: string;
+};
+
+type BaseLinkProps = Omit<
+  React.ComponentProps<typeof BaseLink>,
+  "href" | "as"
+> & {
   className?: string;
-} & (BaseLinkProps | CatalogLinkProps);
+};
 
-function isBaseLinkProps(props: LinkProps): props is BaseLinkProps {
-  return !!(props as BaseLinkProps).href;
-}
+export type LinkProps = BaseLinkProps &
+  (CollectionLinkProps | BookLinkProps | NextLinkConfig);
 
+const buildLinkFromProps = (props: LinkProps, linkUtils: LinkUtils) => {
+  if ("bookUrl" in props) {
+    return linkUtils.buildBookLink(props.bookUrl);
+  }
+  if ("collectionUrl" in props) {
+    return linkUtils.buildCollectionLink(props.collectionUrl);
+  }
+  return linkUtils.buildMultiLibraryLink({
+    as: props.as,
+    href: props.href
+  });
+};
 /**
- * Extends the react router link to:
+ * Extends next/Link to:
  *  - add styles
- *  - allow user to optionally pass in a collectionUrl/bookUrl combo
- *    and let the link compute the "to" prop
+ *  - automatically prepend the library ID if using multiple libraries.
+ *  - allows user to pass in ONE OF:
+ *    - "href" and "as", a normal next/Link
+ *    - "bookUrl"
+ *    - "collectionUrl"
  */
-
 const Link: React.FC<LinkProps> = React.forwardRef(
   ({ children, className, ...props }, ref: React.Ref<any>) => {
-    const getCatalogLink = useGetCatalogLink();
-    const computedHref = isBaseLinkProps(props)
-      ? props.href
-      : getCatalogLink(props.bookUrl, props.collectionUrl);
+    const linkUtils = useLinkUtils();
+    const { as, href } = buildLinkFromProps(props, linkUtils);
 
     return (
-      <BaseLink href={computedHref}>
+      <BaseLink href={href} as={as} passHref>
         <Styled.a
           ref={ref}
           sx={{ textDecoration: "none", color: "inherit" }}

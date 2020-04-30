@@ -2,7 +2,6 @@
 import { jsx, Styled } from "theme-ui";
 import * as React from "react";
 import { BookData } from "opds-web-client/lib/interfaces";
-import useCatalogLink from "../hooks/useCatalogLink";
 import { getAuthors } from "../utils/book";
 import Link from "./Link";
 import BookCover from "./BookCover";
@@ -23,8 +22,10 @@ const BookCard = React.forwardRef<
     isReserved,
     isBorrowable
   } = useBorrow(book);
-  const link = useCatalogLink(book.url);
   const authors = getAuthors(book, 2);
+
+  // if the book url is undefined, there is no sense displaying it.
+  if (!book.url) return null;
   return (
     <li
       className={className}
@@ -42,7 +43,7 @@ const BookCard = React.forwardRef<
         textAlign: "center"
       }}
     >
-      <Link href={link}>
+      <Link bookUrl={book.url}>
         <BookCover book={book} sx={{ mx: 4 }} />
         <Styled.h2
           sx={{

@@ -4,7 +4,7 @@ import { CollectionData } from "opds-web-client/lib/interfaces";
 import { RecommendationsStateContext } from "../../context/RecommendationsContext";
 import { wait } from "@testing-library/react";
 import Recommendations from "../Recommendations";
-import { RecommendationsState } from "interfaces";
+import { RecommendationsState } from "../../../interfaces";
 
 const renderWithRecState = (
   children,

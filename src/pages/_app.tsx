@@ -20,8 +20,8 @@ import Layout from "../components/Layout";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
 import Error from "next/error";
-import { NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
+import libData from "../utils/libData";
 
 type NotFoundProps = {
   statusCode: number;
@@ -95,7 +95,6 @@ MyApp.getInitialProps = async ({ ctx, err }) => {
   IS_SERVER
     ? console.log("Running _app getInitialProps on server")
     : console.log("Running _app getInitialProps on client");
-  console.log(ctx);
   const { query } = ctx;
 
   /**
@@ -105,7 +104,6 @@ MyApp.getInitialProps = async ({ ctx, err }) => {
    *  LIBRARY_REGISTRY
    */
   const parsedLibrary = getLibraryFromQuery(query);
-  console.log("Library is ", query);
   const libraryData = await getLibraryData(parsedLibrary);
 
   if (!libraryData) return { statusCode: 404 };

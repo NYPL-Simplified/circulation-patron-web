@@ -5,13 +5,11 @@ import { NavigateContext } from "opds-web-client/lib/interfaces";
 import { LibraryData } from "../interfaces";
 import Search from "./Search";
 import { NavButton as NavButtonBase } from "./Button";
-import useCatalogLink from "../hooks/useCatalogLink";
 import Link from "./Link";
 import BookIcon from "../icons/Book";
 import useLibraryContext from "./context/LibraryContext";
 import FormatFilter from "./FormatFilter";
 import ViewSelector from "./ViewSelector";
-import useTypedSelector from "../hooks/useTypedSelector";
 
 export interface HeaderContext extends NavigateContext {
   library: LibraryData;
@@ -23,8 +21,6 @@ export interface HeaderContext extends NavigateContext {
  */
 const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
   const library = useLibraryContext();
-  const homeUrl = useCatalogLink(undefined);
-  const loansUrl = useTypedSelector(state => state.loans.url);
 
   return (
     <header
@@ -44,7 +40,7 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
           textAlign: "center",
           padding: [2, 4]
         }}
-        href={homeUrl}
+        href="/"
       >
         <Styled.h2
           sx={{
@@ -82,11 +78,7 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
             p: [2, 0]
           }}
         >
-          <NavButton
-            sx={{ m: 1, mb: [1, 0] }}
-            variant="primary"
-            collectionUrl={loansUrl}
-          >
+          <NavButton sx={{ m: 1, mb: [1, 0] }} variant="primary" href="/loans">
             <BookIcon sx={{ fontSize: 5 }} /> My Books
           </NavButton>
           {/* uncomment to enable a settings button */}
@@ -101,8 +93,8 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
           {/* uncomment to include links from the CM */}
           {/* <CMDefinedHeaderLinks library={library} /> */}
         </Flex>
-        <FormatFilter />
-        <ViewSelector />
+        {/* <FormatFilter /> */}
+        {/* <ViewSelector /> */}
         <Flex sx={{ justifyContent: "center", p: 2 }}>
           <Search />
         </Flex>

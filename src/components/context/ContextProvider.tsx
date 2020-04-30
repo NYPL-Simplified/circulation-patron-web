@@ -2,7 +2,6 @@ import * as React from "react";
 import { PathFor, PreloadedData } from "../../interfaces";
 import UrlShortener from "../../UrlShortener";
 import { LibraryProvider } from "./LibraryContext";
-import { UrlShortenerProvider } from "./UrlShortenerContext";
 import PathForProvider from "opds-web-client/lib/components/context/PathForContext";
 import { RouterProvider } from "./RouterContext";
 import OPDSStore from "opds-web-client/lib/components/context/StoreContext";
@@ -17,6 +16,7 @@ import ActionsCreator from "opds-web-client/lib/actions";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import basicAuthPlugin from "../../auth/basicAuthPlugin";
 import getPathFor from "../../utils/getPathFor";
+import { LinkUtilsProvider } from "./LinkUtilsContext";
 
 type ProviderProps = PreloadedData & {
   // we allow custom store and actions
@@ -58,9 +58,12 @@ const AppContextProvider: React.FC<ProviderProps> = ({
                 fetcher={computedFetcher}
               >
                 <LibraryProvider library={library}>
-                  <UrlShortenerProvider urlShortener={urlShortener}>
+                  <LinkUtilsProvider
+                    library={library}
+                    urlShortener={urlShortener}
+                  >
                     <ViewProvider>{children}</ViewProvider>
-                  </UrlShortenerProvider>
+                  </LinkUtilsProvider>
                 </LibraryProvider>
               </ActionsProvider>
             </RecommendationsProvider>
