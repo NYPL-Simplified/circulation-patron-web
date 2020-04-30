@@ -65,9 +65,7 @@ const MyApp = (props: MyAppProps & AppProps) => {
       >
         <ThemeProvider theme={theme}>
           <Auth>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <Component {...pageProps} />
           </Auth>
         </ThemeProvider>
       </ContextProvider>

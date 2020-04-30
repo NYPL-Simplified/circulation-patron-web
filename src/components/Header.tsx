@@ -93,8 +93,8 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
           {/* uncomment to include links from the CM */}
           {/* <CMDefinedHeaderLinks library={library} /> */}
         </Flex>
-        {/* <FormatFilter /> */}
-        {/* <ViewSelector /> */}
+        <FormatFilter />
+        <ViewSelector />
         <Flex sx={{ justifyContent: "center", p: 2 }}>
           <Search />
         </Flex>

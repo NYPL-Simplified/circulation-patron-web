@@ -5,7 +5,6 @@ import * as React from "react";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { Book, Headset } from "../icons";
 import FilterButton from "./FilterButton";
-import { useRouter } from "next/router";
 
 /**
  * This filter depends on the "Formats" facetGroup, which should have
@@ -16,7 +15,6 @@ import { useRouter } from "next/router";
  * labels must match the spelling and capitalization exactly.
  */
 const FormatFilter: React.FC = () => {
-  const router = useRouter();
   const formatFacetGroup = useTypedSelector(state =>
     state.collection.data?.facetGroups?.find(
       facetGroup => facetGroup.label === "Formats"
@@ -33,14 +31,6 @@ const FormatFilter: React.FC = () => {
   );
   if (!ebookFacet || !audiobookFacet) return null;
 
-  // test if we are at home or /collection/ and only show then.
-  // also include multi-library cases.
-  const isShowingCollection =
-    ["/", "/[library]/", "/collection", "/[library]/collection"].indexOf(
-      router.pathname
-    ) !== -1;
-
-  if (!isShowingCollection) return null;
   return (
     <Group role="tablist" sx={{ display: "flex", py: 0 }}>
       {allFacet && (

@@ -1,9 +1,13 @@
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage } from "next";
 import Collection from "../../components/Collection";
+import Layout from "../../components/Layout";
 
 const LibraryHome: NextPage = () => {
-  // return <Collection />;
-  return <div>"Hi from library home"</div>;
+  return (
+    <Layout showFormatFilter>
+      <Collection />
+    </Layout>
+  );
 };
 
 export default LibraryHome;

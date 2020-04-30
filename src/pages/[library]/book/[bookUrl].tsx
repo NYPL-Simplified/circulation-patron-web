@@ -1,10 +1,12 @@
-import { useRouter } from "next/router";
+import Layout from "../../../components/Layout";
+import BookDetails from "../../../components/bookDetails";
 
-const Home = () => {
-  const router = useRouter();
-  const params = router.query;
-  console.log(params);
-  return <div>Welcome to library/book/bookurl</div>;
+const BookPage = () => {
+  return (
+    <Layout>
+      <BookDetails />
+    </Layout>
+  );
 };
 
-export default Home;
+export default BookPage;

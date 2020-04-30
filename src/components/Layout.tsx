@@ -17,7 +17,10 @@ export const CONTENT_ID = "cpw-content";
  * context or should it be passed via render prop or what?
  */
 
-const Layout: React.FC = ({ children }) => {
+const Layout: React.FC<{ showFormatFilter?: boolean }> = ({
+  children,
+  showFormatFilter = false
+}) => {
   return (
     <Styled.root
       sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}

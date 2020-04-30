@@ -1,10 +1,12 @@
-import { useRouter } from "next/router";
+import Layout from "../../components/Layout";
+import MyBooks from "../../components/MyBooks";
 
-const Home = () => {
-  const router = useRouter();
-  const params = router.query;
-  console.log(params);
-  return <div>Welcome to library/loans</div>;
+const Loans = () => {
+  return (
+    <Layout>
+      <MyBooks />
+    </Layout>
+  );
 };
 
-export default Home;
+export default Loans;
