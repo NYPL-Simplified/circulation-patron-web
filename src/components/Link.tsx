@@ -4,6 +4,7 @@ import * as React from "react";
 import BaseLink from "next/link";
 import useLinkUtils, { LinkUtils } from "./context/LinkUtilsContext";
 import { NextLinkConfig } from "../interfaces";
+import { useRouter } from "next/router";
 
 type CollectionLinkProps = {
   collectionUrl: string;
@@ -47,7 +48,6 @@ const Link: React.FC<LinkProps> = React.forwardRef(
   ({ children, className, ...props }, ref: React.Ref<any>) => {
     const linkUtils = useLinkUtils();
     const { as, href } = buildLinkFromProps(props, linkUtils);
-
     return (
       <BaseLink href={href} as={as} passHref>
         <Styled.a
