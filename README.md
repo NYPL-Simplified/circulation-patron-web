@@ -1,11 +1,13 @@
 # circulation-patron-web
 
-<a aria-label="Docker images" href="https://hub.docker.com/r/nypl/patron-web/tags">
-	<img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/nypl/patron-web?label=Docker%20Hub&logo=docker&sort=semver">
-</a>
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/CI?label=Tests&logo=github">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Production Release?label=Build%20%28master%29&logo=github">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Publish beta?label=Build%20%28beta%29&logo=github">
+<div>
+  <a aria-label="Docker images" href="https://hub.docker.com/r/nypl/patron-web/tags">
+    <img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/nypl/patron-web?label=Docker%20Hub&logo=docker&sort=semver">
+  </a>
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/CI?label=Tests&logo=github">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Production Release?label=Build%20%28master%29&logo=github">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Publish beta?label=Build%20%28beta%29&logo=github">
+</div>
 
 A Circulation catalog web interface for library patrons.
 
