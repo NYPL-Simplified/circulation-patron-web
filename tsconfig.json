@@ -18,11 +18,5 @@
     "importHelpers": true
   },
   "exclude": ["node_modules", "config/srv"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "next.config.js",
-    "./.storybook"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"]
 }

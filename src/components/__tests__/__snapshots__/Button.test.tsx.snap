@@ -61,6 +61,9 @@ exports[`LinkButton renders correct element 1`] = `
 
 exports[`NavButton renders correct element 1`] = `
 .emotion-0 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;

@@ -18,22 +18,18 @@ import ActionsCreator from "opds-web-client/lib/actions";
 import DataFetcher from "opds-web-client/lib/DataFetcher";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import serializer from "jest-emotion";
+import {
+  mockNextUseRouter,
+  NextRouterContextProvider
+} from "./mockNextUseRouter";
+import "./mockNextRouter";
+import { NextRouter } from "next/router";
 
 expect.addSnapshotSerializer(serializer);
 
-/**
- * uncomment this if you would like console errors to to
- * error the test. Useful if you don't know where a console
- * error is coming from.
- */
-// const consoleErrorSpy = jest.spyOn(global.console, "error");
-// consoleErrorSpy.mockImplementation((msg, ...opts) => {
-//   console.warn(msg, ...opts);
-//   throw new Error(msg);
-// });
-
 export { fixtures };
 
+// configure the enzyme adapter
 configure({ adapter: new Adapter() });
 
 /**
@@ -53,7 +49,7 @@ export const fetcher = new DataFetcher({ adapter });
 export const actions = new ActionsCreator(fetcher);
 
 type CustomRenderOptions = Parameters<typeof render>[1] & {
-  route?: string;
+  router?: Partial<NextRouter>;
   initialState?: State;
   library?: LibraryData;
 };
@@ -66,34 +62,33 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
 
   const store = buildStore(options?.initialState, [BasicAuthPlugin], pathFor);
 
+  // pass in router arguments to control this mock
+  // mockNextUseRouter(options?.router);
+
   // spy on dispatch by default
   const origDispatch = store.dispatch;
   const mockDispatch: jest.Mock<typeof origDispatch> = jest
     .fn()
     .mockImplementation(origDispatch);
   store.dispatch = mockDispatch as typeof origDispatch;
-  // const dispatch = jest.spyOn(store, "dispatch");
 
-  const history = createMemoryHistory({
-    initialEntries: [options?.route ?? "/"]
-  });
   const AllTheProviders = ({ children }) => {
     return (
-      // <Router history={history}>
-      <ThemeProvider theme={theme}>
-        <ContextProvider
-          library={options?.library ?? library}
-          shortenUrls
-          helmetContext={{}}
-          initialState={options?.initialState}
-          store={store}
-          fetcher={fetcher}
-          actions={actions}
-        >
-          {children}
-        </ContextProvider>
-      </ThemeProvider>
-      // </Router>
+      <NextRouterContextProvider router={options?.router}>
+        <ThemeProvider theme={theme}>
+          <ContextProvider
+            library={options?.library ?? library}
+            shortenUrls
+            helmetContext={{}}
+            initialState={options?.initialState}
+            store={store}
+            fetcher={fetcher}
+            actions={actions}
+          >
+            {children}
+          </ContextProvider>
+        </ThemeProvider>
+      </NextRouterContextProvider>
     );
   };
 
@@ -101,7 +96,6 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
     ...render(ui, { wrapper: AllTheProviders, ...options }),
     // we pass our mocks along so they can be used in assertions
     store,
-    history,
     dispatch: mockDispatch
   };
 };

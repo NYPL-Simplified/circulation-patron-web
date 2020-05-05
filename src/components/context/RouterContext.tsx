@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 
 export const RouterProvider: React.FC = ({ children }) => {
   const nextRouter = useRouter();
-  const realLocation = nextRouter.asPath;
   const router: RouterType = {
     push: nextRouter.push,
     // we need to manipulate the createHref into the type

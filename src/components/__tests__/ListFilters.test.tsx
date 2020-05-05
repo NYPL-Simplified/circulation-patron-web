@@ -5,6 +5,8 @@ import merge from "deepmerge";
 import { FacetGroupData } from "opds-web-client/lib/interfaces";
 import { State } from "opds-web-client/lib/state";
 import userEvent from "@testing-library/user-event";
+import mockedRouter from "../../test-utils/mockNextRouter";
+
 /**
  * Sort by
  *  - has the right options
@@ -90,5 +92,9 @@ test("does redirect when selected", () => {
 
   userEvent.selectOptions(facet, "title");
 
-  expect(node.history.location.pathname).toBe("/collection/title");
+  expect(mockedRouter.push).toHaveBeenCalledTimes(1);
+  expect(mockedRouter.push).toHaveBeenCalledWith(
+    "/collection/[collectionUrl]",
+    "/collection/title"
+  );
 });

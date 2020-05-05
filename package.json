@@ -65,6 +65,7 @@
     "babel-jest": "^25.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "fetch-mock": "^9.4.0",
     "fetch-mock-jest": "^1.2.4",
     "jest": "^25.3.0",
     "jest-emotion": "^10.0.32",

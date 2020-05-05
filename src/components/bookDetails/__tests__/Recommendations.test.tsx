@@ -75,7 +75,7 @@ test("displays a more button for recommendations", () => {
   const moreButton = node.getByText("More...");
   expect(moreButton).toHaveAttribute(
     "href",
-    "/collection/works%2Fcontributor%2FJane%20Austen%2Feng"
+    "/collection/works%2Fcontributor%2FJane%2520Austen%2Feng"
   );
 });
 

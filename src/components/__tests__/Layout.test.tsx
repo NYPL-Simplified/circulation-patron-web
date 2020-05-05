@@ -15,16 +15,16 @@ describe("Layout nav + structure", () => {
     expect(homeButton.closest("a")).toHaveAttribute("href", "/");
   });
 
-  test("my books navigates to /collections/loans", () => {
+  test("my books navigates to /loans", () => {
     const node = render(<Layout>Child</Layout>, {
       initialState: merge(fixtures.initialState, {
         loans: {
-          url: "/myloans"
+          url: "/myloans" // this url is not used for navigation, but for fetching loans
         }
       })
     });
     const myBooks = node.getByText("My Books").closest("a");
-    expect(myBooks).toHaveAttribute("href", "/collection/myloans");
+    expect(myBooks).toHaveAttribute("href", "/loans");
   });
 
   test("displays children within main", () => {
