@@ -3,6 +3,7 @@ import { render, fixtures, fireEvent, actions } from "../../test-utils";
 import Search from "../Search";
 import merge from "deepmerge";
 import userEvent from "@testing-library/user-event";
+import { mockPush } from "../../test-utils/mockNextRouter";
 
 test("fetches search description", async () => {
   const mockedFetchSearchDescription = jest.spyOn(
@@ -51,5 +52,9 @@ test("searching calls history.push with url", async () => {
   // assert
   expect(mockedTemplate).toHaveBeenCalledTimes(1);
   expect(mockedTemplate).toHaveBeenCalledWith("my%20search");
-  expect(node.history.location.pathname).toBe("/collection/templatereturn");
+  expect(mockPush).toHaveBeenCalledTimes(1);
+  expect(mockPush).toHaveBeenCalledWith(
+    "/collection/[collectionUrl]",
+    "/collection/templatereturn"
+  );
 });

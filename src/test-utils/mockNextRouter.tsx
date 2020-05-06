@@ -1,5 +1,13 @@
+import Router from "next/router";
 import { RouterContext } from "next/dist/next-server/lib/router-context";
 import { NextRouter } from "next/router";
+
+/**
+ * Mock for the next/Router import.
+ */
+
+export const mockPush = jest.fn().mockImplementation(async () => true);
+Router.push = mockPush;
 
 export const MockNextRouterContextProvider: React.FC<{
   router?: Partial<NextRouter>;
@@ -9,7 +17,7 @@ export const MockNextRouterContextProvider: React.FC<{
     pathname = "",
     query = {},
     asPath = "",
-    push = jest.fn().mockImplementation(async () => true),
+    push = mockPush,
     replace = jest.fn().mockImplementation(async () => true),
     reload = jest.fn().mockImplementation(() => null),
     back = jest.fn().mockImplementation(() => null),
@@ -43,3 +51,5 @@ export const MockNextRouterContextProvider: React.FC<{
     </RouterContext.Provider>
   );
 };
+
+export default Router;

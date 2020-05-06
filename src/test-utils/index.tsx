@@ -18,8 +18,7 @@ import ActionsCreator from "opds-web-client/lib/actions";
 import DataFetcher from "opds-web-client/lib/DataFetcher";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import serializer from "jest-emotion";
-import { MockNextRouterContextProvider } from "./mockNextUseRouter";
-import "./mockNextRouter";
+import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
 
 expect.addSnapshotSerializer(serializer);

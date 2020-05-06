@@ -7,7 +7,7 @@ import { usePathFor } from "opds-web-client/lib/components/context/PathForContex
 import { LibraryData } from "../../../interfaces";
 import { State } from "opds-web-client/lib/state";
 import useLibraryContext from "../LibraryContext";
-import { MockNextRouterContextProvider } from "../../../test-utils/mockNextUseRouter";
+import { MockNextRouterContextProvider } from "../../../test-utils/mockNextRouter";
 
 const TestComponent: React.FC = () => <div>test child</div>;
 
