@@ -2,11 +2,10 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { Theme } from "../theme";
-import Button from "./Button";
-import Link from "./Link";
+import { AmbiguousButton } from "./Button";
 
 type FilterButtonProps = { selected: boolean } & React.ComponentProps<
-  typeof Button
+  typeof AmbiguousButton
 >;
 const FilterButton: React.FC<FilterButtonProps> = ({
   selected,
@@ -22,15 +21,8 @@ const FilterButton: React.FC<FilterButtonProps> = ({
         }
       : undefined
   };
-
-  // if there is a "to" prop, make a link, otherwise it's a regular button
-  const computedAs =
-    props.to || props.collectionUrl || props.bookUrl ? Link : undefined;
   return (
-    <Button
-      as={computedAs}
-      role="tab"
-      aria-selected={selected}
+    <AmbiguousButton
       className={className}
       sx={{
         height: 40,
@@ -49,7 +41,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
       {...props}
     >
       {children}
-    </Button>
+    </AmbiguousButton>
   );
 };
 

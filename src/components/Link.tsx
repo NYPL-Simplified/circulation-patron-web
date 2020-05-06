@@ -23,12 +23,19 @@ type BaseLinkProps = Omit<
 export type LinkProps = BaseLinkProps &
   (CollectionLinkProps | BookLinkProps | NextLinkConfig);
 
+/**
+ * converts bookUrl and collectionUrl to as/href props
+ * prepends with multi library path if needed
+ * removes consumed props and returns normalized props
+ */
 const buildLinkFromProps = (props: LinkProps, linkUtils: LinkUtils) => {
   if ("bookUrl" in props) {
-    return linkUtils.buildBookLink(props.bookUrl);
+    const { bookUrl, ...rest } = props;
+    return { ...linkUtils.buildBookLink(bookUrl), ...rest };
   }
   if ("collectionUrl" in props) {
-    return linkUtils.buildCollectionLink(props.collectionUrl);
+    const { collectionUrl, ...rest } = props;
+    return { ...linkUtils.buildCollectionLink(props.collectionUrl), ...rest };
   }
   return linkUtils.buildMultiLibraryLink({
     as: props.as,
@@ -47,13 +54,14 @@ const buildLinkFromProps = (props: LinkProps, linkUtils: LinkUtils) => {
 const Link: React.FC<LinkProps> = React.forwardRef(
   ({ children, className, ...props }, ref: React.Ref<any>) => {
     const linkUtils = useLinkUtils();
-    const { as, href } = buildLinkFromProps(props, linkUtils);
+    const { as, href, ...rest } = buildLinkFromProps(props, linkUtils);
     return (
       <BaseLink href={href} as={as} passHref>
         <Styled.a
           ref={ref}
           sx={{ textDecoration: "none", color: "inherit" }}
           className={className}
+          {...rest}
         >
           {children}
         </Styled.a>

@@ -32,15 +32,24 @@ const FormatFilter: React.FC = () => {
   if (!ebookFacet || !audiobookFacet) return null;
 
   return (
-    <Group role="tablist" sx={{ display: "flex", py: 0 }}>
+    <Group
+      role="navigation"
+      aria-label="Format filters"
+      sx={{ display: "flex", py: 0 }}
+    >
       {allFacet && (
-        <FilterButton collectionUrl={allFacet.href} selected={allFacet.active}>
+        <FilterButton
+          collectionUrl={allFacet.href}
+          selected={allFacet.active}
+          aria-current={allFacet.active}
+        >
           ALL
         </FilterButton>
       )}
       <FilterButton
         collectionUrl={ebookFacet.href}
         selected={!!ebookFacet.active}
+        aria-current={!!ebookFacet.active}
         aria-label="Books"
       >
         <Book sx={{ fontSize: 4 }} />
@@ -49,6 +58,7 @@ const FormatFilter: React.FC = () => {
         aria-label="Audiobooks"
         collectionUrl={audiobookFacet.href}
         selected={!!audiobookFacet.active}
+        aria-current={!!audiobookFacet.active}
       >
         <Headset sx={{ fontSize: 4, m: 0, p: 0 }} />
       </FilterButton>

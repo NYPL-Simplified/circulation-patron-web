@@ -1,49 +1,7 @@
 import { RouterContext } from "next/dist/next-server/lib/router-context";
 import { NextRouter } from "next/router";
 
-// Mocks useRouter
-export const useRouterSpy = jest.spyOn(require("next/router"), "useRouter");
-
-/**
- * mockNextUseRouter
- * Mocks the useRouter React hook from Next.js on a test-case by test-case basis
- */
-export function mockNextUseRouter(router: Partial<NextRouter> = {}) {
-  const {
-    route = "",
-    pathname = "",
-    query = {},
-    asPath = "",
-    push = async () => true,
-    replace = async () => true,
-    reload = () => null,
-    back = () => null,
-    prefetch = async () => undefined,
-    beforePopState = () => null,
-    isFallback = false,
-    events = {
-      on: () => null,
-      off: () => null,
-      emit: () => null
-    }
-  } = router;
-  useRouterSpy.mockImplementation(() => ({
-    route,
-    pathname,
-    query,
-    asPath,
-    push,
-    replace,
-    reload,
-    back,
-    prefetch,
-    beforePopState,
-    isFallback,
-    events
-  }));
-}
-
-export const NextRouterContextProvider: React.FC<{
+export const MockNextRouterContextProvider: React.FC<{
   router?: Partial<NextRouter>;
 }> = ({ router = {}, children }) => {
   const {
@@ -51,12 +9,12 @@ export const NextRouterContextProvider: React.FC<{
     pathname = "",
     query = {},
     asPath = "",
-    push = async () => true,
-    replace = async () => true,
-    reload = () => null,
-    back = () => null,
-    prefetch = async () => undefined,
-    beforePopState = () => null,
+    push = jest.fn().mockImplementation(async () => true),
+    replace = jest.fn().mockImplementation(async () => true),
+    reload = jest.fn().mockImplementation(() => null),
+    back = jest.fn().mockImplementation(() => null),
+    prefetch = jest.fn().mockImplementation(async () => undefined),
+    beforePopState = jest.fn().mockImplementation(() => null),
     isFallback = false,
     events = {
       on: () => null,

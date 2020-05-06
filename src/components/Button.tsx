@@ -45,6 +45,18 @@ export function NavButton(props: NavButtonProps) {
   return <Button component={Link} {...props} />;
 }
 
+function isNavButton(props: AmbiguousButtonProps): props is NavButtonProps {
+  return "collectionUrl" in props || "bookUrl" in props || "href" in props;
+}
+
+type AmbiguousButtonProps =
+  | NavButtonProps
+  | ButtonProps<typeof defaultComponent>;
+export function AmbiguousButton(props: AmbiguousButtonProps) {
+  if (isNavButton(props)) return <NavButton {...props} />;
+  return <Button {...props} />;
+}
+
 type AnchorButtonProps = Omit<React.ComponentProps<"a">, "ref"> &
   ButtonOwnProps;
 export function AnchorButton(props: AnchorButtonProps) {

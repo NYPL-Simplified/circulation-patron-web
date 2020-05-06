@@ -27,7 +27,7 @@ const Layout: React.FC<{ showFormatFilter?: boolean }> = ({
     >
       <SkipNavigation />
       <GlobalStyles />
-      <Header sx={{ width: "100%" }} />
+      <Header sx={{ width: "100%" }} showFormatFilter={showFormatFilter} />
       <main
         id={CONTENT_ID}
         sx={{

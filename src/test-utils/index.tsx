@@ -18,10 +18,7 @@ import ActionsCreator from "opds-web-client/lib/actions";
 import DataFetcher from "opds-web-client/lib/DataFetcher";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import serializer from "jest-emotion";
-import {
-  mockNextUseRouter,
-  NextRouterContextProvider
-} from "./mockNextUseRouter";
+import { MockNextRouterContextProvider } from "./mockNextUseRouter";
 import "./mockNextRouter";
 import { NextRouter } from "next/router";
 
@@ -62,9 +59,6 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
 
   const store = buildStore(options?.initialState, [BasicAuthPlugin], pathFor);
 
-  // pass in router arguments to control this mock
-  // mockNextUseRouter(options?.router);
-
   // spy on dispatch by default
   const origDispatch = store.dispatch;
   const mockDispatch: jest.Mock<typeof origDispatch> = jest
@@ -74,7 +68,7 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
 
   const AllTheProviders = ({ children }) => {
     return (
-      <NextRouterContextProvider router={options?.router}>
+      <MockNextRouterContextProvider router={options?.router}>
         <ThemeProvider theme={theme}>
           <ContextProvider
             library={options?.library ?? library}
@@ -88,7 +82,7 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
             {children}
           </ContextProvider>
         </ThemeProvider>
-      </NextRouterContextProvider>
+      </MockNextRouterContextProvider>
     );
   };
 
