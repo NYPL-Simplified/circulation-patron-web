@@ -6,8 +6,6 @@ import { FacetGroupData, LaneData } from "opds-web-client/lib/interfaces";
 import merge from "deepmerge";
 import userEvent from "@testing-library/user-event";
 
-// file.only
-
 describe("Layout nav + structure", () => {
   test("Library name button navigates home", () => {
     const node = render(<Layout>Child</Layout>);
