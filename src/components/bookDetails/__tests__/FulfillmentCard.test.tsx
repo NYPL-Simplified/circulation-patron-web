@@ -1,5 +1,11 @@
 import * as React from "react";
-import { render, fixtures, actions, within, wait } from "../../../test-utils";
+import {
+  render,
+  fixtures,
+  actions,
+  within,
+  waitFor
+} from "../../../test-utils";
 import merge from "deepmerge";
 import FulfillmentCard from "../FulfillmentCard";
 import {
@@ -105,7 +111,7 @@ describe("borrowable closed-access", () => {
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
     expect(await node.findByText("Loading...")).toBeInTheDocument();
     // we should refetch the loans after borrowing
-    await wait(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
   });
 
   test("displays error message", () => {

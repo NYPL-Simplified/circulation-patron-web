@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, actions, wait, fetcher } from "../../test-utils";
+import { render, fixtures, actions, waitFor, fetcher } from "../../test-utils";
 import merge from "deepmerge";
 import Auth from "../Auth";
 import { State } from "opds-web-client/lib/state";
@@ -42,7 +42,7 @@ test("shows overlay on unauthenticated request", async () => {
    */
   node.dispatch(actions.fetchCollection("/some-collection"));
   // now see that the overlay is shown.
-  await wait(() => expect(modal).toHaveStyle("display: block"));
+  await waitFor(() => expect(modal).toHaveStyle("display: block"));
 });
 
 const authStateWithShowForm: AuthState = {

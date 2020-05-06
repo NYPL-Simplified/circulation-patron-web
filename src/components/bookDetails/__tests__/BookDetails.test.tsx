@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, actions, wait } from "../../../test-utils";
+import { render, fixtures, actions, waitFor } from "../../../test-utils";
 import merge from "deepmerge";
 import { BookDetails } from "../index";
 import { State } from "opds-web-client/lib/state";
@@ -265,7 +265,9 @@ describe("report problem", () => {
     userEvent.click(node.getByText("Submit"));
 
     // actually posted the complaint
-    await wait(() => expect(mockBoundPostComplaint).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(mockBoundPostComplaint).toHaveBeenCalledTimes(1)
+    );
     expect(mockBoundPostComplaint).toHaveBeenCalledWith({
       type: "complaint-type-b",
       detail: "Some issue happened."

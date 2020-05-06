@@ -3,7 +3,7 @@ import {
   render,
   fixtures,
   actions,
-  wait,
+  waitFor,
   waitForElement
 } from "../../test-utils";
 import merge from "deepmerge";
@@ -92,9 +92,9 @@ test("sumbits", async () => {
   userEvent.click(loginButton);
 
   // assert
-  // we wrap this in wait because the handleSubmit from react-hook-form has
+  // we wrap this in waitFor because the handleSubmit from react-hook-form has
   // async code in it
-  await wait(() => {
+  await waitFor(() => {
     expect(node.dispatch).toHaveBeenCalledTimes(1);
     expect(mockedGenerateCredentials).toHaveBeenCalledTimes(1);
     expect(mockedGenerateCredentials).toHaveBeenCalledWith("1234", "pinpin");
