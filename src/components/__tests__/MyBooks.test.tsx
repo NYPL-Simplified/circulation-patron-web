@@ -159,9 +159,9 @@ test("toggles between list and gallery view", () => {
 
   const galleryRadio = node.getByLabelText("Gallery View");
   const listRadio = node.getByLabelText("List View");
-  expect(galleryRadio).toHaveAttribute("aria-selected", "true");
+  expect(galleryRadio).toHaveAttribute("aria-checked", "true");
 
   userEvent.click(listRadio);
 
-  expect(listRadio).toHaveAttribute("aria-selected", "true");
+  expect(listRadio).toHaveAttribute("aria-checked", "true");
 });
