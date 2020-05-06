@@ -217,7 +217,7 @@ const Error: React.FC<{ error: FetchErrorData }> = ({ error }) => {
       <Head>
         <title>Book error</title>
       </Head>
-      <div>
+      <div sx={{ maxWidth: "70%" }}>
         <p>
           There was a problem fetching this book. Please refresh the page or
           return home.
@@ -230,6 +230,9 @@ const Error: React.FC<{ error: FetchErrorData }> = ({ error }) => {
           <span sx={{ fontWeight: "bold" }}>Error Message: </span>
           {detail}
         </div>
+        <NavButton sx={{ mt: 3 }} href="/">
+          Return Home
+        </NavButton>
       </div>
     </section>
   );

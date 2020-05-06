@@ -31,6 +31,9 @@ exports[`book details page handles error state 1`] = `
 }
 
 .emotion-2 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
