@@ -23,6 +23,13 @@ import Error from "next/error";
 import { ParsedUrlQuery } from "querystring";
 import libData from "../utils/libData";
 
+type ErrorProps = {
+  type: string;
+  status: number;
+  title: string;
+  detail: string;
+};
+
 type NotFoundProps = {
   statusCode: number;
 };
@@ -32,10 +39,14 @@ type InitialData = {
   initialState: State;
 };
 
-type MyAppProps = InitialData | NotFoundProps;
+type MyAppProps = InitialData | NotFoundProps | ErrorProps;
 
 function is404(props: MyAppProps): props is NotFoundProps {
   return !!(props as NotFoundProps).statusCode;
+}
+
+function isError(props: MyAppProps): props is ErrorProps {
+  return !!(props as ErrorProps).status;
 }
 
 const MyApp = (props: MyAppProps & AppProps) => {
@@ -44,6 +55,16 @@ const MyApp = (props: MyAppProps & AppProps) => {
    */
   if (is404(props)) {
     return <Error statusCode={props.statusCode} />;
+  }
+
+  if (isError(props)) {
+    return (
+      <Error
+        statusCode={props.status}
+        title={props.title}
+        detail={props.detail}
+      />
+    );
   }
 
   const { library, initialState, Component, pageProps } = props;
