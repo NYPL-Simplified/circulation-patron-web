@@ -6,7 +6,6 @@ import Button from "./Button";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import Router from "next/router";
 import useTypedSelector from "../hooks/useTypedSelector";
-import { usePathFor } from "opds-web-client/lib/components/context/PathForContext";
 import useLinkUtils from "./context/LinkUtilsContext";
 
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -23,7 +22,6 @@ const Search: React.FC<SearchProps> = ({ ...props }) => {
   const [value, setValue] = React.useState("");
   const searchData = useTypedSelector(state => state?.collection?.data?.search);
   const { actions, dispatch } = useActions();
-  const pathFor = usePathFor();
   const linkUtils = useLinkUtils();
 
   React.useEffect(() => {
