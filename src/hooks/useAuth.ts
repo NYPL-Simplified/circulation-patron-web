@@ -19,7 +19,8 @@ function useAuth() {
   const signOut = () => dispatch(actions.clearAuthCredentials());
   const signOutAndGoHome = () => {
     signOut();
-    router.push(buildMultiLibraryLink({ href: "/" }));
+    const link = buildMultiLibraryLink({ href: "/" });
+    router.push(link.href, link.as);
   };
   /**
    * On mount, we need to check for auth data in cookies. This used

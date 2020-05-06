@@ -7,6 +7,7 @@ import { State } from "opds-web-client/lib/state";
 import Layout from "../Layout";
 import userEvent from "@testing-library/user-event";
 import { useBreakpointIndex } from "@theme-ui/match-media";
+import { mockPush } from "../../test-utils/mockNextRouter";
 
 const mockSetCollectionAndBook = jest.fn().mockReturnValue(Promise.resolve({}));
 
@@ -53,13 +54,14 @@ test("displays empty state when empty and signed in", () => {
 test("sign out clears state and goes home", () => {
   const node = render(
     <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth, route: "/loans" }
+    { initialState: emptyWithAuth }
   );
 
   const signOut = node.getByText("Sign Out");
   fireEvent.click(signOut);
 
-  expect(node.history.location.pathname).toBe("/");
+  expect(mockPush).toHaveBeenCalledTimes(1);
+  expect(mockPush).toHaveBeenCalledWith("/", undefined);
 
   expect(node.store.getState().auth.credentials).toBeFalsy();
   /**
