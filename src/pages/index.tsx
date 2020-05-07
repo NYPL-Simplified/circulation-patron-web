@@ -1,8 +1,13 @@
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage } from "next";
 import Collection from "../components/Collection";
+import Layout from "../components/Layout";
 
-const Home: NextPage = () => {
-  return <Collection />;
+const LibraryHome: NextPage = () => {
+  return (
+    <Layout showFormatFilter>
+      <Collection />
+    </Layout>
+  );
 };
 
-export default Home;
+export default LibraryHome;

@@ -1,8 +1,12 @@
-import { NextPage } from "next";
+import Layout from "../../components/Layout";
 import BookDetails from "../../components/bookDetails";
 
-const Book: NextPage = () => {
-  return <BookDetails />;
+const BookPage = () => {
+  return (
+    <Layout>
+      <BookDetails />
+    </Layout>
+  );
 };
 
-export default Book;
+export default BookPage;
