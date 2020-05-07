@@ -17,8 +17,6 @@ function getOrCreateStore(pathFor: PathFor, initialState?: State) {
 
   // Create store if unavailable on the client and set it on the window object
   if (!window[__NEXT_REDUX_STORE__]) {
-    console.log("store not found, making it with");
-    console.log(initialState);
     window[__NEXT_REDUX_STORE__] = buildStore(
       initialState,
       [BasicAuthPlugin],
