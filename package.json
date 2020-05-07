@@ -44,7 +44,7 @@
     "react-hot-loader": "^4.12.20",
     "react-redux": "^7.2.0",
     "react-spinners": "^0.8.0",
-    "reakit": "^1.0.0-beta.16",
+    "reakit": "^1.0.0-rc.2",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2",

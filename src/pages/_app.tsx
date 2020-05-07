@@ -90,9 +90,6 @@ const getLibraryFromQuery = (
 };
 
 MyApp.getInitialProps = async ({ ctx, err }) => {
-  IS_SERVER
-    ? console.log("Running _app getInitialProps on server")
-    : console.log("Running _app getInitialProps on client");
   const { query } = ctx;
 
   /**

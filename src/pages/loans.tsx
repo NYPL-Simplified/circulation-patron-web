@@ -1,8 +1,12 @@
-import { NextPage } from "next";
+import Layout from "../components/Layout";
 import MyBooks from "../components/MyBooks";
 
-const MyBooksPage: NextPage = () => {
-  return <MyBooks />;
+const Loans = () => {
+  return (
+    <Layout>
+      <MyBooks />
+    </Layout>
+  );
 };
 
-export default MyBooksPage;
+export default Loans;

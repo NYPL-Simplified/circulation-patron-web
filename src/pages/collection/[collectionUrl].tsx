@@ -1,10 +1,12 @@
-import { useRouter } from "next/router";
+import Layout from "../../components/Layout";
+import Collection from "../../components/Collection";
 
-const Home = () => {
-  const router = useRouter();
-  const params = router.query;
-  console.log(params);
-  return <div>Welcome to collection/collectionUrl</div>;
+const CollectionPage = () => {
+  return (
+    <Layout showFormatFilter>
+      <Collection />
+    </Layout>
+  );
 };
 
-export default Home;
+export default CollectionPage;
