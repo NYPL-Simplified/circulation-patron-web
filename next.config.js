@@ -1,4 +1,11 @@
 module.exports = {
+  env: {
+    SIMPLIFIED_CATALOG_BASE: process.env.SIMPLIFIED_CATALOG_BASE,
+    SHORTEN_URLS: process.env.SHORTEN_URLS,
+    CONFIG_FILE: process.env.CONFIG_FILE,
+    REACT_AXE: process.env.REACT_AXE,
+    CACHE_EXPIRATION_SECONDS: process.env.CACHE_EXPIRATION_SECONDS
+  },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
