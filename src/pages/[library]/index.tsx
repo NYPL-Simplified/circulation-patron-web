@@ -1,12 +1,12 @@
 import { NextPage } from "next";
 import Collection from "../../components/Collection";
-import Layout from "../../components/Layout";
 
+import MultiLibraryPage from "../../components/MultiLibraryPage";
 const LibraryHome: NextPage = () => {
   return (
-    <Layout showFormatFilter>
+    <MultiLibraryPage showFormatFilter>
       <Collection />
-    </Layout>
+    </MultiLibraryPage>
   );
 };
 

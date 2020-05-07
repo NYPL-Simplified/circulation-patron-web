@@ -1,11 +1,11 @@
-import Layout from "../../components/Layout";
 import MyBooks from "../../components/MyBooks";
+import MultiLibraryPage from "../../components/MultiLibraryPage";
 
 const Loans = () => {
   return (
-    <Layout>
+    <MultiLibraryPage>
       <MyBooks />
-    </Layout>
+    </MultiLibraryPage>
   );
 };
 

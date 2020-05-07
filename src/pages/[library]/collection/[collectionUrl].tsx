@@ -1,11 +1,10 @@
-import Layout from "../../../components/Layout";
 import Collection from "../../../components/Collection";
-
+import MultiLibraryPage from "../../../components/MultiLibraryPage";
 const CollectionPage = () => {
   return (
-    <Layout showFormatFilter>
+    <MultiLibraryPage showFormatFilter>
       <Collection />
-    </Layout>
+    </MultiLibraryPage>
   );
 };
 
