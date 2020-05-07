@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "../../test-utils";
-import Error from "../_error";
+import Error from "../Error";
 
 test("renders error message without status code", () => {
   const node = render(<Error />);
