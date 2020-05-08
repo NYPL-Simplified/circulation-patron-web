@@ -79,7 +79,7 @@
     "fetch-mock-jest": "^1.2.4",
     "jest": "^25.3.0",
     "jest-emotion": "^10.0.32",
-    "prettier": "^1.19.1",
+    "prettier": "2.0.5",
     "react-axe": "^3.4.1",
     "react-test-renderer": "^16.13.1",
     "typescript": "^3.8.3"
