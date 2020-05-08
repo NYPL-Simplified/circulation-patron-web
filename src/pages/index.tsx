@@ -4,7 +4,7 @@ import Collection from "../components/Collection";
 import SingleLibraryPage from "../components/SingleLibraryPage";
 import Layout from "../components/Layout";
 
-const Home: NextPage = () => {
+const LibraryHome: NextPage = () => {
   return (
     <SingleLibraryPage>
       <Layout>
