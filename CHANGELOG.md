@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+## 2.0.2
+
+- Removed travis CI as it has been replaced by Github Actions
+
 ### 2.0.1
 
 #### Added
