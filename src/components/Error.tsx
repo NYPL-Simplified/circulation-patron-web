@@ -9,11 +9,11 @@ const statusCodes: { [code: number]: string } = {
 };
 
 const ErrorComponent = ({
-  statusCode,
+  statusCode = 404,
   title,
   detail
 }: {
-  statusCode: number;
+  statusCode?: number;
   title?: string;
   detail?: string;
 }) => {

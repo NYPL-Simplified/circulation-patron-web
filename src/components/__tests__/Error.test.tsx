@@ -2,9 +2,9 @@ import * as React from "react";
 import { render } from "../../test-utils";
 import Error from "../Error";
 
-test("renders error message without status code", () => {
+test("renders error message without 404 status code if status code not provided", () => {
   const node = render(<Error />);
-  expect(node.getByText("An error occurred")).toBeInTheDocument();
+  expect(node.getByText("A 404 error occurred on server")).toBeInTheDocument();
 });
 
 test("renders error message with status code", () => {
@@ -24,12 +24,4 @@ test("renders error page with detail", () => {
   expect(
     node.getByText("All licenses for this book are loaned out.")
   ).toBeInTheDocument();
-});
-
-test("renders 'Return Home' link", () => {
-  const node = render(<Error />);
-  expect(node.getByText("Return Home")).toBeInTheDocument();
-  expect((node.getByText("Return Home") as HTMLLinkElement).href).toBe(
-    "http://test-domain.com/"
-  );
 });
