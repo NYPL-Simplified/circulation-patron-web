@@ -1,11 +1,14 @@
 import { NextPage } from "next";
 import Collection from "../../components/Collection";
-
+import Layout from "../../components/Layout";
 import MultiLibraryPage from "../../components/MultiLibraryPage";
+
 const LibraryHome: NextPage = () => {
   return (
-    <MultiLibraryPage showFormatFilter>
-      <Collection />
+    <MultiLibraryPage>
+      <Layout showFormatFilter>
+        <Collection />
+      </Layout>
     </MultiLibraryPage>
   );
 };

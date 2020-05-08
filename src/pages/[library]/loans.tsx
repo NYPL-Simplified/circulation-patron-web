@@ -1,10 +1,13 @@
 import MyBooks from "../../components/MyBooks";
 import MultiLibraryPage from "../../components/MultiLibraryPage";
+import Layout from "../../components/Layout";
 
 const Loans = () => {
   return (
     <MultiLibraryPage>
-      <MyBooks />
+      <Layout>
+        <MyBooks />
+      </Layout>
     </MultiLibraryPage>
   );
 };

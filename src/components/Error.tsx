@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx, Styled } from "theme-ui";
-import Layout from "../components/Layout";
 import { NavButton } from "./Button";
 
 const ErrorComponent = ({
@@ -13,7 +12,7 @@ const ErrorComponent = ({
   detail?: string;
 }) => {
   return (
-    <Layout>
+    <>
       <Styled.h1 sx={{ fontSize: 3, textAlign: `center` }}>
         Error{title && `: ${title}`}
       </Styled.h1>
@@ -28,7 +27,7 @@ const ErrorComponent = ({
           Return Home
         </NavButton>
       </p>
-    </Layout>
+    </>
   );
 };
 

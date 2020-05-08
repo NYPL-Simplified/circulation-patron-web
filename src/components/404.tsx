@@ -1,13 +1,11 @@
 /** @jsx jsx */
 import { jsx, Styled } from "theme-ui";
-import * as React from "react";
 import { NavButton } from "./Button";
 import Head from "next/head";
-import Layout from "../components/Layout";
 
 const NoMatch = () => {
   return (
-    <Layout>
+    <>
       {" "}
       <div
         sx={{
@@ -28,7 +26,7 @@ const NoMatch = () => {
         </p>
         <NavButton href="/">Return home</NavButton>
       </div>
-    </Layout>
+    </>
   );
 };
 
