@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx, Styled } from "theme-ui";
-import { NavButton } from "./Button";
 import Head from "next/head";
 
 const NoMatch = () => {
@@ -24,7 +23,6 @@ const NoMatch = () => {
           We&apos;re sorry, but the page you are looking for does not exist.
           Please try a different URL or return to home.
         </p>
-        <NavButton href="/">Return home</NavButton>
       </div>
     </>
   );

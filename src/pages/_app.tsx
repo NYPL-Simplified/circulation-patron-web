@@ -19,7 +19,7 @@ import Auth from "../components/Auth";
 import Layout from "../components/Layout";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
-import Error from "next/error";
+import Error from "../pages/_error";
 import { ParsedUrlQuery } from "querystring";
 import libData from "../utils/libData";
 
@@ -42,16 +42,17 @@ const MyApp = (props: MyAppProps & AppProps) => {
   /**
    * If there was no library or initialState provided, render the error page
    */
+
   if (is404(props)) {
     return <Error statusCode={props.statusCode} />;
   }
 
   const { library, initialState, Component, pageProps } = props;
-
   const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
   const pathFor = getPathFor(urlShortener, library.id);
   const store = getOrCreateStore(pathFor, initialState);
   setLibraryData(library);
+
   return (
     <ErrorBoundary fallback={AppErrorFallback}>
       <Head>

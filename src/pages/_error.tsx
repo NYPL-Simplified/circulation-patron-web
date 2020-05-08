@@ -4,7 +4,7 @@ function Error({
   title,
   detail
 }: {
-  statusCode?: number;
+  statusCode: number;
   title?: string;
   detail?: string;
 }) {
