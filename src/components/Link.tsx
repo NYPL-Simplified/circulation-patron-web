@@ -4,7 +4,6 @@ import * as React from "react";
 import BaseLink from "next/link";
 import useLinkUtils, { LinkUtils } from "./context/LinkUtilsContext";
 import { NextLinkConfig } from "../interfaces";
-import { useRouter } from "next/router";
 
 type CollectionLinkProps = {
   collectionUrl: string;

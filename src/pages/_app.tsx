@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { AppProps } from "next/app";
 import ContextProvider from "../components/context/ContextProvider";
 import {
@@ -16,12 +16,10 @@ import { State } from "opds-web-client/lib/state";
 import { ThemeProvider } from "theme-ui";
 import theme from "../theme";
 import Auth from "../components/Auth";
-import Layout from "../components/Layout";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
 import Error from "next/error";
 import { ParsedUrlQuery } from "querystring";
-import libData from "../utils/libData";
 
 type NotFoundProps = {
   statusCode: number;
@@ -89,7 +87,7 @@ const getLibraryFromQuery = (
     : undefined;
 };
 
-MyApp.getInitialProps = async ({ ctx, err }) => {
+MyApp.getInitialProps = async ({ ctx, _err }) => {
   const { query } = ctx;
 
   /**

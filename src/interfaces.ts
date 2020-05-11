@@ -83,8 +83,7 @@ type PickAndRequire<T, K extends keyof T> = { [P in K]-?: NonNullable<T[P]> };
 export type RequiredKeys<T, K extends keyof T> = Omit<T, K> &
   PickAndRequire<T, K>;
 
-
 export type NextLinkConfig = {
   href: string;
   as?: string;
-}
+};
