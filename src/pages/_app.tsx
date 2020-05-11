@@ -102,7 +102,10 @@ MyApp.getInitialProps = async ({ ctx, err }) => {
   const parsedLibrary = getLibraryFromQuery(query);
   const libraryData = await getLibraryData(parsedLibrary);
 
-  if (!libraryData) return { statusCode: 404 };
+  if (!libraryData) {
+    ctx.res.statusCode = 404;
+    return { statusCode: 404 };
+  }
 
   /**
    * Create the resources we need to complete a server render
