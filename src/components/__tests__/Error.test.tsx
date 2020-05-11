@@ -7,6 +7,14 @@ test("renders error message without 404 status code if status code not provided"
   expect(node.getByText("A 404 error occurred on server")).toBeInTheDocument();
 });
 
+test("renders 404 error message when there is a 404 error", () => {
+  const node = render(<Error statusCode={404} />);
+  expect(
+    node.getByText("Error: This page could not be found")
+  ).toBeInTheDocument();
+  expect(node.getByText("A 404 error occurred on server")).toBeInTheDocument();
+});
+
 test("renders error message with status code", () => {
   const node = render(<Error statusCode={400} />);
   expect(node.getByText("A 400 error occurred on server")).toBeInTheDocument();

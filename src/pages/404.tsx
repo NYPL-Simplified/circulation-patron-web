@@ -1,5 +1,4 @@
-import NoMatch from "../components/404";
-
+import ErrorComponent from "../components/Error";
 export default function NotFoundPage() {
-  return <NoMatch />;
+  return <ErrorComponent statusCode={404} />;
 }
