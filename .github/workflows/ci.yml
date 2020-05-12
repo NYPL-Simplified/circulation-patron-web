@@ -57,7 +57,7 @@ jobs:
       - name: Cache and install node modules
         uses: bahmutov/npm-install@v1
       - name: Test
-        run: npm run test -- --coverage
+        run: npm run test:ci -- --coverage
       - name: Coveralls Report
         uses: coverallsapp/github-action@master
         with:
