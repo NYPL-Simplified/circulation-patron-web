@@ -1,3 +1,4 @@
+import * as React from "react";
 import ErrorComponent from "../components/Error";
 function Error({
   statusCode,

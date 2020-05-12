@@ -3,7 +3,6 @@ import MultiLibraryPage from "../../../components/MultiLibraryPage";
 import Layout from "../../../components/Layout";
 import BookDetails from "../../../components/bookDetails";
 
-
 const BookPage = () => {
   return (
     <MultiLibraryPage>
