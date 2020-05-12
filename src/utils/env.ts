@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /**
  * Simply exporting processed env vars
  */

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { State } from "opds-web-client/lib/state";
 import buildStore from "opds-web-client/lib/store";
 import BasicAuthPlugin from "../auth/basicAuthPlugin";

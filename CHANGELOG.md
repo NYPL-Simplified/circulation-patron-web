@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### 2.0.1
+
+#### Added
+
+- Created Github Actions workflows to test, release, and deploy docker images to Docker Hub for beta and master.
+
 ### 2.0.0
 
 #### Breaking Changes

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { render, fixtures, actions } from "../../test-utils";
-import merge from "deepmerge";
+import { render } from "../../test-utils";
 import Link from "../Link";
 
 test("Renders expected styles", () => {

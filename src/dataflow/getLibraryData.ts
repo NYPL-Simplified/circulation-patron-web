@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { LibraryData } from "./../interfaces";
 import LibraryDataCache from "./LibraryDataCache";
 import {

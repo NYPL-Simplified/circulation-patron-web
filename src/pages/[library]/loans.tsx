@@ -1,6 +1,7 @@
+import * as React from "react";
+import Layout from "../../components/Layout";
 import MyBooks from "../../components/MyBooks";
 import MultiLibraryPage from "../../components/MultiLibraryPage";
-import Layout from "../../components/Layout";
 
 const Loans = () => {
   return (

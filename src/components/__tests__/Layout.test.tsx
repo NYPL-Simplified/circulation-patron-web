@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, prettyDOM } from "../../test-utils";
+import { render, fixtures } from "../../test-utils";
 import Layout from "../Layout";
 import { State } from "opds-web-client/lib/state";
 import { FacetGroupData, LaneData } from "opds-web-client/lib/interfaces";
