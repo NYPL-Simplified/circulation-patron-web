@@ -1,0 +1,49 @@
+# This workflow will tag and release the master branch
+name: Production Release
+
+# workflow will only run when a pull request to the master branch is closed.
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+
+jobs:
+  release_master:
+    name: Tag, Release and Publish master
+    # only run if PR is merged (not just closed)
+    if: github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        # the tag will match the package.json version (eg. v1.0.0)
+      - name: Tag
+        id: autotagger
+        uses: butlerlogic/action-autotag@stable
+        with:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          strategy: package
+          prefix: v
+          # use the body of the PR commit as the tag message
+          tag_message: ${{ github.event.pull_request.body }}
+      - name: Release
+        id: create_release
+        if: steps.autotagger.outputs.tagname != ''
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.autotagger.outputs.tagname }}
+          release_name: ${{ steps.autotagger.outputs.tagname }}
+          # use the body of the PR commit as the release body
+          body: ${{ github.event.pull_request.body }}
+          draft: false
+          prerelease: false
+
+      - name: Publish to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: nypl/patron-web
+          tags: ${{steps.autotagger.outputs.version}}, latest
+          add_git_labels: true

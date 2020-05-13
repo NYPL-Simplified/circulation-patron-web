@@ -1,4 +1,6 @@
+import * as React from "react";
 import { NextPage, NextPageContext } from "next";
+
 import Collection from "../../components/Collection";
 import Layout from "../../components/Layout";
 import MultiLibraryPage from "../../components/MultiLibraryPage";

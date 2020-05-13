@@ -1,7 +1,9 @@
+import * as React from "react";
 import { NextPageContext } from "next";
+
 import Collection from "../../../components/Collection";
-import MultiLibraryPage from "../../../components/MultiLibraryPage";
 import Layout from "../../../components/Layout";
+import MultiLibraryPage from "../../../components/MultiLibraryPage";
 import { IS_MULTI_LIBRARY } from "../../../utils/env";
 
 const CollectionPage = () => {

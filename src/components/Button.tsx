@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import { Button as BaseButton } from "reakit";
 import * as React from "react";
 import { ButtonVariants, VariantProp } from "../interfaces";
