@@ -1,2 +1,0 @@
-brazoria|https://simplye.amigos.org/txbrazoria
-xyzlib|http://simplye-dev-cm.amigos.org/xyzlib
