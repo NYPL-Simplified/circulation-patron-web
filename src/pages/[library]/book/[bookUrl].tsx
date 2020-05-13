@@ -7,13 +7,8 @@ import BookDetails from "../../../components/bookDetails";
 import ErrorPage from "../../404";
 
 const BookPage = ({ statusCode }: { statusCode?: number }) => {
-  if (statusCode === 404) {
-    return <ErrorPage />;
-  }
   return (
-    <Layout>
-      <BookDetails />
-    </Layout>
+    <Layout>{statusCode === 404 ? <ErrorPage /> : <BookDetails />}</Layout>
   );
 };
 

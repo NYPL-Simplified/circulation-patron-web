@@ -8,13 +8,9 @@ import ErrorPage from "../404";
 import { IS_MULTI_LIBRARY } from "../../utils/env";
 
 const LibraryHome = ({ statusCode }: { statusCode?: number }) => {
-  if (statusCode === 404) {
-    return <ErrorPage />;
-  }
-
   return (
     <Layout showFormatFilter>
-      <Collection />
+      {statusCode === 404 ? <ErrorPage /> : <Collection />}
     </Layout>
   );
 };
