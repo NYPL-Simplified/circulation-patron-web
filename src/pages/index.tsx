@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 
 const LibraryHome: NextPage = () => {
   return (
-    <Layout>
+    <Layout showFormatFilter>
       <Collection />
     </Layout>
   );
