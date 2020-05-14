@@ -77,6 +77,10 @@ The following environment variables can also be set to further configure the app
 - Set `CACHE_EXPIRATION_SECONDS` to control how often the app will check for changes to registry entries and circ manager authentication documents.
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 
+#### Using a `.env` file
+
+Next.js will automatically load environment variables set in a `.env` file. There is a default `.env` file which is committed to source control. If you would like to override this locally only, use `.env.local`, which will be ignored by git. If needed, we can also set test and development specific env vars via `.env` files. Read more in the [Next.js env documentation](https://nextjs.org/docs/basic-features/environment-variables).
+
 ### Useful Scripts
 
 - `npm run test` - This will launch the test runner (jest) and run all tests.
