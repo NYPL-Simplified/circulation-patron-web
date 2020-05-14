@@ -6,7 +6,7 @@ module.exports = {
     REACT_AXE: process.env.REACT_AXE,
     CACHE_EXPIRATION_SECONDS: process.env.CACHE_EXPIRATION_SECONDS
   },
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config, { _buildId, _dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
     // Important: return the modified config
