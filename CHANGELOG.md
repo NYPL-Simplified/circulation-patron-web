@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### 2.0.2
+
+- Refactor: Update build configuration and server code to use [Next.js](https://nextjs.org/).
+- Refactor: Replace react-router with file-system Next.js routing.
+- Add: `.env` file support
+- Fix: Correctly send 404s when using one library or multiple.
+- Add: Support absolute imports from `src` directory so `../../../components/xxx` becomes `components/xxx`.
+- Add: Add next/bundle-analyzer to review bundle sizes.
+- Fix: Stop rendering Modal (React Portal) on server
+- Update: Update prettier to 2.0
+
 ### 2.0.1
 
 #### Added
