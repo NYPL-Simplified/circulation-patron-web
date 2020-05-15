@@ -1,4 +1,3 @@
-require("isomorphic-fetch");
 import OPDSParser, { OPDSFeed } from "opds-feed-parser";
 import { Link, LibraryData } from "../interfaces";
 import { parseLinks } from "../utils/libraryLinks";
