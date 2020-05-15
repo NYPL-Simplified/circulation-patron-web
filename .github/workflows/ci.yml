@@ -40,8 +40,6 @@ jobs:
           node-version: 13.x
       - name: Cache and install node modules
         uses: bahmutov/npm-install@v1
-      - name: Use Typescript
-        run: echo "::debug tsc --version"
       - name: Typecheck
         run: tsc --noEmit
 
