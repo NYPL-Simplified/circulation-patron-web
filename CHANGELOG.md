@@ -10,6 +10,7 @@
 - Add: Add next/bundle-analyzer to review bundle sizes.
 - Fix: Stop rendering Modal (React Portal) on server
 - Update: Update prettier to 2.0
+- Removed travis CI as it has been replaced by Github Actions
 
 ### 2.0.1
 
