@@ -14,6 +14,7 @@ export const MockNextRouterContextProvider: React.FC<{
   router?: Partial<NextRouter>;
 }> = ({ router = {}, children }) => {
   const {
+    basePath = "",
     route = "",
     pathname = "",
     query = {},
@@ -34,6 +35,7 @@ export const MockNextRouterContextProvider: React.FC<{
   return (
     <RouterContext.Provider
       value={{
+        basePath,
         route,
         pathname,
         query,
