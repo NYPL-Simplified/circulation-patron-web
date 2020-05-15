@@ -7,6 +7,6 @@ services:
       CONFIG_FILE: /config/cm_libraries.txt
       NODE_ENV: production
     volumes:
-      - ./config:/config
+      - ./config:/app/config
     ports:
       - 3000:3000
