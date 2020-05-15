@@ -20,6 +20,7 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
 import Error from "../pages/_error";
 import { ParsedUrlQuery } from "querystring";
+import enableAxe from "utils/axe";
 
 type NotFoundProps = {
   statusCode: number;
@@ -55,7 +56,7 @@ const MyApp = (props: MyAppProps & AppProps) => {
     <ErrorBoundary fallback={AppErrorFallback}>
       <Head>
         {/* define the default title */}
-        <title>Library.catalogName</title>
+        <title>{library.catalogName}</title>
       </Head>
       <ContextProvider
         shortenUrls={SHORTEN_URLS}
@@ -126,14 +127,8 @@ MyApp.getInitialProps = async ({ ctx, _err }) => {
   };
 };
 
-/**
- * Accessibility tool - outputs to devtools console on dev only and client-side only.
- * @see https://github.com/dequelabs/react-axe
- */
 if (IS_DEVELOPMENT && !IS_SERVER && REACT_AXE) {
-  const ReactDOM = require("react-dom");
-  const axe = require("react-axe");
-  axe(React, ReactDOM, 1000);
+  enableAxe();
 }
 
 const AppErrorFallback: React.FC<{ message: string }> = ({ message }) => {

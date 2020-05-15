@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   env: {
     SIMPLIFIED_CATALOG_BASE: process.env.SIMPLIFIED_CATALOG_BASE,
     SHORTEN_URLS: process.env.SHORTEN_URLS,
@@ -22,3 +22,8 @@ module.exports = {
     return config;
   }
 };
+
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true"
+});
+module.exports = withBundleAnalyzer(config);
