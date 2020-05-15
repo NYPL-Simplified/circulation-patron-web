@@ -145,11 +145,11 @@ export default class LibraryDataCache {
     return {
       id: library,
       catalogUrl,
-      catalogName,
       ...this.getDataFromAuthDocumentAndCatalog(
         entry.authDocument,
         entry.catalog
-      )
+      ),
+      catalogName
     };
   }
 
