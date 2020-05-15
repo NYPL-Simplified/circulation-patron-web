@@ -1,6 +1,6 @@
 ## CHANGELOG
 
-### 2.0.2
+### 2.1.0
 
 - Refactor: Update build configuration and server code to use [Next.js](https://nextjs.org/).
 - Refactor: Replace react-router with file-system Next.js routing.
