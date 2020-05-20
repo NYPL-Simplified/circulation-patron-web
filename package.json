@@ -18,8 +18,6 @@
     "lint": "eslint '*/**/*.{ts,tsx}'",
     "lint:fix": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "generate-icons": "npx @svgr/cli --template src/icons/_template.js --typescript --icon --ext tsx -d src/icons src/icons",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@csstools/normalize.css": "^10.1.0",
