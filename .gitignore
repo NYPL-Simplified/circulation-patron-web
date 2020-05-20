@@ -1,7 +1,5 @@
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
 
 # testing
 /coverage
@@ -26,11 +24,10 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-config_file.txt
-config/cm_libraries.txt
 
 # local developer files
 .yalc
 yalc.lock
 wallaby.js
-config/*
+config/
+.vscode/
