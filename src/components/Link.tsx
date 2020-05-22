@@ -34,7 +34,7 @@ const buildLinkFromProps = (props: LinkProps, linkUtils: LinkUtils) => {
   }
   if ("collectionUrl" in props) {
     const { collectionUrl, ...rest } = props;
-    return { ...linkUtils.buildCollectionLink(props.collectionUrl), ...rest };
+    return { ...linkUtils.buildCollectionLink(collectionUrl), ...rest };
   }
   return linkUtils.buildMultiLibraryLink({
     as: props.as,

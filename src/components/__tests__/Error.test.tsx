@@ -2,8 +2,11 @@ import * as React from "react";
 import { render } from "../../test-utils";
 import Error from "../Error";
 
-test("renders error message without 404 status code if status code not provided", () => {
+test("renders error message with 404 status code if status code not provided", () => {
   const node = render(<Error />);
+  expect(
+    node.getByText("Error: This page could not be found")
+  ).toBeInTheDocument();
   expect(node.getByText("A 404 error occurred on server")).toBeInTheDocument();
 });
 
