@@ -31,8 +31,8 @@ If you are using a Library Registry, this configuration will automatically be cr
 
 Once the dependencies are installed and application environments configured, the following two base commands can be used to start the application:
 
-- `npm run dev` - This command will watch the code for changes and rebuild the front-end code, but won't reload the server code. Unless you have a library registry running locally, remember to have a manager, registry or config file set when running this. eg. `CONFIG_FILE=config/cm_libraries.txt npm run dev`
-- `npm run build:prod` - This will build both the server and the client code into `/lib` and `/dist` respectively. You can then run `npm run start` to start the built server.
+- `npm run dev` - This command will start the development server, which builds pages lazily (when you request them) to shorten the startup time.
+- `npm run build` - This will build both the server and the client code into `./next`. You can then run `npm run start` to start the server.
 
 The application will start at the base URL of `localhost:3000`.
 
