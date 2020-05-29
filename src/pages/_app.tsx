@@ -5,7 +5,8 @@ import {
   SHORTEN_URLS,
   IS_SERVER,
   IS_DEVELOPMENT,
-  REACT_AXE
+  REACT_AXE,
+  IS_MULTI_LIBRARY
 } from "../utils/env";
 import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
@@ -101,7 +102,20 @@ MyApp.getInitialProps = async ({ ctx, _err }) => {
   const parsedLibrary = getLibraryFromQuery(query);
   const libraryData = await getLibraryData(parsedLibrary);
 
-  if (!libraryData) {
+  /**
+   * This guard checks if you are running as a single library but
+   * attempting to access a multi-library route
+   */
+  const isMultiLibraryRoute = ctx.pathname?.includes?.("[library]");
+  const shouldNotHaveAccess = isMultiLibraryRoute && !IS_MULTI_LIBRARY;
+
+  if (!libraryData || shouldNotHaveAccess) {
+    console.warn(
+      "Returning 404 for pathname: ",
+      ctx.pathname,
+      " and as path: ",
+      ctx.asPath
+    );
     ctx.res.statusCode = 404;
     return { statusCode: 404 };
   }

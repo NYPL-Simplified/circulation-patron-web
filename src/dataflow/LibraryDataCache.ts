@@ -185,7 +185,7 @@ export default class LibraryDataCache {
       } else if (this.config) {
         catalogUrl = this.config[library];
         if (!catalogUrl) {
-          throw new Error("No catalog is configured for library " + library);
+          throw new Error(`No catalog is configured for library "${library}".`);
         }
       }
 
