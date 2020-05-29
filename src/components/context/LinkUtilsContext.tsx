@@ -34,7 +34,13 @@ export const LinkUtilsProvider: React.FC<{
     const preparedCollectionUrl = urlShortener.prepareCollectionUrl(
       collectionUrl
     );
-
+    // if there is no prepared collection url, you should go home
+    if (!preparedCollectionUrl) {
+      return buildMultiLibraryLink({
+        href: "/",
+        as: "/"
+      });
+    }
     return buildMultiLibraryLink({
       href: "/collection/[collectionUrl]",
       as: `/collection/${preparedCollectionUrl}`

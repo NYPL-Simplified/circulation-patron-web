@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render } from "../../test-utils";
 import Link from "../Link";
+import { IS_MULTI_LIBRARY } from "../../utils/env";
 
 test("Renders expected styles", () => {
   const utils = render(<Link href="/somewhere">click here</Link>);
@@ -53,5 +54,15 @@ test("Renders proper href with collectionUrl prop", () => {
     utils.getByText("click here").closest("a")?.href
   ).toMatchInlineSnapshot(
     `"http://test-domain.com/collection/http%3A%2F%2Fsome.collection.com"`
+  );
+});
+test("When collectionUrl is your base url, links to home", () => {
+  const utils = render(
+    <Link collectionUrl="http://simplye-dev-cm.amigos.org/xyzlib">
+      click here
+    </Link>
+  );
+  expect(utils.getByText("click here").closest("a")?.href).toEqual(
+    "http://test-domain.com/"
   );
 });
