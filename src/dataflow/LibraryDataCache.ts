@@ -190,14 +190,7 @@ export default class LibraryDataCache {
       }
 
       let catalog = currentEntry && currentEntry.catalog;
-      try {
-        catalog = await this.getCatalog(catalogUrl);
-      } catch (catalogError) {
-        // If we can't get the catalog, patrons won't be able to use the application
-        // Anyway.
-        console.warn(catalogError);
-        throw new Error("This library is not available.");
-      }
+      catalog = await this.getCatalog(catalogUrl);
 
       let authDocument = currentEntry && currentEntry.authDocument;
       try {
