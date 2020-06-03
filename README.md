@@ -80,7 +80,11 @@ The following environment variables can also be set to further configure the app
 
 #### Using a `.env` file
 
-Next.js will automatically load environment variables set in a `.env` file. There is a default `.env` file which is committed to source control. If you would like to override this locally only, use `.env.local`, which will be ignored by git. If needed, we can also set test and development specific env vars via `.env` files. Read more in the [Next.js env documentation](https://nextjs.org/docs/basic-features/environment-variables).
+Next.js will automatically load environment variables set in a `.env` file. There is a default `.env` file which is committed to source control. If you would like to override this locally only (ie. for development purposes), use `.env.local`, which will be ignored by git and will override anything in the `.env` file. If needed, we can also set test and development specific env vars via `.env` files. Read more in the [Next.js env documentation](https://nextjs.org/docs/basic-features/environment-variables).
+
+#### ENV Vars and Building
+
+When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.txt npm run start` will not work, you have to set them at build time.
 
 ### Useful Scripts
 
