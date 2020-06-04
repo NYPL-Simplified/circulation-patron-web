@@ -56,8 +56,9 @@ Set one of the following environment variables when running the application:
 
 - `SIMPLIFIED_CATALOG_BASE` - to use a Circulation Manager
 
-  - Example: `SIMPLIFIED_CATALOG_BASE=http://localhost:6500 npm run dev`.
+  - Example: `SIMPLIFIED_CATALOG_BASE=http://localhost:6500/:library/groups npm run dev`.
   - Point this environment variable to the URL of the Circulation Manager (which defaults to `localhost:6500`). This will load the _main_ library in the Circulation Manager in the app by going to `localhost:3000`.
+  - Note that you cannot point the application to the base url of your Circulation Manager - it must point at the specific library you are starting the application for: `http://localhost:6500` won't work. You must use `http://localhost:6500/:library/groups` where `:library` is the short name of the library you are using.
 
 - `CONFIG_FILE` - to use a configuration file
   - Example: `CONFIG_FILE=config_file.txt npm run prod`
