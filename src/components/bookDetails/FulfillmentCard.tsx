@@ -253,22 +253,9 @@ const DownloadCard: React.FC<{
           If you would rather read on your computer, you can:
         </Text>
         <Stack sx={{ justifyContent: "center", flexWrap: "wrap" }}>
-          {dedupedLinks.map(link =>
-            isOpenAccess ? (
-              <AnchorButton
-                key={link.url}
-                variant="ghost"
-                color="ui.gray.extraDark"
-                newTab
-                href={link.url}
-              >
-                <SvgDownload sx={{ mr: 1 }} /> Download{" "}
-                {typeMap[link.type].name}
-              </AnchorButton>
-            ) : (
-              <DownloadButton key={link.url} link={link} title={title} />
-            )
-          )}
+          {dedupedLinks.map(link => (
+            <DownloadButton key={link.url} link={link} title={title} />
+          ))}
         </Stack>
       </Stack>
     </>
