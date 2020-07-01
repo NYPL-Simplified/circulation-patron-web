@@ -66,8 +66,13 @@ const DEFAULT_AVAILABILITY = "available";
 export function getFulfillmentState(book: BookData): BookFulfillmentState {
   const availabilityStatus = book.availability?.status ?? DEFAULT_AVAILABILITY;
 
-  if (book.openAccessLinks && book.openAccessLinks.length > 0)
-    return "OPEN_ACCESS";
+  // we prefer open access links to fulfillment links, if available.
+  if (
+    availabilityStatus === "available" &&
+    book.openAccessLinks &&
+    book.openAccessLinks.length > 0
+  )
+    return "AVAILABLE_OPEN_ACCESS";
 
   if (
     availabilityStatus === "available" &&

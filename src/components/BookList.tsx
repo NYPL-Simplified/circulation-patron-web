@@ -119,7 +119,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
   const { borrowOrReserve, isLoading, errorMsg } = useBorrow(book);
 
   switch (fulfillmentState) {
-    case "OPEN_ACCESS":
+    case "AVAILABLE_OPEN_ACCESS":
       return (
         <>
           <Text

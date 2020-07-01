@@ -47,7 +47,7 @@ const FulfillmentContent: React.FC<{ book: BookData }> = ({ book }) => {
   const fulfillmentState = getFulfillmentState(book);
 
   switch (fulfillmentState) {
-    case "OPEN_ACCESS":
+    case "AVAILABLE_OPEN_ACCESS":
       if (!book.openAccessLinks)
         throw new Error("This open-access book is missing open access links");
       return (

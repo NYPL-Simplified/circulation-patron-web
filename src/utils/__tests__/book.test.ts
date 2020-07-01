@@ -46,10 +46,18 @@ describe("get authors", () => {
 });
 
 describe("getFulfillmentState", () => {
-  test("returns open access when open access links present", () => {
-    expect(getFulfillmentState(bookFixture)).toBe("OPEN_ACCESS");
+  test("returns AVAILABLE_OPEN_ACCESS when open access links present and status is 'available'", () => {
+    expect(getFulfillmentState(bookFixture)).toBe("AVAILABLE_OPEN_ACCESS");
   });
-  test("available to access", () => {
+  test("does not return AVAILABLE_OPEN_ACCESS is status is not 'available'", () => {
+    expect(
+      getFulfillmentState({
+        ...bookFixture,
+        availability: { status: "ready" }
+      })
+    ).toBe("READY_TO_BORROW");
+  });
+  test("returns AVAILABLE_TO_ACCESS when 'available' and no open access links present", () => {
     expect(
       getFulfillmentState({
         ...bookFixture,
@@ -88,7 +96,7 @@ describe("getFulfillmentState", () => {
     ).toBe("AVAILABLE_TO_BORROW");
   });
 
-  test("available to borrow", () => {
+  test("returns AVAILABLE_TO_BORROW when no fulfillment or open access links and status is 'available'", () => {
     expect(
       getFulfillmentState({
         ...bookFixture,
@@ -100,7 +108,7 @@ describe("getFulfillmentState", () => {
     ).toBe("AVAILABLE_TO_BORROW");
   });
 
-  test("ready to borrow", () => {
+  test("returns READY_TO_BORROW when status is 'ready'", () => {
     expect(
       getFulfillmentState({
         ...bookFixture,
@@ -112,7 +120,7 @@ describe("getFulfillmentState", () => {
     ).toBe("READY_TO_BORROW");
   });
 
-  test("available to reserve", () => {
+  test("returns AVAILABLE_TO_RESERVE when status is 'unavailable'", () => {
     expect(
       getFulfillmentState({
         ...bookFixture,
@@ -124,7 +132,7 @@ describe("getFulfillmentState", () => {
     ).toBe("AVAILABLE_TO_RESERVE");
   });
 
-  test("reserved", () => {
+  test("returns RESERVED when status is 'reserved'", () => {
     expect(
       getFulfillmentState({
         ...bookFixture,
