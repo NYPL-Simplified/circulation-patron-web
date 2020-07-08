@@ -34,8 +34,8 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
       }}
       className={className}
     >
-      <div sx={{ flex: "0 0 auto", mt: 5 }}>
-        <H3 sx={{ mt: 0, mr: 5, maxWidth: "100%" }}>{title}</H3>
+      <div sx={{ flex: "0 0 auto", mt: 5, mr: 5 }}>
+        <H3 sx={{ mt: 0, maxWidth: "100%" }}>{title}</H3>
         <FooterList>
           {libraryWebsite && (
             <ListItem>
@@ -77,8 +77,8 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
           )}
         </FooterList>
       </div>
-      <div sx={{ flex: "0 0 auto", mt: 5 }}>
-        <H3 sx={{ mt: 0, mr: 5 }}>Patron Support</H3>
+      <div sx={{ flex: "0 0 auto", mt: 5, mr: [3, 5] }}>
+        <H3 sx={{ mt: 0 }}>Patron Support</H3>
         <FooterList>
           {helpEmail && (
             <ListItem>

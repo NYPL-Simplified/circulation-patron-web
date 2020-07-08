@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+## 2.2.0
+
+- Redesign: the whole app received a new design based on NYPL Design System.
+- Import and use the Card component from NYPL/design-system-react-components.
+- Removed the grid view as it seemed redundant with the list view (for now).
+- Refactor Buttton to not be polymorphic (ie NavButton and Button and AnchorButton are now completely separate components).
+
 ### 2.1.0
 
 - Refactor: Update build configuration and server code to use [Next.js](https://nextjs.org/).
