@@ -72,6 +72,7 @@ export function getFulfillmentState(
 ): BookFulfillmentState {
   const availabilityStatus = book.availability?.status ?? DEFAULT_AVAILABILITY;
 
+  // indicates the book is open access and ready to download.
   // we prefer open access links to fulfillment links, if available.
   // we can't show OA links unless book is borrowed, however.
   if (

@@ -49,7 +49,6 @@ const FulfillmentContent: React.FC<{
   const isBorrowed = useIsBorrowed(book);
   const fulfillmentState = getFulfillmentState(book, isBorrowed);
 
-  // console.log(book, fulfillmentState);
   switch (fulfillmentState) {
     case "AVAILABLE_OPEN_ACCESS":
       if (!book.openAccessLinks)
