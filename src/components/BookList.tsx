@@ -305,7 +305,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
 
 export const LanesView: React.FC<{ lanes: LaneData[] }> = ({ lanes }) => {
   return (
-    <ul>
+    <ul sx={{ m: 0, p: 0 }}>
       {lanes.map(lane => (
         <Lane key={lane.url} lane={lane} />
       ))}
