@@ -58,7 +58,6 @@ const FulfillmentContent: React.FC<{
           links={book.openAccessLinks}
           book={book}
           subtitle="This open-access book is available to keep forever."
-          isOpenAccess
         />
       );
 
@@ -235,8 +234,7 @@ const DownloadCard: React.FC<{
   book: BookData;
   links: MediaLink[] | FulfillmentLink[];
   subtitle: string;
-  isOpenAccess?: boolean;
-}> = ({ book, links, subtitle, isOpenAccess = false }) => {
+}> = ({ book, links, subtitle }) => {
   const { title } = book;
   const dedupedLinks = dedupeLinks(links ?? []);
 

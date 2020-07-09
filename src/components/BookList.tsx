@@ -128,7 +128,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
             variant="text.body.italic"
             sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
           >
-            This open-access book is available to keep.
+            This open-access book is available to keep forever.
           </Text>
           <NavButton
             variant="ghost"
