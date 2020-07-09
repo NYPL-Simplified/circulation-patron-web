@@ -12,8 +12,7 @@ import {
   MediaLink,
   FulfillmentLink
 } from "opds-web-client/lib/interfaces";
-import { typeMap } from "opds-web-client/lib/utils/file";
-import Button, { AnchorButton } from "../Button";
+import Button from "../Button";
 import useDownloadButton from "opds-web-client/lib/hooks/useDownloadButton";
 import { withErrorBoundary } from "../ErrorBoundary";
 import useBorrow from "../../hooks/useBorrow";
@@ -22,6 +21,7 @@ import { Text } from "components/Text";
 import { MediumIcon } from "components/MediumIndicator";
 import SvgDownload from "icons/Download";
 import SvgPhone from "icons/Phone";
+import useIsBorrowed from "hooks/useIsBorrowed";
 
 const FulfillmentCard: React.FC<{ book: BookData }> = ({ book }) => {
   return (
@@ -43,9 +43,13 @@ const FulfillmentCard: React.FC<{ book: BookData }> = ({ book }) => {
   );
 };
 
-const FulfillmentContent: React.FC<{ book: BookData }> = ({ book }) => {
-  const fulfillmentState = getFulfillmentState(book);
+const FulfillmentContent: React.FC<{
+  book: BookData;
+}> = ({ book }) => {
+  const isBorrowed = useIsBorrowed(book);
+  const fulfillmentState = getFulfillmentState(book, isBorrowed);
 
+  // console.log(book, fulfillmentState);
   switch (fulfillmentState) {
     case "AVAILABLE_OPEN_ACCESS":
       if (!book.openAccessLinks)
