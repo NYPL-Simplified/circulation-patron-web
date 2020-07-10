@@ -23,7 +23,7 @@ test("shows overlay on unauthenticated request", async () => {
     body: merge({}, fixtures.server401Response)
   });
 
-  const node = render(
+  const utils = render(
     <Auth>
       <div>children</div>
     </Auth>,
@@ -32,7 +32,7 @@ test("shows overlay on unauthenticated request", async () => {
     }
   );
   // overlay should not be shown yet
-  const modal = node.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: none");
 
@@ -40,7 +40,7 @@ test("shows overlay on unauthenticated request", async () => {
    * we need to dispatch some action that makes a server request
    * and will receive our mocked 401
    */
-  node.dispatch(actions.fetchCollection("/some-collection"));
+  utils.dispatch(actions.fetchCollection("/some-collection"));
   // now see that the overlay is shown.
   await waitFor(() => expect(modal).toHaveStyle("display: block"));
 });
@@ -60,7 +60,7 @@ const stateWithShowForm: State = merge<State>(fixtures.initialState, {
 });
 
 test("shows overlay when showForm is true", async () => {
-  const node = render(
+  const utils = render(
     <Auth>
       <div>children</div>
     </Auth>,
@@ -69,13 +69,13 @@ test("shows overlay when showForm is true", async () => {
     }
   );
   // overlay should be shown
-  const modal = node.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
 });
 
 test("renders auth form provided in authPlugin", async () => {
-  const node = render(
+  const utils = render(
     <Auth>
       <div>children</div>
     </Auth>,
@@ -84,11 +84,11 @@ test("renders auth form provided in authPlugin", async () => {
     }
   );
   // overlay should be shown
-  const modal = node.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
   // should include the BasicAuthForm
-  expect(node.getByLabelText("Pin")).toBeInTheDocument();
+  expect(utils.getByLabelText("Pin")).toBeInTheDocument();
 });
 
 test("displays message when no auth provider configured", async () => {
@@ -111,7 +111,7 @@ test("displays message when no auth provider configured", async () => {
       arrayMerge: (a, b) => b
     }
   );
-  const node = render(
+  const utils = render(
     <Auth>
       <div>children</div>
     </Auth>,
@@ -120,11 +120,13 @@ test("displays message when no auth provider configured", async () => {
     }
   );
   // overlay should be shown
-  const modal = node.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
 
-  expect(node.getByText("Basic auth provider is missing.")).toBeInTheDocument();
+  expect(
+    utils.getByText("Basic auth provider is missing.")
+  ).toBeInTheDocument();
 });
 
 test("attempts to get credentials from cookies", async () => {

@@ -6,35 +6,37 @@ import userEvent from "@testing-library/user-event";
 
 describe("Layout nav + structure", () => {
   test("Library icon button navigates home", () => {
-    const node = render(<Layout>Child</Layout>);
-    const homeButton = node.getByLabelText("Library catalog, back to homepage");
+    const utils = render(<Layout>Child</Layout>);
+    const homeButton = utils.getByLabelText(
+      "Library catalog, back to homepage"
+    );
 
     // the home button should navigate to "/"
     expect(homeButton.closest("a")).toHaveAttribute("href", "/");
   });
 
   test("my books navigates to /loans", () => {
-    const node = render(<Layout>Child</Layout>, {
+    const utils = render(<Layout>Child</Layout>, {
       initialState: merge(fixtures.initialState, {
         loans: {
           url: "/myloans" // this url is not used for navigation, but for fetching loans
         }
       })
     });
-    const myBooks = node.getAllByRole("link", { name: "My Books" });
+    const myBooks = utils.getAllByRole("link", { name: "My Books" });
     myBooks.forEach(ln => expect(ln).toHaveAttribute("href", "/loans"));
   });
 
   test("displays children within main", () => {
-    const node = render(<Layout>Some children</Layout>);
-    const main = node.getByRole("main");
+    const utils = render(<Layout>Some children</Layout>);
+    const main = utils.getByRole("main");
     expect(main).toHaveTextContent("Some children");
   });
 
   test("provides a working skip nav link", async () => {
-    const node = render(<Layout>Child</Layout>);
-    const skipNav = node.getByText("Skip to content").closest("a");
-    const main = node.getByRole("main");
+    const utils = render(<Layout>Child</Layout>);
+    const skipNav = utils.getByText("Skip to content").closest("a");
+    const main = utils.getByRole("main");
 
     userEvent.tab();
     expect(skipNav).toHaveFocus();

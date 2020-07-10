@@ -55,45 +55,45 @@ test("shows clicklable breadcrumbs", () => {
   // which would leak across tests
   mockedComputeBreadcrumbs.mockReturnValueOnce([...breadcrumbs]);
 
-  const node = render(<BreadcrumbBar />, {
+  const utils = render(<BreadcrumbBar />, {
     initialState: stateWithCrumbs
   });
 
-  const allBooks = node.getByText("All Books");
+  const allBooks = utils.getByText("All Books");
   expect(allBooks.closest("a")).toHaveAttribute(
     "href",
     "/collection/url-allbooks"
   );
 
-  const libraryCrumb = node.getByText("lib");
+  const libraryCrumb = utils.getByText("lib");
   expect(libraryCrumb.closest("a")).toHaveAttribute(
     "href",
     "/collection/url-lib"
   );
 
   // the last item isn't a link
-  const lastItem = node.getByText("Last Item");
+  const lastItem = utils.getByText("Last Item");
   expect(lastItem.closest("a")).toBeNull();
 });
 
 test("adds current location", () => {
   mockedComputeBreadcrumbs.mockReturnValueOnce([...breadcrumbs]);
 
-  const node = render(<BreadcrumbBar currentLocation="We are here" />, {
+  const utils = render(<BreadcrumbBar currentLocation="We are here" />, {
     initialState: stateWithCrumbs
   });
 
-  const lastItem = node.getByText("Last Item");
+  const lastItem = utils.getByText("Last Item");
   expect(lastItem.closest("a")).toHaveAttribute("href", "/collection/last-url");
 
-  const currentLoc = node.getByText("We are here");
+  const currentLoc = utils.getByText("We are here");
   expect(currentLoc.closest("a")).toBeNull();
 });
 
 test("renders children", () => {
   mockedComputeBreadcrumbs.mockReturnValueOnce([...breadcrumbs]);
 
-  const node = render(
+  const utils = render(
     <BreadcrumbBar>
       <div>Hi Im here</div>
     </BreadcrumbBar>,
@@ -101,5 +101,5 @@ test("renders children", () => {
       initialState: stateWithCrumbs
     }
   );
-  expect(node.getByText("Hi Im here")).toBeInTheDocument();
+  expect(utils.getByText("Hi Im here")).toBeInTheDocument();
 });

@@ -154,20 +154,20 @@ test("fetches search description", async () => {
     "fetchSearchDescription"
   );
   /**
-   * node will contain
+   * utils will contain
    *  - the result of render
    *  - the redux store
    *  - the history object
    *  - the spied on dispatch function
    */
-  const node = render(<Search />, {
+  const utils = render(<Search />, {
     initialState
   });
 
   expect(mockedFetchSearchDescription).toHaveBeenCalledTimes(1);
   expect(mockedFetchSearchDescription).toHaveBeenCalledWith("/search-url");
   // we can assert on the app's dispatch like this
-  expect(node.dispatch).toHaveBeenCalledTimes(1);
+  expect(utils.dispatch).toHaveBeenCalledTimes(1);
 });
 ```
 

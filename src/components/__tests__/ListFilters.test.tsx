@@ -59,36 +59,36 @@ const availabilityFacet: FacetGroupData = {
 };
 
 test("renders sort by select with correct options", () => {
-  const node = render(<ListFilters />, {
+  const utils = render(<ListFilters />, {
     initialState: stateWithFacets([sortByFacet])
   });
 
-  const facet = node.getByLabelText("Sort by");
-  expect(node.getByText("author")).toBeInTheDocument();
-  expect(node.getByText("title")).toBeInTheDocument();
+  const facet = utils.getByLabelText("Sort by");
+  expect(utils.getByText("author")).toBeInTheDocument();
+  expect(utils.getByText("title")).toBeInTheDocument();
 
   expect(facet).toHaveValue("author");
 });
 
 test("renders availability select with correct options", () => {
-  const node = render(<ListFilters />, {
+  const utils = render(<ListFilters />, {
     initialState: stateWithFacets([availabilityFacet])
   });
 
-  const facet = node.getByLabelText("Availability");
-  expect(node.getByText("All")).toBeInTheDocument();
-  expect(node.getByText("Yours to keep")).toBeInTheDocument();
-  expect(node.getByText("Available now")).toBeInTheDocument();
+  const facet = utils.getByLabelText("Availability");
+  expect(utils.getByText("All")).toBeInTheDocument();
+  expect(utils.getByText("Yours to keep")).toBeInTheDocument();
+  expect(utils.getByText("Available now")).toBeInTheDocument();
 
   expect(facet).toHaveValue("All");
 });
 
 test("does redirect when selected", () => {
-  const node = render(<ListFilters />, {
+  const utils = render(<ListFilters />, {
     initialState: stateWithFacets([sortByFacet])
   });
 
-  const facet = node.getByLabelText("Sort by");
+  const facet = utils.getByLabelText("Sort by");
 
   userEvent.selectOptions(facet, "title");
 

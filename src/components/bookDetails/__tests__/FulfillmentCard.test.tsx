@@ -9,23 +9,23 @@ import { State } from "opds-web-client/lib/state";
 
 describe("open-access", () => {
   test("correct title and subtitle", () => {
-    const node = render(<FulfillmentCard book={fixtures.book} />);
+    const utils = render(<FulfillmentCard book={fixtures.book} />);
     expect(
-      node.getByText("This open-access book is available to keep forever.")
+      utils.getByText("This open-access book is available to keep forever.")
     ).toBeInTheDocument();
-    expect(node.getByText("You're ready to read this book in SimplyE!"));
+    expect(utils.getByText("You're ready to read this book in SimplyE!"));
   });
   test("shows download options", () => {
-    const node = render(<FulfillmentCard book={fixtures.book} />);
+    const utils = render(<FulfillmentCard book={fixtures.book} />);
     expect(
-      node.getByText("If you would rather read on your computer, you can:")
+      utils.getByText("If you would rather read on your computer, you can:")
     );
-    const downloadButton = node.getByText("Download EPUB");
+    const downloadButton = utils.getByText("Download EPUB");
     expect(downloadButton).toBeInTheDocument();
     expect(downloadButton).toHaveAttribute("target", "__blank");
     expect(downloadButton).toHaveAttribute("href", "/epub-open-access-link");
 
-    const PDFButton = node.getByText("Download PDF");
+    const PDFButton = utils.getByText("Download PDF");
     expect(PDFButton).toBeInTheDocument();
     expect(PDFButton).toHaveAttribute("target", "__blank");
     expect(PDFButton).toHaveAttribute("href", "/pdf-open-access-link");
@@ -44,8 +44,8 @@ describe("open-access", () => {
         }
       ]
     });
-    const node = render(<FulfillmentCard book={bookWithDuplicateFormat} />);
-    const downloadButton = node.getAllByText("Download PDF");
+    const utils = render(<FulfillmentCard book={bookWithDuplicateFormat} />);
+    const downloadButton = utils.getAllByText("Download PDF");
     expect(downloadButton).toHaveLength(1);
   });
 });
@@ -59,15 +59,15 @@ describe("available to borrow", () => {
     }
   });
   test("correct title and subtitle", () => {
-    const node = render(<FulfillmentCard book={closedAccessBook} />);
+    const utils = render(<FulfillmentCard book={closedAccessBook} />);
     expect(
-      node.getByText("This book is available to borrow!")
+      utils.getByText("This book is available to borrow!")
     ).toBeInTheDocument();
-    expect(node.getByText("10 out of 13 copies available."));
+    expect(utils.getByText("10 out of 13 copies available."));
   });
   test("displays borrow button", () => {
-    const node = render(<FulfillmentCard book={closedAccessBook} />);
-    const borrowButton = node.getByText("Borrow");
+    const utils = render(<FulfillmentCard book={closedAccessBook} />);
+    const borrowButton = utils.getByText("Borrow");
     expect(borrowButton).toBeInTheDocument();
   });
 
@@ -84,7 +84,7 @@ describe("available to borrow", () => {
       );
     // also spy on fetchLoans
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
-    const node = render(<FulfillmentCard book={closedAccessBook} />, {
+    const utils = render(<FulfillmentCard book={closedAccessBook} />, {
       initialState: merge<State>(fixtures.initialState, {
         loans: {
           url: "/loans-url",
@@ -93,10 +93,10 @@ describe("available to borrow", () => {
       })
     });
     // click borrow
-    userEvent.click(node.getByText("Borrow"));
+    userEvent.click(utils.getByText("Borrow"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const borrowButton = await node.findByRole("button", {
+    const borrowButton = await utils.findByRole("button", {
       name: "Borrowing..."
     });
     expect(borrowButton).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe("available to borrow", () => {
       status: 403,
       url: "error-url"
     };
-    const node = render(<FulfillmentCard book={closedAccessBook} />, {
+    const utils = render(<FulfillmentCard book={closedAccessBook} />, {
       initialState: merge(fixtures.initialState, {
         book: {
           error: err
@@ -119,10 +119,10 @@ describe("available to borrow", () => {
       })
     });
     expect(
-      node.getByText("10 out of 13 copies available.")
+      utils.getByText("10 out of 13 copies available.")
     ).toBeInTheDocument();
     expect(
-      node.getByText("Error: cannot loan more than 3 documents.")
+      utils.getByText("Error: cannot loan more than 3 documents.")
     ).toBeInTheDocument();
   });
 });
@@ -137,9 +137,11 @@ describe("ready to borrow", () => {
     }
   });
   test("correct title and subtitle", () => {
-    const node = render(<FulfillmentCard book={readyBook} />);
-    expect(node.getByText("You can now borrow this book!")).toBeInTheDocument();
-    expect(node.getByText("Your hold will expire on Tue Jun 16 2020."));
+    const utils = render(<FulfillmentCard book={readyBook} />);
+    expect(
+      utils.getByText("You can now borrow this book!")
+    ).toBeInTheDocument();
+    expect(utils.getByText("Your hold will expire on Tue Jun 16 2020."));
   });
   test("shows loading state when borrowing, borrows, and refetches loans", async () => {
     // mock the actions.updateBook
@@ -154,7 +156,7 @@ describe("ready to borrow", () => {
       );
     // also spy on fetchLoans
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
-    const node = render(<FulfillmentCard book={readyBook} />, {
+    const utils = render(<FulfillmentCard book={readyBook} />, {
       initialState: merge<State>(fixtures.initialState, {
         loans: {
           url: "/loans-url",
@@ -163,10 +165,10 @@ describe("ready to borrow", () => {
       })
     });
     // click borrow
-    userEvent.click(node.getByText("Borrow"));
+    userEvent.click(utils.getByText("Borrow"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const borrowButton = await node.findByRole("button", {
+    const borrowButton = await utils.findByRole("button", {
       name: "Borrowing..."
     });
     expect(borrowButton).toBeInTheDocument();
@@ -181,7 +183,7 @@ describe("ready to borrow", () => {
       status: 403,
       url: "error-url"
     };
-    const node = render(<FulfillmentCard book={readyBook} />, {
+    const utils = render(<FulfillmentCard book={readyBook} />, {
       initialState: merge(fixtures.initialState, {
         book: {
           error: err
@@ -189,7 +191,7 @@ describe("ready to borrow", () => {
       })
     });
     expect(
-      node.getByText("Error: cannot loan more than 3 documents.")
+      utils.getByText("Error: cannot loan more than 3 documents.")
     ).toBeInTheDocument();
   });
   test("handles lack of availability.until info", () => {
@@ -197,9 +199,9 @@ describe("ready to borrow", () => {
       ...readyBook,
       availability: { status: "ready" }
     });
-    const node = render(<FulfillmentCard book={withoutCopies} />);
+    const utils = render(<FulfillmentCard book={withoutCopies} />);
     expect(
-      node.getByText("You must borrow this book before your loan expires.")
+      utils.getByText("You must borrow this book before your loan expires.")
     );
   });
 });
@@ -217,16 +219,18 @@ describe("available to reserve", () => {
   });
 
   test("correct title and subtitle", () => {
-    const node = render(<FulfillmentCard book={unavailableBook} />);
+    const utils = render(<FulfillmentCard book={unavailableBook} />);
     expect(
-      node.getByText("This book is currently unavailable.")
+      utils.getByText("This book is currently unavailable.")
     ).toBeInTheDocument();
-    expect(node.getByText("0 out of 13 copies available.")).toBeInTheDocument();
+    expect(
+      utils.getByText("0 out of 13 copies available.")
+    ).toBeInTheDocument();
   });
 
   test("displays reserve button", () => {
-    const node = render(<FulfillmentCard book={unavailableBook} />);
-    const reserveButton = node.getByRole("button", { name: "Reserve" });
+    const utils = render(<FulfillmentCard book={unavailableBook} />);
+    const reserveButton = utils.getByRole("button", { name: "Reserve" });
     expect(reserveButton).toBeInTheDocument();
   });
 
@@ -237,15 +241,17 @@ describe("available to reserve", () => {
         total: 4
       }
     });
-    const node = render(<FulfillmentCard book={bookWithQueue} />);
+    const utils = render(<FulfillmentCard book={bookWithQueue} />);
     expect(
-      node.getByText("0 out of 13 copies available. 4 patrons in the queue.")
+      utils.getByText("0 out of 13 copies available. 4 patrons in the queue.")
     );
   });
 
   test("doesn't show patrons in queue when holds info no present", () => {
-    const node = render(<FulfillmentCard book={unavailableBook} />);
-    expect(node.getByText("0 out of 13 copies available.")).toBeInTheDocument();
+    const utils = render(<FulfillmentCard book={unavailableBook} />);
+    expect(
+      utils.getByText("0 out of 13 copies available.")
+    ).toBeInTheDocument();
   });
 
   test("handles unknown availability numbers", () => {
@@ -256,8 +262,8 @@ describe("available to reserve", () => {
     // this is currently failing because the getFulfillmentState is returning error
     // since we expect to always have the availability numbers otherwise we don't know
     // if the book is available or not, unless there is some other way to tell that state.
-    const node = render(<FulfillmentCard book={bookWithQueue} />);
-    expect(node.getByText("Number of books available is unknown."));
+    const utils = render(<FulfillmentCard book={bookWithQueue} />);
+    expect(utils.getByText("Number of books available is unknown."));
   });
 
   test("shows loading state when reserving, reserves, and refetches loans", async () => {
@@ -273,7 +279,7 @@ describe("available to reserve", () => {
       );
     // also spy on fetchLoans
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
-    const node = render(<FulfillmentCard book={unavailableBook} />, {
+    const utils = render(<FulfillmentCard book={unavailableBook} />, {
       initialState: merge<State>(fixtures.initialState, {
         loans: {
           url: "/loans-url",
@@ -282,10 +288,10 @@ describe("available to reserve", () => {
       })
     });
     // click reserve
-    userEvent.click(node.getByText("Reserve"));
+    userEvent.click(utils.getByText("Reserve"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const reserveButton = await node.findByRole("button", {
+    const reserveButton = await utils.findByRole("button", {
       name: "Reserving..."
     });
     expect(reserveButton).toBeInTheDocument();
@@ -308,8 +314,8 @@ describe("reserved", () => {
   });
 
   test("displays disabled reserve button", () => {
-    const node = render(<FulfillmentCard book={reservedBook} />);
-    const reserveButton = node.getByText("Reserved");
+    const utils = render(<FulfillmentCard book={reservedBook} />);
+    const reserveButton = utils.getByText("Reserved");
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toBeDisabled();
   });
@@ -329,8 +335,8 @@ describe("reserved", () => {
         position: 5
       }
     });
-    const node = render(<FulfillmentCard book={reservedBookWithQueue} />);
-    expect(node.getByText("Your hold position is: 5.")).toBeInTheDocument;
+    const utils = render(<FulfillmentCard book={reservedBookWithQueue} />);
+    expect(utils.getByText("Your hold position is: 5.")).toBeInTheDocument;
   });
 });
 
@@ -356,11 +362,11 @@ describe("available to download", () => {
   });
 
   test("correct title and subtitle", () => {
-    const node = render(<FulfillmentCard book={downloadableBook} />);
+    const utils = render(<FulfillmentCard book={downloadableBook} />);
     expect(
-      node.getByText("You have this book on loan until Thu Jun 18 2020.")
+      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
     ).toBeInTheDocument();
-    expect(node.getByText("You're ready to read this book in SimplyE!"));
+    expect(utils.getByText("You're ready to read this book in SimplyE!"));
   });
 
   test("handles lack of availability info", () => {
@@ -368,28 +374,28 @@ describe("available to download", () => {
       ...downloadableBook,
       availability: undefined
     });
-    const node = render(<FulfillmentCard book={withoutAvailability} />);
-    expect(node.getByText("You have this book on loan.")).toBeInTheDocument();
-    expect(node.getByText("You're ready to read this book in SimplyE!"));
+    const utils = render(<FulfillmentCard book={withoutAvailability} />);
+    expect(utils.getByText("You have this book on loan.")).toBeInTheDocument();
+    expect(utils.getByText("You're ready to read this book in SimplyE!"));
   });
 
   test("shows download options", () => {
-    const node = render(<FulfillmentCard book={downloadableBook} />);
+    const utils = render(<FulfillmentCard book={downloadableBook} />);
     expect(
-      node.getByText("If you would rather read on your computer, you can:")
+      utils.getByText("If you would rather read on your computer, you can:")
     );
-    const downloadButton = node.getByText("Download EPUB");
+    const downloadButton = utils.getByText("Download EPUB");
     expect(downloadButton).toBeInTheDocument();
 
-    const PDFButton = node.getByText("Download PDF");
+    const PDFButton = utils.getByText("Download PDF");
     expect(PDFButton).toBeInTheDocument();
   });
 
   test("download button calls fulfillBook", () => {
     const fulfillBookSpy = jest.spyOn(actions, "fulfillBook");
 
-    const node = render(<FulfillmentCard book={downloadableBook} />);
-    const downloadButton = node.getByText("Download EPUB");
+    const utils = render(<FulfillmentCard book={downloadableBook} />);
+    const downloadButton = utils.getByText("Download EPUB");
     expect(downloadButton).toBeInTheDocument();
 
     userEvent.click(downloadButton);
@@ -412,8 +418,8 @@ describe("available to download", () => {
 
     const indirectFulfillSpy = jest.spyOn(actions, "indirectFulfillBook");
 
-    const node = render(<FulfillmentCard book={bookWithIndirect} />);
-    const downloadButton = node.getByText("Download atom");
+    const utils = render(<FulfillmentCard book={bookWithIndirect} />);
+    const downloadButton = utils.getByText("Download atom");
     expect(downloadButton).toBeInTheDocument();
 
     userEvent.click(downloadButton);
@@ -440,8 +446,8 @@ describe("available to download", () => {
 
     const indirectFulfillSpy = jest.spyOn(actions, "indirectFulfillBook");
 
-    const node = render(<FulfillmentCard book={bookWithIndirect} />);
-    const downloadButton = node.getByText("Read Online");
+    const utils = render(<FulfillmentCard book={bookWithIndirect} />);
+    const downloadButton = utils.getByText("Read Online");
     expect(downloadButton).toBeInTheDocument();
 
     userEvent.click(downloadButton);

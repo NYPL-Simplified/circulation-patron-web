@@ -54,27 +54,27 @@ const stateWithFacets: State = merge<State>(fixtures.initialState, {
 
 describe("Format filters", () => {
   test("Format filters not rendered when not in state", () => {
-    const node = render(<PageTitle>Child</PageTitle>);
-    expect(node.queryByLabelText("Format filters")).toBeFalsy();
-    expect(node.queryByText("All")).toBeFalsy();
-    expect(node.queryByLabelText("Books")).toBeFalsy();
-    expect(node.queryByLabelText("Audiobooks")).toBeFalsy();
+    const utils = render(<PageTitle>Child</PageTitle>);
+    expect(utils.queryByLabelText("Format filters")).toBeFalsy();
+    expect(utils.queryByText("All")).toBeFalsy();
+    expect(utils.queryByLabelText("Books")).toBeFalsy();
+    expect(utils.queryByLabelText("Audiobooks")).toBeFalsy();
   });
   test("Format filters are visible in PageTitle w/ facets", () => {
-    const node = render(<PageTitle>Child</PageTitle>, {
+    const utils = render(<PageTitle>Child</PageTitle>, {
       initialState: stateWithFacets
     });
-    expect(node.getByRole("option", { name: "All" })).toBeTruthy();
-    expect(node.getByRole("option", { name: "eBooks" })).toBeTruthy();
-    expect(node.getByRole("option", { name: "Audiobooks" })).toBeTruthy();
+    expect(utils.getByRole("option", { name: "All" })).toBeTruthy();
+    expect(utils.getByRole("option", { name: "eBooks" })).toBeTruthy();
+    expect(utils.getByRole("option", { name: "Audiobooks" })).toBeTruthy();
   });
 
   test("format filters navigate to respective urls", async () => {
-    const node = render(<PageTitle>Child</PageTitle>, {
+    const utils = render(<PageTitle>Child</PageTitle>, {
       initialState: stateWithFacets
     });
 
-    const select = node.getByRole("combobox", {
+    const select = utils.getByRole("combobox", {
       name: "Format"
     }) as HTMLSelectElement;
     // all is selected

@@ -32,11 +32,13 @@ test("shows recommendations loading state", async () => {
    * wrap the BookDetails in a Provider so we can specify the recommendations state.
    * This will override the provider rendered in our custom `render` method
    */
-  const node = renderWithRecState(<Recommendations book={fixtures.book} />, {
+  const utils = renderWithRecState(<Recommendations book={fixtures.book} />, {
     ...fixtures.emptyRecommendationsState,
     isFetching: true
   });
-  await waitFor(() => expect(node.getByText("Loading...")).toBeInTheDocument());
+  await waitFor(() =>
+    expect(utils.getByText("Loading...")).toBeInTheDocument()
+  );
 });
 
 test("fetches the proper url for recommendation collection", () => {
@@ -46,26 +48,26 @@ test("fetches the proper url for recommendation collection", () => {
 });
 
 test("shows recommendation lanes", () => {
-  const node = renderWithRecState(<Recommendations book={fixtures.book} />);
+  const utils = renderWithRecState(<Recommendations book={fixtures.book} />);
   expect(
-    node.getByRole("heading", { name: "Recommendations" })
+    utils.getByRole("heading", { name: "Recommendations" })
   ).toBeInTheDocument();
   expect(
-    node.getByRole("heading", { name: "Jane Austen" })
+    utils.getByRole("heading", { name: "Jane Austen" })
   ).toBeInTheDocument();
 });
 
 test("doesn't show recommendations if there are none", () => {
-  const node = renderWithRecState(<Recommendations book={fixtures.book} />, {
+  const utils = renderWithRecState(<Recommendations book={fixtures.book} />, {
     ...fixtures.emptyRecommendationsState
   });
-  expect(node.container).toBeEmpty();
+  expect(utils.container).toBeEmpty();
 });
 
 test("recommendations are clickable", () => {
-  const node = renderWithRecState(<Recommendations book={fixtures.book} />);
+  const utils = renderWithRecState(<Recommendations book={fixtures.book} />);
 
-  const recommendationCover = node.getByRole("link", {
+  const recommendationCover = utils.getByRole("link", {
     name: "View Recommendation 1"
   });
   expect(recommendationCover.closest("a")).toHaveAttribute(
@@ -75,8 +77,8 @@ test("recommendations are clickable", () => {
 });
 
 test("displays a more button for recommendations", () => {
-  const node = renderWithRecState(<Recommendations book={fixtures.book} />);
-  const moreButton = node.getByText("See More");
+  const utils = renderWithRecState(<Recommendations book={fixtures.book} />);
+  const moreButton = utils.getByText("See More");
   expect(moreButton).toHaveAttribute(
     "href",
     "/collection/works%2Fcontributor%2FJane%2520Austen%2Feng"
@@ -90,9 +92,9 @@ const mockClearCollection = jest
   }));
 
 test("cleans up recommendations collection on unmount", () => {
-  const node = renderWithRecState(<Recommendations book={fixtures.book} />);
+  const utils = renderWithRecState(<Recommendations book={fixtures.book} />);
   expect(mockClearCollection).toHaveBeenCalledTimes(0);
-  node.unmount();
+  utils.unmount();
   expect(mockClearCollection).toHaveBeenCalledTimes(1);
 });
 
@@ -119,13 +121,13 @@ test("shows multiple lanes if existing", () => {
       ]
     }
   };
-  const node = renderWithRecState(
+  const utils = renderWithRecState(
     <Recommendations book={fixtures.book} />,
     stateWithMultipleLames
   );
 
-  expect(node.getByText("lane 1")).toBeInTheDocument();
-  expect(node.getByText("lane 2")).toBeInTheDocument();
+  expect(utils.getByText("lane 1")).toBeInTheDocument();
+  expect(utils.getByText("lane 2")).toBeInTheDocument();
 
-  expect(node.getAllByText("See More")).toHaveLength(2);
+  expect(utils.getAllByText("See More")).toHaveLength(2);
 });
