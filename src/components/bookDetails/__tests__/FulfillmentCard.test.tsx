@@ -452,4 +452,24 @@ describe("available to download", () => {
       "text/html;profile=http://librarysimplified.org/terms/profiles/streaming-media"
     );
   });
+
+  test("does not show download links for audiobooks", () => {
+    const audiobook = mergeBook({
+      raw: {
+        $: {
+          "schema:additionalType": {
+            value: "http://bib.schema.org/Audiobook"
+          }
+        }
+      }
+    });
+
+    const utils = render(<FulfillmentCard book={audiobook} />);
+
+    expect(
+      utils.queryByText("If you would rather read on your computer, you can:")
+    ).toBeNull();
+
+    expect(utils.queryByText(/Download/i)).toBeNull();
+  });
 });

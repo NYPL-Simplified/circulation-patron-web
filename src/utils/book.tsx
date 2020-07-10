@@ -8,6 +8,7 @@ import {
 import { BookFulfillmentState } from "interfaces";
 
 import { Book, Headset } from "../icons";
+import { getMedium } from "opds-web-client/lib/utils/book";
 
 export function getAuthors(book: BookData, lim?: number): string[] {
   // select contributors if the authors array is undefined or empty.
@@ -105,6 +106,13 @@ export function getErrorMsg(error: FetchErrorData | null): string | null {
     }
   }
   return null;
+}
+
+export function bookIsAudiobook(book: BookData): boolean {
+  if (getMedium(book) === "http://bib.schema.org/Audiobook") {
+    return true;
+  }
+  return false;
 }
 
 export const bookMediumMap: {

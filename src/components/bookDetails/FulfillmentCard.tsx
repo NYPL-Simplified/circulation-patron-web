@@ -5,7 +5,8 @@ import {
   getFulfillmentState,
   dedupeLinks,
   availabilityString,
-  queueString
+  queueString,
+  bookIsAudiobook
 } from "utils/book";
 import {
   BookData,
@@ -236,6 +237,7 @@ const DownloadCard: React.FC<{
 }> = ({ book, links, subtitle, isOpenAccess = false }) => {
   const { title } = book;
   const dedupedLinks = dedupeLinks(links ?? []);
+  const isAudiobook = bookIsAudiobook(book);
 
   return (
     <>
@@ -248,29 +250,31 @@ const DownloadCard: React.FC<{
           <Text>{subtitle}</Text>
         </Stack>
       </Stack>
-      <Stack direction="column" sx={{ mt: 3 }}>
-        <Text variant="text.body.italic" sx={{ textAlign: "center" }}>
-          If you would rather read on your computer, you can:
-        </Text>
-        <Stack sx={{ justifyContent: "center", flexWrap: "wrap" }}>
-          {dedupedLinks.map(link =>
-            isOpenAccess ? (
-              <AnchorButton
-                key={link.url}
-                variant="ghost"
-                color="ui.gray.extraDark"
-                newTab
-                href={link.url}
-              >
-                <SvgDownload sx={{ mr: 1 }} /> Download{" "}
-                {typeMap[link.type].name}
-              </AnchorButton>
-            ) : (
-              <DownloadButton key={link.url} link={link} title={title} />
-            )
-          )}
+      {!isAudiobook && (
+        <Stack direction="column" sx={{ mt: 3 }}>
+          <Text variant="text.body.italic" sx={{ textAlign: "center" }}>
+            If you would rather read on your computer, you can:
+          </Text>
+          <Stack sx={{ justifyContent: "center", flexWrap: "wrap" }}>
+            {dedupedLinks.map(link =>
+              isOpenAccess ? (
+                <AnchorButton
+                  key={link.url}
+                  variant="ghost"
+                  color="ui.gray.extraDark"
+                  newTab
+                  href={link.url}
+                >
+                  <SvgDownload sx={{ mr: 1 }} /> Download{" "}
+                  {typeMap[link.type].name}
+                </AnchorButton>
+              ) : (
+                <DownloadButton key={link.url} link={link} title={title} />
+              )
+            )}
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </>
   );
 };
