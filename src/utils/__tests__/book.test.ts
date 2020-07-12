@@ -180,8 +180,8 @@ describe("getFulfillmentState", () => {
           ...bookFixture,
           openAccessLinks: undefined,
           fulfillmentLinks: undefined,
-          availability: { status: "" },
-          borrowUrl: "/borrow"
+          availability: { status: "available" },
+          borrowUrl: undefined
         },
         false
       )
