@@ -22,7 +22,7 @@ test("calls setCollectionAndBook", () => {
 });
 
 test("displays loader", () => {
-  const node = render(
+  const utils = render(
     <Collection setCollectionAndBook={setCollectionAndBook} />,
     {
       initialState: merge(fixtures.initialState, {
@@ -32,7 +32,9 @@ test("displays loader", () => {
       })
     }
   );
-  expect(node.getByRole("heading", { name: "Loading..." })).toBeInTheDocument();
+  expect(
+    utils.getByRole("heading", { name: "Loading..." })
+  ).toBeInTheDocument();
 });
 
 test("displays lanes when present", () => {
@@ -49,7 +51,7 @@ test("displays lanes when present", () => {
       }
     }
   });
-  const node = render(
+  const utils = render(
     <Collection setCollectionAndBook={setCollectionAndBook} />,
     {
       initialState
@@ -57,11 +59,11 @@ test("displays lanes when present", () => {
   );
 
   // expect there to be a lane with books
-  const laneTitle = node.getByText("my lane");
+  const laneTitle = utils.getByText("my lane");
   expect(laneTitle).toBeInTheDocument();
-  expect(node.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
+  expect(utils.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
   expect(
-    node.getByText(fixtures.makeBook(0).authors.join(", "))
+    utils.getByText(fixtures.makeBook(0).authors.join(", "))
   ).toBeInTheDocument();
 });
 
@@ -79,7 +81,7 @@ test("prefers lanes over books", () => {
       }
     }
   });
-  const node = render(
+  const utils = render(
     <Collection setCollectionAndBook={setCollectionAndBook} />,
     {
       initialState
@@ -88,7 +90,7 @@ test("prefers lanes over books", () => {
 
   // expect the lane title to be rendered, indicating it chose
   // lanes over books
-  const laneTitle = node.getByText("my lane");
+  const laneTitle = utils.getByText("my lane");
   expect(laneTitle).toBeInTheDocument();
 });
 
@@ -101,18 +103,18 @@ test("renders books in list view if no lanes", () => {
       }
     }
   });
-  const node = render(
+  const utils = render(
     <Collection setCollectionAndBook={setCollectionAndBook} />,
     {
       initialState
     }
   );
 
-  const list = node.getByTestId("listview-list");
+  const list = utils.getByTestId("listview-list");
   expect(list).toBeInTheDocument();
-  expect(node.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
+  expect(utils.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
   expect(
-    node.getByText(fixtures.makeBook(0).authors.join(", "))
+    utils.getByText(fixtures.makeBook(0).authors.join(", "))
   ).toBeInTheDocument();
 });
 
@@ -125,12 +127,12 @@ test("renders empty state if no lanes or books", () => {
       }
     }
   });
-  const node = render(
+  const utils = render(
     <Collection setCollectionAndBook={setCollectionAndBook} />,
     {
       initialState
     }
   );
 
-  expect(node.getByText("This collection is empty.")).toBeInTheDocument();
+  expect(utils.getByText("This collection is empty.")).toBeInTheDocument();
 });

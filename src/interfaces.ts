@@ -24,7 +24,7 @@ export interface Link {
  * be borrowed before the hold expires, or else you lose your spot.
  */
 export type BookFulfillmentState =
-  | "OPEN_ACCESS"
+  | "AVAILABLE_OPEN_ACCESS"
   | "AVAILABLE_TO_BORROW"
   | "READY_TO_BORROW"
   | "AVAILABLE_TO_RESERVE"

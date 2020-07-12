@@ -16,8 +16,40 @@ describe("open access book", () => {
   test("renders with view details button", () => {
     const utils = render(<BookListItem book={fixtures.book} />);
     expect(
-      utils.getByText("This open-access book is available to keep.")
+      utils.getByText("This open-access book is available to keep forever.")
     ).toBeInTheDocument();
+    expectViewDetails(utils);
+  });
+
+  test("shows borrow button if not yet loaned", () => {
+    const utils = render(<BookListItem book={fixtures.book} />);
+    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+  });
+
+  test("shows no borrow button when book is loaned", () => {
+    const stateWithLoans = merge<State>(fixtures.initialState, {
+      loans: {
+        url: "/loans",
+        books: [fixtures.book]
+      }
+    });
+    const utils = render(<BookListItem book={fixtures.book} />, {
+      initialState: stateWithLoans
+    });
+
+    expect(utils.queryByText("Borrow")).toBeNull();
+    expectViewDetails(utils);
+  });
+
+  test("renders without borrow button if no borrow url present", () => {
+    const noAuthBook = fixtures.mergeBook({
+      borrowUrl: undefined
+    });
+    const utils = render(<BookListItem book={noAuthBook} />);
+    expect(
+      utils.getByText("This open-access book is available to keep forever.")
+    ).toBeInTheDocument();
+    expect(utils.queryByText("Borrow")).toBeNull();
     expectViewDetails(utils);
   });
 });
@@ -52,7 +84,7 @@ describe("available to borrow book", () => {
       );
     // also spy on fetchLoans
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
-    const node = render(<BookListItem book={closedAccessBook} />, {
+    const utils = render(<BookListItem book={closedAccessBook} />, {
       initialState: merge<State>(fixtures.initialState, {
         loans: {
           url: "/loans-url",
@@ -61,10 +93,10 @@ describe("available to borrow book", () => {
       })
     });
     // click borrow
-    userEvent.click(node.getByText("Borrow"));
+    userEvent.click(utils.getByText("Borrow"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const borrowButton = await node.findByRole("button", {
+    const borrowButton = await utils.findByRole("button", {
       name: "Borrowing..."
     });
     expect(borrowButton).toBeInTheDocument();
@@ -79,7 +111,7 @@ describe("available to borrow book", () => {
       status: 403,
       url: "error-url"
     };
-    const node = render(<BookListItem book={closedAccessBook} />, {
+    const utils = render(<BookListItem book={closedAccessBook} />, {
       initialState: merge(fixtures.initialState, {
         book: {
           error: err
@@ -87,10 +119,10 @@ describe("available to borrow book", () => {
       })
     });
     expect(
-      node.queryByText("10 out of 13 copies available.")
+      utils.queryByText("10 out of 13 copies available.")
     ).not.toBeInTheDocument();
     expect(
-      node.getByText("Error: cannot loan more than 3 documents.")
+      utils.getByText("Error: cannot loan more than 3 documents.")
     ).toBeInTheDocument();
   });
 });
@@ -126,7 +158,7 @@ describe("ready to borrow book", () => {
       );
     // also spy on fetchLoans
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
-    const node = render(<BookListItem book={readyBook} />, {
+    const utils = render(<BookListItem book={readyBook} />, {
       initialState: merge<State>(fixtures.initialState, {
         loans: {
           url: "/loans-url",
@@ -135,10 +167,10 @@ describe("ready to borrow book", () => {
       })
     });
     // click borrow
-    userEvent.click(node.getByText("Borrow"));
+    userEvent.click(utils.getByText("Borrow"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const borrowButton = await node.findByRole("button", {
+    const borrowButton = await utils.findByRole("button", {
       name: "Borrowing..."
     });
     expect(borrowButton).toBeInTheDocument();
@@ -153,7 +185,7 @@ describe("ready to borrow book", () => {
       status: 403,
       url: "error-url"
     };
-    const node = render(<BookListItem book={readyBook} />, {
+    const utils = render(<BookListItem book={readyBook} />, {
       initialState: merge(fixtures.initialState, {
         book: {
           error: err
@@ -161,10 +193,10 @@ describe("ready to borrow book", () => {
       })
     });
     expect(
-      node.queryByText("You can now borrow this book!")
+      utils.queryByText("You can now borrow this book!")
     ).not.toBeInTheDocument();
     expect(
-      node.getByText("Error: cannot loan more than 3 documents.")
+      utils.getByText("Error: cannot loan more than 3 documents.")
     ).toBeInTheDocument();
   });
 });
@@ -182,14 +214,16 @@ describe("available to reserve book", () => {
   });
 
   test("displays correct title and subtitle", () => {
-    const node = render(<BookListItem book={unavailableBook} />);
-    expect(node.getByText("0 out of 13 copies available.")).toBeInTheDocument();
-    expectViewDetails(node);
+    const utils = render(<BookListItem book={unavailableBook} />);
+    expect(
+      utils.getByText("0 out of 13 copies available.")
+    ).toBeInTheDocument();
+    expectViewDetails(utils);
   });
 
   test("displays reserve button", () => {
-    const node = render(<BookListItem book={unavailableBook} />);
-    const reserveButton = node.getByRole("button", { name: "Reserve" });
+    const utils = render(<BookListItem book={unavailableBook} />);
+    const reserveButton = utils.getByRole("button", { name: "Reserve" });
     expect(reserveButton).toBeInTheDocument();
   });
 
@@ -206,7 +240,7 @@ describe("available to reserve book", () => {
       );
     // also spy on fetchLoans
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
-    const node = render(<BookListItem book={unavailableBook} />, {
+    const utils = render(<BookListItem book={unavailableBook} />, {
       initialState: merge<State>(fixtures.initialState, {
         loans: {
           url: "/loans-url",
@@ -215,10 +249,10 @@ describe("available to reserve book", () => {
       })
     });
     // click reserve
-    userEvent.click(node.getByText("Reserve"));
+    userEvent.click(utils.getByText("Reserve"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const reserveButton = await node.findByRole("button", {
+    const reserveButton = await utils.findByRole("button", {
       name: "Reserving..."
     });
     expect(reserveButton).toBeInTheDocument();
@@ -241,12 +275,12 @@ describe("reserved book", () => {
   });
 
   test("displays disabled reserve button and text", () => {
-    const node = render(<BookListItem book={reservedBook} />);
-    const reserveButton = node.getByText("Reserved");
+    const utils = render(<BookListItem book={reservedBook} />);
+    const reserveButton = utils.getByText("Reserved");
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toBeDisabled();
 
-    expect(node.getByText("You have this book on hold.")).toBeInTheDocument();
+    expect(utils.getByText("You have this book on hold.")).toBeInTheDocument();
   });
 
   test("displays number of patrons in queue and your position", () => {
@@ -264,9 +298,9 @@ describe("reserved book", () => {
         position: 5
       }
     });
-    const node = render(<BookListItem book={reservedBookWithQueue} />);
+    const utils = render(<BookListItem book={reservedBookWithQueue} />);
     expect(
-      node.getByText("You have this book on hold. Position: 5")
+      utils.getByText("You have this book on hold. Position: 5")
     ).toBeInTheDocument();
   });
 });
@@ -293,11 +327,11 @@ describe("available to access book", () => {
   });
 
   test("displays correct title and subtitle and view details", () => {
-    const node = render(<BookListItem book={downloadableBook} />);
+    const utils = render(<BookListItem book={downloadableBook} />);
     expect(
-      node.getByText("You have this book on loan until Thu Jun 18 2020.")
+      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
     ).toBeInTheDocument();
-    expectViewDetails(node);
+    expectViewDetails(utils);
   });
 
   test("handles lack of availability info", () => {
@@ -305,7 +339,7 @@ describe("available to access book", () => {
       ...downloadableBook,
       availability: undefined
     });
-    const node = render(<BookListItem book={withoutAvailability} />);
-    expect(node.getByText("You have this book on loan.")).toBeInTheDocument();
+    const utils = render(<BookListItem book={withoutAvailability} />);
+    expect(utils.getByText("You have this book on loan.")).toBeInTheDocument();
   });
 });

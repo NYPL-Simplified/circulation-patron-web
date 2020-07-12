@@ -10,7 +10,7 @@ test("fetches search description", async () => {
     actions,
     "fetchSearchDescription"
   );
-  const node = render(<Search />, {
+  const utils = render(<Search />, {
     initialState: merge(fixtures.initialState, {
       collection: {
         data: {
@@ -24,12 +24,12 @@ test("fetches search description", async () => {
 
   expect(mockedFetchSearchDescription).toHaveBeenCalledTimes(1);
   expect(mockedFetchSearchDescription).toHaveBeenCalledWith("/search-url");
-  expect(node.dispatch).toHaveBeenCalledTimes(1);
+  expect(utils.dispatch).toHaveBeenCalledTimes(1);
 });
 
 test("searching calls history.push with url", async () => {
   const mockedTemplate = jest.fn().mockReturnValue("templatereturn");
-  const node = render(<Search />, {
+  const utils = render(<Search />, {
     initialState: merge(fixtures.initialState, {
       collection: {
         data: {
@@ -43,8 +43,8 @@ test("searching calls history.push with url", async () => {
       }
     })
   });
-  const searchButton = node.getByText("Search");
-  const input = node.getByLabelText("Enter search keyword or keywords");
+  const searchButton = utils.getByText("Search");
+  const input = utils.getByLabelText("Enter search keyword or keywords");
   // act
   userEvent.type(input, "my search");
   fireEvent.click(searchButton);
