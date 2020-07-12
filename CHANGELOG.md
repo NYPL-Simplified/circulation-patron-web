@@ -4,6 +4,7 @@
 
 - Fix: Only show download options for open-access books once they have been borrowed and are present in a user's loans. Download options should still be shown for open-access books in libraries that do not have any auth enabled.
 - Fix: Don't perform state update on unmounted `BorrowCard`. 
+- Refactor: Rename `node` in tests to `utils`, as it is more accurate.
 
 ## 2.2.0
 
