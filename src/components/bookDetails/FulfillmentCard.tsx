@@ -12,8 +12,7 @@ import {
   MediaLink,
   FulfillmentLink
 } from "opds-web-client/lib/interfaces";
-import { typeMap } from "opds-web-client/lib/utils/file";
-import Button, { AnchorButton } from "../Button";
+import Button from "../Button";
 import useDownloadButton from "opds-web-client/lib/hooks/useDownloadButton";
 import { withErrorBoundary } from "../ErrorBoundary";
 import useBorrow from "../../hooks/useBorrow";
@@ -22,6 +21,7 @@ import { Text } from "components/Text";
 import { MediumIcon } from "components/MediumIndicator";
 import SvgDownload from "icons/Download";
 import SvgPhone from "icons/Phone";
+import useIsBorrowed from "hooks/useIsBorrowed";
 
 const FulfillmentCard: React.FC<{ book: BookData }> = ({ book }) => {
   return (
@@ -43,11 +43,14 @@ const FulfillmentCard: React.FC<{ book: BookData }> = ({ book }) => {
   );
 };
 
-const FulfillmentContent: React.FC<{ book: BookData }> = ({ book }) => {
-  const fulfillmentState = getFulfillmentState(book);
+const FulfillmentContent: React.FC<{
+  book: BookData;
+}> = ({ book }) => {
+  const isBorrowed = useIsBorrowed(book);
+  const fulfillmentState = getFulfillmentState(book, isBorrowed);
 
   switch (fulfillmentState) {
-    case "OPEN_ACCESS":
+    case "AVAILABLE_OPEN_ACCESS":
       if (!book.openAccessLinks)
         throw new Error("This open-access book is missing open access links");
       return (
@@ -55,7 +58,6 @@ const FulfillmentContent: React.FC<{ book: BookData }> = ({ book }) => {
           links={book.openAccessLinks}
           book={book}
           subtitle="This open-access book is available to keep forever."
-          isOpenAccess
         />
       );
 
@@ -232,8 +234,7 @@ const DownloadCard: React.FC<{
   book: BookData;
   links: MediaLink[] | FulfillmentLink[];
   subtitle: string;
-  isOpenAccess?: boolean;
-}> = ({ book, links, subtitle, isOpenAccess = false }) => {
+}> = ({ book, links, subtitle }) => {
   const { title } = book;
   const dedupedLinks = dedupeLinks(links ?? []);
 
@@ -253,22 +254,9 @@ const DownloadCard: React.FC<{
           If you would rather read on your computer, you can:
         </Text>
         <Stack sx={{ justifyContent: "center", flexWrap: "wrap" }}>
-          {dedupedLinks.map(link =>
-            isOpenAccess ? (
-              <AnchorButton
-                key={link.url}
-                variant="ghost"
-                color="ui.gray.extraDark"
-                newTab
-                href={link.url}
-              >
-                <SvgDownload sx={{ mr: 1 }} /> Download{" "}
-                {typeMap[link.type].name}
-              </AnchorButton>
-            ) : (
-              <DownloadButton key={link.url} link={link} title={title} />
-            )
-          )}
+          {dedupedLinks.map(link => (
+            <DownloadButton key={link.url} link={link} title={title} />
+          ))}
         </Stack>
       </Stack>
     </>

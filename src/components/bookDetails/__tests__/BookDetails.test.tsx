@@ -122,13 +122,7 @@ describe("book details page", () => {
     expect(
       utils.getByText("This open-access book is available to keep forever.")
     );
-    const epubDownload = utils.getByRole("link", { name: "Download EPUB" });
-    expect(epubDownload).toBeInTheDocument();
-    expect(epubDownload).toHaveAttribute("href", "/epub-open-access-link");
-
-    const pdfDownload = utils.getByRole("link", { name: "Download PDF" });
-    expect(pdfDownload).toBeInTheDocument();
-    expect(pdfDownload).toHaveAttribute("href", "/pdf-open-access-link");
+    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
   });
 
   test("shows simplyE callout", async () => {

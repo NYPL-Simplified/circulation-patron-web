@@ -5,6 +5,7 @@ import { getErrorMsg } from "utils/book";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 
 export default function useBorrow(book: BookData) {
+  const isUnmounted = React.useRef(false);
   const [isLoading, setLoading] = React.useState(false);
   const bookError = useTypedSelector(state => state.book?.error);
   const errorMsg = getErrorMsg(bookError);
@@ -15,7 +16,7 @@ export default function useBorrow(book: BookData) {
     if (book.borrowUrl) {
       setLoading(true);
       await dispatch(actions.updateBook(book.borrowUrl));
-      setLoading(false);
+      if (!isUnmounted.current) setLoading(false);
     } else {
       throw Error("No borrow url present for book");
     }
@@ -24,6 +25,13 @@ export default function useBorrow(book: BookData) {
       await dispatch(actions.fetchLoans(loansUrl));
     }
   };
+
+  React.useEffect(
+    () => () => {
+      isUnmounted.current = true;
+    },
+    []
+  );
 
   return {
     isLoading,

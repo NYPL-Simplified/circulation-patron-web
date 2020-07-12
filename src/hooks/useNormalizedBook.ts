@@ -1,4 +1,4 @@
-import { loanedBookData } from "opds-web-client/lib/utils";
+import { BookData } from "opds-web-client/lib/interfaces";
 import useTypedSelector from "./useTypedSelector";
 
 /**
@@ -6,12 +6,13 @@ import useTypedSelector from "./useTypedSelector";
  * loan data if any exists
  */
 
-export default function useNormalizedBook() {
+export default function useNormalizedBook(): BookData | null {
   const book = useTypedSelector(state => state.book.data);
   const loans = useTypedSelector(state => state.loans.books);
 
   if (!book) return book;
 
-  const bookWithLoanInfo = loanedBookData(book, loans);
-  return bookWithLoanInfo;
+  const loan = loans.find(loanedBook => book.id === loanedBook.id);
+
+  return loan ?? book;
 }
