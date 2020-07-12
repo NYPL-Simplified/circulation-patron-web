@@ -51,10 +51,11 @@ module.exports = {
         args: "after-used",
         // ignore underscore _vars or jsx imports or React imports
         argsIgnorePattern: "^_.*",
-        varsIgnorePattern: "^jsx$|^React$",
+        varsIgnorePattern: "^jsx$|^React$|^_.*",
         ignoreRestSiblings: true
       }
     ],
+    "no-underscore-dangle": 0,
     // these are meant to allow jsx to mark react as used. Not working right now though
     "react/jsx-uses-vars": "error",
     "react/jsx-uses-react": "error",
@@ -81,7 +82,6 @@ module.exports = {
     "id-match": "error",
     "no-eval": "error",
     "no-redeclare": "error",
-    "no-underscore-dangle": "error",
     "no-var": "error"
   },
   settings: {

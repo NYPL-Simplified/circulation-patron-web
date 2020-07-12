@@ -46,105 +46,145 @@ describe("get authors", () => {
 });
 
 describe("getFulfillmentState", () => {
-  test("returns open access when open access links present", () => {
-    expect(getFulfillmentState(bookFixture)).toBe("OPEN_ACCESS");
+  test("returns AVAILABLE_OPEN_ACCESS when open access links present and status is 'available' and book is borrowed", () => {
+    expect(getFulfillmentState(bookFixture, true)).toBe(
+      "AVAILABLE_OPEN_ACCESS"
+    );
   });
-  test("available to access", () => {
+  test("returns AVAILABLE_TO_BORROW when open access links present and status is 'available' and book is not borrowed", () => {
+    expect(getFulfillmentState(bookFixture, false)).toBe("AVAILABLE_TO_BORROW");
+  });
+  test("does not return AVAILABLE_OPEN_ACCESS is status is not 'available'", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        availability: { status: "available" },
-        openAccessLinks: undefined,
-        fulfillmentLinks: [
-          {
-            url: "/pdf-link",
-            type: "application/pdf",
-            indirectType: "indirect"
-          }
-        ]
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          availability: { status: "ready" }
+        },
+        false
+      )
+    ).toBe("READY_TO_BORROW");
+  });
+  test("returns AVAILABLE_TO_ACCESS when 'available' and no open access links present", () => {
+    expect(
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          availability: { status: "available" },
+          openAccessLinks: undefined,
+          fulfillmentLinks: [
+            {
+              url: "/pdf-link",
+              type: "application/pdf",
+              indirectType: "indirect"
+            }
+          ]
+        },
+        true
+      )
     ).toBe("AVAILABLE_TO_ACCESS");
   });
 
   test("does not count empty array for fulfillmentLinks", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        availability: { status: "available" },
-        openAccessLinks: undefined,
-        fulfillmentLinks: []
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          availability: { status: "available" },
+          openAccessLinks: undefined,
+          fulfillmentLinks: []
+        },
+        false
+      )
     ).toBe("AVAILABLE_TO_BORROW");
   });
 
   test("does not count empty array for openAccessLinks", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        availability: { status: "available" },
-        openAccessLinks: [],
-        fulfillmentLinks: []
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          availability: { status: "available" },
+          openAccessLinks: [],
+          fulfillmentLinks: []
+        },
+        true
+      )
     ).toBe("AVAILABLE_TO_BORROW");
   });
 
-  test("available to borrow", () => {
+  test("returns AVAILABLE_TO_BORROW when no fulfillment or open access links and status is 'available'", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        openAccessLinks: undefined,
-        fulfillmentLinks: undefined,
-        availability: { status: "available" },
-        borrowUrl: "/borrow"
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          openAccessLinks: undefined,
+          fulfillmentLinks: undefined,
+          availability: { status: "available" },
+          borrowUrl: "/borrow"
+        },
+        false
+      )
     ).toBe("AVAILABLE_TO_BORROW");
   });
 
-  test("ready to borrow", () => {
+  test("returns READY_TO_BORROW when status is 'ready'", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        openAccessLinks: undefined,
-        fulfillmentLinks: undefined,
-        availability: { status: "ready" },
-        borrowUrl: "/borrow"
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          openAccessLinks: undefined,
+          fulfillmentLinks: undefined,
+          availability: { status: "ready" },
+          borrowUrl: "/borrow"
+        },
+        false
+      )
     ).toBe("READY_TO_BORROW");
   });
 
-  test("available to reserve", () => {
+  test("returns AVAILABLE_TO_RESERVE when status is 'unavailable'", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        openAccessLinks: undefined,
-        fulfillmentLinks: undefined,
-        availability: { status: "unavailable" },
-        borrowUrl: "/borrow"
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          openAccessLinks: undefined,
+          fulfillmentLinks: undefined,
+          availability: { status: "unavailable" },
+          borrowUrl: "/borrow"
+        },
+        false
+      )
     ).toBe("AVAILABLE_TO_RESERVE");
   });
 
-  test("reserved", () => {
+  test("returns RESERVED when status is 'reserved'", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        openAccessLinks: undefined,
-        fulfillmentLinks: undefined,
-        availability: { status: "reserved" },
-        borrowUrl: "/borrow"
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          openAccessLinks: undefined,
+          fulfillmentLinks: undefined,
+          availability: { status: "reserved" },
+          borrowUrl: "/borrow"
+        },
+        false
+      )
     ).toBe("RESERVED");
   });
 
   test("error state", () => {
     expect(
-      getFulfillmentState({
-        ...bookFixture,
-        openAccessLinks: undefined,
-        fulfillmentLinks: undefined,
-        availability: { status: "" },
-        borrowUrl: "/borrow"
-      })
+      getFulfillmentState(
+        {
+          ...bookFixture,
+          openAccessLinks: undefined,
+          fulfillmentLinks: undefined,
+          availability: { status: "" },
+          borrowUrl: "/borrow"
+        },
+        false
+      )
     ).toBe("FULFILLMENT_STATE_ERROR");
   });
 });

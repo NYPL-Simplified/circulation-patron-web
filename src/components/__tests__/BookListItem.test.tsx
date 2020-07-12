@@ -16,8 +16,40 @@ describe("open access book", () => {
   test("renders with view details button", () => {
     const utils = render(<BookListItem book={fixtures.book} />);
     expect(
-      utils.getByText("This open-access book is available to keep.")
+      utils.getByText("This open-access book is available to keep forever.")
     ).toBeInTheDocument();
+    expectViewDetails(utils);
+  });
+
+  test("shows borrow button if not yet loaned", () => {
+    const utils = render(<BookListItem book={fixtures.book} />);
+    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+  });
+
+  test("shows no borrow button when book is loaned", () => {
+    const stateWithLoans = merge<State>(fixtures.initialState, {
+      loans: {
+        url: "/loans",
+        books: [fixtures.book]
+      }
+    });
+    const utils = render(<BookListItem book={fixtures.book} />, {
+      initialState: stateWithLoans
+    });
+
+    expect(utils.queryByText("Borrow")).toBeNull();
+    expectViewDetails(utils);
+  });
+
+  test("renders without borrow button if no borrow url present", () => {
+    const noAuthBook = fixtures.mergeBook({
+      borrowUrl: undefined
+    });
+    const utils = render(<BookListItem book={noAuthBook} />);
+    expect(
+      utils.getByText("This open-access book is available to keep forever.")
+    ).toBeInTheDocument();
+    expect(utils.queryByText("Borrow")).toBeNull();
     expectViewDetails(utils);
   });
 });

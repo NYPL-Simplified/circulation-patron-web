@@ -17,6 +17,7 @@ import { H2, Text } from "./Text";
 import * as DS from "@nypl/design-system-react-components";
 import MediumIndicator from "components/MediumIndicator";
 import { ArrowForward } from "icons";
+import useIsBorrowed from "hooks/useIsBorrowed";
 
 /**
  * In a collection you can:
@@ -115,18 +116,19 @@ export const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
 };
 
 const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
-  const fulfillmentState = getFulfillmentState(book);
+  const isBorrowed = useIsBorrowed(book);
+  const fulfillmentState = getFulfillmentState(book, isBorrowed);
   const { borrowOrReserve, isLoading, errorMsg } = useBorrow(book);
 
   switch (fulfillmentState) {
-    case "OPEN_ACCESS":
+    case "AVAILABLE_OPEN_ACCESS":
       return (
         <>
           <Text
             variant="text.body.italic"
             sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
           >
-            This open-access book is available to keep.
+            This open-access book is available to keep forever.
           </Text>
           <NavButton
             variant="ghost"

@@ -27,6 +27,9 @@ export function getAuthors(book: BookData, lim?: number): string[] {
 }
 
 export function availabilityString(book: BookData) {
+  if (book.openAccessLinks && book.openAccessLinks.length > 0)
+    return "This open-access book is available to keep forever.";
+
   const availableCopies = book.copies?.available;
   const totalCopies = book.copies?.total;
   return typeof availableCopies === "number" && typeof totalCopies === "number"
@@ -63,11 +66,22 @@ const DEFAULT_AVAILABILITY = "available";
  * This is mapped from a conversation with Leonard and the OPDS wiki:
  * https://github.com/NYPL-Simplified/Simplified/wiki/OPDS-For-Library-Patrons#opdsavailability---describing-resource-availability
  */
-export function getFulfillmentState(book: BookData): BookFulfillmentState {
+export function getFulfillmentState(
+  book: BookData,
+  isBorrowed: boolean
+): BookFulfillmentState {
   const availabilityStatus = book.availability?.status ?? DEFAULT_AVAILABILITY;
 
-  if (book.openAccessLinks && book.openAccessLinks.length > 0)
-    return "OPEN_ACCESS";
+  // indicates the book is open access and ready to download.
+  // we prefer open access links to fulfillment links, if available.
+  // we can't show OA links unless book is borrowed, however.
+  if (
+    isBorrowed &&
+    availabilityStatus === "available" &&
+    book.openAccessLinks &&
+    book.openAccessLinks.length > 0
+  )
+    return "AVAILABLE_OPEN_ACCESS";
 
   if (
     availabilityStatus === "available" &&
