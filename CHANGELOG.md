@@ -6,6 +6,7 @@
 - Fix: Don't perform state update on unmounted `BorrowCard`. 
 - Refactor: Rename `node` in tests to `utils`, as it is more accurate.
 - Fix: Don't show download options for audiobooks since there is no way to play them on desktop. Only show SimplyE callout instead.
+- Fix: Update `opds-web-client` dependency to fix browser caching of unwanted Authorization headers.
 
 ## 2.2.0
 
