@@ -32,7 +32,6 @@ const Auth: React.FC = ({ children }) => {
       providers?.find(provider => provider.id === e.target.value)
     );
   };
-  console.log(showForm);
   return (
     <React.Fragment>
       <ClientOnly>
