@@ -16,13 +16,6 @@ import FormLabel from "./form/FormLabel";
  *  - uses the AuthPlugin system to render the auth form
  */
 const Auth: React.FC = ({ children }) => {
-  /**
-   * the useAuth hook also makes sure that the credentials are loaded
-   * from cookies, at least for basic auth.
-   * Instead, we need to load credentials using lookForCredentials.
-   * So maybe the authProvider chosen should be in the state? Or it should just
-   * loop through the providers and use the first one that returns some credentials
-   */
   const { showForm, cancel, providers } = useAuth();
   const dialog = useDialogState();
   const library = useLibraryContext();
@@ -39,7 +32,7 @@ const Auth: React.FC = ({ children }) => {
       providers?.find(provider => provider.id === e.target.value)
     );
   };
-
+  console.log(showForm);
   return (
     <React.Fragment>
       <ClientOnly>

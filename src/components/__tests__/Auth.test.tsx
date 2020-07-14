@@ -32,7 +32,7 @@ test("shows overlay on unauthenticated request", async () => {
     }
   );
   // overlay should not be shown yet
-  const modal = utils.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In Form");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: none");
 
@@ -69,7 +69,7 @@ test("shows overlay when showForm is true", async () => {
     }
   );
   // overlay should be shown
-  const modal = utils.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In Form");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
 });
@@ -84,7 +84,7 @@ test("renders auth form provided in authPlugin", async () => {
     }
   );
   // overlay should be shown
-  const modal = utils.getByLabelText("Sign In");
+  const modal = utils.getByLabelText("Sign In Form");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
   // should include the BasicAuthForm
@@ -120,12 +120,14 @@ test("displays message when no auth provider configured", async () => {
     }
   );
   // overlay should be shown
-  const modal = utils.getByLabelText("Sign In");
+  const modal = await utils.findByLabelText("Sign In Form");
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
 
   expect(
-    utils.getByText("Basic auth provider is missing.")
+    utils.getByText(
+      "There is no Auth Plugin configured for the selected Auth Provider."
+    )
   ).toBeInTheDocument();
 });
 

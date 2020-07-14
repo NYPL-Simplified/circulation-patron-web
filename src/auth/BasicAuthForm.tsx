@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import Button from "./Button";
-import useTypedSelector from "../hooks/useTypedSelector";
+import Button from "components/Button";
+import useTypedSelector from "hooks/useTypedSelector";
 import { useForm } from "react-hook-form";
-import FormInput from "./form/FormInput";
+import FormInput from "components/form/FormInput";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";

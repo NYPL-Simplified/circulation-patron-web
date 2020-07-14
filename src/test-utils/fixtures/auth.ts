@@ -1,7 +1,7 @@
-import { BASIC_AUTH_ID } from "./../../utils/auth";
 import { AuthProvider, BasicAuthMethod } from "opds-web-client/lib/interfaces";
-import BasicAuthForm from "../../components/BasicAuthForm";
+import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
+import { BASIC_AUTH_ID } from "utils/auth";
 
 export const basicAuthType = "http://opds-spec.org/auth/basic";
 

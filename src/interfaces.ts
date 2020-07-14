@@ -1,6 +1,11 @@
+/* eslint-disable camelcase */
 import { State } from "opds-web-client/lib/state";
 import { CollectionState } from "opds-web-client/lib/reducers/collection";
-import { CollectionData, BookData } from "opds-web-client/lib/interfaces";
+import {
+  CollectionData,
+  BookData,
+  AuthMethod
+} from "opds-web-client/lib/interfaces";
 
 export interface PathFor {
   (collectionUrl?: string, bookUrl?: string): string;
