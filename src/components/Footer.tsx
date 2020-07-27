@@ -9,6 +9,7 @@ import { NavButton } from "./Button";
 import SvgPhone from "icons/Phone";
 import IosBadge from "./storeBadges/IosBadge";
 import GooglePlayBadge from "./storeBadges/GooglePlayBadge";
+import { NEXT_PUBLIC_COMPANION_APP } from "../utils/env";
 
 const Footer: React.FC<{ className?: string }> = ({ className }) => {
   const library = useLibraryContext();
@@ -97,23 +98,27 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
         </FooterList>
       </div>
       <div sx={{ flex: "1 1 0" }} />
-      <div sx={{ maxWidth: 300, flex: "0 1 auto", mt: 5 }}>
-        <H3 sx={{ mt: 0, display: "flex", alignItems: "center" }}>
-          <SvgPhone sx={{ mr: 1 }} />
-          Download SimplyE
-        </H3>
-        <Text>
-          Our mobile app lets you browse, borrow and read from our whole
-          collection of eBooks and Audiobooks right on your phone!
-        </Text>
-        <div sx={{ width: "75%", overflow: "hidden", ml: -3 }}>
-          <IosBadge sx={{ p: 3, pb: 0 }} />
-          <GooglePlayBadge />
-        </div>
-      </div>
+      {NEXT_PUBLIC_COMPANION_APP === "simplye" && <DownloadSimplyECallout />}
     </footer>
   );
 };
+
+const DownloadSimplyECallout = () => (
+  <div sx={{ maxWidth: 300, flex: "0 1 auto", mt: 5 }}>
+    <H3 sx={{ mt: 0, display: "flex", alignItems: "center" }}>
+      <SvgPhone sx={{ mr: 1 }} />
+      Download SimplyE
+    </H3>
+    <Text>
+      Our mobile app lets you browse, borrow and read from our whole collection
+      of eBooks and Audiobooks right on your phone!
+    </Text>
+    <div sx={{ width: "75%", overflow: "hidden", ml: -3 }}>
+      <IosBadge sx={{ p: 3, pb: 0 }} />
+      <GooglePlayBadge />
+    </div>
+  </div>
+);
 
 const FooterList = (props: React.ComponentProps<typeof List>) => (
   <List
