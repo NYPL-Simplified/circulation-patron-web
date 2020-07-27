@@ -2,8 +2,6 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import Button from "components/Button";
-import useTypedSelector from "hooks/useTypedSelector";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { ClientSamlMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
