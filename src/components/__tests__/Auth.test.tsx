@@ -6,6 +6,7 @@ import { State } from "opds-web-client/lib/state";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
 import fetchMock from "fetch-mock-jest";
 import { AuthCredentials } from "opds-web-client/lib/interfaces";
+import userEvent from "@testing-library/user-event";
 
 const stateWithAuth: State = merge<State>(fixtures.initialState, {
   auth: fixtures.unauthenticatedAuthState
@@ -88,7 +89,52 @@ test("renders auth form provided in authPlugin", async () => {
   expect(modal).toBeInTheDocument();
   expect(modal).toHaveStyle("display: block");
   // should include the BasicAuthForm
-  expect(utils.getByLabelText("Pin")).toBeInTheDocument();
+  expect(utils.getByLabelText("Pin input")).toBeInTheDocument();
+});
+
+const authStateWithTwoProviders: AuthState = {
+  showForm: true,
+  callback: jest.fn(),
+  cancel: jest.fn(),
+  credentials: null,
+  title: "form",
+  error: null,
+  attemptedProvider: null,
+  providers: [fixtures.basicAuthProvider, fixtures.samlAuthProvider]
+};
+const stateWithTwoProviders: State = merge<State>(fixtures.initialState, {
+  auth: authStateWithTwoProviders
+});
+
+test("renders select when multiple providers present", async () => {
+  const utils = render(
+    <Auth>
+      <div>children</div>
+    </Auth>,
+    {
+      initialState: stateWithTwoProviders
+    }
+  );
+
+  const select = utils.getByRole("combobox", { name: "Login Method" });
+  expect(select).toBeInTheDocument();
+
+  // should have two options
+  expect(
+    utils.getByRole("option", { name: "Library Barcode" })
+  ).toBeInTheDocument();
+  expect(utils.getByRole("option", { name: "SAML IdP" })).toBeInTheDocument();
+
+  // should default to basic auth (first)
+  expect(
+    utils.getByRole("textbox", { name: "Barcode input" })
+  ).toBeInTheDocument();
+  expect(utils.getByLabelText("Pin input")).toBeInTheDocument();
+
+  // should be able to change
+  userEvent.selectOptions(select, fixtures.samlAuthProvider.id);
+
+  expect(await utils.findByText("Login with SAML IdP")).toBeInTheDocument();
 });
 
 test("displays message when no auth provider configured", async () => {
@@ -148,7 +194,7 @@ test("attempts to get credentials from cookies", async () => {
 test("attempts to save auth credentials", async () => {
   const credentials: AuthCredentials = {
     credentials: "auth-cred",
-    provider: fixtures.basicAuthType
+    provider: fixtures.basicAuthId
   };
   const getCredentialsSpy = jest.spyOn(fetcher, "getAuthCredentials");
   getCredentialsSpy.mockReturnValue(credentials);

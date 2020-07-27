@@ -14,13 +14,8 @@ const SamlAuthForm: React.FC<AuthFormProps<ClientSamlMethod>> = ({
   const handleClick = async () => {
     // get the current location to be redirected back to
     const referrer = encodeURIComponent(window.location.href);
-
     const urlWithReferrer = `${provider.method.href}&redirect_uri=${referrer}`;
-
     window.open(urlWithReferrer, "_self");
-
-    // // call the callback that was saved when the form was triggered
-    // callback?.();
   };
   return (
     <div
