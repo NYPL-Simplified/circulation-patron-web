@@ -3,6 +3,7 @@
 # 2.3.0
 
 - Feature: Add support for SAML auth providers.
+- Feature: Add `NEXT_PUBLIC_COMPANION_APP` env var (in PR #97) to toggle the display of SimplyE branding. Value can be either `"simplye"` or `"openebooks"`. 
 
 ## 2.2.1
 
