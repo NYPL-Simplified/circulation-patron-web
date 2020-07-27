@@ -56,8 +56,8 @@ function initBookSettings(element, webpubManifestUrl, catalogName) {
     prefix: "webpub-viewer"
   });
   const upLink = {
-    url: new URL("https://github.com/NYPL-Simplified/webpub-viewer"),
-    label: catalogName,
+    url: new URL(document.referrer || window.location.origin),
+    label: `Return to ${catalogName}`,
     ariaLabel: "Go back to the Github repository"
   };
   const publisher = new PublisherFont();
