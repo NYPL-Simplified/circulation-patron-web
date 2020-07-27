@@ -25,9 +25,19 @@ const SamlAuthForm: React.FC<AuthFormProps<ClientSamlMethod>> = ({
     // callback?.();
   };
   return (
-    <Button onClick={handleClick}>
-      Login with {provider.method.description ?? "Unknown IDP"}
-    </Button>
+    <div
+      sx={{
+        p: 2,
+        pt: 4,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
+    >
+      <Button onClick={handleClick}>
+        Login with {provider.method.description ?? "Unknown IDP"}
+      </Button>
+    </div>
   );
 };
 

@@ -32,6 +32,9 @@ const Auth: React.FC = ({ children }) => {
       providers?.find(provider => provider.id === e.target.value)
     );
   };
+
+  const hasMultipleProviders = providers?.length !== 1;
+
   return (
     <React.Fragment>
       <ClientOnly>
@@ -46,16 +49,18 @@ const Auth: React.FC = ({ children }) => {
             <H2>{library.catalogName}</H2>
             <h4>Login</h4>
           </div>
-          <div sx={{ mb: 2 }}>
-            <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
-            <Select id="login-method-select" onChange={handleChangeProvider}>
-              {providers?.map(provider => (
-                <option key={provider.id} value={provider.id}>
-                  {provider.method.description}
-                </option>
-              ))}
-            </Select>
-          </div>
+          {hasMultipleProviders && (
+            <div sx={{ mb: 2 }}>
+              <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
+              <Select id="login-method-select" onChange={handleChangeProvider}>
+                {providers?.map(provider => (
+                  <option key={provider.id} value={provider.id}>
+                    {provider.method.description}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          )}
           {authProvider && authProvider.plugin.formComponent ? (
             <authProvider.plugin.formComponent provider={authProvider} />
           ) : (
