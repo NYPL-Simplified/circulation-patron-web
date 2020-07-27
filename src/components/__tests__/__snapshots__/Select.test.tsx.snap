@@ -9,7 +9,7 @@ exports[`select matches snapshot 1`] = `
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  width: auto;
+  width: 100%;
   padding-left: 8px;
   padding-right: 2rem;
   padding-top: 4px;
