@@ -28,6 +28,8 @@ import SimplyELogo from "components/SimplyELogo";
 import IosBadge from "components/storeBadges/IosBadge";
 import GooglePlayBadge from "components/storeBadges/GooglePlayBadge";
 
+import { NEXT_PUBLIC_COMPANION_APP } from "../../utils/env";
+
 export const BookDetails: React.FC<{
   setCollectionAndBook: SetCollectionAndBook;
 }> = ({ setCollectionAndBook }) => {
@@ -59,7 +61,10 @@ export const BookDetails: React.FC<{
         >
           <div sx={{ flex: ["1 1 auto", 0.33], mr: [0, 4], mb: [3, 0] }}>
             <BookCover book={book} sx={{ maxWidth: [180, "initial"] }} />
-            <SimplyECallout sx={{ display: ["none", "block"] }} />
+
+            {NEXT_PUBLIC_COMPANION_APP === "simplye" && (
+              <SimplyECallout sx={{ display: ["none", "block"] }} />
+            )}
           </div>
           <div
             sx={{
