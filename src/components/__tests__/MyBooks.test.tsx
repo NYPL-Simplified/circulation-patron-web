@@ -112,7 +112,7 @@ test("sets collection and book", () => {
 
   expect(mockSetCollectionAndBook).toHaveBeenCalledTimes(1);
   expect(mockSetCollectionAndBook).toHaveBeenCalledWith(
-    "http://simplye-dev-cm.amigos.org/xyzlib/loans",
+    "http://test-cm.com/catalogUrl/loans",
     undefined
   );
 });

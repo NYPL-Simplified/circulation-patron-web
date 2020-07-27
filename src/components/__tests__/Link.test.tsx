@@ -41,9 +41,7 @@ test("Renders proper href with collectionUrl prop", () => {
 });
 test("When collectionUrl is your base url, links to home", () => {
   const utils = render(
-    <Link collectionUrl="http://simplye-dev-cm.amigos.org/xyzlib">
-      click here
-    </Link>
+    <Link collectionUrl="http://test-cm.com/catalogUrl">click here</Link>
   );
   expect(utils.getByText("click here").closest("a")?.href).toEqual(
     "http://test-domain.com/"

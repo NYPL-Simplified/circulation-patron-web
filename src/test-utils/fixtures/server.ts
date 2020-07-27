@@ -37,17 +37,17 @@ export const server401Response = {
       rel: "register"
     },
     {
-      href: "http://simplye-dev-cm.amigos.org/xyzlib/",
+      href: "http://test-cm.com/catalogUrl/",
       type: "application/atom+xml;profile=opds-catalog;kind=acquisition",
       rel: "start"
     },
     {
-      href: "http://simplye-dev-cm.amigos.org/xyzlib/loans/",
+      href: "http://test-cm.com/catalogUrl/loans/",
       type: "application/atom+xml;profile=opds-catalog;kind=acquisition",
       rel: "http://opds-spec.org/shelf"
     },
     {
-      href: "http://simplye-dev-cm.amigos.org/xyzlib/patrons/me/",
+      href: "http://test-cm.com/catalogUrl/patrons/me/",
       type: "vnd.librarysimplified/user-profile+json",
       rel: "http://librarysimplified.org/terms/rel/user-profile"
     },
@@ -70,7 +70,7 @@ export const server401Response = {
   authentication: [basicAuthMethod],
   service_description: "Your third place",
   color_scheme: "amber",
-  id: "http://simplye-dev-cm.amigos.org/xyzlib/authentication_document",
+  id: "http://test-cm.com/catalogUrl/authentication_document",
   features: {
     disabled: [],
     enabled: ["https://librarysimplified.org/rel/policy/reservations"]
