@@ -32,6 +32,9 @@ const Search: React.FC<SearchProps> = ({ className, ...props }) => {
     }
   }, [actions, dispatch, searchData]);
 
+  // show no searchbar if we cannot perform a search
+  if (!searchData) return null;
+
   // handle the search
   const onSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
