@@ -3,6 +3,7 @@
 ## UNRELEASED CHANGES
 
 - Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
+- Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
 
 ## 2.2.1
 
