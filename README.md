@@ -74,6 +74,7 @@ Set one of the following environment variables when running the application:
 
 The following environment variables can also be set to further configure the application.
 
+- Set `NEXT_PUBLIC_COMPANION_APP=openebooks` to display OpenE Books Branding (default displays SimplyE Branding).
 - Set `SHORTEN_URLS=false` to stop the app from removing common parts of the circulation manager URLs from the web app's URLs.
 - Set `CACHE_EXPIRATION_SECONDS` to control how often the app will check for changes to registry entries and circ manager authentication documents.
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
