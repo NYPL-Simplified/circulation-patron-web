@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+## UNRELEASED CHANGES
+
+- Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
+
 ## 2.2.1
 
 - Fix: Only show download options for open-access books once they have been borrowed and are present in a user's loans. Download options should still be shown for open-access books in libraries that do not have any auth enabled.
