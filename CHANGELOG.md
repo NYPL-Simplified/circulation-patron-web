@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+## UNRELEASED CHANGES
+
+- Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
+
 ## 2.2.1
 
 - Fix: Only show download options for open-access books once they have been borrowed and are present in a user's loans. Download options should still be shown for open-access books in libraries that do not have any auth enabled.
