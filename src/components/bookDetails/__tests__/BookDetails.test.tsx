@@ -8,6 +8,7 @@ import * as complaintActions from "../../../hooks/useComplaints/actions";
 import { RecommendationsStateContext } from "../../context/RecommendationsContext";
 import userEvent from "@testing-library/user-event";
 import ReportProblem from "../ReportProblem";
+import * as env from "../../../utils/env";
 
 const mockSetCollectionAndBook = jest.fn().mockResolvedValue({});
 
@@ -125,7 +126,29 @@ describe("book details page", () => {
     expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
   });
 
-  test("shows simplyE callout", async () => {
+  test("does not show simplyE callout when NEXT_PUBLIC_COMPANION_APP is 'openebooks'", () => {
+    (env.NEXT_PUBLIC_COMPANION_APP as string) = "openebooks";
+    const utils = render(
+      <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
+      {
+        initialState: makeStateWithBook()
+      }
+    );
+
+    expect(
+      utils.queryByText("Read Now. Read Everywhere.")
+    ).not.toBeInTheDocument();
+
+    expect(utils.queryByText("SimplyE Logo")).not.toBeInTheDocument();
+    expect(
+      utils.queryByText(
+        "Browse and read our collection of eBooks and Audiobooks right from your phone."
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  test("shows simplyE callout when NEXT_PUBLIC_COMPANION_APP is 'simplye'", async () => {
+    (env.NEXT_PUBLIC_COMPANION_APP as string) = "simplye";
     const utils = render(
       <BookDetails setCollectionAndBook={mockSetCollectionAndBook} />,
       {
