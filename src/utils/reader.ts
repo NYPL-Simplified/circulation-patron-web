@@ -58,7 +58,7 @@ function initBookSettings(element, webpubManifestUrl, catalogName) {
   const upLink = {
     url: new URL(document.referrer || window.location.origin),
     label: `Return to ${catalogName}`,
-    ariaLabel: "Go back to the Github repository"
+    ariaLabel: `Return to ${catalogName}`
   };
   const publisher = new PublisherFont();
   const serif = new SerifFont();
