@@ -22,7 +22,7 @@ export const recommendationsState: RecommendationsState = {
   history: [
     {
       id: null,
-      url: "http://simplye-dev-cm.amigos.org/xyzlib/groups/",
+      url: "http://test-cm.com/catalogUrl/groups/",
       text: "All Books",
       type: "start"
     }
@@ -30,14 +30,14 @@ export const recommendationsState: RecommendationsState = {
   url: "/related-url",
   data: {
     id:
-      "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/related_books?available=all&after=0&collection=main&entrypoint=Book&order=author&size=50",
+      "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/related_books?available=all&after=0&collection=main&entrypoint=Book&order=author&size=50",
     title: "Related Books",
     url: "/data-related-url",
     lanes: [
       {
         title: "Jane Austen",
         url:
-          "http://simplye-dev-cm.amigos.org/xyzlib/works/contributor/Jane%20Austen/eng/",
+          "http://test-cm.com/catalogUrl/works/contributor/Jane%20Austen/eng/",
         books: [
           {
             id:
@@ -52,28 +52,24 @@ export const recommendationsState: RecommendationsState = {
               "https://s3.amazonaws.com/open-bookshelf-covers/scaled/300/Standard+Ebooks/URI/https%3A//standardebooks.org/ebooks/jane-austen/pride-and-prejudice/cover.png",
             openAccessLinks: [
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/9/fulfill/2",
                 type: "application/kepub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/9/fulfill/2",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/8",
+                url: "http://test-cm.com/catalogUrl/works/9/fulfill/8",
                 type: "application/kepub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/7",
+                url: "http://test-cm.com/catalogUrl/works/9/fulfill/7",
                 type: "application/x-mobi8-ebook"
               }
             ],
             borrowUrl:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/borrow",
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/borrow",
             fulfillmentLinks: [],
             availability: {
               status: "available"
@@ -135,7 +131,7 @@ export const recommendationsState: RecommendationsState = {
                         href: {
                           name: "href",
                           value:
-                            "http://simplye-dev-cm.amigos.org/xyzlib/works/contributor/Jane%20Austen/eng/Adult%2CAdults%2BOnly%2CChildren%2CYoung%2BAdult",
+                            "http://test-cm.com/catalogUrl/works/contributor/Jane%20Austen/eng/Adult%2CAdults%2BOnly%2CChildren%2CYoung%2BAdult",
                           prefix: "",
                           local: "href",
                           uri: ""
@@ -265,7 +261,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/report",
+                        "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/report",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -288,7 +284,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
+                        "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -319,7 +315,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/contributor/Jane%20Austen/eng/",
+                        "http://test-cm.com/catalogUrl/works/contributor/Jane%20Austen/eng/",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -349,7 +345,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/borrow",
+                        "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/borrow",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -458,8 +454,7 @@ export const recommendationsState: RecommendationsState = {
                   $: {
                     href: {
                       name: "href",
-                      value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/2",
+                      value: "http://test-cm.com/catalogUrl/works/9/fulfill/2",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -513,8 +508,7 @@ export const recommendationsState: RecommendationsState = {
                   $: {
                     href: {
                       name: "href",
-                      value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/2",
+                      value: "http://test-cm.com/catalogUrl/works/9/fulfill/2",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -568,8 +562,7 @@ export const recommendationsState: RecommendationsState = {
                   $: {
                     href: {
                       name: "href",
-                      value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/8",
+                      value: "http://test-cm.com/catalogUrl/works/9/fulfill/8",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -623,8 +616,7 @@ export const recommendationsState: RecommendationsState = {
                   $: {
                     href: {
                       name: "href",
-                      value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/9/fulfill/7",
+                      value: "http://test-cm.com/catalogUrl/works/9/fulfill/7",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -679,7 +671,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/related_books",
+                        "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/related_books",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -717,7 +709,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/annotations/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/",
+                        "http://test-cm.com/catalogUrl/annotations/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -748,7 +740,7 @@ export const recommendationsState: RecommendationsState = {
                     href: {
                       name: "href",
                       value:
-                        "http://simplye-dev-cm.amigos.org/xyzlib/analytics/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/open_book",
+                        "http://test-cm.com/catalogUrl/analytics/URI/https://standardebooks.org/ebooks/jane-austen/pride-and-prejudice/open_book",
                       prefix: "",
                       local: "href",
                       uri: ""
@@ -1009,33 +1001,28 @@ export const recommendationsState: RecommendationsState = {
               "https://s3.amazonaws.com/open-bookshelf-covers/scaled/300/Standard+Ebooks/URI/https%3A//standardebooks.org/ebooks/jane-austen/sense-and-sensibility/cover.png",
             openAccessLinks: [
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/5734/fulfill/6",
+                url: "http://test-cm.com/catalogUrl/works/5734/fulfill/6",
                 type: "application/x-mobi8-ebook"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/5734/fulfill/8",
+                url: "http://test-cm.com/catalogUrl/works/5734/fulfill/8",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/5734/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/5734/fulfill/2",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/5734/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/5734/fulfill/2",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/5734/fulfill/7",
+                url: "http://test-cm.com/catalogUrl/works/5734/fulfill/7",
                 type: "application/x-mobi8-ebook"
               }
             ],
             borrowUrl:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/sense-and-sensibility/borrow",
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/sense-and-sensibility/borrow",
             fulfillmentLinks: [],
             availability: {
               status: "available"
@@ -1053,7 +1040,7 @@ export const recommendationsState: RecommendationsState = {
             ],
             language: "en",
             url:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/sense-and-sensibility"
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/sense-and-sensibility"
           },
           {
             id: "https://standardebooks.org/ebooks/jane-austen/persuasion",
@@ -1067,23 +1054,20 @@ export const recommendationsState: RecommendationsState = {
               "https://s3.amazonaws.com/open-bookshelf-covers/scaled/300/Standard+Ebooks/URI/https%3A//standardebooks.org/ebooks/jane-austen/persuasion/cover.png",
             openAccessLinks: [
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/2746/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/2746/fulfill/2",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/2746/fulfill/8",
+                url: "http://test-cm.com/catalogUrl/works/2746/fulfill/8",
                 type: "application/kepub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/2746/fulfill/7",
+                url: "http://test-cm.com/catalogUrl/works/2746/fulfill/7",
                 type: "application/x-mobi8-ebook"
               }
             ],
             borrowUrl:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/persuasion/borrow",
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/persuasion/borrow",
             fulfillmentLinks: [],
             availability: {
               status: "available"
@@ -1094,7 +1078,7 @@ export const recommendationsState: RecommendationsState = {
             categories: ["Adult", "Fiction", "Romance", "Literary Fiction"],
             language: "en",
             url:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/persuasion"
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/persuasion"
           },
           {
             id: "https://standardebooks.org/ebooks/jane-austen/emma",
@@ -1108,28 +1092,24 @@ export const recommendationsState: RecommendationsState = {
               "https://s3.amazonaws.com/open-bookshelf-covers/scaled/300/Standard+Ebooks/URI/https%3A//standardebooks.org/ebooks/jane-austen/emma/cover.png",
             openAccessLinks: [
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/13/fulfill/7",
+                url: "http://test-cm.com/catalogUrl/works/13/fulfill/7",
                 type: "application/x-mobipocket-ebook"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/13/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/13/fulfill/2",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/13/fulfill/2",
+                url: "http://test-cm.com/catalogUrl/works/13/fulfill/2",
                 type: "application/epub+zip"
               },
               {
-                url:
-                  "http://simplye-dev-cm.amigos.org/xyzlib/works/13/fulfill/6",
+                url: "http://test-cm.com/catalogUrl/works/13/fulfill/6",
                 type: "application/x-mobipocket-ebook"
               }
             ],
             borrowUrl:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/borrow",
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/borrow",
             fulfillmentLinks: [],
             availability: {
               status: "available"
@@ -1147,7 +1127,7 @@ export const recommendationsState: RecommendationsState = {
             ],
             language: "en",
             url:
-              "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/emma"
+              "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/emma"
           }
         ]
       }
@@ -1156,40 +1136,40 @@ export const recommendationsState: RecommendationsState = {
     books: [],
     facetGroups: [],
     search: {
-      url: "http://simplye-dev-cm.amigos.org/xyzlib/search/"
+      url: "http://test-cm.com/catalogUrl/search/"
     },
     catalogRootLink: {
-      url: "http://simplye-dev-cm.amigos.org/xyzlib/groups/",
+      url: "http://test-cm.com/catalogUrl/groups/",
       text: "All Books",
       type: "start"
     },
     parentLink: null,
-    shelfUrl: "http://simplye-dev-cm.amigos.org/xyzlib/loans/",
+    shelfUrl: "http://test-cm.com/catalogUrl/loans/",
     links: [
       {
         url:
-          "http://simplye-dev-cm.amigos.org/xyzlib/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/related_books?available=all&after=0&collection=main&entrypoint=Book&order=author&size=50",
+          "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/related_books?available=all&after=0&collection=main&entrypoint=Book&order=author&size=50",
         type: "self"
       },
       {
-        url: "http://simplye-dev-cm.amigos.org/xyzlib/groups/",
+        url: "http://test-cm.com/catalogUrl/groups/",
         text: "All Books",
         type: "start"
       },
       {
-        url: "http://simplye-dev-cm.amigos.org/xyzlib/authentication_document",
+        url: "http://test-cm.com/catalogUrl/authentication_document",
         type: "http://opds-spec.org/auth/document"
       },
       {
-        url: "http://simplye-dev-cm.amigos.org/xyzlib/search/",
+        url: "http://test-cm.com/catalogUrl/search/",
         type: "search"
       },
       {
-        url: "http://simplye-dev-cm.amigos.org/xyzlib/loans/",
+        url: "http://test-cm.com/catalogUrl/loans/",
         type: "http://opds-spec.org/shelf"
       },
       {
-        url: "http://simplye-dev-cm.amigos.org/xyzlib/annotations/",
+        url: "http://test-cm.com/catalogUrl/annotations/",
         type: "http://www.w3.org/ns/oa#annotationService"
       },
       {
