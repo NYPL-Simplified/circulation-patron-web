@@ -22,6 +22,7 @@ import * as DS from "@nypl/design-system-react-components";
 import MediumIndicator from "components/MediumIndicator";
 import { ArrowForward } from "icons";
 import useIsBorrowed from "hooks/useIsBorrowed";
+import BookCover from "./BookCover";
 
 /**
  * In a collection you can:
@@ -82,7 +83,17 @@ export const BookListItem: React.FC<{
     >
       <DS.Card
         sx={{ bg: "ui.white" }}
-        image={<DS.Image src={book.imageUrl ?? ""} isDecorative />}
+        image={
+          <BookCover
+            book={book}
+            sx={{
+              height: "100%",
+              width: "100%",
+              maxHeight: "100%",
+              maxWidth: "100%"
+            }}
+          />
+        }
         ctas={
           <div
             sx={{

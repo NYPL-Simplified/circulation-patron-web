@@ -199,6 +199,7 @@ test("attempts to save auth credentials", async () => {
   const getCredentialsSpy = jest.spyOn(fetcher, "getAuthCredentials");
   getCredentialsSpy.mockReturnValue(credentials);
   const setCredentialsSpy = jest.spyOn(fetcher, "setAuthCredentials");
+  const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
 
   render(
     <Auth>
@@ -210,4 +211,8 @@ test("attempts to save auth credentials", async () => {
   );
   expect(setCredentialsSpy).toHaveBeenCalledTimes(1);
   expect(setCredentialsSpy).toHaveBeenCalledWith(credentials);
+  expect(fetchLoansSpy).toHaveBeenCalledTimes(1);
+  expect(fetchLoansSpy).toHaveBeenLastCalledWith(
+    "http://test-cm.com/catalogUrl/loans"
+  );
 });

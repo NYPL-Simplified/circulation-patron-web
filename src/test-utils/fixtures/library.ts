@@ -5,7 +5,7 @@ import { LibraryData } from "../../interfaces";
  */
 export const libraryData: LibraryData = {
   onlyLibrary: true,
-  catalogUrl: "http://simplye-dev-cm.amigos.org/xyzlib",
+  catalogUrl: "http://test-cm.com/catalogUrl",
   catalogName: "XYZ Public Library",
   colors: {
     foreground: "#ffffff",

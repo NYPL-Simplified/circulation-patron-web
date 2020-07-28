@@ -16,7 +16,6 @@ function useAuth() {
   const isSignedIn = !!authState?.credentials;
   const { fetcher, actions, dispatch } = useActions();
   const { buildMultiLibraryLink, urlShortener } = useLinkUtils();
-
   const signOut = () => dispatch(actions.clearAuthCredentials());
   const signOutAndGoHome = () => {
     signOut();
@@ -40,8 +39,9 @@ function useAuth() {
     // save the credentials if they exist
     if (credentials) {
       dispatch(actions.saveAuthCredentials(credentials));
+      dispatch(actions.fetchLoans(loansUrl));
     }
-  }, [dispatch, actions, fetcher]);
+  }, [dispatch, actions, fetcher, loansUrl]);
 
   /**
    * We need to set SAML credentials whenenever they are available in a
