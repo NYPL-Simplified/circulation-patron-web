@@ -3,6 +3,7 @@
 ## UNRELEASED CHANGES
 
 - Fix: Don't show search bar if collection does not include search data.
+- Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
 
 ## 2.2.1
 
