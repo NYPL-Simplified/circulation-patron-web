@@ -2,6 +2,7 @@
 import { State } from "opds-web-client/lib/state";
 import buildStore from "opds-web-client/lib/store";
 import BasicAuthPlugin from "../auth/basicAuthPlugin";
+import samlAuthPlugin from "auth/samlAuthPlugin";
 import { PathFor } from "opds-web-client/lib/interfaces";
 import { IS_SERVER, __NEXT_REDUX_STORE__ } from "../utils/env";
 /**
@@ -13,14 +14,14 @@ import { IS_SERVER, __NEXT_REDUX_STORE__ } from "../utils/env";
 function getOrCreateStore(pathFor: PathFor, initialState?: State) {
   // Always make a new store if server, otherwise state is shared between requests
   if (IS_SERVER) {
-    return buildStore(undefined, [BasicAuthPlugin], pathFor);
+    return buildStore(undefined, [BasicAuthPlugin, samlAuthPlugin], pathFor);
   }
 
   // Create store if unavailable on the client and set it on the window object
   if (!window[__NEXT_REDUX_STORE__]) {
     window[__NEXT_REDUX_STORE__] = buildStore(
       initialState,
-      [BasicAuthPlugin],
+      [BasicAuthPlugin, samlAuthPlugin],
       pathFor
     );
   }
