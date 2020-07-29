@@ -19,6 +19,7 @@ import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
 import { BookData } from "opds-web-client/lib/interfaces";
 import PageTitle from "./PageTitle";
+import SignOut from "./SignOut";
 
 export const MyBooks: React.FC<{
   setCollectionAndBook: SetCollectionAndBook;
@@ -56,16 +57,9 @@ export const MyBooks: React.FC<{
 };
 
 const LoansContent: React.FC<{ books: BookData[] }> = ({ books }) => {
-  const { signOutAndGoHome } = useAuth();
-
-  const signOutButton = (
-    <Button aria-label="Sign out and go home" onClick={signOutAndGoHome}>
-      Sign out
-    </Button>
-  );
   return (
     <React.Fragment>
-      <ListView books={books} breadcrumb={signOutButton} />
+      <ListView books={books} />
     </React.Fragment>
   );
 };
@@ -90,8 +84,6 @@ const Unauthorized = () => {
 };
 
 const Empty = () => {
-  const { signOutAndGoHome } = useAuth();
-
   return (
     <>
       <div
@@ -106,7 +98,7 @@ const Empty = () => {
         <H3>
           Your books will show up here when you have any loaned or on hold.
         </H3>
-        <Button onClick={signOutAndGoHome}>Sign Out</Button>
+        <SignOut />
       </div>
     </>
   );
