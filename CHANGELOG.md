@@ -5,6 +5,7 @@
 - Fix: Don't show search bar if collection does not include search data.
 - Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
 - Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
+- Featre: Add confirmation modal to the sign out button.
 
 ## 2.2.1
 
