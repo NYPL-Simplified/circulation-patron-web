@@ -11,6 +11,7 @@ import useLibraryContext from "./context/LibraryContext";
 import { Text } from "./Text";
 import useAuth from "hooks/useAuth";
 import Stack from "./Stack";
+import SignOut from "./SignOut";
 
 export interface HeaderContext extends NavigateContext {
   library: LibraryData;
@@ -125,13 +126,7 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
       >
         My Books
       </NavButton>
-      {isSignedIn ? (
-        <Button color="ui.black" onClick={signOutAndGoHome}>
-          Sign Out
-        </Button>
-      ) : (
-        <Button onClick={signIn}>Sign In</Button>
-      )}
+      {isSignedIn ? <SignOut /> : <Button onClick={signIn}>Sign In</Button>}
     </div>
   );
 };
