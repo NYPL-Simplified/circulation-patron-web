@@ -1,16 +1,21 @@
-import { BASIC_AUTH_ID } from "./../../utils/auth";
-import { AuthProvider, BasicAuthMethod } from "opds-web-client/lib/interfaces";
-import BasicAuthForm from "../../components/BasicAuthForm";
+import {
+  AuthProvider,
+  BasicAuthMethod,
+  ClientSamlMethod
+} from "opds-web-client/lib/interfaces";
+import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
+import SamlAuthForm from "auth/SamlAuthForm";
 
-export const basicAuthType = "http://opds-spec.org/auth/basic";
+export const basicAuthId = "http://opds-spec.org/auth/basic";
+export const samlAuthId = "http://librarysimplified.org/authtype/SAML-2.0";
 
 export const basicAuthMethod = {
   labels: {
     login: "Barcode",
     password: "Pin"
   },
-  type: basicAuthType,
+  type: basicAuthId,
   description: "Library Barcode",
   inputs: {
     login: { keyboard: "Default" },
@@ -19,14 +24,30 @@ export const basicAuthMethod = {
 };
 
 export const basicAuthProvider: AuthProvider<BasicAuthMethod> = {
-  id: BASIC_AUTH_ID,
+  id: basicAuthId,
   plugin: {
-    type: basicAuthType,
+    type: basicAuthId,
     formComponent: BasicAuthForm,
     buttonComponent: jest.fn(),
     lookForCredentials: jest.fn()
   },
   method: basicAuthMethod
+};
+
+export const samlAuthHref = "/saml-auth-url";
+export const samlAuthProvider: AuthProvider<ClientSamlMethod> = {
+  id: samlAuthHref,
+  plugin: {
+    type: samlAuthId,
+    formComponent: SamlAuthForm,
+    buttonComponent: jest.fn(),
+    lookForCredentials: jest.fn()
+  },
+  method: {
+    href: samlAuthHref,
+    type: samlAuthId,
+    description: "SAML IdP"
+  }
 };
 
 export const unauthenticatedAuthState: AuthState = {

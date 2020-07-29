@@ -12,7 +12,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           sx={{
             appearance: "none",
-            width: "auto",
+            width: "100%",
             pl: 2,
             pr: "2rem",
             py: 1,

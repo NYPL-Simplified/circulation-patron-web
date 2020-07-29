@@ -3,6 +3,17 @@ import { render, fixtures } from "test-utils";
 import { ListView } from "../BookList";
 import merge from "deepmerge";
 import { BookData } from "opds-web-client/lib/interfaces";
+import useInfiniteScroll from "hooks/useInfiniteScroll";
+
+const mockUseInfiniteScroll = useInfiniteScroll as jest.Mock<
+  ReturnType<typeof useInfiniteScroll>
+>;
+jest.mock("hooks/useInfiniteScroll", () => ({
+  __esModule: true,
+  default: jest.fn().mockReturnValue({
+    isFetchingPage: false
+  })
+}));
 
 const books = fixtures.makeBooks(3);
 
@@ -45,4 +56,13 @@ test("truncates authors", () => {
 
   expect(utils.getByText("one, two & 3 more"));
   expect(utils.queryByText("one, two, three")).toBeFalsy();
+});
+
+test("displays loader", () => {
+  mockUseInfiniteScroll.mockReturnValueOnce({
+    isFetchingPage: true,
+    listRef: React.createRef()
+  });
+  const utils = render(<ListView books={[]} />);
+  expect(utils.getByText("Loading more books...")).toBeInTheDocument();
 });

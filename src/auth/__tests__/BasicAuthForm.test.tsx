@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render, fixtures, actions, waitFor } from "../../test-utils";
 import merge from "deepmerge";
-import BasicAuthForm from "../BasicAuthForm";
+import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthProvider, BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
 import { State } from "opds-web-client/lib/state";
@@ -48,12 +48,13 @@ test("displays form", () => {
       auth: authState
     })
   });
-  expect(utils.getByLabelText("Barcode")).toBeInTheDocument();
-  expect(utils.getByLabelText("Pin")).toBeInTheDocument();
-  expect(utils.getByText("Login")).toBeInTheDocument();
 
-  const barcode = utils.getByLabelText("Barcode");
-  const pin = utils.getByLabelText("Pin");
+  const barcode = utils.getByLabelText("Barcode input");
+  const pin = utils.getByLabelText("Pin input");
+  expect(barcode).toBeInTheDocument();
+  expect(pin).toBeInTheDocument();
+  expect(utils.getByRole("button", { name: "Login" })).toBeInTheDocument();
+
   userEvent.type(barcode, "1234");
   userEvent.type(pin, "pinpin");
 
@@ -78,11 +79,11 @@ test("sumbits", async () => {
   });
 
   // act
-  const barcode = utils.getByLabelText("Barcode");
-  const pin = utils.getByLabelText("Pin");
+  const barcode = utils.getByLabelText("Barcode input");
+  const pin = utils.getByLabelText("Pin input");
   userEvent.type(barcode, "1234");
   userEvent.type(pin, "pinpin");
-  const loginButton = utils.getByText("Login");
+  const loginButton = utils.getByRole("button", { name: "Login" });
   userEvent.click(loginButton);
 
   // assert
@@ -108,7 +109,7 @@ test("displays client error when unfilled", async () => {
   });
 
   // don't fill form, but click login
-  const loginButton = utils.getByText("Login");
+  const loginButton = utils.getByRole("button", { name: "Login" });
   userEvent.click(loginButton);
 
   // assert
@@ -181,7 +182,7 @@ test("accepts different input labels", async () => {
     initialState: stateWithLabels
   });
 
-  expect(utils.getByLabelText("Username")).toBeInTheDocument();
-  expect(utils.getByLabelText("Password")).toBeInTheDocument();
+  expect(utils.getByLabelText("Username input")).toBeInTheDocument();
+  expect(utils.getByLabelText("Password input")).toBeInTheDocument();
   expect(utils.getByText("Login")).toBeInTheDocument();
 });

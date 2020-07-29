@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import Button from "./Button";
-import useTypedSelector from "../hooks/useTypedSelector";
+import Button from "components/Button";
+import useTypedSelector from "hooks/useTypedSelector";
 import { useForm } from "react-hook-form";
-import FormInput from "./form/FormInput";
+import FormInput from "components/form/FormInput";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
@@ -26,7 +26,12 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
   const { actions, dispatch } = useActions();
   const { register, handleSubmit, errors } = useForm<FormData>();
 
-  const onSubmit = async ({ login, password }) => {
+  const usernameInputName = provider.method.labels.login;
+  const passwordInputName = provider.method.labels.password;
+
+  const onSubmit = handleSubmit(async values => {
+    const login = values[usernameInputName];
+    const password = values[passwordInputName];
     // create credentials
     const credentials = generateCredentials(login, password);
     // save them with redux
@@ -38,35 +43,31 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
     );
     // call the callback that was saved when the form was triggered
     callback?.();
-  };
+  });
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{ display: "flex", flexDirection: "column" }}
-    >
+    <form onSubmit={onSubmit} sx={{ display: "flex", flexDirection: "column" }}>
       <span sx={{ color: "ui.error" }}>
         {serverError && `Error: ${serverError}`}
       </span>
       <FormInput
-        name="login"
-        label={provider.method.labels.login}
+        name={usernameInputName}
+        label={usernameInputName}
         id="login"
-        placeholder={provider.method.labels.login}
+        placeholder={usernameInputName}
         ref={register({ required: true, maxLength: 25 })}
         error={
-          errors?.login && `Your ${provider.method.labels.login} is required.`
+          errors[usernameInputName] && `Your ${usernameInputName} is required.`
         }
       />
       <FormInput
-        name="password"
-        label={provider.method.labels.password}
+        name={passwordInputName}
+        label={passwordInputName}
         ref={register({ required: true, maxLength: 25 })}
         id="password"
         type="password"
-        placeholder={provider.method.labels.password}
+        placeholder={passwordInputName}
         error={
-          errors?.password &&
-          `Your ${provider.method.labels.password} is required.`
+          errors[passwordInputName] && `Your ${passwordInputName} is required.`
         }
       />
       <Button

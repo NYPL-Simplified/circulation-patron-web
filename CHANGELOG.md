@@ -1,7 +1,8 @@
 ## CHANGELOG
 
-## UNRELEASED CHANGES
-
+# 2.3.0
+- Feature: Add support for SAML auth providers.
+- Feature: Add `NEXT_PUBLIC_COMPANION_APP` env var (in PR #97) to toggle the display of SimplyE branding. Value can be either `"simplye"` or `"openebooks"`. 
 - Fix: Don't show search bar if collection does not include search data.
 - Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
 - Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.

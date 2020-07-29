@@ -1,6 +1,6 @@
 {
   "name": "simplified-circulation-patron-web",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "patron UI for Circulation Manager",
   "repository": {
     "type": "git",
@@ -36,7 +36,7 @@
     "moment": "^2.24.0",
     "next": "^9.4.2",
     "opds-feed-parser": "0.0.18",
-    "opds-web-client": "^0.4.5",
+    "opds-web-client": "^0.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^4.9.2",
