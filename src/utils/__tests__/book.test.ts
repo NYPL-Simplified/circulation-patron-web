@@ -1,4 +1,5 @@
-import { getFulfillmentState } from "utils/book";
+import { BookData } from "opds-web-client/lib/interfaces";
+import { getFulfillmentState, queueString, bookIsAudiobook } from "utils/book";
 import { book as bookFixture } from "../../test-utils/fixtures/book";
 import { getAuthors } from "../book";
 
@@ -186,5 +187,41 @@ describe("getFulfillmentState", () => {
         false
       )
     ).toBe("FULFILLMENT_STATE_ERROR");
+  });
+});
+
+describe("queue string formatter", () => {
+  test("returns empty string with no holds data", () => {
+    const book: BookData = {
+      ...bookFixture,
+      holds: null
+    };
+    expect(queueString(book)).toBe("");
+  });
+  test("returns formatted string when total holds provided", () => {
+    const book: BookData = {
+      ...bookFixture,
+      holds: {
+        total: 10
+      }
+    };
+    expect(queueString(book)).toBe("10 patrons in the queue.");
+  });
+});
+
+describe("book is audiobook", () => {
+  test("correctly recognizes audiobook", () => {
+    const book: BookData = {
+      ...bookFixture,
+      raw: {
+        $: {
+          "schema:additionalType": {
+            value: "http://bib.schema.org/Audiobook"
+          }
+        }
+      }
+    };
+
+    expect(bookIsAudiobook(book)).toBe(true);
   });
 });

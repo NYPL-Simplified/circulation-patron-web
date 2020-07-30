@@ -28,6 +28,7 @@ import enableAxe from "utils/axe";
 import "system-font-css";
 import { Config } from "dataflow/LibraryDataCache";
 import "@nypl/design-system-react-components/dist/styles.css";
+import "css-overrides.css";
 
 type NotFoundProps = {
   statusCode: number;

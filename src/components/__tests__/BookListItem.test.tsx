@@ -52,6 +52,17 @@ describe("open access book", () => {
     expect(utils.queryByText("Borrow")).toBeNull();
     expectViewDetails(utils);
   });
+
+  test("renders subtitle if provided", () => {
+    const bookWithSubtitle = fixtures.mergeBook({
+      subtitle:
+        "Book subtitle that is quite long-winded and will break the ux if not truncated"
+    });
+    const utils = render(<BookListItem book={bookWithSubtitle} />);
+    expect(
+      utils.getByText("Book subtitle that is quite long-winded and will...")
+    ).toBeInTheDocument();
+  });
 });
 
 describe("available to borrow book", () => {

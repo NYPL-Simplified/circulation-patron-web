@@ -1,7 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData, LaneData } from "opds-web-client/lib/interfaces";
+import {
+  BookData,
+  LaneData,
+  RequiredKeys
+} from "opds-web-client/lib/interfaces";
 import { truncateString, stripHTML } from "../utils/string";
 import {
   getAuthors,
@@ -18,6 +22,7 @@ import * as DS from "@nypl/design-system-react-components";
 import MediumIndicator from "components/MediumIndicator";
 import { ArrowForward } from "icons";
 import useIsBorrowed from "hooks/useIsBorrowed";
+import BookCover from "./BookCover";
 
 /**
  * In a collection you can:
@@ -41,6 +46,9 @@ const ListLoadingIndicator = () => (
   </div>
 );
 
+type BookWithUrl = RequiredKeys<BookData, "url">;
+const hasUrl = (book: BookData): book is BookWithUrl => !!book.url;
+
 export const ListView: React.FC<{
   books: BookData[];
   breadcrumb?: React.ReactNode;
@@ -60,9 +68,11 @@ export const ListView: React.FC<{
   );
 };
 
-export const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
+export const BookListItem: React.FC<{
+  book: BookData;
+}> = ({ book }) => {
   // if there is no book url, it doesn't make sense to display it.
-  if (!book.url) return null;
+  if (!hasUrl(book)) return null;
 
   return (
     <li
@@ -73,7 +83,17 @@ export const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
     >
       <DS.Card
         sx={{ bg: "ui.white" }}
-        image={<DS.Image src={book.imageUrl ?? ""} isDecorative />}
+        image={
+          <BookCover
+            book={book}
+            sx={{
+              height: "100%",
+              width: "100%",
+              maxHeight: "100%",
+              maxWidth: "100%"
+            }}
+          />
+        }
         ctas={
           <div
             sx={{
@@ -115,7 +135,7 @@ export const BookListItem: React.FC<{ book: BookData }> = ({ book }) => {
   );
 };
 
-const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
+const BookListCTA: React.FC<{ book: BookWithUrl }> = ({ book }) => {
   const isBorrowed = useIsBorrowed(book);
   const fulfillmentState = getFulfillmentState(book, isBorrowed);
   const { borrowOrReserve, isLoading, errorMsg } = useBorrow(book);
@@ -132,7 +152,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
           </Text>
           <NavButton
             variant="ghost"
-            bookUrl={book.url ?? ""}
+            bookUrl={book.url}
             iconRight={ArrowForward}
           >
             View Book Details
@@ -163,7 +183,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
           )}
           <NavButton
             variant="ghost"
-            bookUrl={book.url ?? ""}
+            bookUrl={book.url}
             iconRight={ArrowForward}
           >
             View Book Details
@@ -190,7 +210,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
           </Text>
           <NavButton
             variant="ghost"
-            bookUrl={book.url ?? ""}
+            bookUrl={book.url}
             iconRight={ArrowForward}
           >
             View Book Details
@@ -216,7 +236,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
           </Text>
           <NavButton
             variant="ghost"
-            bookUrl={book.url ?? ""}
+            bookUrl={book.url}
             iconRight={ArrowForward}
           >
             View Book Details
@@ -249,7 +269,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
           )}
           <NavButton
             variant="ghost"
-            bookUrl={book.url ?? ""}
+            bookUrl={book.url}
             iconRight={ArrowForward}
           >
             View Book Details
@@ -278,7 +298,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
           </Text>
           <NavButton
             variant="ghost"
-            bookUrl={book.url ?? ""}
+            bookUrl={book.url}
             iconRight={ArrowForward}
           >
             View Book Details
@@ -289,11 +309,7 @@ const BookListCTA: React.FC<{ book: BookData }> = ({ book }) => {
 
     case "FULFILLMENT_STATE_ERROR":
       return (
-        <NavButton
-          variant="ghost"
-          bookUrl={book.url ?? ""}
-          iconRight={ArrowForward}
-        >
+        <NavButton variant="ghost" bookUrl={book.url} iconRight={ArrowForward}>
           View Book Details
         </NavButton>
       );

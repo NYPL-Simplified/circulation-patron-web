@@ -27,6 +27,19 @@ test("fetches search description", async () => {
   expect(utils.dispatch).toHaveBeenCalledTimes(1);
 });
 
+test("doesn't render if there is no searchData in the store", () => {
+  const utils = render(<Search />, {
+    initialState: merge(fixtures.initialState, {
+      collection: {
+        data: {
+          search: undefined
+        }
+      }
+    })
+  });
+  expect(utils.container).toBeEmpty();
+});
+
 test("searching calls history.push with url", async () => {
   const mockedTemplate = jest.fn().mockReturnValue("templatereturn");
   const utils = render(<Search />, {

@@ -1,5 +1,5 @@
 import AuthPlugin from "opds-web-client/lib/AuthPlugin";
-import BasicAuthForm from "../components/BasicAuthForm";
+import BasicAuthForm from "./BasicAuthForm";
 
 const BasicAuthPlugin: AuthPlugin = {
   type: "http://opds-spec.org/auth/basic",
