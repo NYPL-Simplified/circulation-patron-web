@@ -177,6 +177,7 @@ const BorrowOrReserve: React.FC<{
         onClick={borrowOrReserve}
         loading={isLoading}
         loadingText={buttonLoadingText}
+        aria-label="button"
       >
         <Text variant="text.body.bold">{buttonLabel}</Text>
       </Button>
