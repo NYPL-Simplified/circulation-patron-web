@@ -245,7 +245,7 @@ describe("ready to borrow", () => {
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
   });
 
-  test.only("shows loading state when borrowing", async () => {
+  test("shows loading state when borrowing", async () => {
     const _useBorrowSpy = jest.spyOn(useBorrow, "default").mockReturnValueOnce({
       isLoading: true,
       borrowOrReserve: jest.fn(),
