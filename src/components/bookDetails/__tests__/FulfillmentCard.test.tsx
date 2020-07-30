@@ -245,7 +245,7 @@ describe("ready to borrow", () => {
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
   });
 
-  test("shows loading state when borrowing", async () => {
+  test.only("shows loading state when borrowing", async () => {
     const _useBorrowSpy = jest.spyOn(useBorrow, "default").mockReturnValueOnce({
       isLoading: true,
       borrowOrReserve: jest.fn(),
@@ -262,7 +262,8 @@ describe("ready to borrow", () => {
     });
 
     const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+      //@ts-ignore next-line
+      title: "Borrowing..."
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
