@@ -63,7 +63,7 @@ exports[`book details page handles error state 1`] = `
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
-  background-color: var(--theme-ui-colors-brand-primary,#377F8B);
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
   color: white;
@@ -79,14 +79,14 @@ exports[`book details page handles error state 1`] = `
 
 .emotion-2:focus,
 .emotion-2:hover {
-  background-color: #306e79;
+  background-color: #2d6da3;
   color: white;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 .emotion-2:active {
-  background-color: #295e66;
+  background-color: #285f8f;
 }
 
 .emotion-2:disabled {
