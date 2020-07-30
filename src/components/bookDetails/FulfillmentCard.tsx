@@ -300,6 +300,7 @@ const DownloadButton: React.FC<{
         variant="ghost"
         color="ui.gray.extraDark"
         iconLeft={SvgDownload}
+        aria-label="button"
       >
         {downloadLabel}
       </Button>
