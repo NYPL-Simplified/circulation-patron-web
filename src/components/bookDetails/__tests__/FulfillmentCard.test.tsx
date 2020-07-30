@@ -262,9 +262,8 @@ describe("ready to borrow", () => {
     });
 
     const borrowButton = await utils.findByRole("button", {
-      //@ts-ignore next-line
       title: "Borrowing..."
-    });
+    } as any);
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
   });
