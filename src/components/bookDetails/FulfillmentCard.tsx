@@ -177,7 +177,7 @@ const BorrowOrReserve: React.FC<{
         onClick={borrowOrReserve}
         loading={isLoading}
         loadingText={buttonLoadingText}
-        aria-label="button"
+        aria-label={buttonLabel}
       >
         <Text variant="text.body.bold">{buttonLabel}</Text>
       </Button>
@@ -200,7 +200,7 @@ const Reserved: React.FC<{ book: BookData }> = ({ book }) => {
           Your hold position is: {position}.
         </Text>
       )}
-      <Button size="lg" disabled>
+      <Button size="lg" disabled aria-label="Reserved">
         <Text variant="text.body.bold">Reserved</Text>
       </Button>
       {/* {errorMsg && <Text sx={{ color: "ui.error" }}>Error: {errorMsg}</Text>} */}
@@ -301,7 +301,7 @@ const DownloadButton: React.FC<{
         variant="ghost"
         color="ui.gray.extraDark"
         iconLeft={SvgDownload}
-        aria-label="button"
+        aria-label={downloadLabel}
       >
         {downloadLabel}
       </Button>
