@@ -56,9 +56,16 @@ const Recommendations: React.FC<{ book: BookData }> = ({ book }) => {
       </H2>
       <ul sx={{ listStyle: "none", m: 0, p: 0 }}>
         {!isFetching &&
-          lanes.map(lane => (
-            <Lane key={lane.title} lane={lane} titleTag={H3} />
-          ))}
+          lanes.map(lane => {
+            return (
+              <Lane
+                key={lane.title}
+                lane={lane}
+                titleTag={H3}
+                omitIds={[book.id]}
+              />
+            );
+          })}
       </ul>
     </section>
   );
@@ -71,6 +78,7 @@ const getRelatedUrl = (book: BookData): null | string => {
   if (!links) return null;
 
   const relatedLink = links.find(link => link.$.rel.value === "related");
+
   if (!relatedLink) return null;
 
   return relatedLink.$.href.value;
