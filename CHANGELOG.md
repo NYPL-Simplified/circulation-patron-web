@@ -1,7 +1,5 @@
 ## CHANGELOG
 
-# UNRELEASED CHANGES
-
 # 2.3.0
 
 - Feature: Add support for SAML auth providers.
@@ -10,6 +8,7 @@
 - Fix: Don't show search bar if collection does not include search data.
 - Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
 - Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
+- Fix: Only fetch loans on app start, instead updating our internal store whenever we perform a successful mutation like borrowing a book.
 - Fix: Sort My Books by loan date. Open Access content is displayed at the end (bottom).
 - Fix: Prevent the current book from appearing in recommendations on book page
 

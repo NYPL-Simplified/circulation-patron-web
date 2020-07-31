@@ -3,7 +3,6 @@ import {
   render,
   fixtures,
   actions,
-  waitFor,
   waitForElementToBeRemoved
 } from "test-utils";
 import { mergeBook } from "test-utils/fixtures";
@@ -163,7 +162,7 @@ describe("available to borrow", () => {
     expect(borrowButton).toHaveAttribute("disabled", "");
   });
 
-  test("calls fetch loans after borrowing", async () => {
+  test("doesn't refetch loans after borrowing", async () => {
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
     const _updateBookSpy = jest
       .spyOn(actions, "updateBook")
@@ -182,7 +181,7 @@ describe("available to borrow", () => {
     userEvent.click(utils.getByText("Borrow"));
 
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
-    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 
   test("displays error message", () => {
@@ -268,7 +267,7 @@ describe("ready to borrow", () => {
     expect(borrowButton).toHaveAttribute("disabled", "");
   });
 
-  test("refetches loans after borrowing", async () => {
+  test("doesn't refetch loans after borrowing", async () => {
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
     const _updateBookSpy = jest
       .spyOn(actions, "updateBook")
@@ -286,7 +285,7 @@ describe("ready to borrow", () => {
     userEvent.click(utils.getByText("Borrow"));
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
-    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 
   test("displays error message", () => {
@@ -415,7 +414,7 @@ describe("available to reserve", () => {
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toHaveAttribute("disabled", "");
   });
-  test("refetches loans after reserving", async () => {
+  test("doesn't refetch loans after reserving", async () => {
     const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
     const _updateBookSpy = jest
       .spyOn(actions, "updateBook")
@@ -431,7 +430,7 @@ describe("available to reserve", () => {
       })
     });
     userEvent.click(utils.getByText("Reserve"));
-    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 });
 

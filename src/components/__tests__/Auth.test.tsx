@@ -9,7 +9,11 @@ import { AuthCredentials } from "opds-web-client/lib/interfaces";
 import userEvent from "@testing-library/user-event";
 
 const stateWithAuth: State = merge<State>(fixtures.initialState, {
-  auth: fixtures.unauthenticatedAuthState
+  auth: fixtures.unauthenticatedAuthState,
+  loans: {
+    url: "/loans-url",
+    books: []
+  }
 });
 
 afterEach(() => {
@@ -212,7 +216,5 @@ test("attempts to save auth credentials", async () => {
   expect(setCredentialsSpy).toHaveBeenCalledTimes(1);
   expect(setCredentialsSpy).toHaveBeenCalledWith(credentials);
   expect(fetchLoansSpy).toHaveBeenCalledTimes(1);
-  expect(fetchLoansSpy).toHaveBeenLastCalledWith(
-    "http://test-cm.com/catalogUrl/loans"
-  );
+  expect(fetchLoansSpy).toHaveBeenLastCalledWith("/loans-url");
 });

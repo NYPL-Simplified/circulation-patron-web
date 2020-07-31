@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, actions, waitFor } from "test-utils";
+import { render, fixtures, actions } from "test-utils";
 import merge from "deepmerge";
 import { BookListItem } from "components/BookList";
 import { State } from "opds-web-client/lib/state";
@@ -82,7 +82,7 @@ describe("available to borrow book", () => {
     ).toBeInTheDocument();
   });
 
-  test("shows loading state when borrowing, borrows, and refetches loans", async () => {
+  test("shows loading state when borrowing, borrows, and doesn't refetch loans", async () => {
     // mock the actions.updateBook
     const updateBookSpy = jest
       .spyOn(actions, "updateBook")
@@ -112,8 +112,8 @@ describe("available to borrow book", () => {
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
-    // we should refetch the loans after borrowing
-    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    // we only fetch loans on app start
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 
   test("displays error message", () => {
@@ -156,7 +156,7 @@ describe("ready to borrow book", () => {
     ).toBeInTheDocument();
   });
 
-  test("shows loading state when borrowing, borrows, and refetches loans", async () => {
+  test("shows loading state when borrowing, borrows, and doesn't refetch loans", async () => {
     // mock the actions.updateBook
     const updateBookSpy = jest
       .spyOn(actions, "updateBook")
@@ -186,8 +186,7 @@ describe("ready to borrow book", () => {
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
-    // we should refetch the loans after borrowing
-    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 
   test("displays error message", () => {
@@ -238,7 +237,7 @@ describe("available to reserve book", () => {
     expect(reserveButton).toBeInTheDocument();
   });
 
-  test("shows loading state when reserving, reserves, and refetches loans", async () => {
+  test("shows loading state when reserving, reserves, and doesn't refetch loans", async () => {
     // mock the actions.updateBook
     const updateBookSpy = jest
       .spyOn(actions, "updateBook")
@@ -268,8 +267,7 @@ describe("available to reserve book", () => {
     });
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toHaveAttribute("disabled", "");
-    // we should refetch the loans after borrowing
-    await waitFor(() => expect(fetchLoansSpy).toHaveBeenCalledTimes(1));
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 });
 

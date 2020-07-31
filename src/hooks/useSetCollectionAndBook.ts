@@ -1,7 +1,5 @@
 import * as React from "react";
 import { SetCollectionAndBook } from "../interfaces";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
-import useAuth from "./useAuth";
 import { useRouter } from "next/router";
 import useLinkUtils from "../components/context/LinkUtilsContext";
 
@@ -18,25 +16,15 @@ const useSetCollectionAndBook = (
 ) => {
   const { bookUrl, collectionUrl } = useRouter().query;
   const finalCollectionUrl = collectionUrlOverride ?? collectionUrl;
-  const { actions, dispatch } = useActions();
-  const { isSignedIn } = useAuth();
   const { urlShortener } = useLinkUtils();
 
   const fullCollectionUrl = decodeURIComponent(
     urlShortener.expandCollectionUrl(finalCollectionUrl)
   );
   const fullBookUrl = urlShortener.expandBookUrl(bookUrl);
-  // set the collection and book whenever the urls change, and fetch loans
+  // set the collection and book whenever the urls change
   React.useEffect(() => {
-    setCollectionAndBook(fullCollectionUrl, fullBookUrl).then(
-      ({ collectionData }) => {
-        // then fetch the loans (like in OPDS root)
-        // but only if you are already signed in. Otherwise you don't need them at this point
-        if (collectionData?.shelfUrl && isSignedIn) {
-          dispatch(actions.fetchLoans(collectionData.shelfUrl));
-        }
-      }
-    );
+    setCollectionAndBook(fullCollectionUrl, fullBookUrl);
     /**
      * We will explicitly not have exhaustive deps here because
      * setCollectionAndBook changes identity on every render, which
