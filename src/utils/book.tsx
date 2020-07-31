@@ -5,11 +5,11 @@ import {
   BookMedium,
   MediaLink
 } from "opds-web-client/lib/interfaces";
-import { isPlatoformCompatible } from "opds-web-client/lib/utils/book";
 import { BookFulfillmentState } from "interfaces";
 
 import { Book, Headset } from "../icons";
 import { getMedium } from "opds-web-client/lib/utils/book";
+import { fixMimeType } from "opds-web-client/lib/hooks/useDownloadButton";
 
 export function getAuthors(book: BookData, lim?: number): string[] {
   // select contributors if the authors array is undefined or empty.
@@ -52,6 +52,13 @@ export function dedupeLinks<T extends MediaLink>(links: T[]) {
 
     return isDup ? uniqueArr : [...uniqueArr, current];
   }, []);
+}
+
+const isMac = navigator.platform.indexOf("Mac") > -1;
+export function linkIsPlatformCompatible<T extends MediaLink>(link: T) {
+  if (isMac && fixMimeType(link.type) === "application/vnd.adobe.adept+xml")
+    return false;
+  return true;
 }
 
 export function filterPlatformIncompatibleLinks<T extends MediaLink>(
