@@ -10,6 +10,7 @@ import { BookFulfillmentState } from "interfaces";
 import { Book, Headset } from "../icons";
 import { getMedium } from "opds-web-client/lib/utils/book";
 import { fixMimeType } from "opds-web-client/lib/hooks/useDownloadButton";
+import { IS_SERVER } from "./env";
 
 export function getAuthors(book: BookData, lim?: number): string[] {
   // select contributors if the authors array is undefined or empty.
@@ -54,7 +55,9 @@ export function dedupeLinks<T extends MediaLink>(links: T[]) {
   }, []);
 }
 
-const isMac = navigator.platform.indexOf("Mac") > -1;
+const isMac = IS_SERVER
+  ? false
+  : navigator && navigator.platform.indexOf("Mac") > -1;
 export function linkIsPlatformCompatible<T extends MediaLink>(link: T) {
   if (isMac && fixMimeType(link.type) === "application/vnd.adobe.adept+xml")
     return false;
@@ -64,7 +67,7 @@ export function linkIsPlatformCompatible<T extends MediaLink>(link: T) {
 export function filterPlatformIncompatibleLinks<T extends MediaLink>(
   links: T[]
 ) {
-  return links.filter(isPlatoformCompatible(link.type));
+  return links.filter(linkIsPlatformCompatible);
 }
 
 function hasBorrowRelation(book: BookData) {
