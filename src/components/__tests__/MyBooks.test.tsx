@@ -57,13 +57,17 @@ test("sign out clears state and goes home", () => {
   const signOut = utils.getByText("Sign Out");
   fireEvent.click(signOut);
 
+  // now click the confirm
+  const reallySignOut = utils.getByLabelText("Confirm Sign Out");
+  fireEvent.click(reallySignOut);
+
   expect(mockPush).toHaveBeenCalledTimes(1);
   expect(mockPush).toHaveBeenCalledWith("/", undefined);
 
   expect(utils.store.getState().auth.credentials).toBeFalsy();
   /**
    * even though the location shows home, we should still be able to assert on the MyBooks
-   * because we are rendering it no matter what route we are on
+   * because we are rendering it no matter what route we are on (in testing)
    */
   expect(
     utils.getByText("You need to be signed in to view this page.")
