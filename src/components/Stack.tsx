@@ -5,15 +5,18 @@ import * as React from "react";
 type StackProps = {
   direction?: "row" | "column";
   spacing?: number | string;
+  className?: string;
 };
 const Stack: React.FC<StackProps> = ({
   direction = "row",
   spacing = 2,
   children,
+  className,
   ...rest
 }) => {
   return (
     <div
+      className={className}
       sx={{
         display: "flex",
         flexDirection: direction,
