@@ -19,6 +19,21 @@ import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
 import { BookData } from "opds-web-client/lib/interfaces";
 import PageTitle from "./PageTitle";
+import SignOut from "./SignOut";
+
+const availableUntil = (book: BookData) =>
+  book.availability?.until ? new Date(book.availability.until) : "NaN";
+
+function sortBooksByLoanExpirationDate(books: BookData[]) {
+  return books.sort((a, b) => {
+    const aDate = availableUntil(a);
+    const bDate = availableUntil(b);
+    if (typeof aDate === "string") return 1;
+    if (typeof bDate === "string") return -1;
+    if (aDate <= bDate) return -1;
+    return 1;
+  });
+}
 
 export const MyBooks: React.FC<{
   setCollectionAndBook: SetCollectionAndBook;
@@ -35,6 +50,8 @@ export const MyBooks: React.FC<{
     collection.data.books.length > 0 &&
     collection.data.books;
 
+  const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
+
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
       <Head>
@@ -47,7 +64,7 @@ export const MyBooks: React.FC<{
       ) : !isSignedIn ? (
         <Unauthorized />
       ) : books ? (
-        <LoansContent books={books} />
+        <LoansContent books={sortedBooks} />
       ) : (
         <Empty />
       )}
@@ -56,16 +73,9 @@ export const MyBooks: React.FC<{
 };
 
 const LoansContent: React.FC<{ books: BookData[] }> = ({ books }) => {
-  const { signOutAndGoHome } = useAuth();
-
-  const signOutButton = (
-    <Button aria-label="Sign out and go home" onClick={signOutAndGoHome}>
-      Sign out
-    </Button>
-  );
   return (
     <React.Fragment>
-      <ListView books={books} breadcrumb={signOutButton} />
+      <ListView books={books} />
     </React.Fragment>
   );
 };
@@ -90,8 +100,6 @@ const Unauthorized = () => {
 };
 
 const Empty = () => {
-  const { signOutAndGoHome } = useAuth();
-
   return (
     <>
       <div
@@ -106,7 +114,7 @@ const Empty = () => {
         <H3>
           Your books will show up here when you have any loaned or on hold.
         </H3>
-        <Button onClick={signOutAndGoHome}>Sign Out</Button>
+        <SignOut />
       </div>
     </>
   );
