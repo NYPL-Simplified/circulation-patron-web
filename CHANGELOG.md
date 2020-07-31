@@ -1,16 +1,18 @@
 ## CHANGELOG
 
 # 2.3.0
+
 - Feature: Add support for SAML auth providers.
-- Feature: Add `NEXT_PUBLIC_COMPANION_APP` env var (in PR #97) to toggle the display of SimplyE branding. Value can be either `"simplye"` or `"openebooks"`. 
+- Feature: Add `NEXT_PUBLIC_COMPANION_APP` env var (in PR #97) to toggle the display of SimplyE branding. Value can be either `"simplye"` or `"openebooks"`.
 - Fix: Don't show search bar if collection does not include search data.
 - Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
 - Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
+- Fix: Prevent the current book from appearing in recommendations on book page
 
 ## 2.2.1
 
 - Fix: Only show download options for open-access books once they have been borrowed and are present in a user's loans. Download options should still be shown for open-access books in libraries that do not have any auth enabled.
-- Fix: Don't perform state update on unmounted `BorrowCard`. 
+- Fix: Don't perform state update on unmounted `BorrowCard`.
 - Refactor: Rename `node` in tests to `utils`, as it is more accurate.
 - Fix: Don't show download options for audiobooks since there is no way to play them on desktop. Only show SimplyE callout instead.
 - Fix: Update `opds-web-client` dependency to fix browser caching of unwanted Authorization headers.
