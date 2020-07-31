@@ -14,8 +14,8 @@ function useAuth() {
   const router = useRouter();
   const authState = useTypedSelector(state => state.auth);
   const isSignedIn = !!authState?.credentials;
-  const { fetcher, actions, dispatch } = useActions();
-  const { buildMultiLibraryLink, urlShortener } = useLinkUtils();
+  const { actions, dispatch } = useActions();
+  const { buildMultiLibraryLink } = useLinkUtils();
   const signOut = () => dispatch(actions.clearAuthCredentials());
   const signOutAndGoHome = () => {
     signOut();
@@ -23,27 +23,10 @@ function useAuth() {
     router.push(link.href, link.as);
   };
 
-  const loansUrl = decodeURIComponent(
-    urlShortener.expandCollectionUrl("loans")
-  );
-  const signIn = () => dispatch(actions.fetchLoans(loansUrl));
-  /**
-   * On mount, we need to check for auth data in cookies. This used
-   * to be done in componentWillMount of Root in OPDS.
-   *
-   * @TODO we need to change this so that it's loading using lookForCredentials
-   */
-  React.useEffect(() => {
-    // get the credentials
-    const credentials = fetcher.getAuthCredentials();
-    // save the credentials if they exist
-    if (credentials) {
-      dispatch(actions.saveAuthCredentials(credentials));
-      dispatch(actions.fetchLoans(loansUrl));
-    }
-  }, [dispatch, actions, fetcher, loansUrl]);
+  const loansUrl = useTypedSelector(state => state.loans.url);
+  const signIn = () => loansUrl && dispatch(actions.fetchLoans(loansUrl));
 
-  /**
+  /*
    * We need to set SAML credentials whenenever they are available in a
    * query param
    */

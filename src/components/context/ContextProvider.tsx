@@ -40,8 +40,14 @@ const AppContextProvider: React.FC<ProviderProps> = ({
   const libraryId = library.id;
   const urlShortener = new UrlShortener(library.catalogUrl, shortenUrls);
   const pathFor: PathFor = getPathFor(urlShortener, libraryId);
-  const computedFetcher = fetcher ?? new DataFetcher({ adapter });
-  const computedActions = actions ?? new ActionsCreator(computedFetcher);
+  const computedFetcher = React.useMemo(
+    () => fetcher ?? new DataFetcher({ adapter }),
+    [fetcher]
+  );
+  const computedActions = React.useMemo(
+    () => actions ?? new ActionsCreator(computedFetcher),
+    [actions, computedFetcher]
+  );
 
   return (
     <ReakitProvider>

@@ -10,7 +10,6 @@ export default function useBorrow(book: BookData) {
   const bookError = useTypedSelector(state => state.book?.error);
   const errorMsg = getErrorMsg(bookError);
   const { actions, dispatch } = useActions();
-  const loansUrl = useTypedSelector(state => state.loans.url);
 
   const borrowOrReserve = async () => {
     if (book.borrowUrl) {
@@ -19,10 +18,6 @@ export default function useBorrow(book: BookData) {
       if (!isUnmounted.current) setLoading(false);
     } else {
       throw Error("No borrow url present for book");
-    }
-    // refetch the loans
-    if (loansUrl) {
-      await dispatch(actions.fetchLoans(loansUrl));
     }
   };
 
