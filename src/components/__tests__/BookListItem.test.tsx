@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, actions, waitFor } from "test-utils";
+import { render, fixtures, actions } from "test-utils";
 import merge from "deepmerge";
 import { BookListItem } from "components/BookList";
 import { State } from "opds-web-client/lib/state";

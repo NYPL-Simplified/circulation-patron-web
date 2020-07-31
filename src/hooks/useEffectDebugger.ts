@@ -1,3 +1,4 @@
+import { IS_DEVELOPMENT } from "./../utils/env";
 import * as React from "react";
 
 const usePrevious = (value, initialValue) => {
@@ -9,6 +10,11 @@ const usePrevious = (value, initialValue) => {
 };
 
 const useEffectDebugger = (effectHook, dependencies, dependencyNames = []) => {
+  if (!IS_DEVELOPMENT)
+    throw new Error(
+      "useEffectDebugger only to be used in development. Please revert to using React.useEffect."
+    );
+
   const previousDeps = usePrevious(dependencies, []);
 
   const changedDeps = dependencies.reduce((accum, dependency, index) => {
@@ -30,6 +36,8 @@ const useEffectDebugger = (effectHook, dependencies, dependencyNames = []) => {
     console.log("[use-effect-debugger] ", changedDeps);
   }
 
+  // ignore the react hook warning bc this is only to be used in development
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(effectHook, dependencies);
 };
 

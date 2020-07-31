@@ -3,7 +3,6 @@ import {
   render,
   fixtures,
   actions,
-  waitFor,
   waitForElementToBeRemoved
 } from "test-utils";
 import { mergeBook } from "test-utils/fixtures";
