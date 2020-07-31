@@ -55,10 +55,12 @@ export function dedupeLinks<T extends MediaLink>(links: T[]) {
   }, []);
 }
 
-const isMac = IS_SERVER
-  ? false
-  : navigator && navigator.platform.indexOf("Mac") > -1;
 export function linkIsPlatformCompatible<T extends MediaLink>(link: T) {
+  const isMac = IS_SERVER
+    ? false
+    : window &&
+      window.navigator &&
+      window.navigator.platform.indexOf("Mac") > -1;
   if (isMac && fixMimeType(link.type) === "application/vnd.adobe.adept+xml")
     return false;
   return true;

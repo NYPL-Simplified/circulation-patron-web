@@ -242,7 +242,7 @@ const DownloadCard: React.FC<{
     dedupeLinks(links ?? [])
   );
   const isAudiobook = bookIsAudiobook(book);
-
+  console.log(filteredLinks);
   return (
     <>
       <Stack sx={{ alignItems: "center" }}>

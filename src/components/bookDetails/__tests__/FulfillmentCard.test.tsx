@@ -525,6 +525,56 @@ describe("available to download", () => {
     expect(PDFButton).toBeInTheDocument();
   });
 
+  const platformGetter = jest.spyOn(window.navigator, "platform", "get");
+
+  test("doesn't show ACSM books on Mac", () => {
+    const acsmBook = mergeBook({
+      openAccessLinks: undefined,
+      fulfillmentLinks: [
+        {
+          url: "/epub-link",
+          type: "application/vnd.adobe.adept+xml",
+          indirectType: "indirect"
+        }
+      ],
+      availability: {
+        status: "available",
+        until: "2020-06-18"
+      }
+    });
+    platformGetter.mockReturnValue("MacIntel");
+    const utils = render(<FulfillmentCard book={acsmBook} />);
+
+    expect(
+      utils.queryByText(/If you would rather read on your computer, you can:/)
+    ).not.toBeInTheDocument();
+    expect(utils.queryByText(/download acsm/i)).not.toBeInTheDocument();
+  });
+
+  test("shows ACSM books on all other platforms", () => {
+    const acsmBook = mergeBook({
+      openAccessLinks: undefined,
+      fulfillmentLinks: [
+        {
+          url: "/epub-link",
+          type: "application/vnd.adobe.adept+xml",
+          indirectType: "indirect"
+        }
+      ],
+      availability: {
+        status: "available",
+        until: "2020-06-18"
+      }
+    });
+    platformGetter.mockReturnValue("Win");
+    const utils = render(<FulfillmentCard book={acsmBook} />);
+
+    expect(
+      utils.getByText(/If you would rather read on your computer, you can:/)
+    ).toBeInTheDocument();
+    expect(utils.getByText(/download acsm/i)).toBeInTheDocument();
+  });
+
   test("download button calls fulfillBook", () => {
     const fulfillBookSpy = jest.spyOn(actions, "fulfillBook");
 
