@@ -57,13 +57,17 @@ test("sign out clears state and goes home", () => {
   const signOut = utils.getByText("Sign Out");
   fireEvent.click(signOut);
 
+  // now click the confirm
+  const reallySignOut = utils.getByLabelText("Confirm Sign Out");
+  fireEvent.click(reallySignOut);
+
   expect(mockPush).toHaveBeenCalledTimes(1);
   expect(mockPush).toHaveBeenCalledWith("/", undefined);
 
   expect(utils.store.getState().auth.credentials).toBeFalsy();
   /**
    * even though the location shows home, we should still be able to assert on the MyBooks
-   * because we are rendering it no matter what route we are on
+   * because we are rendering it no matter what route we are on (in testing)
    */
   expect(
     utils.getByText("You need to be signed in to view this page.")
@@ -76,7 +80,23 @@ const withAuthAndBooks: State = merge(fixtures.initialState, {
   },
   collection: {
     data: {
-      books: fixtures.makeBooks(10)
+      books: [
+        ...fixtures.makeBooks(10),
+        fixtures.mergeBook({
+          title: "Book Title 10",
+          availability: {
+            until: "Jan 2 2020",
+            status: "available"
+          }
+        }),
+        fixtures.mergeBook({
+          title: "Book Title 11",
+          availability: {
+            until: "Jan 1 2020",
+            status: "available"
+          }
+        })
+      ]
     }
   }
 });
@@ -103,6 +123,17 @@ test("displays books when signed in with data", () => {
   expect(
     utils.getByText(fixtures.makeBook(0).authors.join(", "))
   ).toBeInTheDocument();
+});
+
+test("sorts books", () => {
+  const utils = render(
+    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
+    { initialState: withAuthAndBooks }
+  );
+  const bookNames = utils.queryAllByText(/Book Title/);
+  expect(bookNames[0]).toHaveTextContent("Book Title 11");
+  expect(bookNames[1]).toHaveTextContent("Book Title 10");
+  expect(bookNames[2]).toHaveTextContent("Book Title 0");
 });
 
 test("sets collection and book", () => {

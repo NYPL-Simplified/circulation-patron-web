@@ -9,6 +9,8 @@ type ModalProps = {
   hide?: () => void;
   label?: string;
   className?: string;
+  hideOnClickOutside?: boolean;
+  role?: string;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -17,7 +19,9 @@ const Modal: React.FC<ModalProps> = ({
   hide,
   children,
   label,
-  className
+  className,
+  hideOnClickOutside,
+  role
 }) => {
   return (
     <DialogBackdrop
@@ -38,9 +42,11 @@ const Modal: React.FC<ModalProps> = ({
     >
       <Dialog
         {...dialog}
+        role={role}
         visible={isVisible}
-        hide={hide}
+        hide={hide ?? dialog.hide}
         className={className}
+        hideOnClickOutside={hideOnClickOutside}
         sx={{
           background: "white",
           borderRadius: 2,
