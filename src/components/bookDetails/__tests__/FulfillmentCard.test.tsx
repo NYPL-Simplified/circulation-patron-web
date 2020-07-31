@@ -156,8 +156,8 @@ describe("available to borrow", () => {
       })
     });
 
-    const borrowButton = await utils.findByRole("button", {
-      name: /Borrowing.../
+    const borrowButton = await utils.getByRole("button", {
+      name: /Borrow/i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -261,8 +261,8 @@ describe("ready to borrow", () => {
       })
     });
 
-    const borrowButton = await utils.findByRole("button", {
-      name: /Borrowing.../i
+    const borrowButton = await utils.getByRole("button", {
+      name: /Borrow/i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -411,8 +411,8 @@ describe("available to reserve", () => {
         }
       })
     });
-    const reserveButton = await utils.findByRole("button", {
-      name: /Reserving.../i
+    const reserveButton = await utils.getByRole("button", {
+      name: /Reserve/i
     });
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toHaveAttribute("disabled", "");
