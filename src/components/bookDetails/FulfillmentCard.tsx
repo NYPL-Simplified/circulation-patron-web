@@ -271,7 +271,12 @@ const DownloadButton: React.FC<{
   link: FulfillmentLink | MediaLink;
   title: string;
 }> = ({ link, title }) => {
-  const { fulfill, downloadLabel } = useDownloadButton(link, title);
+  const { fulfill, downloadLabel, isPlatformCompatible } = useDownloadButton(
+    link,
+    title
+  );
+
+  if (!isPlatformCompatible) return null;
   return (
     <Button
       onClick={fulfill}
