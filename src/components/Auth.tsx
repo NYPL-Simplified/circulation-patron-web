@@ -36,7 +36,6 @@ const Auth: React.FC = ({ children }) => {
       dispatch(
         actions.saveAuthCredentials({ provider: currentProvider, credentials })
       );
-      console.log("got here", loansUrl);
       if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
     }
   }, [currentProvider, credentials, loansUrl, actions, dispatch]);
