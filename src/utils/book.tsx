@@ -5,6 +5,7 @@ import {
   BookMedium,
   MediaLink
 } from "opds-web-client/lib/interfaces";
+import { isPlatoformCompatible } from "opds-web-client/lib/utils/book";
 import { BookFulfillmentState } from "interfaces";
 
 import { Book, Headset } from "../icons";
@@ -51,6 +52,12 @@ export function dedupeLinks<T extends MediaLink>(links: T[]) {
 
     return isDup ? uniqueArr : [...uniqueArr, current];
   }, []);
+}
+
+export function filterPlatformIncompatibleLinks<T extends MediaLink>(
+  links: T[]
+) {
+  return links.filter(isPlatoformCompatible(link.type));
 }
 
 function hasBorrowRelation(book: BookData) {

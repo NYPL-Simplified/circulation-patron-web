@@ -6,7 +6,8 @@ import {
   dedupeLinks,
   availabilityString,
   queueString,
-  bookIsAudiobook
+  bookIsAudiobook,
+  filterPlatformIncompatibleLinks
 } from "utils/book";
 import {
   BookData,
@@ -237,7 +238,9 @@ const DownloadCard: React.FC<{
   subtitle: string;
 }> = ({ book, links, subtitle }) => {
   const { title } = book;
-  const dedupedLinks = dedupeLinks(links ?? []);
+  const filteredLinks = filterPlatformIncompatibleLinks(
+    dedupeLinks(links ?? [])
+  );
   const isAudiobook = bookIsAudiobook(book);
 
   return (
@@ -251,13 +254,13 @@ const DownloadCard: React.FC<{
           <Text>{subtitle}</Text>
         </Stack>
       </Stack>
-      {!isAudiobook && (
+      {!isAudiobook && filteredLinks.length > 0 && (
         <Stack direction="column" sx={{ mt: 3 }}>
           <Text variant="text.body.italic" sx={{ textAlign: "center" }}>
             If you would rather read on your computer, you can:
           </Text>
           <Stack sx={{ justifyContent: "center", flexWrap: "wrap" }}>
-            {dedupedLinks.map(link => (
+            {filteredLinks.map(link => (
               <DownloadButton key={link.url} link={link} title={title} />
             ))}
           </Stack>
@@ -271,12 +274,7 @@ const DownloadButton: React.FC<{
   link: FulfillmentLink | MediaLink;
   title: string;
 }> = ({ link, title }) => {
-  const { fulfill, downloadLabel, isPlatformCompatible } = useDownloadButton(
-    link,
-    title
-  );
-
-  if (!isPlatformCompatible) return null;
+  const { fulfill, downloadLabel } = useDownloadButton(link, title);
   return (
     <Button
       onClick={fulfill}
