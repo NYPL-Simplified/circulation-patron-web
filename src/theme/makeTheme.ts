@@ -4,8 +4,8 @@ import theme from "./theme";
  */
 
 export default function makeCustomTheme(colors?: {
-  primary: string;
-  secondary: string;
+  primary?: string;
+  secondary?: string;
 }): typeof theme {
   return {
     ...theme,

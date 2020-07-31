@@ -15,9 +15,9 @@ export interface AuthDocument {
   title: string;
   links: Link[];
   // eslint-disable-next-line camelcase
-  web_color_scheme: {
-    primary: string;
-    secondary: string;
+  web_color_scheme?: {
+    primary?: string;
+    secondary?: string;
   };
 }
 
