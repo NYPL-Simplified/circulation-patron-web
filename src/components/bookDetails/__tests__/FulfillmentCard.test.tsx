@@ -410,7 +410,7 @@ describe("available to reserve", () => {
         }
       })
     });
-    const reserveButton = await utils.getByRole("button", {
+    const reserveButton = utils.getByRole("button", {
       name: /Reserving.../i
     });
     expect(reserveButton).toBeInTheDocument();
