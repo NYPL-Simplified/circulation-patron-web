@@ -178,7 +178,6 @@ const BorrowOrReserve: React.FC<{
         loading={isLoading}
         loadingText={buttonLoadingText}
         aria-label={buttonLabel}
-        role="button"
       >
         <Text variant="text.body.bold">{buttonLabel}</Text>
       </Button>
@@ -284,13 +283,13 @@ const DownloadButton: React.FC<{
     link.type === "application/vnd.librarysimplified.axisnow+json";
 
   if (hasReaderLink) {
-    link.url = `/read/${encodeURIComponent(link.url)}`;
+    const readerLink = `/read/${encodeURIComponent(link.url)}`;
     return (
       <NavButton
         variant="ghost"
         color="ui.gray.extraDark"
         iconLeft={SvgExternalLink}
-        href={link.url}
+        href={readerLink}
       >
         {downloadLabel}
       </NavButton>
@@ -303,7 +302,6 @@ const DownloadButton: React.FC<{
         color="ui.gray.extraDark"
         iconLeft={SvgDownload}
         aria-label={downloadLabel}
-        role="button"
       >
         {downloadLabel}
       </Button>
