@@ -155,7 +155,7 @@ describe("available to borrow", () => {
       })
     });
 
-    const borrowButton = await utils.getByRole("button", {
+    const borrowButton = await utils.findByRole("button", {
       name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();

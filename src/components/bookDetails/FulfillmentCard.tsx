@@ -177,7 +177,6 @@ const BorrowOrReserve: React.FC<{
         onClick={borrowOrReserve}
         loading={isLoading}
         loadingText={buttonLoadingText}
-        aria-label={buttonLabel}
       >
         <Text variant="text.body.bold">{buttonLabel}</Text>
       </Button>
@@ -301,7 +300,6 @@ const DownloadButton: React.FC<{
         variant="ghost"
         color="ui.gray.extraDark"
         iconLeft={SvgDownload}
-        aria-label={downloadLabel}
       >
         {downloadLabel}
       </Button>
