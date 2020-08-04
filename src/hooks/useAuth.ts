@@ -23,8 +23,27 @@ function useAuth() {
     router.push(link.href, link.as);
   };
 
-  const loansUrl = useTypedSelector(state => state.loans.url);
-  const signIn = () => loansUrl && dispatch(actions.fetchLoans(loansUrl));
+  const loansUrl = useTypedSelector(state => {
+    return state.loans.url;
+  });
+
+  const authTitle = useTypedSelector(state => state.auth.title) || "";
+
+  const noop = () => ({});
+
+  const authCallback = useTypedSelector(state => state.auth.callback) || noop;
+
+  const authCancel = useTypedSelector(state => state.auth.cancel) || noop;
+
+  const authProviders = useTypedSelector(state => state.auth.providers) || [];
+
+  const signIn = () =>
+    loansUrl &&
+    authProviders &&
+    dispatch(
+      actions.showAuthForm(authCallback, authCancel, authProviders, authTitle)
+    ) &&
+    dispatch(actions.fetchLoans(loansUrl));
 
   /*
    * We need to set SAML credentials whenenever they are available in a
