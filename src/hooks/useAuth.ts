@@ -27,21 +27,22 @@ function useAuth() {
     return state.loans.url;
   });
 
-  const authTitle = useTypedSelector(state => state.auth.title) || "";
+  const auth = useTypedSelector(state => state.auth);
 
   const noop = () => ({});
 
-  const authCallback = useTypedSelector(state => state.auth.callback) || noop;
-
-  const authCancel = useTypedSelector(state => state.auth.cancel) || noop;
-
-  const authProviders = useTypedSelector(state => state.auth.providers) || [];
+  const { title, callback, cancel, providers } = auth;
 
   const signIn = () =>
     loansUrl &&
-    authProviders &&
+    providers &&
     dispatch(
-      actions.showAuthForm(authCallback, authCancel, authProviders, authTitle)
+      actions.showAuthForm(
+        callback || noop,
+        cancel || noop,
+        providers,
+        title || ""
+      )
     ) &&
     dispatch(actions.fetchLoans(loansUrl));
 
