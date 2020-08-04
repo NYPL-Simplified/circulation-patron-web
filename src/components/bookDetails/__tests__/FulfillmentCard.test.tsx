@@ -476,6 +476,8 @@ describe("reserved", () => {
 });
 
 describe("available to download", () => {
+  beforeEach(() => ((env.NEXT_PUBLIC_COMPANION_APP as string) = "simplye"));
+
   const downloadableBook = mergeBook({
     openAccessLinks: undefined,
     fulfillmentLinks: [
