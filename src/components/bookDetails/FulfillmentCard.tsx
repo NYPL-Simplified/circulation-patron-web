@@ -24,6 +24,7 @@ import SvgExternalLink from "icons/ExternalOpen";
 import SvgDownload from "icons/Download";
 import SvgPhone from "icons/Phone";
 import useIsBorrowed from "hooks/useIsBorrowed";
+import { NEXT_PUBLIC_COMPANION_APP } from "../../utils/env";
 
 const FulfillmentCard: React.FC<{ book: BookData }> = ({ book }) => {
   return (
@@ -240,13 +241,16 @@ const AccessCard: React.FC<{
   const { title } = book;
   const dedupedLinks = dedupeLinks(links ?? []);
   const isAudiobook = bookIsAudiobook(book);
+  const companionApp =
+    NEXT_PUBLIC_COMPANION_APP === "openebooks" ? "Open eBooks" : "SimplyE";
+
   return (
     <>
       <Stack sx={{ alignItems: "center" }}>
         <SvgPhone sx={{ fontSize: 64 }} />
         <Stack direction="column">
           <Text variant="text.callouts.bold">
-            You&apos;re ready to read this book in SimplyE!
+            You&apos;re ready to read this book in {companionApp}!
           </Text>
           <Text>{subtitle}</Text>
         </Stack>
