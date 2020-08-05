@@ -85,6 +85,8 @@ const Auth: React.FC = ({ children }) => {
           )}
           {authProvider && authProvider.plugin.formComponent ? (
             <authProvider.plugin.formComponent provider={authProvider} />
+          ) : authProvider && authProvider.plugin.buttonComponent ? (
+            <authProvider.plugin.buttonComponent provider={authProvider} />
           ) : (
             "There is no Auth Plugin configured for the selected Auth Provider."
           )}

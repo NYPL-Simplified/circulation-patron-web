@@ -1,6 +1,7 @@
 import * as React from "react";
-import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
+import { AuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthButtonProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
+import Button from "components/Button";
 
 export interface AuthLink {
   rel: string;
@@ -21,22 +22,26 @@ export default class CleverButton extends React.Component<
     console.log("provider?", this.props.provider);
     for (const link of this.props?.provider?.method.links || []) {
       if (link.rel === "authenticate") {
+        console.log("auth", link.href);
         authUrl =
           link.href +
           "&redirect_uri=" +
           encodeURIComponent(encodeURIComponent(currentUrl));
+
+        console.log("after", authUrl);
         break;
       }
     }
 
-    authUrl = "https://www.google.com";
     return authUrl ? (
-      <a
-        href={authUrl}
-        className="clever-button"
-        aria-label="log in with clever"
-      >
-        logged
+      <a href={authUrl}>
+        <Button
+          type="submit"
+          sx={{ alignSelf: "flex-end", m: 2, mr: 0, flex: "1 0 auto" }}
+          aria-label="log in with clever"
+        >
+          Log In With Clever
+        </Button>
       </a>
     ) : null;
   }
