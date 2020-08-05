@@ -19,9 +19,12 @@ import useTypedSelector from "hooks/useTypedSelector";
  */
 const Auth: React.FC = ({ children }) => {
   const { showForm, cancel, providers } = useAuth();
+
+  console.log("providers", providers);
   const dialog = useDialogState();
   const library = useLibraryContext();
   const [authProvider, setAuthProvider] = React.useState(providers?.[0]);
+
   const { fetcher, actions, dispatch } = useActions();
 
   /**

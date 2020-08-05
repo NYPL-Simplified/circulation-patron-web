@@ -15,6 +15,7 @@ import ActionsCreator from "opds-web-client/lib/actions";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import basicAuthPlugin from "auth/basicAuthPlugin";
 import samlAuthPlugin from "auth/samlAuthPlugin";
+import CleverAuthPlugin from "auth/cleverAuthPlugin";
 import getPathFor from "utils/getPathFor";
 import { LinkUtilsProvider } from "./LinkUtilsContext";
 
@@ -56,7 +57,7 @@ const AppContextProvider: React.FC<ProviderProps> = ({
           <OPDSStore
             initialState={initialState}
             store={store}
-            authPlugins={[basicAuthPlugin, samlAuthPlugin]}
+            authPlugins={[basicAuthPlugin, samlAuthPlugin, CleverAuthPlugin]}
           >
             <RecommendationsProvider>
               <ActionsProvider

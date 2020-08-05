@@ -23,7 +23,10 @@ function useAuth() {
     router.push(link.href, link.as);
   };
 
-  const loansUrl = useTypedSelector(state => state.loans.url);
+  const loansUrl = useTypedSelector(state => {
+    console.log(state);
+    return state.loans.url;
+  });
   const signIn = () => loansUrl && dispatch(actions.fetchLoans(loansUrl));
 
   /*
