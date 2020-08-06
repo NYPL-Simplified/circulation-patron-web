@@ -14,6 +14,8 @@ import { State } from "opds-web-client/lib/state";
 import * as useBorrow from "hooks/useBorrow";
 import _download from "opds-web-client/lib/components/download";
 
+import * as env from "../../../utils/env";
+
 jest.mock("opds-web-client/lib/components/download");
 window.open = jest.fn();
 
@@ -474,6 +476,8 @@ describe("reserved", () => {
 });
 
 describe("available to download", () => {
+  beforeEach(() => ((env.NEXT_PUBLIC_COMPANION_APP as string) = "simplye"));
+
   const downloadableBook = mergeBook({
     openAccessLinks: undefined,
     fulfillmentLinks: [
@@ -500,6 +504,17 @@ describe("available to download", () => {
       utils.getByText("You have this book on loan until Thu Jun 18 2020.")
     ).toBeInTheDocument();
     expect(utils.getByText("You're ready to read this book in SimplyE!"));
+  });
+
+  test("correct title and subtitle when COMPANION_APP is set to openebooks", () => {
+    (env.NEXT_PUBLIC_COMPANION_APP as string) = "openebooks";
+    const utils = render(<FulfillmentCard book={downloadableBook} />);
+    expect(
+      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
+    ).toBeInTheDocument();
+    expect(
+      utils.getByText("You're ready to read this book in Open eBooks!")
+    ).toBeInTheDocument();
   });
 
   test("handles lack of availability info", () => {
