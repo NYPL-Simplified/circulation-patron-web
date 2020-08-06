@@ -24,7 +24,6 @@ function useAuth() {
   };
 
   const loansUrl = useTypedSelector(state => {
-    console.log(state);
     return state.loans.url;
   });
   const signIn = () => loansUrl && dispatch(actions.fetchLoans(loansUrl));

@@ -10,8 +10,6 @@ import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
-import CleverButton from "./cleverAuthButton";
-
 type FormData = {
   login: string;
   password: string;
@@ -72,7 +70,7 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
           errors[passwordInputName] && `Your ${passwordInputName} is required.`
         }
       />
-      <CleverButton />
+
       <Button
         type="submit"
         sx={{ alignSelf: "flex-end", m: 2, mr: 0, flex: "1 0 auto" }}
