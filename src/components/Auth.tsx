@@ -20,7 +20,6 @@ import useTypedSelector from "hooks/useTypedSelector";
 const Auth: React.FC = ({ children }) => {
   const { showForm, cancel, providers } = useAuth();
 
-  console.log("providers", providers);
   const dialog = useDialogState();
   const library = useLibraryContext();
   const [authProvider, setAuthProvider] = React.useState(providers?.[0]);
@@ -85,7 +84,9 @@ const Auth: React.FC = ({ children }) => {
           )}
           {authProvider && authProvider.plugin.formComponent ? (
             <authProvider.plugin.formComponent provider={authProvider} />
-          ) : authProvider && authProvider.plugin.buttonComponent ? (
+          ) : authProvider &&
+            authProvider.plugin.buttonComponent &&
+            authProvider.method.description === "Clever" ? (
             <authProvider.plugin.buttonComponent provider={authProvider} />
           ) : (
             "There is no Auth Plugin configured for the selected Auth Provider."

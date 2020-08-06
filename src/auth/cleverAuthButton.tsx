@@ -19,16 +19,14 @@ export default class CleverButton extends React.Component<
   render() {
     const currentUrl = window.location.origin + window.location.pathname;
     let authUrl;
-    console.log("provider?", this.props.provider);
+
     for (const link of this.props?.provider?.method.links || []) {
       if (link.rel === "authenticate") {
-        console.log("auth", link.href);
         authUrl =
           link.href +
           "&redirect_uri=" +
           encodeURIComponent(encodeURIComponent(currentUrl));
 
-        console.log("after", authUrl);
         break;
       }
     }
