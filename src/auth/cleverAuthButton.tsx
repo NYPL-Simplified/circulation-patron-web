@@ -48,8 +48,7 @@ const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = props => {
           mr: 0,
           flex: "1 0 auto",
           color: "#ffffff",
-          backgroundColor: "#2f67aa",
-          backgroundImage: "url('./cleverLoginButton.png')"
+          backgroundColor: "#2f67aa"
         }}
         aria-label="log in with clever"
       >

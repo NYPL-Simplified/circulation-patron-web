@@ -3,12 +3,10 @@ import useTypedSelector from "./useTypedSelector";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { useRouter } from "next/router";
 import useLinkUtils from "components/context/LinkUtilsContext";
-import { access } from "fs";
+import { CleverAuthPlugin } from "../auth/cleverAuthPlugin";
 
 const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 
-const CLEVER_AUTH_TYPE =
-  "https://qa-circulation.openebooks.us/USOEI/authentication_document";
 /**
  * Will get auth data from cookies and make sure it's saved to redux
  * and will also provide auth data from the redux store, as well as
@@ -57,23 +55,39 @@ function useAuth() {
    */
   const { access_token: samlAccessToken } = router.query;
 
-  /* this hacky -- need a better way to differentiate between SAML and Clever access tokens  */
   const cleverAccessToken =
-    typeof window !== "undefined" ? window.location.hash.split("=")[0] : "";
+    typeof window !== "undefined" && CleverAuthPlugin.lookForCredentials();
 
   const accessToken = samlAccessToken || cleverAccessToken;
 
+  const { credentials: cleverCredentials } = cleverAccessToken || {
+    credentials: { credentials: "", provider: "" }
+  };
+
   React.useEffect(() => {
     if (accessToken) {
-      const credentials = `Bearer: ${accessToken}`;
+      const credentials = `Bearer: ${cleverAccessToken || samlAccessToken}`;
       dispatch(
         actions.saveAuthCredentials({
-          provider: cleverAccessToken ? CLEVER_AUTH_TYPE : SAML_AUTH_TYPE,
-          credentials: credentials
+          provider: cleverCredentials
+            ? cleverCredentials.provider
+            : SAML_AUTH_TYPE,
+          credentials: cleverCredentials
+            ? cleverCredentials.credentials
+            : credentials
         })
       );
     }
-  }, [accessToken, samlAccessToken, cleverAccessToken, dispatch, actions]);
+
+    window.location.hash = "";
+  }, [
+    accessToken,
+    samlAccessToken,
+    dispatch,
+    actions,
+    cleverAccessToken,
+    cleverCredentials
+  ]);
 
   return {
     isSignedIn,

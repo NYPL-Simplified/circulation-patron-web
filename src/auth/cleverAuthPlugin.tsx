@@ -1,7 +1,7 @@
 import AuthPlugin from "opds-web-client/lib/AuthPlugin";
 import CleverButton from "./cleverAuthButton";
 
-const CleverAuthPlugin: AuthPlugin = {
+export const CleverAuthPlugin: AuthPlugin = {
   type: "http://librarysimplified.org/authtype/OAuth-with-intermediary",
 
   lookForCredentials: () => {
@@ -21,7 +21,6 @@ const CleverAuthPlugin: AuthPlugin = {
             provider: "Clever",
             credentials: "Bearer " + accessToken
           };
-          window.location.hash = "";
           return { credentials };
         } else if (window.location.hash.indexOf(errorKey) !== -1) {
           const hash = window.location.hash;
