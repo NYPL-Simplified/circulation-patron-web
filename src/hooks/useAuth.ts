@@ -78,7 +78,7 @@ function useAuth() {
         })
       );
     }
-
+    /*clear access_token from URL after credentials are set */
     window.location.hash = "";
   }, [
     accessToken,
