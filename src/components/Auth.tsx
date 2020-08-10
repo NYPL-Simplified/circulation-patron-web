@@ -56,6 +56,15 @@ const Auth: React.FC = ({ children }) => {
 
   const hasMultipleProviders = providers?.length !== 1;
 
+  const showFormComponent = authProvider && authProvider.plugin.formComponent;
+
+  const showButtonComponent =
+    authProvider &&
+    authProvider.plugin.buttonComponent &&
+    authProvider.method.description === "Clever";
+
+  const noAuth = !showFormComponent && !showButtonComponent;
+
   return (
     <React.Fragment>
       <ClientOnly>
@@ -87,16 +96,12 @@ const Auth: React.FC = ({ children }) => {
             <authProvider.plugin.formComponent provider={authProvider} />
           )}
 
-          {authProvider &&
-            authProvider.plugin.buttonComponent &&
-            authProvider.method.description === "Clever" && (
-              <authProvider.plugin.buttonComponent provider={authProvider} />
-            )}
+          {authProvider && showButtonComponent && (
+            <authProvider.plugin.buttonComponent provider={authProvider} />
+          )}
 
-          {!authProvider ||
-            (!authProvider.plugin.buttonComponent &&
-              !authProvider.plugin.formComponent &&
-              "There is no Auth Plugin configured for the selected Auth Provider.")}
+          {noAuth &&
+            "There is no Auth Plugin configured for the selected Auth Provider."}
         </Modal>
       </ClientOnly>
       {/* We render this to provide the dialog a focus target after it closes

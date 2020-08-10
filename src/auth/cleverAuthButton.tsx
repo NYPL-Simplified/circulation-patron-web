@@ -27,10 +27,7 @@ const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
       imageUrl = link.href;
     }
     if (link.rel === "authenticate") {
-      authUrl =
-        link.href +
-        "&redirect_uri=" +
-        encodeURIComponent(encodeURIComponent(currentUrl));
+      authUrl = link.href + "&redirect_uri=" + encodeURIComponent(currentUrl);
     }
   }
 
