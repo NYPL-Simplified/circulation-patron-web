@@ -13,20 +13,24 @@ export interface CleverAuthMethod extends AuthMethod {
   links?: AuthLink[];
 }
 
-const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = props => {
+const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
+  provider
+}) => {
   const { actions, dispatch } = useActions();
 
   const currentUrl = window.location.origin + window.location.pathname;
   let authUrl;
+  let imageUrl;
 
-  for (const link of props?.provider?.method.links || []) {
+  for (const link of provider?.method.links || []) {
+    if (link.rel === "logo") {
+      imageUrl = link.href;
+    }
     if (link.rel === "authenticate") {
       authUrl =
         link.href +
         "&redirect_uri=" +
         encodeURIComponent(encodeURIComponent(currentUrl));
-
-      break;
     }
   }
 
@@ -43,16 +47,19 @@ const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = props => {
         }
         type="submit"
         sx={{
-          alignSelf: "flex-end",
-          m: 2,
-          mr: 0,
-          flex: "1 0 auto",
           color: "#ffffff",
-          backgroundColor: "#2f67aa"
+          backgroundColor: "#2f67aa",
+          width: "280px",
+          height: "51px",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "0",
+          backgroundImage: `url(${imageUrl})`,
+          cursor: "pointer",
+          border: "none"
         }}
-        aria-label="log in with clever"
+        aria-label="Log in with Clever"
       >
-        Log In With Clever
+        {!imageUrl ? "Log in With Clever" : ""}
       </Button>
     </a>
   ) : null;

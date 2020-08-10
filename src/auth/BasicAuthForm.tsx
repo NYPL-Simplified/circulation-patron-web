@@ -10,15 +10,24 @@ import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
+export interface AuthLink {
+  rel: string;
+  href: string;
+}
+
 type FormData = {
   login: string;
   password: string;
 };
 
+export interface CPWBasicAuthMethod extends BasicAuthMethod {
+  links?: AuthLink[];
+}
+
 /**
  * Auth form
  */
-const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
+const BasicAuthForm: React.FC<AuthFormProps<CPWBasicAuthMethod>> = ({
   provider
 }) => {
   const authState = useTypedSelector(state => state.auth);
@@ -28,6 +37,15 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
 
   const usernameInputName = provider.method.labels.login;
   const passwordInputName = provider.method.labels.password;
+
+  let imageUrl;
+
+  for (const link of provider.method.links || []) {
+    if (link.rel === "logo") {
+      imageUrl = link.href;
+      break;
+    }
+  }
 
   const onSubmit = handleSubmit(async values => {
     const login = values[usernameInputName];
@@ -73,9 +91,21 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
 
       <Button
         type="submit"
-        sx={{ alignSelf: "flex-end", m: 2, mr: 0, flex: "1 0 auto" }}
+        sx={{
+          alignSelf: "flex-end",
+          m: 2,
+          mr: 0,
+          flex: "1 0 auto",
+          width: "280px",
+          height: "51px",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "0",
+          backgroundImage: `url(${imageUrl})`,
+          cursor: "pointer",
+          border: "none"
+        }}
       >
-        Login
+        {!imageUrl ? "Login" : ""}
       </Button>
     </form>
   );
