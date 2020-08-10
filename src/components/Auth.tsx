@@ -82,15 +82,21 @@ const Auth: React.FC = ({ children }) => {
               </Select>
             </div>
           )}
-          {authProvider && authProvider.plugin.formComponent ? (
+
+          {authProvider && authProvider.plugin.formComponent && (
             <authProvider.plugin.formComponent provider={authProvider} />
-          ) : authProvider &&
-            authProvider.plugin.buttonComponent &&
-            authProvider.method.description === "Clever" ? (
-            <authProvider.plugin.buttonComponent provider={authProvider} />
-          ) : (
-            "There is no Auth Plugin configured for the selected Auth Provider."
           )}
+
+          {authProvider &&
+            authProvider.plugin.buttonComponent &&
+            authProvider.method.description === "Clever" && (
+              <authProvider.plugin.buttonComponent provider={authProvider} />
+            )}
+
+          {!authProvider ||
+            (!authProvider.plugin.buttonComponent &&
+              !authProvider.plugin.formComponent &&
+              "There is no Auth Plugin configured for the selected Auth Provider.")}
         </Modal>
       </ClientOnly>
       {/* We render this to provide the dialog a focus target after it closes

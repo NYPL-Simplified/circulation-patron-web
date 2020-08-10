@@ -57,9 +57,9 @@ const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
           cursor: "pointer",
           border: "none"
         }}
-        aria-label="Log in with Clever"
+        aria-label="Log In with Clever"
       >
-        {!imageUrl ? "Log in With Clever" : ""}
+        {!imageUrl ? "Log In With Clever" : ""}
       </Button>
     </a>
   ) : null;
