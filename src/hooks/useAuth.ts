@@ -7,6 +7,36 @@ import { CleverAuthPlugin } from "../auth/cleverAuthPlugin";
 
 const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 
+const TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
+
+export function getTokenFromUrl(
+  router
+): {
+  token:
+    | string
+    | { credentials?: string; undefined; error?: string | undefined }
+    | undefined;
+  type: string;
+} {
+  const cleverAccessToken =
+    typeof window !== "undefined" && CleverAuthPlugin.lookForCredentials();
+
+  const { access_token: samlAccessToken } = router.query;
+
+  let type = TOKEN_NOT_FOUND;
+  /* there should never be a case where both types of access tokens exists at the same time */
+  if (samlAccessToken) {
+    type = "SAML";
+  } else if (cleverAccessToken) {
+    type = "Clever";
+  }
+
+  return {
+    token: samlAccessToken ? `Bearer ${samlAccessToken}` : cleverAccessToken,
+    type: type
+  };
+}
+
 /**
  * Will get auth data from cookies and make sure it's saved to redux
  * and will also provide auth data from the redux store, as well as
@@ -60,13 +90,18 @@ function useAuth() {
 
   const accessToken = samlAccessToken || cleverAccessToken;
 
+  const token = getTokenFromUrl(router);
   const { credentials: cleverCredentials } = cleverAccessToken || {
     credentials: { credentials: "", provider: "" }
   };
 
   React.useEffect(() => {
+    // if (token && token.type !== TOKEN_NOT_FOUND && token.credentials) {
+    //   const credentials =
+    //     token.type === "Clever" ? token.credentials.credentials : token.token;
+
+    const credentials = `Bearer ${samlAccessToken}`;
     if (accessToken) {
-      const credentials = `Bearer: ${cleverAccessToken || samlAccessToken}`;
       dispatch(
         actions.saveAuthCredentials({
           provider: cleverCredentials
