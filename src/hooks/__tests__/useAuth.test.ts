@@ -1,5 +1,5 @@
-import { getTokenFromUrl } from "../useAuth";
-describe("getTokenFromUrl", () => {
+import { getAccessToken } from "../useAuth";
+describe("getAccessToken", () => {
   const { location } = window;
 
   beforeAll(() => {
@@ -20,23 +20,27 @@ describe("getTokenFromUrl", () => {
   };
 
   test("returns TOKEN_NOT_FOUND without a token when there is no access_token in query or access_token in window.location.hash", async () => {
-    expect(getTokenFromUrl(mockRouterWithEmptyQuery)).toStrictEqual({
-      token: undefined,
+    expect(getAccessToken(mockRouterWithEmptyQuery)).toStrictEqual({
+      token: { credentials: {} },
       type: "TOKEN_NOT_FOUND"
     });
   });
 
   test("returns SAML token from router", async () => {
-    expect(getTokenFromUrl(mockRouterWithSAMLToken)).toStrictEqual({
-      token: `Bearer ${mockSAMLToken}`,
-      type: "SAML"
+    expect(getAccessToken(mockRouterWithSAMLToken)).toStrictEqual({
+      token: {
+        credentials: {
+          credentials: `Bearer ${mockSAMLToken}`
+        }
+      },
+      type: "http://librarysimplified.org/authtype/SAML-2.0"
     });
   });
 
   test("returns Clever token when there is an access_token hashed in the window.location", async () => {
     window.location = { hash: "#access_token=fry" } as any;
 
-    expect(getTokenFromUrl(mockRouterWithEmptyQuery)).toStrictEqual({
+    expect(getAccessToken(mockRouterWithEmptyQuery)).toStrictEqual({
       token: { credentials: { credentials: "Bearer fry", provider: "Clever" } },
       type: "Clever"
     });

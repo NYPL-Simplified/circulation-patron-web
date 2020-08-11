@@ -9,13 +9,17 @@ const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 
 const TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
 
-export function getTokenFromUrl(
+export function getAccessToken(
   router
 ): {
-  token:
-    | string
-    | { credentials?: string; undefined; error?: string | undefined }
-    | undefined;
+  token: {
+    credentials: {
+      credentials?: string | undefined;
+      provider?: string | undefined;
+      error?: string | undefined;
+    };
+  };
+
   type: string;
 } {
   const cleverAccessToken =
@@ -24,15 +28,33 @@ export function getTokenFromUrl(
   const { access_token: samlAccessToken } = router.query;
 
   let type = TOKEN_NOT_FOUND;
+  //to-do: import AuthCredentials type to avoid manually typing this
+  let token = { credentials: {} } as {
+    credentials?:
+      | {
+          credentials?: string | undefined;
+          error?: string | undefined;
+        }
+      | undefined;
+    error?: string | undefined;
+  };
   /* there should never be a case where both types of access tokens exists at the same time */
   if (samlAccessToken) {
-    type = "SAML";
+    (type = SAML_AUTH_TYPE),
+      (token = {
+        credentials: {
+          credentials: `Bearer ${samlAccessToken}`
+        }
+      });
   } else if (cleverAccessToken) {
     type = "Clever";
+    token = cleverAccessToken;
   }
 
   return {
-    token: samlAccessToken ? `Bearer ${samlAccessToken}` : cleverAccessToken,
+    /*Object literal may only specify known properties, and 'token' does not exist in type '(token: { credentials: { credentials?: string | undefined; error?: string | undefined; }; }, type: string) */
+    // @ts-ignore
+    token: token,
     type: type
   };
 }
@@ -83,46 +105,29 @@ function useAuth() {
    * We need to set SAML credentials whenenever they are available in a
    * query param
    */
-  const { access_token: samlAccessToken } = router.query;
 
-  const cleverAccessToken =
-    typeof window !== "undefined" && CleverAuthPlugin.lookForCredentials();
-
-  const accessToken = samlAccessToken || cleverAccessToken;
-
-  const token = getTokenFromUrl(router);
-  const { credentials: cleverCredentials } = cleverAccessToken || {
-    credentials: { credentials: "", provider: "" }
-  };
+  const accessToken = getAccessToken(router);
 
   React.useEffect(() => {
-    // if (token && token.type !== TOKEN_NOT_FOUND && token.credentials) {
-    //   const credentials =
-    //     token.type === "Clever" ? token.credentials.credentials : token.token;
+    const { type } = accessToken;
+    const { credentials = "", provider = "" } = accessToken?.token
+      ?.credentials || {
+      credentials: ""
+    };
 
-    const credentials = `Bearer ${samlAccessToken}`;
-    if (accessToken) {
+    const isCleverAuth = type === "Clever";
+
+    if (accessToken && accessToken.type !== TOKEN_NOT_FOUND) {
       dispatch(
         actions.saveAuthCredentials({
-          provider: cleverCredentials
-            ? cleverCredentials.provider
-            : SAML_AUTH_TYPE,
-          credentials: cleverCredentials
-            ? cleverCredentials.credentials
-            : credentials
+          provider: isCleverAuth ? provider : SAML_AUTH_TYPE,
+          credentials: credentials
         })
       );
     }
-    /*clear access_token from URL after credentials are set */
+    /* clear #access_token from URL after credentials are set */
     window.location.hash = "";
-  }, [
-    accessToken,
-    samlAccessToken,
-    dispatch,
-    actions,
-    cleverAccessToken,
-    cleverCredentials
-  ]);
+  }, [accessToken, actions, dispatch]);
 
   return {
     isSignedIn,
