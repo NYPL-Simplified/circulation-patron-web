@@ -7,5 +7,5 @@ import * as React from "react";
 export default async function enableAxe() {
   const ReactDOM = await import("react-dom");
   const axe = await import("react-axe");
-  axe(React, ReactDOM, 1000);
+  axe.default(React, ReactDOM, 1000);
 }

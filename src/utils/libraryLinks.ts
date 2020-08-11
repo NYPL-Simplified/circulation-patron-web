@@ -42,3 +42,15 @@ export function parseLinks(links: Link[]): LibraryLinks {
 
   return linkMap;
 }
+
+export function getReportUrl(raw: any) {
+  const reportLink = raw?.link?.find?.(
+    link => link?.["$"]?.["rel"]?.["value"] === "issues"
+  );
+
+  if (!reportLink) {
+    return null;
+  }
+
+  return reportLink?.["$"]?.["href"]?.["value"];
+}

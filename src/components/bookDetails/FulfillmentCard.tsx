@@ -13,13 +13,14 @@ import {
   MediaLink,
   FulfillmentLink
 } from "opds-web-client/lib/interfaces";
-import Button from "../Button";
+import Button, { NavButton } from "../Button";
 import useDownloadButton from "opds-web-client/lib/hooks/useDownloadButton";
 import { withErrorBoundary } from "../ErrorBoundary";
 import useBorrow from "../../hooks/useBorrow";
 import Stack from "components/Stack";
 import { Text } from "components/Text";
 import { MediumIcon } from "components/MediumIndicator";
+import SvgExternalLink from "icons/ExternalOpen";
 import SvgDownload from "icons/Download";
 import SvgPhone from "icons/Phone";
 import useIsBorrowed from "hooks/useIsBorrowed";
@@ -56,7 +57,7 @@ const FulfillmentContent: React.FC<{
       if (!book.openAccessLinks)
         throw new Error("This open-access book is missing open access links");
       return (
-        <DownloadCard
+        <AccessCard
           links={book.openAccessLinks}
           book={book}
           subtitle="This open-access book is available to keep forever."
@@ -138,7 +139,7 @@ const FulfillmentContent: React.FC<{
           ? `You have this book on loan until ${availableUntil}.`
           : "You have this book on loan.";
       return (
-        <DownloadCard
+        <AccessCard
           links={book.fulfillmentLinks}
           book={book}
           subtitle={subtitle}
@@ -199,7 +200,7 @@ const Reserved: React.FC<{ book: BookData }> = ({ book }) => {
           Your hold position is: {position}.
         </Text>
       )}
-      <Button size="lg" disabled>
+      <Button size="lg" disabled aria-label="Reserved" role="button">
         <Text variant="text.body.bold">Reserved</Text>
       </Button>
       {/* {errorMsg && <Text sx={{ color: "ui.error" }}>Error: {errorMsg}</Text>} */}
@@ -232,7 +233,7 @@ const ErrorCard: React.FC = () => {
  * Handles the case where it is ready for download either via openAccessLink or
  * via fulfillmentLink.
  */
-const DownloadCard: React.FC<{
+const AccessCard: React.FC<{
   book: BookData;
   links: MediaLink[] | FulfillmentLink[];
   subtitle: string;
@@ -240,7 +241,6 @@ const DownloadCard: React.FC<{
   const { title } = book;
   const dedupedLinks = dedupeLinks(links ?? []);
   const isAudiobook = bookIsAudiobook(book);
-
   const companionApp =
     NEXT_PUBLIC_COMPANION_APP === "openebooks" ? "Open eBooks" : "SimplyE";
 
@@ -261,9 +261,11 @@ const DownloadCard: React.FC<{
             If you would rather read on your computer, you can:
           </Text>
           <Stack sx={{ justifyContent: "center", flexWrap: "wrap" }}>
-            {dedupedLinks.map(link => (
-              <DownloadButton key={link.url} link={link} title={title} />
-            ))}
+            {dedupedLinks.map(link => {
+              return (
+                <DownloadButton key={link.url} link={link} title={title} />
+              );
+            })}
           </Stack>
         </Stack>
       )}
@@ -276,16 +278,37 @@ const DownloadButton: React.FC<{
   title: string;
 }> = ({ link, title }) => {
   const { fulfill, downloadLabel } = useDownloadButton(link, title);
-  return (
-    <Button
-      onClick={fulfill}
-      variant="ghost"
-      color="ui.gray.extraDark"
-      iconLeft={SvgDownload}
-    >
-      {downloadLabel}
-    </Button>
-  );
+
+  /* web-epub is currently used in test-server.
+                 to-do: remove the below commented out check */
+  const hasReaderLink =
+    // link.type === "application/vnd.librarysimplified.web-epub" ||
+    link.type === "application/vnd.librarysimplified.axisnow+json";
+
+  if (hasReaderLink) {
+    const readerLink = `/read/${encodeURIComponent(link.url)}`;
+    return (
+      <NavButton
+        variant="ghost"
+        color="ui.gray.extraDark"
+        iconLeft={SvgExternalLink}
+        href={readerLink}
+      >
+        {downloadLabel}
+      </NavButton>
+    );
+  } else {
+    return (
+      <Button
+        onClick={fulfill}
+        variant="ghost"
+        color="ui.gray.extraDark"
+        iconLeft={SvgDownload}
+      >
+        {downloadLabel}
+      </Button>
+    );
+  }
 };
 
 export default withErrorBoundary(FulfillmentCard, ErrorCard);

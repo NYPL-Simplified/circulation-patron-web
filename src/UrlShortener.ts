@@ -10,6 +10,8 @@ export default class UrlShortener {
   }
 
   private catalogBase(): string {
+    if (!this.enabled) return this.catalogUrl;
+
     // The origin and library short name in a catalog URL are safe to remove.
     const url = new URL(this.catalogUrl);
     const origin = url.origin;
@@ -42,7 +44,7 @@ export default class UrlShortener {
         ? this.catalogBase() + "/" + collectionUrl
         : this.catalogBase();
     } else {
-      return collectionUrl;
+      return collectionUrl ? collectionUrl : this.catalogBase();
     }
   }
 

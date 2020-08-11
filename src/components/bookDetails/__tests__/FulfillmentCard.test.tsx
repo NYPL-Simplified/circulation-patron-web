@@ -32,7 +32,7 @@ describe("open-access", () => {
     expect(
       utils.getByText("This open-access book is available to keep forever.")
     ).toBeInTheDocument();
-    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+    expect(utils.getByRole("button", { name: /Borrow/i })).toBeInTheDocument();
   });
 
   test("correct title and subtitle when loaned", () => {
@@ -158,7 +158,7 @@ describe("available to borrow", () => {
     });
 
     const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+      name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -263,7 +263,7 @@ describe("ready to borrow", () => {
     });
 
     const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+      name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -343,7 +343,9 @@ describe("available to reserve", () => {
 
   test("displays reserve button", () => {
     const utils = render(<FulfillmentCard book={unavailableBook} />);
-    const reserveButton = utils.getByRole("button", { name: "Reserve" });
+    const reserveButton = utils.getByRole("button", {
+      name: /Reserve/i
+    });
     expect(reserveButton).toBeInTheDocument();
   });
 
@@ -410,8 +412,8 @@ describe("available to reserve", () => {
         }
       })
     });
-    const reserveButton = await utils.findByRole("button", {
-      name: "Reserving..."
+    const reserveButton = utils.getByRole("button", {
+      name: /Reserving.../i
     });
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toHaveAttribute("disabled", "");
@@ -496,6 +498,29 @@ describe("available to download", () => {
       status: "available",
       until: "2020-06-18"
     }
+  });
+
+  const viewableAxisNowBook = mergeBook({
+    openAccessLinks: undefined,
+    fulfillmentLinks: [
+      {
+        url: "/epub-link",
+        type: "application/vnd.librarysimplified.axisnow+json",
+        indirectType: "something-indirect"
+      }
+    ],
+    availability: {
+      status: "available",
+      until: "2020-06-18"
+    }
+  });
+
+  test("constructs link to viewer for OpenAxis Books", () => {
+    const utils = render(<FulfillmentCard book={viewableAxisNowBook} />);
+    const readerLink = utils.getByRole("link", {
+      name: /Read Online/i
+    }) as HTMLLinkElement;
+    expect(readerLink.href).toBe("http://test-domain.com/read/%2Fepub-link");
   });
 
   test("correct title and subtitle", () => {

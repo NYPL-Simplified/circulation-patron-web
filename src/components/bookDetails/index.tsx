@@ -43,6 +43,7 @@ export const BookDetails: React.FC<{
   if (error) {
     return <Error error={error} />;
   }
+
   if (!book) return <PageLoader />;
   return (
     <section aria-label="Book details">

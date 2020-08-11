@@ -12,19 +12,22 @@ import { ComplaintData } from "../../interfaces";
 import LoadingIndicator from "../LoadingIndicator";
 import Select, { Label } from "../Select";
 import { H1 } from "components/Text";
+import { getReportUrl } from "utils/libraryLinks";
 
 const getDisplayType = (type: string) =>
   type
     .replace("http://librarysimplified.org/terms/problem/", "")
     .replace(/-/g, " ")
     .split(" ")
-    .map(t => t[0].toUpperCase() + t.slice(1))
+    .map(t => (t ? t[0].toUpperCase() + t.slice(1) : ""))
     .join(" ");
 
 type ComplaintFormData = Required<ComplaintData>;
 
 const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
   const { state, dialog, dispatch, postComplaint } = useComplaints(book);
+
+  const hasReportUrl = Boolean(getReportUrl(book.raw));
   const handleClick = () => dispatch({ type: "REPORT_PROBLEM" });
 
   const { register, handleSubmit, errors, reset } = useForm<
@@ -38,6 +41,11 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
   const onSubmit = handleSubmit(({ type, detail }) => {
     postComplaint({ type, detail });
   });
+
+  if (!hasReportUrl) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <Modal
@@ -124,6 +132,7 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
           </form>
         )}
       </Modal>
+
       <DialogDisclosure
         {...dialog}
         onClick={handleClick}

@@ -3,7 +3,7 @@ import complaints, { initState } from "./reducer";
 import { fetchComplaintTypes, postComplaint } from "./actions";
 import { useDialogState } from "reakit";
 import { BookData } from "opds-web-client/lib/interfaces";
-
+import { getReportUrl } from "../../utils/libraryLinks";
 /**
  * We are using react useReducer instead of redux. The only real difference
  * here is that instead of using redux-thunk, we import the thunk actions
@@ -34,16 +34,4 @@ export default function useComplaints(book: BookData) {
     postComplaint: postComplaint(dispatch)(reportUrl),
     dialog
   };
-}
-
-function getReportUrl(raw: any) {
-  const reportLink = raw?.link?.find?.(
-    link => link?.["$"]?.["rel"]?.["value"] === "issues"
-  );
-
-  if (!reportLink) {
-    return null;
-  }
-
-  return reportLink?.["$"]?.["href"]?.["value"];
 }
