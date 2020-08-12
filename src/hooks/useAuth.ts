@@ -7,55 +7,37 @@ import { CleverAuthPlugin } from "../auth/cleverAuthPlugin";
 
 const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 
-const TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
+const CREDENTIALS_NOT_FOUND = "CREDENTIALS_NOT_FOUND";
+const PROVIDER_NOT_FOUND = "PROVIDER_NOT_FOUND";
 
 export function getAccessToken(
   router
 ): {
-  token: {
-    credentials: {
-      credentials?: string | undefined;
-      provider?: string | undefined;
-      error?: string | undefined;
-    };
-  };
-
-  type: string;
+  credentials: string;
+  provider: string;
 } {
   const cleverAccessToken =
     typeof window !== "undefined" && CleverAuthPlugin.lookForCredentials();
 
   const { access_token: samlAccessToken } = router.query;
 
-  let type = TOKEN_NOT_FOUND;
-  //to-do: import AuthCredentials type to avoid manually typing this
-  let token = { credentials: {} } as {
-    credentials?:
-      | {
-          credentials?: string | undefined;
-          error?: string | undefined;
-        }
-      | undefined;
-    error?: string | undefined;
-  };
   /* there should never be a case where both types of access tokens exists at the same time */
   if (samlAccessToken) {
-    (type = SAML_AUTH_TYPE),
-      (token = {
-        credentials: {
-          credentials: `Bearer ${samlAccessToken}`
-        }
-      });
-  } else if (cleverAccessToken) {
-    type = "Clever";
-    token = cleverAccessToken;
+    return {
+      credentials: `Bearer ${samlAccessToken}`,
+      provider: SAML_AUTH_TYPE
+    };
+  } else if (cleverAccessToken && cleverAccessToken.credentials?.credentials) {
+    const { credentials, provider } = cleverAccessToken.credentials;
+    return {
+      credentials: credentials,
+      provider: provider
+    };
   }
 
   return {
-    /*Object literal may only specify known properties, and 'token' does not exist in type '(token: { credentials: { credentials?: string | undefined; error?: string | undefined; }; }, type: string) */
-    // @ts-ignore
-    token: token,
-    type: type
+    credentials: CREDENTIALS_NOT_FOUND,
+    provider: PROVIDER_NOT_FOUND
   };
 }
 
@@ -108,26 +90,32 @@ function useAuth() {
 
   const accessToken = getAccessToken(router);
 
+  const { credentials, provider } = accessToken;
+
+  const hasValidCredentials =
+    accessToken &&
+    provider !== PROVIDER_NOT_FOUND &&
+    credentials !== CREDENTIALS_NOT_FOUND;
+
   React.useEffect(() => {
-    const { type } = accessToken;
-    const { credentials = "", provider = "" } = accessToken?.token
-      ?.credentials || {
-      credentials: ""
-    };
-
-    const isCleverAuth = type === "Clever";
-
-    if (accessToken && accessToken.type !== TOKEN_NOT_FOUND) {
+    if (hasValidCredentials) {
       dispatch(
         actions.saveAuthCredentials({
-          provider: isCleverAuth ? provider : SAML_AUTH_TYPE,
+          provider: provider,
           credentials: credentials
         })
       );
     }
     /* clear #access_token from URL after credentials are set */
     window.location.hash = "";
-  }, [accessToken, actions, dispatch]);
+  }, [
+    accessToken,
+    hasValidCredentials,
+    credentials,
+    provider,
+    actions,
+    dispatch
+  ]);
 
   return {
     isSignedIn,
