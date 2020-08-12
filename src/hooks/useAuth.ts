@@ -10,7 +10,7 @@ const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 const CREDENTIALS_NOT_FOUND = "CREDENTIALS_NOT_FOUND";
 const PROVIDER_NOT_FOUND = "PROVIDER_NOT_FOUND";
 
-export function getAccessToken(
+export function getCredentials(
   router
 ): {
   credentials: string;
@@ -88,14 +88,10 @@ function useAuth() {
    * query param
    */
 
-  const accessToken = getAccessToken(router);
-
-  const { credentials, provider } = accessToken;
+  const { credentials, provider } = getCredentials(router);
 
   const hasValidCredentials =
-    accessToken &&
-    provider !== PROVIDER_NOT_FOUND &&
-    credentials !== CREDENTIALS_NOT_FOUND;
+    provider !== PROVIDER_NOT_FOUND && credentials !== CREDENTIALS_NOT_FOUND;
 
   React.useEffect(() => {
     if (hasValidCredentials) {
@@ -108,14 +104,7 @@ function useAuth() {
     }
     /* clear #access_token from URL after credentials are set */
     window.location.hash = "";
-  }, [
-    accessToken,
-    hasValidCredentials,
-    credentials,
-    provider,
-    actions,
-    dispatch
-  ]);
+  }, [hasValidCredentials, credentials, provider, actions, dispatch]);
 
   return {
     isSignedIn,
