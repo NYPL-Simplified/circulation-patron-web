@@ -21,7 +21,8 @@ export function getCredentials(router): AuthCredentials {
 
   const { access_token: samlAccessToken } = router.query;
 
-  /* there should never be a case where both types of access tokens exists at the same time */
+  /* TODO: throw error if samlAccessToken and cleverAccessToken exist at the same time as this is an invalid state that shouldn't be reached */
+
   if (samlAccessToken) {
     return {
       credentials: `Bearer ${samlAccessToken}`,

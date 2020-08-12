@@ -4,7 +4,7 @@ import {
   ClientSamlMethod
 } from "opds-web-client/lib/interfaces";
 
-import { CleverAuthMethod, CleverButton } from "auth/cleverAuthButton";
+import CleverButton, { CleverAuthMethod } from "auth/cleverAuthButton";
 
 import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
