@@ -13,7 +13,7 @@ export interface CleverAuthMethod extends AuthMethod {
   links?: AuthLink[];
 }
 
-export const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
+const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
   provider
 }) => {
   const { actions, dispatch } = useActions();

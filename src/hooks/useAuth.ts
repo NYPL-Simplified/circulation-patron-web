@@ -3,19 +3,19 @@ import useTypedSelector from "./useTypedSelector";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { useRouter } from "next/router";
 import useLinkUtils from "components/context/LinkUtilsContext";
-import { CleverAuthPlugin } from "../auth/cleverAuthPlugin";
+import CleverAuthPlugin from "../auth/cleverAuthPlugin";
 
 const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 
 const CREDENTIALS_NOT_FOUND = "CREDENTIALS_NOT_FOUND";
 const PROVIDER_NOT_FOUND = "PROVIDER_NOT_FOUND";
 
-export function getCredentials(
-  router
-): {
+export interface AuthCredentials {
   credentials: string;
   provider: string;
-} {
+}
+
+export function getCredentials(router): AuthCredentials {
   const cleverAccessToken =
     typeof window !== "undefined" && CleverAuthPlugin.lookForCredentials();
 
