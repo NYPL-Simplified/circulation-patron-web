@@ -1,10 +1,11 @@
 import {
   AuthProvider,
   BasicAuthMethod,
-  ClientSamlMethod
+  ClientSamlMethod,
+  AuthMethod
 } from "opds-web-client/lib/interfaces";
 
-import CleverButton, { CleverAuthMethod } from "auth/cleverAuthButton";
+import CleverButton from "auth/cleverAuthButton";
 
 import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
@@ -29,7 +30,7 @@ export const basicAuthMethod = {
   }
 };
 
-export const cleverAuthProvider: AuthProvider<CleverAuthMethod> = {
+export const cleverAuthProvider: AuthProvider<AuthMethod> = {
   id: cleverAuthId,
   plugin: {
     formComponent: undefined,

@@ -10,24 +10,15 @@ import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
-export interface AuthLink {
-  rel: string;
-  href: string;
-}
-
 type FormData = {
   login: string;
   password: string;
 };
 
-export interface CPWBasicAuthMethod extends BasicAuthMethod {
-  links?: AuthLink[];
-}
-
 /**
  * Auth form
  */
-const BasicAuthForm: React.FC<AuthFormProps<CPWBasicAuthMethod>> = ({
+const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
   provider
 }) => {
   const authState = useTypedSelector(state => state.auth);

@@ -33,7 +33,7 @@ describe("CleverButton", () => {
       wrapper.getByText("Log In With Clever").closest("a")
     ).toHaveAttribute(
       "href",
-      "https://testing.com/USOEI/oauth_authenticate?provider=Clever&redirect_uri=http%3A%2F%2Ftest-domain.com%2F"
+      "https://testing.com/USOEI/oauth_authenticate?provider=Clever&redirect_uri=http%253A%252F%252Ftest-domain.com%252F"
     );
   });
 });

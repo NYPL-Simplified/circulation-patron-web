@@ -4,18 +4,7 @@ import { AuthButtonProps } from "opds-web-client/lib/components/AuthProviderSele
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import Button from "components/Button";
 
-export interface AuthLink {
-  rel: string;
-  href: string;
-}
-
-export interface CleverAuthMethod extends AuthMethod {
-  links?: AuthLink[];
-}
-
-const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
-  provider
-}) => {
+const CleverButton: React.FC<AuthButtonProps<AuthMethod>> = ({ provider }) => {
   const { actions, dispatch } = useActions();
 
   const currentUrl = window.location.origin + window.location.pathname;
@@ -27,7 +16,11 @@ const CleverButton: React.FC<AuthButtonProps<CleverAuthMethod>> = ({
       imageUrl = link.href;
     }
     if (link.rel === "authenticate") {
-      authUrl = link.href + "&redirect_uri=" + encodeURIComponent(currentUrl);
+      authUrl =
+        link.href +
+        "&redirect_uri=" +
+        // double encoding is required for unshortened book urls to be redirected to properly
+        encodeURIComponent(encodeURIComponent(currentUrl));
     }
   }
 
