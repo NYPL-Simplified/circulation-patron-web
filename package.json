@@ -13,7 +13,7 @@
     "dev:axe": "REACT_AXE=true npm run dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest --watch",
+    "test": "TZ=UTC jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint '*/**/*.{ts,tsx}'",
     "lint:fix": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
