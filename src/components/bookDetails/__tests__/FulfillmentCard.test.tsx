@@ -577,14 +577,15 @@ describe("available to download", () => {
     expect(fulfillBookSpy).toHaveBeenCalledWith("/epub-link");
   });
 
-  test("download button calls indirect fullfill when book is indirect", () => {
+  test("download button calls indirect fullfill when book is indirect with a type that is readable online", () => {
     const bookWithIndirect = mergeBook({
       ...downloadableBook,
       fulfillmentLinks: [
         {
           url: "/indirect",
           type: "application/atom+xml;type=entry;profile=opds-catalog",
-          indirectType: "something-indirect"
+          indirectType:
+            'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
         }
       ]
     });
@@ -592,7 +593,7 @@ describe("available to download", () => {
     const indirectFulfillSpy = jest.spyOn(actions, "indirectFulfillBook");
 
     const utils = render(<FulfillmentCard book={bookWithIndirect} />);
-    const downloadButton = utils.getByText("Download atom");
+    const downloadButton = utils.getByText("Read Online");
     expect(downloadButton).toBeInTheDocument();
 
     userEvent.click(downloadButton);
@@ -600,8 +601,32 @@ describe("available to download", () => {
     expect(indirectFulfillSpy).toHaveBeenCalledTimes(1);
     expect(indirectFulfillSpy).toHaveBeenCalledWith(
       "/indirect",
-      "something-indirect"
+      'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
     );
+  });
+
+  test("download button says download type when book is indirect with a type that is not readable online", () => {
+    const bookWithIndirect = mergeBook({
+      ...downloadableBook,
+      fulfillmentLinks: [
+        {
+          url: "/indirect",
+          type: "application/atom+xml;type=entry;profile=opds-catalog",
+          indirectType: "indirect-link"
+        }
+      ]
+    });
+
+    const fulfillBookSpy = jest.spyOn(actions, "fulfillBook");
+
+    const utils = render(<FulfillmentCard book={bookWithIndirect} />);
+    const downloadButton = utils.getByText("Download atom");
+    expect(downloadButton).toBeInTheDocument();
+
+    userEvent.click(downloadButton);
+
+    expect(fulfillBookSpy).toHaveBeenCalledTimes(1);
+    expect(fulfillBookSpy).toHaveBeenCalledWith("/indirect");
   });
 
   test("says read online for streaming media", () => {
@@ -612,7 +637,7 @@ describe("available to download", () => {
           url: "/streaming",
           type: "application/atom+xml;type=entry;profile=opds-catalog",
           indirectType:
-            "text/html;profile=http://librarysimplified.org/terms/profiles/streaming-media"
+            'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
         }
       ]
     });
@@ -628,7 +653,7 @@ describe("available to download", () => {
     expect(indirectFulfillSpy).toHaveBeenCalledTimes(1);
     expect(indirectFulfillSpy).toHaveBeenCalledWith(
       "/streaming",
-      "text/html;profile=http://librarysimplified.org/terms/profiles/streaming-media"
+      'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
     );
   });
 
