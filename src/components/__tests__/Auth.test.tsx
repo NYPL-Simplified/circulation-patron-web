@@ -136,20 +136,43 @@ test("renders select Clever with multiple providers present", async () => {
     }
   );
 
-  const select = utils.getByRole("combobox", { name: /login method/i });
-  expect(select).toBeInTheDocument();
-
   // should have two options
-  expect(utils.getByRole("option", { name: "SAML IdP" })).toBeInTheDocument();
-  expect(utils.getByRole("option", { name: "Clever" })).toBeInTheDocument();
+  expect(
+    utils.getByRole("button", {
+      name: "Login to SAML IdP"
+    })
+  ).toBeInTheDocument();
 
-  // should be able to change to select clever
-  userEvent.selectOptions(select, fixtures.cleverAuthProvider.id);
+  // to-do revisit this phrasing? it sounds awkward and will be the fallback when there is no logo provided
+  expect(
+    utils.getByRole("button", {
+      name: "Login to Library Barcode"
+    })
+  ).toBeInTheDocument();
 
+  // should be able to click to select Clever
+
+  userEvent.click(
+    utils.getByRole("button", {
+      name: "Clever"
+    })
+  );
   expect(await utils.findByLabelText("Log In with Clever")).toBeInTheDocument();
+
+  // should no longer show  two options
+  expect(
+    utils.getByRole("button", {
+      name: "SAML IdP"
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    utils.getByRole("button", {
+      name: "Clever"
+    })
+  ).not.toBeInTheDocument();
 });
 
-test("renders select when multiple providers present", async () => {
+test.only("renders provider buttons when multiple providers present", async () => {
   const utils = render(
     <Auth>
       <div>children</div>
@@ -159,28 +182,25 @@ test("renders select when multiple providers present", async () => {
     }
   );
 
-  const select = utils.getByRole("combobox", { name: "Login Method" });
-  expect(select).toBeInTheDocument();
-
   // should have two options
   expect(
-    utils.getByRole("option", { name: "Library Barcode" })
+    utils.getByRole("button", { name: "Login to Library Barcode" })
   ).toBeInTheDocument();
-  expect(utils.getByRole("option", { name: "SAML IdP" })).toBeInTheDocument();
-
-  // should default to basic auth (first)
   expect(
-    utils.getByRole("textbox", { name: "Barcode input" })
+    utils.getByRole("button", { name: "Login to SAML IdP" })
   ).toBeInTheDocument();
-  expect(utils.getByLabelText("Pin input")).toBeInTheDocument();
 
-  // should be able to change
-  userEvent.selectOptions(select, fixtures.samlAuthProvider.id);
+  userEvent.click(utils.getByRole("button", { name: "Login to SAML IdP" }));
 
-  expect(await utils.findByText("Login with SAML IdP")).toBeInTheDocument();
+  // /* after clicking SAML IdP button Login with SAML IdP text appears */
+  expect(
+    utils.queryByRole("button", { name: "Login to Library Barcode" })
+  ).toBe(null);
+  expect(utils.queryByRole("button", { name: "Login to SAML IdP" })).toBe(null);
 });
 
-test("displays message when no auth provider configured", async () => {
+// TODO: revisit when this error message should be displayed
+test.skip("displays message when no auth provider configured", async () => {
   const authStateWithoutProvider: AuthState = {
     showForm: true,
     callback: jest.fn(),

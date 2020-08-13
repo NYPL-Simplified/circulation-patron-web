@@ -7,8 +7,8 @@ import useAuth from "../hooks/useAuth";
 import Modal from "./Modal";
 import ClientOnly from "./ClientOnly";
 import { H2 } from "./Text";
-import Select from "./Select";
-import FormLabel from "./form/FormLabel";
+import Button from "components/Button";
+import BasicAuthButton from "../auth/BasicAuthButton";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useTypedSelector from "hooks/useTypedSelector";
 
@@ -22,7 +22,7 @@ const Auth: React.FC = ({ children }) => {
 
   const dialog = useDialogState();
   const library = useLibraryContext();
-  const [authProvider, setAuthProvider] = React.useState(providers?.[0]);
+  const [authProvider, setAuthProvider] = React.useState();
 
   const { fetcher, actions, dispatch } = useActions();
 
@@ -45,13 +45,26 @@ const Auth: React.FC = ({ children }) => {
   // the providers get set when the form is shown, so
   // it's initially undefined. We need to update when they get set
   React.useEffect(() => {
-    if (!authProvider) setAuthProvider(providers?.[0]);
+    if (!authProvider && providers?.length === 1)
+      setAuthProvider(providers?.[0]);
   }, [authProvider, providers]);
 
-  const handleChangeProvider: React.ChangeEventHandler<HTMLSelectElement> = e => {
+  //  ChangeEventHandler<MouseEvent>
+
+  const handleChangeProvider: React.MouseEvent<
+    HTMLButtonElement,
+    MouseEvent
+  > = e => {
     setAuthProvider(
       providers?.find(provider => provider.id === e.target.value)
     );
+  };
+
+  const cancelGoBackToAuthSelection: React.MouseEvent<
+    HTMLButtonElement,
+    MouseEvent
+  > = e => {
+    setAuthProvider(undefined);
   };
 
   const hasMultipleProviders = providers?.length !== 1;
@@ -79,28 +92,72 @@ const Auth: React.FC = ({ children }) => {
             <H2>{library.catalogName}</H2>
             <h4>Login</h4>
           </div>
-          {hasMultipleProviders && (
-            <div sx={{ mb: 2 }}>
-              <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
-              <Select id="login-method-select" onChange={handleChangeProvider}>
+
+          {hasMultipleProviders && !authProvider && (
+            <div sx={{ mb: 2, textAlign: `center` }}>
+              {/* what accessibility markup should be used here 
+               <FormLabel htmlFor="login-method-select">Login Method</FormLabel> */}
+
+              <div>
                 {providers?.map(provider => (
-                  <option key={provider.id} value={provider.id}>
-                    {provider.method.description}
-                  </option>
+                  <div>
+                    {" "}
+                    {/* todo: make buttons block elements without extra div*/}
+                    {provider.plugin && (
+                      <BasicAuthButton
+                        links={provider.method.links || []}
+                        aria-label={`Login to ${provider.method.description}`}
+                        key={provider.id}
+                        value={provider.id}
+                        onClick={handleChangeProvider}
+                      >
+                        {provider.method.description}
+                      </BasicAuthButton>
+                    )}
+                    {provider.plugin.buttonComponent &&
+                      provider.id === "Clever" && (
+                        <provider.plugin.buttonComponent
+                          key={provider.id}
+                          provider={provider}
+                        />
+                      )}
+                  </div>
                 ))}
-              </Select>
+              </div>
             </div>
           )}
-
           {authProvider && authProvider.plugin.formComponent && (
             <authProvider.plugin.formComponent provider={authProvider} />
           )}
-
           {authProvider && showButtonComponent && (
             <authProvider.plugin.buttonComponent provider={authProvider} />
           )}
 
-          {noAuth &&
+          <Button
+            onClick={
+              authProvider && providers.length > 1
+                ? cancelGoBackToAuthSelection
+                : cancel
+            }
+            sx={{
+              alignSelf: "flex-end",
+              m: 2,
+              mr: 0,
+              flex: "1 0 auto",
+              width: "280px",
+              height: "51px",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "0",
+              cursor: "pointer",
+              border: "none"
+            }}
+            variant="ghost"
+          >
+            Cancel
+          </Button>
+
+          {authProvider &&
+            noAuth &&
             "There is no Auth Plugin configured for the selected Auth Provider."}
         </Modal>
       </ClientOnly>

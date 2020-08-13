@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import Button from "components/Button";
 import useTypedSelector from "hooks/useTypedSelector";
 import { useForm } from "react-hook-form";
+import Button from "components/Button";
 import FormInput from "components/form/FormInput";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { generateCredentials } from "opds-web-client/lib/utils/auth";
@@ -28,15 +28,6 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
 
   const usernameInputName = provider.method.labels.login;
   const passwordInputName = provider.method.labels.password;
-
-  let imageUrl;
-
-  for (const link of provider.method.links || []) {
-    if (link.rel === "logo") {
-      imageUrl = link.href;
-      break;
-    }
-  }
 
   const onSubmit = handleSubmit(async values => {
     const login = values[usernameInputName];
@@ -91,12 +82,11 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
           height: "51px",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "0",
-          backgroundImage: `url(${imageUrl})`,
           cursor: "pointer",
           border: "none"
         }}
       >
-        {!imageUrl ? "Login" : ""}
+        Login
       </Button>
     </form>
   );
