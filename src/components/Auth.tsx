@@ -22,7 +22,7 @@ const Auth: React.FC = ({ children }) => {
 
   const dialog = useDialogState();
   const library = useLibraryContext();
-  const [authProvider, setAuthProvider] = React.useState();
+  const [authProvider, setAuthProvider] = React.useState(providers?.[0]);
 
   const { fetcher, actions, dispatch } = useActions();
 
@@ -50,11 +50,10 @@ const Auth: React.FC = ({ children }) => {
   }, [authProvider, providers]);
 
   //  ChangeEventHandler<MouseEvent>
-
   const handleChangeProvider: React.MouseEvent<
     HTMLButtonElement,
     MouseEvent
-  > = e => {
+  > = (e: { target: { value: string } }) => {
     setAuthProvider(
       providers?.find(provider => provider.id === e.target.value)
     );
@@ -63,7 +62,7 @@ const Auth: React.FC = ({ children }) => {
   const cancelGoBackToAuthSelection: React.MouseEvent<
     HTMLButtonElement,
     MouseEvent
-  > = e => {
+  > = () => {
     setAuthProvider(undefined);
   };
 
@@ -135,7 +134,7 @@ const Auth: React.FC = ({ children }) => {
 
           <Button
             onClick={
-              authProvider && providers.length > 1
+              authProvider && providers && providers.length > 1
                 ? cancelGoBackToAuthSelection
                 : cancel
             }
