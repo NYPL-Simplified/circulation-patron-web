@@ -19,9 +19,11 @@ import useTypedSelector from "hooks/useTypedSelector";
  */
 const Auth: React.FC = ({ children }) => {
   const { showForm, cancel, providers } = useAuth();
+
   const dialog = useDialogState();
   const library = useLibraryContext();
   const [authProvider, setAuthProvider] = React.useState(providers?.[0]);
+
   const { fetcher, actions, dispatch } = useActions();
 
   /**
@@ -54,6 +56,15 @@ const Auth: React.FC = ({ children }) => {
 
   const hasMultipleProviders = providers?.length !== 1;
 
+  const showFormComponent = authProvider && authProvider.plugin.formComponent;
+
+  const showButtonComponent =
+    authProvider &&
+    authProvider.plugin.buttonComponent &&
+    authProvider.method.description === "Clever";
+
+  const noAuth = !showFormComponent && !showButtonComponent;
+
   return (
     <React.Fragment>
       <ClientOnly>
@@ -80,11 +91,17 @@ const Auth: React.FC = ({ children }) => {
               </Select>
             </div>
           )}
-          {authProvider && authProvider.plugin.formComponent ? (
+
+          {authProvider && authProvider.plugin.formComponent && (
             <authProvider.plugin.formComponent provider={authProvider} />
-          ) : (
-            "There is no Auth Plugin configured for the selected Auth Provider."
           )}
+
+          {authProvider && showButtonComponent && (
+            <authProvider.plugin.buttonComponent provider={authProvider} />
+          )}
+
+          {noAuth &&
+            "There is no Auth Plugin configured for the selected Auth Provider."}
         </Modal>
       </ClientOnly>
       {/* We render this to provide the dialog a focus target after it closes

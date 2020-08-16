@@ -1,5 +1,6 @@
 import * as React from "react";
 import { render, fixtures, actions, waitFor, fetcher } from "../../test-utils";
+
 import merge from "deepmerge";
 import Auth from "../Auth";
 import { State } from "opds-web-client/lib/state";
@@ -96,6 +97,17 @@ test("renders auth form provided in authPlugin", async () => {
   expect(utils.getByLabelText("Pin input")).toBeInTheDocument();
 });
 
+const authStateWithClever: AuthState = {
+  showForm: true,
+  callback: jest.fn(),
+  cancel: jest.fn(),
+  credentials: null,
+  title: "form",
+  error: null,
+  attemptedProvider: null,
+  providers: [fixtures.cleverAuthProvider, fixtures.samlAuthProvider]
+};
+
 const authStateWithTwoProviders: AuthState = {
   showForm: true,
   callback: jest.fn(),
@@ -108,6 +120,33 @@ const authStateWithTwoProviders: AuthState = {
 };
 const stateWithTwoProviders: State = merge<State>(fixtures.initialState, {
   auth: authStateWithTwoProviders
+});
+
+const stateWithCleverProvider: State = merge<State>(fixtures.initialState, {
+  auth: authStateWithClever
+});
+
+test("renders select Clever with multiple providers present", async () => {
+  const utils = render(
+    <Auth>
+      <div>children</div>
+    </Auth>,
+    {
+      initialState: stateWithCleverProvider
+    }
+  );
+
+  const select = utils.getByRole("combobox", { name: /login method/i });
+  expect(select).toBeInTheDocument();
+
+  // should have two options
+  expect(utils.getByRole("option", { name: "SAML IdP" })).toBeInTheDocument();
+  expect(utils.getByRole("option", { name: "Clever" })).toBeInTheDocument();
+
+  // should be able to change to select clever
+  userEvent.selectOptions(select, fixtures.cleverAuthProvider.id);
+
+  expect(await utils.findByLabelText("Log In with Clever")).toBeInTheDocument();
 });
 
 test("renders select when multiple providers present", async () => {

@@ -14,6 +14,8 @@ import { State } from "opds-web-client/lib/state";
 import * as useBorrow from "hooks/useBorrow";
 import _download from "opds-web-client/lib/components/download";
 
+import * as env from "../../../utils/env";
+
 jest.mock("opds-web-client/lib/components/download");
 window.open = jest.fn();
 
@@ -30,7 +32,7 @@ describe("open-access", () => {
     expect(
       utils.getByText("This open-access book is available to keep forever.")
     ).toBeInTheDocument();
-    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+    expect(utils.getByRole("button", { name: /Borrow/i })).toBeInTheDocument();
   });
 
   test("correct title and subtitle when loaned", () => {
@@ -156,7 +158,7 @@ describe("available to borrow", () => {
     });
 
     const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+      name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -261,7 +263,7 @@ describe("ready to borrow", () => {
     });
 
     const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+      name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -341,7 +343,9 @@ describe("available to reserve", () => {
 
   test("displays reserve button", () => {
     const utils = render(<FulfillmentCard book={unavailableBook} />);
-    const reserveButton = utils.getByRole("button", { name: "Reserve" });
+    const reserveButton = utils.getByRole("button", {
+      name: /Reserve/i
+    });
     expect(reserveButton).toBeInTheDocument();
   });
 
@@ -408,8 +412,8 @@ describe("available to reserve", () => {
         }
       })
     });
-    const reserveButton = await utils.findByRole("button", {
-      name: "Reserving..."
+    const reserveButton = utils.getByRole("button", {
+      name: /Reserving.../i
     });
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toHaveAttribute("disabled", "");
@@ -474,6 +478,8 @@ describe("reserved", () => {
 });
 
 describe("available to download", () => {
+  beforeEach(() => ((env.NEXT_PUBLIC_COMPANION_APP as string) = "simplye"));
+
   const downloadableBook = mergeBook({
     openAccessLinks: undefined,
     fulfillmentLinks: [
@@ -494,12 +500,46 @@ describe("available to download", () => {
     }
   });
 
+  const viewableAxisNowBook = mergeBook({
+    openAccessLinks: undefined,
+    fulfillmentLinks: [
+      {
+        url: "/epub-link",
+        type: "application/vnd.librarysimplified.axisnow+json",
+        indirectType: "something-indirect"
+      }
+    ],
+    availability: {
+      status: "available",
+      until: "2020-06-18"
+    }
+  });
+
+  test("constructs link to viewer for OpenAxis Books", () => {
+    const utils = render(<FulfillmentCard book={viewableAxisNowBook} />);
+    const readerLink = utils.getByRole("link", {
+      name: /Read Online/i
+    }) as HTMLLinkElement;
+    expect(readerLink.href).toBe("http://test-domain.com/read/%2Fepub-link");
+  });
+
   test("correct title and subtitle", () => {
     const utils = render(<FulfillmentCard book={downloadableBook} />);
     expect(
       utils.getByText("You have this book on loan until Thu Jun 18 2020.")
     ).toBeInTheDocument();
     expect(utils.getByText("You're ready to read this book in SimplyE!"));
+  });
+
+  test("correct title and subtitle when COMPANION_APP is set to openebooks", () => {
+    (env.NEXT_PUBLIC_COMPANION_APP as string) = "openebooks";
+    const utils = render(<FulfillmentCard book={downloadableBook} />);
+    expect(
+      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
+    ).toBeInTheDocument();
+    expect(
+      utils.getByText("You're ready to read this book in Open eBooks!")
+    ).toBeInTheDocument();
   });
 
   test("handles lack of availability info", () => {
@@ -537,14 +577,15 @@ describe("available to download", () => {
     expect(fulfillBookSpy).toHaveBeenCalledWith("/epub-link");
   });
 
-  test("download button calls indirect fullfill when book is indirect", () => {
+  test("download button calls indirect fullfill when book is indirect with a type that is readable online", () => {
     const bookWithIndirect = mergeBook({
       ...downloadableBook,
       fulfillmentLinks: [
         {
           url: "/indirect",
           type: "application/atom+xml;type=entry;profile=opds-catalog",
-          indirectType: "something-indirect"
+          indirectType:
+            'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
         }
       ]
     });
@@ -552,7 +593,7 @@ describe("available to download", () => {
     const indirectFulfillSpy = jest.spyOn(actions, "indirectFulfillBook");
 
     const utils = render(<FulfillmentCard book={bookWithIndirect} />);
-    const downloadButton = utils.getByText("Download atom");
+    const downloadButton = utils.getByText("Read Online");
     expect(downloadButton).toBeInTheDocument();
 
     userEvent.click(downloadButton);
@@ -560,8 +601,32 @@ describe("available to download", () => {
     expect(indirectFulfillSpy).toHaveBeenCalledTimes(1);
     expect(indirectFulfillSpy).toHaveBeenCalledWith(
       "/indirect",
-      "something-indirect"
+      'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
     );
+  });
+
+  test("download button says download type when book is indirect with a type that is not readable online", () => {
+    const bookWithIndirect = mergeBook({
+      ...downloadableBook,
+      fulfillmentLinks: [
+        {
+          url: "/indirect",
+          type: "application/atom+xml;type=entry;profile=opds-catalog",
+          indirectType: "indirect-link"
+        }
+      ]
+    });
+
+    const fulfillBookSpy = jest.spyOn(actions, "fulfillBook");
+
+    const utils = render(<FulfillmentCard book={bookWithIndirect} />);
+    const downloadButton = utils.getByText("Download atom");
+    expect(downloadButton).toBeInTheDocument();
+
+    userEvent.click(downloadButton);
+
+    expect(fulfillBookSpy).toHaveBeenCalledTimes(1);
+    expect(fulfillBookSpy).toHaveBeenCalledWith("/indirect");
   });
 
   test("says read online for streaming media", () => {
@@ -572,7 +637,7 @@ describe("available to download", () => {
           url: "/streaming",
           type: "application/atom+xml;type=entry;profile=opds-catalog",
           indirectType:
-            "text/html;profile=http://librarysimplified.org/terms/profiles/streaming-media"
+            'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
         }
       ]
     });
@@ -588,7 +653,7 @@ describe("available to download", () => {
     expect(indirectFulfillSpy).toHaveBeenCalledTimes(1);
     expect(indirectFulfillSpy).toHaveBeenCalledWith(
       "/streaming",
-      "text/html;profile=http://librarysimplified.org/terms/profiles/streaming-media"
+      'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"'
     );
   });
 

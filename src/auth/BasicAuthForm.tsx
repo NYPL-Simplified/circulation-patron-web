@@ -29,6 +29,15 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
   const usernameInputName = provider.method.labels.login;
   const passwordInputName = provider.method.labels.password;
 
+  let imageUrl;
+
+  for (const link of provider.method.links || []) {
+    if (link.rel === "logo") {
+      imageUrl = link.href;
+      break;
+    }
+  }
+
   const onSubmit = handleSubmit(async values => {
     const login = values[usernameInputName];
     const password = values[passwordInputName];
@@ -70,11 +79,24 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
           errors[passwordInputName] && `Your ${passwordInputName} is required.`
         }
       />
+
       <Button
         type="submit"
-        sx={{ alignSelf: "flex-end", m: 2, mr: 0, flex: "1 0 auto" }}
+        sx={{
+          alignSelf: "flex-end",
+          m: 2,
+          mr: 0,
+          flex: "1 0 auto",
+          width: "280px",
+          height: "51px",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "0",
+          backgroundImage: `url(${imageUrl})`,
+          cursor: "pointer",
+          border: "none"
+        }}
       >
-        Login
+        {!imageUrl ? "Login" : ""}
       </Button>
     </form>
   );

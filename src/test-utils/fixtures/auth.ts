@@ -1,11 +1,18 @@
 import {
   AuthProvider,
   BasicAuthMethod,
-  ClientSamlMethod
+  ClientSamlMethod,
+  AuthMethod
 } from "opds-web-client/lib/interfaces";
+
+import CleverButton from "auth/cleverAuthButton";
+
 import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
 import SamlAuthForm from "auth/SamlAuthForm";
+
+export const cleverAuthId =
+  "http://librarysimplified.org/authtype/OAuth-with-intermediary";
 
 export const basicAuthId = "http://opds-spec.org/auth/basic";
 export const samlAuthId = "http://librarysimplified.org/authtype/SAML-2.0";
@@ -20,6 +27,30 @@ export const basicAuthMethod = {
   inputs: {
     login: { keyboard: "Default" },
     password: { keyboard: "Default" }
+  }
+};
+
+export const cleverAuthProvider: AuthProvider<AuthMethod> = {
+  id: cleverAuthId,
+  plugin: {
+    formComponent: undefined,
+    buttonComponent: CleverButton,
+    lookForCredentials: jest.fn(),
+    type: cleverAuthId
+  },
+  method: {
+    description: "Clever",
+    links: [
+      {
+        href: "https://example.com/oauth_authenticate?provider=Clever",
+        rel: "authenticate"
+      },
+      {
+        href: "https://example.com/CleverLoginButton280.png",
+        rel: "logo"
+      }
+    ],
+    type: cleverAuthId
   }
 };
 

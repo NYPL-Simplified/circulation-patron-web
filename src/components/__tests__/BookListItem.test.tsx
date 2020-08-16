@@ -108,7 +108,7 @@ describe("available to borrow book", () => {
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
     const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+      name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -181,8 +181,8 @@ describe("ready to borrow book", () => {
     userEvent.click(utils.getByText("Borrow"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const borrowButton = await utils.findByRole("button", {
-      name: "Borrowing..."
+    const borrowButton = utils.getByRole("button", {
+      name: /Borrowing.../i
     });
     expect(borrowButton).toBeInTheDocument();
     expect(borrowButton).toHaveAttribute("disabled", "");
@@ -262,8 +262,8 @@ describe("available to reserve book", () => {
     userEvent.click(utils.getByText("Reserve"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
     expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
-    const reserveButton = await utils.findByRole("button", {
-      name: "Reserving..."
+    const reserveButton = utils.getByRole("button", {
+      name: /Reserving.../i
     });
     expect(reserveButton).toBeInTheDocument();
     expect(reserveButton).toHaveAttribute("disabled", "");
