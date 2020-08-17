@@ -37,10 +37,13 @@ const CleverButton: React.FC<AuthButtonProps<AuthMethod>> = ({ provider }) => {
         }
         type="submit"
         sx={{
+          m: 2,
+          mr: 0,
           color: "#ffffff",
           backgroundColor: "#2f67aa",
           width: "280px",
           height: "51px",
+          backgroundSize: `280px 51px`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "0",
           backgroundImage: `url(${imageUrl})`,

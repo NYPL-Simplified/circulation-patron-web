@@ -76,7 +76,6 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
         sx={{
           alignSelf: "flex-end",
           m: 2,
-          mr: 0,
           flex: "1 0 auto",
           width: "280px",
           height: "51px",

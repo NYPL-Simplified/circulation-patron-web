@@ -97,32 +97,39 @@ const Auth: React.FC = ({ children }) => {
               {/* what accessibility markup should be used here 
                <FormLabel htmlFor="login-method-select">Login Method</FormLabel> */}
 
-              <div>
+              <ul
+                sx={{
+                  padding: 0,
+                  margin: 0,
+                  listStyleType: "none"
+                }}
+              >
                 {providers?.map(provider => (
-                  <div>
+                  <li>
                     {" "}
                     {/* todo: make buttons block elements without extra div*/}
-                    {provider.plugin && (
-                      <BasicAuthButton
-                        links={provider.method.links || []}
-                        aria-label={`Login to ${provider.method.description}`}
-                        key={provider.id}
-                        value={provider.id}
-                        onClick={handleChangeProvider}
-                      >
-                        {provider.method.description}
-                      </BasicAuthButton>
-                    )}
+                    {provider.plugin &&
+                      provider.method.description !== "Clever" && (
+                        <BasicAuthButton
+                          links={provider.method.links || []}
+                          aria-label={`Login to ${provider.method.description}`}
+                          key={provider.id}
+                          value={provider.id}
+                          onClick={handleChangeProvider}
+                        >
+                          {provider.method.description}
+                        </BasicAuthButton>
+                      )}
                     {provider.plugin.buttonComponent &&
-                      provider.id === "Clever" && (
+                      provider.method.description === "Clever" && (
                         <provider.plugin.buttonComponent
                           key={provider.id}
                           provider={provider}
                         />
                       )}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           )}
           {authProvider && authProvider.plugin.formComponent && (
