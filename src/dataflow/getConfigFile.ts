@@ -24,16 +24,20 @@ async function fetchConfigFile(configFileUrl: string): Promise<AppConfigFile> {
     const parsed = parseConfigText(text);
     return parsed;
   } catch (e) {
-    throw new Error("Could not fetch config file at " + configFileUrl);
+    throw new Error("Could not fetch config file at: " + configFileUrl);
   }
 }
 
 function parseConfigText(raw: string): AppConfigFile {
-  return raw.split("\n").reduce((config, line) => {
-    if (line.charAt(0) !== "#") {
-      const [path, circManagerUrl] = line.split("|");
-      return { ...config, [path]: circManagerUrl };
-    }
-    return config;
-  }, {});
+  return raw
+    .split("\n")
+    .map(v => v.trim())
+    .filter(line => line !== "")
+    .reduce((config, line) => {
+      if (line.charAt(0) !== "#") {
+        const [path, circManagerUrl] = line.split("|");
+        return { ...config, [path]: circManagerUrl };
+      }
+      return config;
+    }, {});
 }
