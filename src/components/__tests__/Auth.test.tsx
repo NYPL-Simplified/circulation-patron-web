@@ -108,6 +108,18 @@ const authStateWithClever: AuthState = {
   providers: [fixtures.cleverAuthProvider, fixtures.samlAuthProvider]
 };
 
+
+const authStateWithFiveProviders: AuthState = {
+  showForm: true,
+  callback: jest.fn(),
+  cancel: jest.fn(),
+  credentials: null,
+  title: "form",
+  error: null,
+  attemptedProvider: null,
+  providers: [fixtures.basicAuthProvider, fixtures.samlAuthProvider, fixtures.cleverAuthProvider, fixtures.samlAuthProvider, fixtures.samlAuthProvider]
+};
+
 const authStateWithTwoProviders: AuthState = {
   showForm: true,
   callback: jest.fn(),
@@ -118,12 +130,46 @@ const authStateWithTwoProviders: AuthState = {
   attemptedProvider: null,
   providers: [fixtures.basicAuthProvider, fixtures.samlAuthProvider]
 };
+
+const stateWithFiveProviders: State = merge<State>(fixtures.initialState, {
+  auth: authStateWithFiveProviders
+})
+
 const stateWithTwoProviders: State = merge<State>(fixtures.initialState, {
   auth: authStateWithTwoProviders
 });
 
 const stateWithCleverProvider: State = merge<State>(fixtures.initialState, {
   auth: authStateWithClever
+});
+
+
+test("renders select when more than four providers present", async () => {
+  const utils = render(
+    <Auth>
+      <div>children</div>
+    </Auth>,
+    {
+      initialState: stateWithFiveProviders
+    }
+  );
+
+  const select = utils.getByRole("combobox", { name: "Login Method" });
+  expect(select).toBeInTheDocument();
+
+  // should have five options
+  expect(
+    utils.getByRole("option", { name: "Clever" })
+  ).toBeInTheDocument();
+  expect(
+    utils.getByRole("option", { name: "Library Barcode" })
+  ).toBeInTheDocument();
+  expect(utils.getAllByRole("option", { name: "SAML IdP" })).toHaveLength(3);
+
+  // should be able to change provider
+  userEvent.selectOptions(select, fixtures.samlAuthProvider.id);
+
+  expect(await utils.findByText("Login with SAML IdP")).toBeInTheDocument();
 });
 
 test("renders select Clever with multiple providers present", async () => {
