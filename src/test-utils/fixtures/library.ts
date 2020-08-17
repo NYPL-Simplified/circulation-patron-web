@@ -4,6 +4,8 @@ import { LibraryData } from "../../interfaces";
  * Copied via chrome console from sample app.
  */
 export const libraryData: LibraryData = {
+  id: "library-auth-id",
+  logoUrl: null,
   onlyLibrary: true,
   catalogUrl: "http://test-cm.com/catalogUrl",
   catalogName: "XYZ Public Library",

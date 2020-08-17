@@ -6,17 +6,12 @@ import {
   IS_SERVER,
   IS_DEVELOPMENT,
   REACT_AXE,
-  IS_MULTI_LIBRARY
+  CONFIG_FILE
 } from "../utils/env";
 import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
-import getLibraryData, {
-  setLibraryData,
-  getConfig
-} from "../dataflow/getLibraryData";
 import getOrCreateStore from "../dataflow/getOrCreateStore";
-import { LibraryData } from "../interfaces";
-import { State } from "opds-web-client/lib/state";
+import { LibraryData, AppConfigFile } from "../interfaces";
 import { ThemeProvider } from "theme-ui";
 import Auth from "../components/Auth";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -25,25 +20,36 @@ import Error from "components/Error";
 import { ParsedUrlQuery } from "querystring";
 import enableAxe from "utils/axe";
 import "system-font-css";
-import { Config } from "dataflow/LibraryDataCache";
 import "@nypl/design-system-react-components/dist/styles.css";
 import "css-overrides.css";
 import makeTheme from "../theme";
+import {
+  getCatalogUrl,
+  fetchCatalog,
+  getAuthDocHref,
+  fetchAuthDocument,
+  getLibraryData
+} from "dataflow/getLibraryData";
+import getConfigFile from "dataflow/getConfigFile";
+import ApplicationError from "errors";
 
-type NotFoundProps = {
-  statusCode: number;
-  configFile?: Config;
+type ErrorProps = {
+  error: {
+    message: string;
+    name: string;
+    statusCode: number;
+  };
+  configFile?: AppConfigFile;
 };
 
-type InitialData = {
-  library: LibraryData;
-  initialState: State;
-};
+type MyAppProps =
+  | {
+      library: LibraryData;
+    }
+  | ErrorProps;
 
-type MyAppProps = InitialData | NotFoundProps;
-
-function is404(props: MyAppProps): props is NotFoundProps {
-  return !!(props as NotFoundProps).statusCode;
+function isErrorProps(props: MyAppProps): props is ErrorProps {
+  return !!(props as ErrorProps).error;
 }
 
 const MyApp = (props: MyAppProps & AppProps) => {
@@ -51,17 +57,20 @@ const MyApp = (props: MyAppProps & AppProps) => {
    * If there was no library or initialState provided, render the error page
    */
 
-  if (is404(props)) {
+  if (isErrorProps(props)) {
     return (
-      <Error statusCode={props.statusCode} configFile={props.configFile} />
+      <Error
+        statusCode={props.error.statusCode}
+        detail={props.error.message}
+        configFile={props.configFile}
+      />
     );
   }
 
-  const { library, initialState, Component, pageProps } = props;
+  const { library, Component, pageProps } = props;
   const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
   const pathFor = getPathFor(urlShortener, library.id);
-  const store = getOrCreateStore(pathFor, initialState);
-  setLibraryData(library);
+  const store = getOrCreateStore(pathFor);
 
   const theme = makeTheme(library.colors);
 
@@ -86,6 +95,42 @@ const MyApp = (props: MyAppProps & AppProps) => {
   );
 };
 
+MyApp.getInitialProps = async ({ ctx, _err }) => {
+  const librarySlug = getLibraryFromQuery(ctx.query);
+
+  try {
+    const catalogUrl = await getCatalogUrl(librarySlug);
+    const catalog = await fetchCatalog(catalogUrl);
+    const authDocHref = getAuthDocHref(catalog);
+    const authDocument = await fetchAuthDocument(authDocHref);
+    const library = getLibraryData(authDocument, catalogUrl);
+
+    return {
+      library
+    };
+  } catch (e) {
+    let configFile: AppConfigFile | undefined;
+    if (CONFIG_FILE) {
+      try {
+        configFile = await getConfigFile(CONFIG_FILE);
+      } catch {
+        configFile = undefined;
+      }
+    }
+
+    if (e instanceof ApplicationError) {
+      return {
+        error: {
+          message: e.message,
+          name: e.name,
+          statusCode: e.statusCode
+        },
+        configFile
+      };
+    }
+  }
+};
+
 /**
  * The query object type doesn't protect against undefined values, and
  * the "library" variable could be an array if you pass ?library=xxx&library=zzz
@@ -100,58 +145,6 @@ const getLibraryFromQuery = (
       ? libraryQuery
       : libraryQuery[0]
     : undefined;
-};
-
-MyApp.getInitialProps = async ({ ctx, _err }) => {
-  const { query } = ctx;
-
-  /**
-   * Get libraryData from the DataCache, which we will then set
-   * in the redux store. We need to augment this for settings
-   *  CONFIG_FILE
-   *  LIBRARY_REGISTRY
-   */
-  const parsedLibrary = getLibraryFromQuery(query);
-  const libraryData = await getLibraryData(parsedLibrary);
-
-  /**
-   * This guard checks if you are running as a single library but
-   * attempting to access a multi-library route
-   */
-  const isMultiLibraryRoute = ctx.pathname?.includes?.("[library]");
-  const shouldNotHaveAccess = isMultiLibraryRoute && !IS_MULTI_LIBRARY;
-
-  if (!libraryData || shouldNotHaveAccess) {
-    console.warn(
-      "Returning 404 for pathname: ",
-      ctx.pathname,
-      " and as path: ",
-      ctx.asPath
-    );
-    const config = await getConfig();
-    if (ctx.res) ctx.res.statusCode = 404;
-    return { statusCode: 404, configFile: config };
-  }
-
-  /**
-   * Create the resources we need to complete a server render
-   */
-  const urlShortener = new UrlShortener(libraryData.catalogUrl, SHORTEN_URLS);
-  const pathFor = getPathFor(urlShortener, libraryData.id);
-  const store = getOrCreateStore(pathFor);
-
-  /**
-   * Pass updated redux state to the app component to be used to rebuild
-   * the store on client side with pre-filled data from ssr
-   */
-  const initialState = store.getState();
-
-  return {
-    initialState,
-    SHORTEN_URLS,
-    pathFor,
-    library: libraryData
-  };
 };
 
 if (IS_DEVELOPMENT && !IS_SERVER && REACT_AXE) {
