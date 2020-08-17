@@ -15,7 +15,7 @@ const urlComparator = (
   return !!(url1 && url2) && url1 === url2;
 };
 
-export default (
+const computeBreadcrumbs = (
   collection: CollectionData,
   history: LinkData[]
 ): LinkData[] => {
@@ -45,3 +45,5 @@ export default (
 
   return links;
 };
+
+export default computeBreadcrumbs;
