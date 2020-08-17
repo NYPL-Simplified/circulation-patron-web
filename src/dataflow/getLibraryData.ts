@@ -88,7 +88,7 @@ export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
 export function getLibraryData(
   authDoc: AuthDocument,
   catalogUrl: string,
-  librarySlug?: string
+  librarySlug: string | undefined
 ): LibraryData {
   const logoUrl = authDoc.links.find(link => link.rel === "logo")?.href;
   const headerLinks = authDoc.links.filter(link => link.rel === "navigation");

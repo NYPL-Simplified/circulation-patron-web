@@ -11,8 +11,11 @@ test("app sets and uses passed in primary and secondary colors", () => {
   expect(result.colors.brand.secondary).toBe("red");
 });
 
-test("accepts undefined color scheme", () => {
-  const result = makeTheme(undefined);
+test("accepts nullish color scheme", () => {
+  const result = makeTheme({
+    primary: null,
+    secondary: null
+  });
 
   expect(result).toEqual(baseTheme);
 });

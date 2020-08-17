@@ -1,23 +1,19 @@
 import * as React from "react";
+import Collection from "components/Collection";
+import { NextPage, GetServerSideProps } from "next";
+import Page from "components/Page";
+import withAppProps, { AppProps } from "dataflow/withAppProps";
 
-import Collection from "../../components/Collection";
-import Layout from "../../components/Layout";
+type Props = AppProps;
 
-import ErrorPage from "../404";
-import useLibraryContext from "components/context/LibraryContext";
-
-const LibraryHome = ({ statusCode }: { statusCode?: number }) => {
-  const libraryTitle = useLibraryContext().catalogName;
-
+const LibraryHome: NextPage<Props> = ({ library, error }) => {
   return (
-    <Layout>
-      {statusCode === 404 ? (
-        <ErrorPage />
-      ) : (
-        <Collection title={`${libraryTitle} Home`} />
-      )}
-    </Layout>
+    <Page library={library} error={error}>
+      <Collection title={`${library?.catalogName} Home`} />
+    </Page>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withAppProps();
 
 export default LibraryHome;

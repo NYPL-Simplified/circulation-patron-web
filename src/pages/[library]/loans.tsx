@@ -1,11 +1,19 @@
 import * as React from "react";
-import MyBooks from "../../components/MyBooks";
+import { NextPage, GetServerSideProps } from "next";
+import Page from "components/Page";
+import withAppProps, { AppProps } from "dataflow/withAppProps";
+import MyBooks from "components/MyBooks";
 
-import Layout from "../../components/Layout";
-import ErrorPage from "../404";
+type Props = AppProps;
 
-const Loans = ({ statusCode }: { statusCode?: number }) => {
-  return <Layout>{statusCode === 404 ? <ErrorPage /> : <MyBooks />}</Layout>;
+const MyBooksPage: NextPage<Props> = ({ library, error }) => {
+  return (
+    <Page library={library} error={error}>
+      <MyBooks />
+    </Page>
+  );
 };
 
-export default Loans;
+export const getServerSideProps: GetServerSideProps = withAppProps();
+
+export default MyBooksPage;

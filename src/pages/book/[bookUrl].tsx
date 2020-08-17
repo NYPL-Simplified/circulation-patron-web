@@ -1,13 +1,17 @@
 import * as React from "react";
-import Layout from "../../components/Layout";
-import BookDetails from "../../components/bookDetails";
+import BookDetails from "components/bookDetails";
+import withAppProps, { AppProps } from "dataflow/withAppProps";
+import Page from "components/Page";
+import { NextPage, GetServerSideProps } from "next";
 
-const BookPage = () => {
+const BookPage: NextPage<AppProps> = ({ library, error }) => {
   return (
-    <Layout>
+    <Page library={library} error={error}>
       <BookDetails />
-    </Layout>
+    </Page>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withAppProps();
 
 export default BookPage;
