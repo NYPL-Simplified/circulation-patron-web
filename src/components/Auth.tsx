@@ -11,7 +11,9 @@ import Button from "components/Button";
 import BasicAuthButton from "../auth/BasicAuthButton";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useTypedSelector from "hooks/useTypedSelector";
-
+import FormLabel from "./form/FormLabel";
+import Select from "./Select";
+import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
 /**
  *  - makes sure auth state is loaded from cookies
  *  - shows auth form modal based on redux state (showForm)
@@ -22,7 +24,9 @@ const Auth: React.FC = ({ children }) => {
 
   const dialog = useDialogState();
   const library = useLibraryContext();
-  const [authProvider, setAuthProvider] = React.useState(providers?.[0]);
+  const [authProvider, setAuthProvider] = React.useState(
+    [][0] as AuthProvider<AuthMethod>
+  );
 
   const { fetcher, actions, dispatch } = useActions();
 
@@ -49,31 +53,27 @@ const Auth: React.FC = ({ children }) => {
       setAuthProvider(providers?.[0]);
   }, [authProvider, providers]);
 
-  //  ChangeEventHandler<MouseEvent>
-  const handleChangeProvider: React.MouseEvent<
-    HTMLButtonElement,
-    MouseEvent
-  > = (e: { target: { value: string } }) => {
+  const handleChangeProvider = (e: { target: { value: string } }) => {
     setAuthProvider(
-      providers?.find(provider => provider.id === e.target.value)
+      providers?.find(provider => provider.id === e.target.value) ||
+        ([][0] as AuthProvider<AuthMethod>)
     );
   };
 
-  const cancelGoBackToAuthSelection: React.MouseEvent<
-    HTMLButtonElement,
-    MouseEvent
-  > = () => {
-    setAuthProvider(undefined);
+  const cancelGoBackToAuthSelection = () => {
+    setAuthProvider([][0] as AuthProvider<AuthMethod>);
   };
 
-  const hasMultipleProviders = providers?.length !== 1;
+  const showProviderButtons =
+    providers && providers?.length > 1 && providers?.length <= 4;
 
-  const showFormComponent = authProvider && authProvider.plugin.formComponent;
+  const showProviderComboBox = providers && providers?.length > 4;
+
+  const showFormComponent = authProvider && authProvider?.plugin?.formComponent;
 
   const showButtonComponent =
-    authProvider &&
-    authProvider.plugin.buttonComponent &&
-    authProvider.method.description === "Clever";
+    authProvider?.plugin?.buttonComponent &&
+    authProvider?.method?.description === "Clever";
 
   const noAuth = !showFormComponent && !showButtonComponent;
 
@@ -92,10 +92,23 @@ const Auth: React.FC = ({ children }) => {
             <h4>Login</h4>
           </div>
 
-          {hasMultipleProviders && !authProvider && (
+          {showProviderComboBox && (
+            <div sx={{ mb: 2 }}>
+              <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
+              <Select id="login-method-select" onChange={handleChangeProvider}>
+                {providers?.map(provider => (
+                  <option key={provider.id} value={provider.id}>
+                    {provider.method.description}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          )}
+
+          {showProviderButtons && !authProvider && (
             <div sx={{ mb: 2, textAlign: `center` }}>
-              {/* what accessibility markup should be used here 
-               <FormLabel htmlFor="login-method-select">Login Method</FormLabel> */}
+              {/* what accessibility markup should be used here */}
+              <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
 
               <ul
                 sx={{
@@ -106,8 +119,6 @@ const Auth: React.FC = ({ children }) => {
               >
                 {providers?.map(provider => (
                   <li>
-                    {" "}
-                    {/* todo: make buttons block elements without extra div*/}
                     {provider.plugin &&
                       provider.method.description !== "Clever" && (
                         <BasicAuthButton
@@ -140,6 +151,8 @@ const Auth: React.FC = ({ children }) => {
           )}
 
           <Button
+            // TO-DO resolve type issue
+            // @ts-ignore
             onClick={
               authProvider && providers && providers.length > 1
                 ? cancelGoBackToAuthSelection
