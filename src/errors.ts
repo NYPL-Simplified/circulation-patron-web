@@ -10,8 +10,26 @@ export default class ApplicationError extends Error {
 
 export class PageNotFoundError extends ApplicationError {
   readonly statusCode = 404;
+
+  constructor(m: string, baseError?: Error) {
+    super(`${m}${baseError ? baseError.message : ""}`);
+    Object.setPrototypeOf(this, PageNotFoundError.prototype);
+    this.name = "Page Not Found Error";
+  }
 }
 
-export class UnimplementedError extends ApplicationError {}
+export class UnimplementedError extends ApplicationError {
+  constructor(m: string, baseError?: Error) {
+    super(`${m}${baseError ? baseError.message : ""}`);
+    Object.setPrototypeOf(this, UnimplementedError.prototype);
+    this.name = "Unimplemented Error";
+  }
+}
 
-export class AppSetupError extends ApplicationError {}
+export class AppSetupError extends ApplicationError {
+  constructor(m: string, baseError?: Error) {
+    super(`${m}${baseError ? baseError.message : ""}`);
+    Object.setPrototypeOf(this, AppSetupError.prototype);
+    this.name = "App Setup Error";
+  }
+}
