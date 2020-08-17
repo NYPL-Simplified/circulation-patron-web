@@ -3,11 +3,11 @@ import UrlShortener from "../UrlShortener";
 
 const getPathFor = (
   urlShortener: UrlShortener,
-  libraryId?: string
+  librarySlug: string | null
 ): PathFor => (collectionUrl, bookUrl) => {
   let path = "";
-  if (libraryId) {
-    path += "/" + libraryId;
+  if (librarySlug) {
+    path += "/" + librarySlug;
   }
   if (collectionUrl) {
     const preparedCollectionUrl = urlShortener.prepareCollectionUrl(

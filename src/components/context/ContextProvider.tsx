@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PathFor, PreloadedData } from "interfaces";
+import { PathFor, LibraryData } from "interfaces";
 import UrlShortener from "UrlShortener";
 import { LibraryProvider } from "./LibraryContext";
 import PathForProvider from "opds-web-client/lib/components/context/PathForContext";
@@ -18,11 +18,11 @@ import samlAuthPlugin from "auth/samlAuthPlugin";
 import CleverAuthPlugin from "auth/cleverAuthPlugin";
 import getPathFor from "utils/getPathFor";
 import { LinkUtilsProvider } from "./LinkUtilsContext";
+import { SHORTEN_URLS } from "utils/env";
 
-type ProviderProps = PreloadedData & {
-  // we allow custom store and actions
-  // to be passed in for the sake of mocking during testing
-  store?: Store<State>;
+type ProviderProps = {
+  library: LibraryData;
+  store: Store<State>;
   actions?: ActionsCreator;
   fetcher?: DataFetcher;
 };
@@ -32,15 +32,13 @@ type ProviderProps = PreloadedData & {
 const AppContextProvider: React.FC<ProviderProps> = ({
   children,
   library,
-  shortenUrls,
-  initialState,
   store,
   actions,
   fetcher
 }) => {
-  const libraryId = library.id;
-  const urlShortener = new UrlShortener(library.catalogUrl, shortenUrls);
-  const pathFor: PathFor = getPathFor(urlShortener, libraryId);
+  const librarySlug = library.slug;
+  const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
+  const pathFor: PathFor = getPathFor(urlShortener, librarySlug);
   const computedFetcher = React.useMemo(
     () => fetcher ?? new DataFetcher({ adapter }),
     [fetcher]
@@ -55,7 +53,6 @@ const AppContextProvider: React.FC<ProviderProps> = ({
       <RouterProvider>
         <PathForProvider pathFor={pathFor}>
           <OPDSStore
-            initialState={initialState}
             store={store}
             authPlugins={[basicAuthPlugin, samlAuthPlugin, CleverAuthPlugin]}
           >

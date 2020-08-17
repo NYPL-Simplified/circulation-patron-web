@@ -118,23 +118,6 @@ export interface LibraryData {
   libraryLinks: LibraryLinks;
 }
 
-export interface PreloadedData {
-  library: LibraryData;
-  shortenUrls: boolean;
-  initialState?: State;
-  helmetContext?: any;
-}
-declare global {
-  interface Window {
-    // Our custom global holding data loaded by the server
-    __PRELOADED_DATA__: PreloadedData;
-  }
-}
-
-export interface WebpackAssets {
-  CirculationPatronWeb: string[];
-}
-
 /**
  * Recommendations and Complaints
  */

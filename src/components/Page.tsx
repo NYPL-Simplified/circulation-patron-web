@@ -30,7 +30,7 @@ const Page: React.FC<AppProps> = props => {
 
   const { library, children } = props;
   const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
-  const pathFor = getPathFor(urlShortener, library.id);
+  const pathFor = getPathFor(urlShortener, library.slug);
   const store = getOrCreateStore(pathFor);
   const theme = makeTheme(library.colors);
 
@@ -40,11 +40,7 @@ const Page: React.FC<AppProps> = props => {
         {/* define the default title */}
         <title>{library.catalogName}</title>
       </Head>
-      <ContextProvider
-        shortenUrls={SHORTEN_URLS}
-        library={library}
-        store={store}
-      >
+      <ContextProvider library={library} store={store}>
         <ThemeProvider theme={theme}>
           <Auth>
             <Layout>{children}</Layout>

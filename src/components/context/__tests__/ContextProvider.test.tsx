@@ -12,10 +12,16 @@ import { MockNextRouterContextProvider } from "../../../test-utils/mockNextRoute
 const TestComponent: React.FC = () => <div>test child</div>;
 
 const testLibrary: LibraryData = {
-  id: "TEST",
+  slug: "TEST",
   catalogUrl: "http://example.com/home",
   catalogName: "Example",
-  libraryLinks: {}
+  libraryLinks: {},
+  logoUrl: null,
+  colors: {
+    primary: null,
+    secondary: null
+  },
+  headerLinks: []
 };
 
 type MakeContextConfig = {
@@ -27,16 +33,10 @@ type MakeContextConfig = {
 const makeContextWrapper = (config: MakeContextConfig = {}) => ({
   children
 }) => {
-  const { library = testLibrary, initialState, shortenUrls = false } = config;
+  const { library = testLibrary } = config;
   return (
     <MockNextRouterContextProvider>
-      <AppContextProvider
-        library={library}
-        initialState={initialState}
-        shortenUrls={shortenUrls}
-      >
-        {children}
-      </AppContextProvider>
+      <AppContextProvider library={library}>{children}</AppContextProvider>
     </MockNextRouterContextProvider>
   );
 };
@@ -60,11 +60,7 @@ describe("ContextProvider", () => {
   test("renders child", () => {
     const store = buildStore();
     const wrapper = shallow(
-      <AppContextProvider
-        library={testLibrary}
-        initialState={store.getState()}
-        shortenUrls
-      >
+      <AppContextProvider library={testLibrary} shortenUrls>
         <TestComponent />
       </AppContextProvider>
     );
