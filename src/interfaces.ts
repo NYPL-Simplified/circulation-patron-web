@@ -50,11 +50,10 @@ export interface LibraryData {
   catalogName: string;
   logoUrl?: string;
   colors?: {
-    background?: string;
-    foreground?: string;
+    primary?: string;
+    secondary?: string;
   };
   headerLinks?: Link[];
-  cssLinks?: Link[];
   libraryLinks: LibraryLinks;
 }
 
@@ -79,7 +78,7 @@ export interface WebpackAssets {
 export type RecommendationsState = CollectionState;
 export type { ComplaintsState } from "./hooks/useComplaints/reducer";
 
-export type { Theme } from "./theme";
+export type { AppTheme } from "theme";
 // helper for theme variant prop types
 export type VariantProp<VType> = Exclude<keyof VType, keyof {}>;
 

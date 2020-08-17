@@ -2,7 +2,6 @@ import * as React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ThemeProvider } from "theme-ui";
-import theme from "../theme";
 import ContextProvider from "../components/context/ContextProvider";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
@@ -19,6 +18,7 @@ import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import serializer from "jest-emotion";
 import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
+import makeTheme from "../theme";
 
 expect.addSnapshotSerializer(serializer);
 
@@ -47,6 +47,7 @@ type CustomRenderOptions = Parameters<typeof render>[1] & {
   router?: Partial<NextRouter>;
   initialState?: State;
   library?: LibraryData;
+  colors?: { primary: string; secondary: string };
 };
 const customRender = (ui: any, options?: CustomRenderOptions) => {
   const pathFor = jest
@@ -64,6 +65,10 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
     .mockImplementation(origDispatch);
   store.dispatch = mockDispatch as typeof origDispatch;
 
+  const theme = makeTheme({
+    primary: "#337ab7",
+    secondary: "#d9534f"
+  });
   const AllTheProviders = ({ children }) => {
     return (
       <MockNextRouterContextProvider router={options?.router}>

@@ -16,8 +16,8 @@ export interface AuthDocument {
   links: Link[];
   // eslint-disable-next-line camelcase
   web_color_scheme?: {
-    background?: string;
-    foreground?: string;
+    primary?: string;
+    secondary?: string;
   };
 }
 
@@ -93,14 +93,11 @@ export default class LibraryDataCache {
     catalog: OPDSFeed
   ) {
     let logoUrl: string | undefined;
-    const cssLinks: Link[] = [];
     const headerLinks: Link[] = [];
 
     for (const link of authDocument.links) {
       if (link.rel === "logo") {
         logoUrl = link.href;
-      } else if (link.rel === "stylesheet") {
-        cssLinks.push(link);
       }
     }
 
@@ -116,7 +113,6 @@ export default class LibraryDataCache {
       catalogName: authDocument["title"],
       colors: authDocument["web_color_scheme"],
       headerLinks,
-      cssLinks,
       logoUrl,
       libraryLinks
     };

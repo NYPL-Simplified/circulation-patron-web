@@ -8,8 +8,8 @@ export const libraryData: LibraryData = {
   catalogUrl: "http://test-cm.com/catalogUrl",
   catalogName: "XYZ Public Library",
   colors: {
-    foreground: "#ffffff",
-    background: "#000000"
+    primary: "#ffffff",
+    secondary: "#000000"
   },
   headerLinks: [
     {
@@ -18,14 +18,6 @@ export const libraryData: LibraryData = {
       type: "text/html",
       title: "LOC",
       role: "navigation"
-    }
-  ],
-  cssLinks: [
-    {
-      href:
-        "http://simplye-dev-web.amigos.org/resources/xyzlib/styles/test-css.css",
-      type: "text/css",
-      rel: "stylesheet"
     }
   ],
   libraryLinks: {}

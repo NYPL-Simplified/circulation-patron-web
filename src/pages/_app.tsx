@@ -18,7 +18,6 @@ import getOrCreateStore from "../dataflow/getOrCreateStore";
 import { LibraryData } from "../interfaces";
 import { State } from "opds-web-client/lib/state";
 import { ThemeProvider } from "theme-ui";
-import theme from "../theme";
 import Auth from "../components/Auth";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
@@ -29,6 +28,7 @@ import "system-font-css";
 import { Config } from "dataflow/LibraryDataCache";
 import "@nypl/design-system-react-components/dist/styles.css";
 import "css-overrides.css";
+import makeTheme from "../theme";
 
 type NotFoundProps = {
   statusCode: number;
@@ -62,6 +62,8 @@ const MyApp = (props: MyAppProps & AppProps) => {
   const pathFor = getPathFor(urlShortener, library.id);
   const store = getOrCreateStore(pathFor, initialState);
   setLibraryData(library);
+
+  const theme = makeTheme(library.colors);
 
   return (
     <ErrorBoundary fallback={AppErrorFallback}>

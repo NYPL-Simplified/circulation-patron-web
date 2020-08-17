@@ -1,4 +1,5 @@
 import theme from "./theme";
+import makeTheme from "./makeTheme";
 import { SystemStyleObject } from "@styled-system/css";
 
 /**
@@ -15,6 +16,6 @@ export type CardVariants = {
   bookDetails: SystemStyleObject;
 };
 
-export type Theme = typeof theme;
+export type AppTheme = typeof theme;
 
-export default theme;
+export default makeTheme;
