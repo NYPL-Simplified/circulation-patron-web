@@ -103,7 +103,7 @@ MyApp.getInitialProps = async ({ ctx, _err }) => {
     const catalog = await fetchCatalog(catalogUrl);
     const authDocHref = getAuthDocHref(catalog);
     const authDocument = await fetchAuthDocument(authDocHref);
-    const library = getLibraryData(authDocument, catalogUrl);
+    const library = getLibraryData(authDocument, catalogUrl, librarySlug);
 
     return {
       library
@@ -128,6 +128,8 @@ MyApp.getInitialProps = async ({ ctx, _err }) => {
         configFile
       };
     }
+    // otherwise it is probably not recoverable
+    throw e;
   }
 };
 

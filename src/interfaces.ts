@@ -106,7 +106,7 @@ export type LibraryLinks = {
 };
 
 export interface LibraryData {
-  id: string;
+  slug: string | null;
   catalogUrl: string;
   catalogName: string;
   logoUrl: string | null;

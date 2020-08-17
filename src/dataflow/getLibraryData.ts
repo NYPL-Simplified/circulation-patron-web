@@ -1,7 +1,6 @@
+import { HTMLMediaType, AuthDocumentLink } from "./../interfaces";
 /* eslint-disable camelcase */
-import { IS_MULTI_LIBRARY } from "../utils/env";
-import { LibraryData, LibraryLinks } from "../interfaces";
-import { AuthDocument, AuthDocLink, HTML_LINK_TYPE } from "../opds/types";
+import { LibraryData, LibraryLinks, AuthDocument } from "../interfaces";
 import OPDSParser, { OPDSFeed } from "opds-feed-parser";
 import {
   CIRCULATION_MANAGER_BASE,
@@ -88,14 +87,14 @@ export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
 
 export function getLibraryData(
   authDoc: AuthDocument,
-  catalogUrl: string
+  catalogUrl: string,
+  librarySlug?: string
 ): LibraryData {
   const logoUrl = authDoc.links.find(link => link.rel === "logo")?.href;
   const headerLinks = authDoc.links.filter(link => link.rel === "navigation");
   const libraryLinks = parseLinks(authDoc.links);
   return {
-    id: authDoc.id,
-    onlyLibrary: !IS_MULTI_LIBRARY,
+    slug: librarySlug ?? null,
     catalogUrl,
     catalogName: authDoc.title,
     logoUrl: logoUrl ?? null,
@@ -119,7 +118,7 @@ export function getAuthDocHref(catalog: OPDSFeed) {
   return link.href;
 }
 
-function parseLinks(links: AuthDocLink[]): LibraryLinks {
+function parseLinks(links: AuthDocumentLink[]): LibraryLinks {
   const parsed = links.reduce((links, link) => {
     switch (link.rel) {
       case "about":
@@ -131,8 +130,7 @@ function parseLinks(links: AuthDocLink[]): LibraryLinks {
       case "terms-of-service":
         return { ...links, tos: link };
       case "help":
-        if (link.type === HTML_LINK_TYPE)
-          return { ...links, helpWebsite: link };
+        if (link.type === HTMLMediaType) return { ...links, helpWebsite: link };
         return { ...links, helpEmail: link };
       case "register":
       case "logo":

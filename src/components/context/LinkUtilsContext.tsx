@@ -20,10 +20,10 @@ export const LinkUtilsProvider: React.FC<{
   urlShortener: UrlShortener;
 }> = ({ library, urlShortener, children }) => {
   const buildMultiLibraryLink: BuildMultiLibraryLink = ({ href, as }) => {
-    if (library.id) {
+    if (library.slug) {
       return {
         // if no as was passed, but you're adding one now, use the href
-        as: `/${library.id}${as ? as : href}`.replace(trailingSlashRegex, ""),
+        as: `/${library.slug}${as ? as : href}`.replace(trailingSlashRegex, ""),
         href: `/[library]${href}`.replace(trailingSlashRegex, "")
       };
     }

@@ -1,4 +1,5 @@
-import { readFileSync } from "fs";
+import { AppSetupError } from "./../errors";
+import { readFileSync, existsSync } from "fs";
 import path from "path";
 import { AppConfigFile } from "interfaces";
 
@@ -9,6 +10,9 @@ export default async function getConfigFile(
     return await fetchConfigFile(configFileSetting);
   }
   const configFilePath = path.join(process.cwd(), configFileSetting);
+  if (!existsSync(configFilePath)) {
+    throw new AppSetupError("Config file not found at: " + configFilePath);
+  }
   const text = readFileSync(configFilePath, "utf8");
   return parseConfigText(text);
 }
