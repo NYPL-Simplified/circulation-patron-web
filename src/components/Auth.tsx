@@ -75,20 +75,22 @@ const Auth: React.FC = ({ children }) => {
     setAuthProvider([][0] as AuthProvider<AuthMethod>);
   };
 
-  const showProviderButtons =
-    providers && providers?.length > 1 && providers?.length <= 4;
-
-  const showProviderComboBox = providers && providers?.length > 4;
-
-  const showButtonComponent = shouldShowButton(authProvider);
-
-  const noAuth =
+  const visibleProviders =
     providers?.reduce((acc, provider) => {
       if (shouldShowButton(provider) || shouldShowFormComponent(provider)) {
-        acc++;
+        acc.push(provider);
       }
       return acc;
-    }, 0) === 0;
+    }, [] as AuthProvider<AuthMethod>[]) || ([] as AuthProvider<AuthMethod>[]);
+
+  const noAuth = visibleProviders.length === 0;
+
+  const showProviderComboBox = visibleProviders.length > 4;
+
+  const showProviderButtons =
+    visibleProviders.length > 1 && visibleProviders.length <= 4;
+
+  const showButtonComponent = shouldShowButton(authProvider);
 
   return (
     <React.Fragment>
