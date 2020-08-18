@@ -20,15 +20,15 @@ import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
  *  - uses the AuthPlugin system to render the auth form
  */
 
-function shouldShowButton(authProvider) {
-  return (
+function shouldShowButton(authProvider): boolean {
+  return Boolean(
     authProvider?.plugin?.buttonComponent &&
-    authProvider?.method?.description === "Clever"
+      authProvider?.method?.description === "Clever"
   );
 }
 
-function shouldShowFormComponent(authProvider) {
-  return authProvider.plugin.formComponent;
+function shouldShowFormComponent(authProvider): boolean {
+  return Boolean(authProvider.plugin.formComponent);
 }
 const Auth: React.FC = ({ children }) => {
   const { showForm, cancel, providers } = useAuth();
