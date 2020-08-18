@@ -108,7 +108,6 @@ const authStateWithClever: AuthState = {
   providers: [fixtures.cleverAuthProvider, fixtures.samlAuthProvider]
 };
 
-
 const authStateWithFiveProviders: AuthState = {
   showForm: true,
   callback: jest.fn(),
@@ -117,7 +116,13 @@ const authStateWithFiveProviders: AuthState = {
   title: "form",
   error: null,
   attemptedProvider: null,
-  providers: [fixtures.basicAuthProvider, fixtures.samlAuthProvider, fixtures.cleverAuthProvider, fixtures.samlAuthProvider, fixtures.samlAuthProvider]
+  providers: [
+    fixtures.basicAuthProvider,
+    fixtures.samlAuthProvider,
+    fixtures.cleverAuthProvider,
+    fixtures.samlAuthProvider,
+    fixtures.samlAuthProvider
+  ]
 };
 
 const authStateWithTwoProviders: AuthState = {
@@ -133,7 +138,7 @@ const authStateWithTwoProviders: AuthState = {
 
 const stateWithFiveProviders: State = merge<State>(fixtures.initialState, {
   auth: authStateWithFiveProviders
-})
+});
 
 const stateWithTwoProviders: State = merge<State>(fixtures.initialState, {
   auth: authStateWithTwoProviders
@@ -142,7 +147,6 @@ const stateWithTwoProviders: State = merge<State>(fixtures.initialState, {
 const stateWithCleverProvider: State = merge<State>(fixtures.initialState, {
   auth: authStateWithClever
 });
-
 
 test("renders select when more than four providers present", async () => {
   const utils = render(
@@ -158,9 +162,7 @@ test("renders select when more than four providers present", async () => {
   expect(select).toBeInTheDocument();
 
   // should have five options
-  expect(
-    utils.getByRole("option", { name: "Clever" })
-  ).toBeInTheDocument();
+  expect(utils.getByRole("option", { name: "Clever" })).toBeInTheDocument();
   expect(
     utils.getByRole("option", { name: "Library Barcode" })
   ).toBeInTheDocument();

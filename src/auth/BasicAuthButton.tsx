@@ -1,17 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import * as React from "react";
 import Button from "components/Button";
 
 const BasicAuthButton = props => {
-  let imageUrl;
-
-  for (const link of props.links || []) {
-    if (link.rel === "logo") {
-      imageUrl = link.href;
-      break;
-    }
-  }
+  const imageUrl = props.links.find(link => link.rel === "logo")?.href;
 
   return (
     <Button
