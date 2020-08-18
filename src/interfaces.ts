@@ -8,10 +8,20 @@ import {
 } from "opds-web-client/lib/interfaces";
 
 /**
- * OPDS DATA TYPES
+ * OPDS 2.0 DATA TYPES
+ * Currently only used for support of a Library Regristry, which is
+ * an OPDS 2 Feed of OPDS 2 Catalogs from which we extract the catalog root url
  */
 
-export type OPDSLinkRelation = string;
+/**
+ * OPDS1.2 DATA TYPES
+ */
+
+export const AuthDocLinkRelation = "http://opds-spec.org/auth/document";
+export type OPDSLinkRelation =
+  | typeof AuthDocLinkRelation
+  | AuthDocLinkRelations;
+
 export type OPDSLinkRole = string;
 
 export const HTMLMediaType = "text/html";
@@ -28,7 +38,7 @@ export interface OPDSLink {
 /**
  * Auth Document
  */
-type AuthDocLinkRelation =
+type AuthDocLinkRelations =
   | "navigation"
   | "logo"
   | "register"
@@ -39,7 +49,7 @@ type AuthDocLinkRelation =
   | "alternate";
 
 export interface AuthDocumentLink extends Omit<OPDSLink, "role"> {
-  rel: AuthDocLinkRelation;
+  rel: AuthDocLinkRelations;
 }
 
 export interface OPDSAuthProvider {}

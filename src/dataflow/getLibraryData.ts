@@ -4,7 +4,8 @@ import {
   LibraryLinks,
   AuthDocument,
   HTMLMediaType,
-  AuthDocumentLink
+  AuthDocumentLink,
+  AuthDocLinkRelation
 } from "interfaces";
 import OPDSParser, { OPDSFeed } from "opds-feed-parser";
 import {
@@ -19,22 +20,63 @@ import ApplicationError, {
   AppSetupError
 } from "errors";
 
-export async function fetchCatalog(catalogUrl: string) {
+export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
   try {
-    console.log("Fetching Catalog for " + catalogUrl);
     const catalogResponse = await fetch(catalogUrl);
     const rawCatalog = await catalogResponse.text();
     const parser = new OPDSParser();
     const parsedCatalog = await parser.parse(rawCatalog);
-    if (!(parsedCatalog instanceof OPDSFeed)) {
+    return parsedCatalog as OPDSFeed;
+  } catch (e) {
+    throw new ApplicationError("Could not fetch catalog at: " + catalogUrl, e);
+  }
+}
+
+async function fetchLibraryTemplate(registryBase: string) {
+  try {
+    const response = await fetch(registryBase);
+    const registryCatalog = (await response.json()) as OPDSFeed;
+    const templateUrl = registryCatalog?.links.find(
+      link => link.rel === "http://librarysimplified.org/rel/registry/library"
+    )?.href;
+    if (!templateUrl) {
       throw new ApplicationError(
-        "Fetched catalog is not an instance of OPDSFeed: " + catalogUrl
+        `Template not present in response from: ${registryBase}`
       );
     }
-    return parsedCatalog;
+    return templateUrl;
   } catch (e) {
-    throw new ApplicationError("Could not fetch catalog at " + catalogUrl, e);
+    throw new ApplicationError(
+      `Could not fetch the library template at: ${registryBase}`,
+      e
+    );
   }
+}
+
+async function fetchRegistryEntry(librarySlug: string, registryBase: string) {
+  // get the template
+  // fill in the template
+  // fetch the registry
+  // convert to json
+  // check for catalogs
+  // return the first catalog
+  const template = await fetchLibraryTemplate(registryBase);
+  const libraryUrl = template.replace("{uuid}", librarySlug);
+  try {
+    const response = await fetch(libraryUrl);
+    const catalog = (await response.json()) as OPDSFeed;
+    // const entry = catalog.catalogs
+  } catch (e) {
+    throw new ApplicationError(
+      `Could not fetch registry entry for library: ${librarySlug} at ${registryBase}`,
+      e
+    );
+  }
+}
+
+const CATALOG_ROOT_REL = "http://opds-spec.org/catalog";
+function getCatalogRootUrlFromRegistryEntry(entry) {
+  return entry.links.find(link => link.rel === CATALOG_ROOT_REL)?.href;
 }
 
 export async function getCatalogUrl(librarySlug?: string) {
@@ -63,7 +105,9 @@ export async function getCatalogUrl(librarySlug?: string) {
   }
 
   if (REGISTRY_BASE) {
-    // get it from the registry
+    // fetch the registry entry
+    const entry = fetchRegistryEntry(librarySlug, REGISTRY_BASE);
+    // get the root url and return it
     throw new UnimplementedError("Registry Base not implemented");
   }
   throw new AppSetupError(
@@ -73,7 +117,6 @@ export async function getCatalogUrl(librarySlug?: string) {
 
 export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
   try {
-    console.log("Fetching Auth Document for: " + url);
     const response = await fetch(url);
     const json = await response.json();
     return json;
@@ -108,9 +151,7 @@ export function getLibraryData(
 }
 
 export function getAuthDocHref(catalog: OPDSFeed) {
-  const link = catalog.links.find(
-    link => link.rel === "http://opds-spec.org/auth/document"
-  );
+  const link = catalog.links.find(link => link.rel === AuthDocLinkRelation);
   if (!link)
     throw new ApplicationError(
       "OPDS Catalog did not contain an auth document link."
@@ -126,7 +167,7 @@ function parseLinks(links: AuthDocumentLink[]): LibraryLinks {
       case "alternate":
         return { ...links, libraryWebsite: link };
       case "privacy-policy":
-        return { ...links, pivacyPolicy: link };
+        return { ...links, privacyPolicy: link };
       case "terms-of-service":
         return { ...links, tos: link };
       case "help":

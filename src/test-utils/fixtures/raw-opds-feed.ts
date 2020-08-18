@@ -1,4 +1,4 @@
-export default `<feed
+const raw = `<feed
 	xmlns:dcterms="http://purl.org/dc/terms/"
 	xmlns:thr="http://purl.org/syndication/thread/1.0"
 	xmlns:opds="http://opds-spec.org/2010/catalog"
@@ -160,4 +160,6 @@ This work is available for countries where copyright is Life+70 and in the USA.
 		<link type="image/jpeg" rel="http://opds-spec.org/image/thumbnail" href="../thumbnail.jpg"/>
 		<link type="text/html" rel="related" href="http://www.feedbooks.com/book/52" title="Some link for the test"/>
 	</entry>
-</feed>`
+</feed>`;
+
+export default raw;
