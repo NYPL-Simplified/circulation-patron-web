@@ -151,12 +151,10 @@ const Auth: React.FC = ({ children }) => {
           )}
 
           <Button
-            // TO-DO resolve type issue
-            // @ts-ignore
-            onClick={
+            onClick={() =>
               authProvider && providers && providers.length > 1
-                ? cancelGoBackToAuthSelection
-                : cancel
+                ? cancelGoBackToAuthSelection()
+                : typeof cancel === "function" && cancel()
             }
             sx={{
               alignSelf: "flex-end",
