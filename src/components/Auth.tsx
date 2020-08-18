@@ -120,9 +120,6 @@ const Auth: React.FC = ({ children }) => {
 
           {showProviderButtons && !authProvider && (
             <div sx={{ mb: 2, textAlign: `center` }}>
-              {/* what accessibility markup should be used here */}
-              <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
-
               <ul
                 sx={{
                   padding: 0,
