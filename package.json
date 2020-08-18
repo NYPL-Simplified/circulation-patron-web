@@ -9,7 +9,8 @@
   "author": "NYPL",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "node dev-server.js",
+    "dev": "next dev",
+    "dev:https": "node dev-server.js",
     "dev:axe": "REACT_AXE=true npm run dev",
     "build": "next build",
     "start": "next start",
