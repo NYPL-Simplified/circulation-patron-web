@@ -148,7 +148,7 @@ const stateWithCleverProvider: State = merge<State>(fixtures.initialState, {
   auth: authStateWithClever
 });
 
-test("renders select when more than four providers present", async () => {
+test("renders select comboxbox when more than four providers present", async () => {
   const utils = render(
     <Auth>
       <div>children</div>

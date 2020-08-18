@@ -13,6 +13,7 @@ import { useActions } from "opds-web-client/lib/components/context/ActionsContex
 import useTypedSelector from "hooks/useTypedSelector";
 import FormLabel from "./form/FormLabel";
 import Select from "./Select";
+import Stack from "./Stack";
 import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
 /**
  *  - makes sure auth state is loaded from cookies
@@ -122,7 +123,8 @@ const Auth: React.FC = ({ children }) => {
 
           {showProviderButtons && !authProvider && (
             <div sx={{ mb: 2, textAlign: `center` }}>
-              <ul
+              <Stack
+                direction="column"
                 sx={{
                   padding: 0,
                   margin: 0,
@@ -130,7 +132,7 @@ const Auth: React.FC = ({ children }) => {
                 }}
               >
                 {providers?.map(provider => (
-                  <li>
+                  <>
                     {provider.plugin &&
                       provider.method.description !== "Clever" && (
                         <BasicAuthButton
@@ -150,9 +152,9 @@ const Auth: React.FC = ({ children }) => {
                           provider={provider}
                         />
                       )}
-                  </li>
+                  </>
                 ))}
-              </ul>
+              </Stack>
             </div>
           )}
           {authProvider && authProvider.plugin.formComponent && (
@@ -164,7 +166,7 @@ const Auth: React.FC = ({ children }) => {
 
           <Button
             onClick={() =>
-              authProvider && providers && providers.length > 1
+              authProvider && visibleProviders.length > 1
                 ? cancelGoBackToAuthSelection()
                 : typeof cancel === "function" && cancel()
             }
