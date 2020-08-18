@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fetchCatalog Throws error if catalog is not correct format 1`] = `
+"Could not fetch catalog at a url somewhere
+Base Error:
+Non-whitespace before first tag.
+Line: 0
+Column: 1
+Char: s"
+`;
+
+exports[`fetchCatalog Throws error if catalog is not correct format: "Could not fetch catalog at a url somewhereNon-whitespace before first tag." 1`] = `
+"Could not fetch catalog at a url somewhere
+Base Error:
+Non-whitespace before first tag.
+Line: 0
+Column: 1
+Char: s"
+`;

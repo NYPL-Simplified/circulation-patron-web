@@ -1,6 +1,11 @@
-import { HTMLMediaType, AuthDocumentLink } from "./../interfaces";
 /* eslint-disable camelcase */
-import { LibraryData, LibraryLinks, AuthDocument } from "../interfaces";
+import {
+  LibraryData,
+  LibraryLinks,
+  AuthDocument,
+  HTMLMediaType,
+  AuthDocumentLink
+} from "interfaces";
 import OPDSParser, { OPDSFeed } from "opds-feed-parser";
 import {
   CIRCULATION_MANAGER_BASE,
@@ -13,23 +18,20 @@ import ApplicationError, {
   UnimplementedError,
   AppSetupError
 } from "errors";
-import cache from "./cache";
 
 export async function fetchCatalog(catalogUrl: string) {
   try {
-    return cache.get(catalogUrl, async () => {
-      console.log("Fetching Catalog for " + catalogUrl);
-      const catalogResponse = await fetch(catalogUrl);
-      const rawCatalog = await catalogResponse.text();
-      const parser = new OPDSParser();
-      const parsedCatalog = await parser.parse(rawCatalog);
-      if (!(parsedCatalog instanceof OPDSFeed)) {
-        throw new ApplicationError(
-          "Fetched catalog is not an instance of OPDSFeed: " + catalogUrl
-        );
-      }
-      return parsedCatalog;
-    });
+    console.log("Fetching Catalog for " + catalogUrl);
+    const catalogResponse = await fetch(catalogUrl);
+    const rawCatalog = await catalogResponse.text();
+    const parser = new OPDSParser();
+    const parsedCatalog = await parser.parse(rawCatalog);
+    if (!(parsedCatalog instanceof OPDSFeed)) {
+      throw new ApplicationError(
+        "Fetched catalog is not an instance of OPDSFeed: " + catalogUrl
+      );
+    }
+    return parsedCatalog;
   } catch (e) {
     throw new ApplicationError("Could not fetch catalog at " + catalogUrl, e);
   }
@@ -71,12 +73,10 @@ export async function getCatalogUrl(librarySlug?: string) {
 
 export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
   try {
-    return cache.get(url, async () => {
-      console.log("Fetching Auth Document for: " + url);
-      const response = await fetch(url);
-      const json = await response.json();
-      return json;
-    });
+    console.log("Fetching Auth Document for: " + url);
+    const response = await fetch(url);
+    const json = await response.json();
+    return json;
   } catch (e) {
     throw new ApplicationError(
       "Could not fetch auth document at url: " + url,
