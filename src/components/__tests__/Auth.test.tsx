@@ -230,8 +230,7 @@ test("renders provider buttons when multiple providers present", async () => {
   expect(utils.queryByRole("button", { name: "Login to SAML IdP" })).toBe(null);
 });
 
-// TODO: revisit when this error message should be displayed
-test.skip("displays message when no auth provider configured", async () => {
+test("displays message when no auth provider configured", async () => {
   const authStateWithoutProvider: AuthState = {
     showForm: true,
     callback: jest.fn(),

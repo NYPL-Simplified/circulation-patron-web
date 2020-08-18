@@ -19,6 +19,17 @@ import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
  *  - shows auth form modal based on redux state (showForm)
  *  - uses the AuthPlugin system to render the auth form
  */
+
+function shouldShowButton(authProvider) {
+  return (
+    authProvider?.plugin?.buttonComponent &&
+    authProvider?.method?.description === "Clever"
+  );
+}
+
+function shouldShowFormComponent(authProvider) {
+  return authProvider.plugin.formComponent;
+}
 const Auth: React.FC = ({ children }) => {
   const { showForm, cancel, providers } = useAuth();
 
@@ -69,13 +80,15 @@ const Auth: React.FC = ({ children }) => {
 
   const showProviderComboBox = providers && providers?.length > 4;
 
-  const showFormComponent = authProvider && authProvider?.plugin?.formComponent;
+  const showButtonComponent = shouldShowButton(authProvider);
 
-  const showButtonComponent =
-    authProvider?.plugin?.buttonComponent &&
-    authProvider?.method?.description === "Clever";
-
-  const noAuth = !showFormComponent && !showButtonComponent;
+  const noAuth =
+    providers?.reduce((acc, provider) => {
+      if (shouldShowButton(provider) || shouldShowFormComponent(provider)) {
+        acc++;
+      }
+      return acc;
+    }, 0) === 0;
 
   return (
     <React.Fragment>
@@ -173,8 +186,7 @@ const Auth: React.FC = ({ children }) => {
             Cancel
           </Button>
 
-          {authProvider &&
-            noAuth &&
+          {noAuth &&
             "There is no Auth Plugin configured for the selected Auth Provider."}
         </Modal>
       </ClientOnly>
