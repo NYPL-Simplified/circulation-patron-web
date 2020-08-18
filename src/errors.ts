@@ -2,7 +2,7 @@ export default class ApplicationError extends Error {
   readonly statusCode?: number = undefined;
 
   constructor(m: string, baseError?: Error) {
-    super(`${m}${baseError ? baseError.message : ""}`);
+    super(`${m}${baseError ? `\nBase Error:\n${baseError.message}` : ""}`);
     Object.setPrototypeOf(this, ApplicationError.prototype);
     this.name = "Application Error";
   }
