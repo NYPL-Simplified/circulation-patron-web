@@ -5,7 +5,7 @@ import * as React from "react";
  * @see https://github.com/dequelabs/react-axe
  */
 export default async function enableAxe() {
-  const ReactDOM = await import("react-dom");
-  const axe = await import("react-axe");
-  axe.default(React, ReactDOM, 1000);
+  const ReactDOM = require("react-dom");
+  const axe = require("react-axe");
+  axe(React, ReactDOM, 1000);
 }
