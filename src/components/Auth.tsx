@@ -20,14 +20,16 @@ import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
  *  - uses the AuthPlugin system to render the auth form
  */
 
-function shouldShowButton(authProvider): boolean {
+function shouldShowButton(authProvider: AuthProvider<AuthMethod>): boolean {
   return Boolean(
     authProvider?.plugin?.buttonComponent &&
       authProvider?.method?.description === "Clever"
   );
 }
 
-function shouldShowFormComponent(authProvider): boolean {
+function shouldShowFormComponent(
+  authProvider: AuthProvider<AuthMethod>
+): boolean {
   return Boolean(authProvider.plugin.formComponent);
 }
 const Auth: React.FC = ({ children }) => {
@@ -64,7 +66,7 @@ const Auth: React.FC = ({ children }) => {
       setAuthProvider(providers?.[0]);
   }, [authProvider, providers]);
 
-  const handleChangeProvider = e => {
+  const handleChangeProvider: React.ChangeEventHandler<HTMLSelectElement> = e => {
     setAuthProvider(
       providers?.find(provider => provider.id === e.target.value) ||
         ([][0] as AuthProvider<AuthMethod>)
@@ -127,7 +129,7 @@ const Auth: React.FC = ({ children }) => {
                     <provider.plugin.buttonComponent
                       key={`${provider.id}${idx}`}
                       provider={provider}
-                      onClick={handleChangeProvider}
+                      onClick={handleChangeProvider as () => void}
                     />
                   )}
                 </>
