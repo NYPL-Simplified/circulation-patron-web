@@ -15,6 +15,9 @@ const config = {
     // Perform customizations to webpack config
     // Important: return the modified config
     !isServer && config.plugins.push(new webpack.IgnorePlugin(/jsdom$/));
+    // react-axe should only be bundled when REACT_AXE=true
+    !process.env.REACT_AXE &&
+      config.plugins.push(new webpack.IgnorePlugin(/react-axe$/));
     // Fixes dependency on "fs" module.
     // we don't (and can't) depend on this in client-side code.
     if (!isServer) {
