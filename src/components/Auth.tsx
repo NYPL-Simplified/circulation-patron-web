@@ -8,7 +8,6 @@ import Modal from "./Modal";
 import ClientOnly from "./ClientOnly";
 import { H2 } from "./Text";
 import Button from "components/Button";
-import BasicAuthButton from "../auth/BasicAuthButton";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useTypedSelector from "hooks/useTypedSelector";
 import FormLabel from "./form/FormLabel";
@@ -65,7 +64,7 @@ const Auth: React.FC = ({ children }) => {
       setAuthProvider(providers?.[0]);
   }, [authProvider, providers]);
 
-  const handleChangeProvider = (e: { target: { value: string } }) => {
+  const handleChangeProvider = e => {
     setAuthProvider(
       providers?.find(provider => provider.id === e.target.value) ||
         ([][0] as AuthProvider<AuthMethod>)
@@ -76,20 +75,19 @@ const Auth: React.FC = ({ children }) => {
     setAuthProvider([][0] as AuthProvider<AuthMethod>);
   };
 
-  const visibleProviders =
-    providers?.reduce((acc, provider) => {
-      if (shouldShowButton(provider) || shouldShowFormComponent(provider)) {
-        acc.push(provider);
-      }
-      return acc;
-    }, [] as AuthProvider<AuthMethod>[]) || ([] as AuthProvider<AuthMethod>[]);
+  const visibleProviders = providers?.reduce((acc, provider) => {
+    if (shouldShowButton(provider) || shouldShowFormComponent(provider)) {
+      acc.push(provider);
+    }
+    return acc;
+  }, [] as AuthProvider<AuthMethod>[]);
 
-  const noAuth = visibleProviders.length === 0;
+  const noAuth = (visibleProviders?.length ?? 0) === 0;
 
-  const showProviderComboBox = visibleProviders.length > 4;
+  const showProviderComboBox = (visibleProviders?.length ?? 0) > 4;
 
   const showProviderButtons =
-    visibleProviders.length > 1 && visibleProviders.length <= 4;
+    (visibleProviders?.length ?? 0) > 1 && (visibleProviders?.length ?? 0) <= 4;
 
   const showButtonComponent = shouldShowButton(authProvider);
 
@@ -122,40 +120,19 @@ const Auth: React.FC = ({ children }) => {
           )}
 
           {showProviderButtons && !authProvider && (
-            <div sx={{ mb: 2, textAlign: `center` }}>
-              <Stack
-                direction="column"
-                sx={{
-                  padding: 0,
-                  margin: 0,
-                  listStyleType: "none"
-                }}
-              >
-                {providers?.map(provider => (
-                  <>
-                    {provider.plugin &&
-                      provider.method.description !== "Clever" && (
-                        <BasicAuthButton
-                          links={provider.method.links || []}
-                          aria-label={`Login to ${provider.method.description}`}
-                          key={provider.id}
-                          value={provider.id}
-                          onClick={handleChangeProvider}
-                        >
-                          {provider.method.description}
-                        </BasicAuthButton>
-                      )}
-                    {provider.plugin.buttonComponent &&
-                      provider.method.description === "Clever" && (
-                        <provider.plugin.buttonComponent
-                          key={provider.id}
-                          provider={provider}
-                        />
-                      )}
-                  </>
-                ))}
-              </Stack>
-            </div>
+            <Stack direction="column">
+              {providers?.map((provider, idx) => (
+                <>
+                  {provider.plugin.buttonComponent && (
+                    <provider.plugin.buttonComponent
+                      key={`${provider.id}${idx}`}
+                      provider={provider}
+                      onClick={handleChangeProvider}
+                    />
+                  )}
+                </>
+              ))}
+            </Stack>
           )}
           {authProvider && authProvider.plugin.formComponent && (
             <authProvider.plugin.formComponent provider={authProvider} />
@@ -166,7 +143,7 @@ const Auth: React.FC = ({ children }) => {
 
           <Button
             onClick={() =>
-              authProvider && visibleProviders.length > 1
+              authProvider && (visibleProviders?.length ?? 0) > 1
                 ? cancelGoBackToAuthSelection()
                 : typeof cancel === "function" && cancel()
             }

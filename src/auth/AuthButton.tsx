@@ -2,16 +2,19 @@
 import { jsx } from "theme-ui";
 import Button from "components/Button";
 
-const BasicAuthButton = props => {
-  const imageUrl = props.links.find(link => link.rel === "logo")?.href;
+const BasicAuthButton = ({ provider, onClick }) => {
+  const { id, method } = provider;
+  const { description, links } = method;
+  const imageUrl = links.find(link => link.rel === "logo")?.href;
 
   return (
     <Button
+      aria-label={`Login to ${description}`}
       type="submit"
+      value={id}
+      onClick={onClick}
       sx={{
-        alignSelf: "flex-end",
         m: 2,
-        mr: 0,
         flex: "1 0 auto",
         width: "280px",
         height: "51px",
@@ -22,7 +25,6 @@ const BasicAuthButton = props => {
         cursor: "pointer",
         border: "none"
       }}
-      {...props}
     >
       {!imageUrl ? "Login" : ""}
     </Button>

@@ -6,6 +6,7 @@ import {
 } from "opds-web-client/lib/interfaces";
 
 import CleverButton from "auth/cleverAuthButton";
+import AuthButton from "auth/AuthButton";
 
 import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
@@ -27,7 +28,13 @@ export const basicAuthMethod = {
   inputs: {
     login: { keyboard: "Default" },
     password: { keyboard: "Default" }
-  }
+  },
+  links: [
+    {
+      href: "https://example.com/LoginButton280.png",
+      rel: "logo"
+    }
+  ]
 };
 
 export const cleverAuthProvider: AuthProvider<AuthMethod> = {
@@ -59,7 +66,7 @@ export const basicAuthProvider: AuthProvider<BasicAuthMethod> = {
   plugin: {
     type: basicAuthId,
     formComponent: BasicAuthForm,
-    buttonComponent: jest.fn(),
+    buttonComponent: AuthButton,
     lookForCredentials: jest.fn()
   },
   method: basicAuthMethod
@@ -71,13 +78,19 @@ export const samlAuthProvider: AuthProvider<ClientSamlMethod> = {
   plugin: {
     type: samlAuthId,
     formComponent: SamlAuthForm,
-    buttonComponent: jest.fn(),
+    buttonComponent: AuthButton,
     lookForCredentials: jest.fn()
   },
   method: {
     href: samlAuthHref,
     type: samlAuthId,
-    description: "SAML IdP"
+    description: "SAML IdP",
+    links: [
+      {
+        href: "https://example.com/LoginButton280.png",
+        rel: "logo"
+      }
+    ]
   }
 };
 

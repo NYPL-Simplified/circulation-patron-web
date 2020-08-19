@@ -32,7 +32,6 @@ const CleverButton: React.FC<AuthButtonProps<AuthMethod>> = ({ provider }) => {
         type="submit"
         sx={{
           m: 2,
-          mr: 0,
           color: "#ffffff",
           backgroundColor: "#2f67aa",
           width: "280px",
