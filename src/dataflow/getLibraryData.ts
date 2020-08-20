@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import {
+  OPDS2,
   LibraryData,
   LibraryLinks,
   AuthDocument,
@@ -19,6 +20,7 @@ import ApplicationError, {
   UnimplementedError,
   AppSetupError
 } from "errors";
+import { CatalogEntry } from "types/opds2";
 
 export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
   try {
@@ -32,19 +34,25 @@ export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
   }
 }
 
-async function fetchLibraryTemplate(registryBase: string) {
+/**
+ * Returns a function to construct a registry catalog ink, which leads to a
+ * LibraryRegistryFeed containing a single CatalogEntry.
+ */
+async function fetchCatalogLinkBuilder(
+  registryBase: string
+): Promise<(uuid: string) => string> {
   try {
     const response = await fetch(registryBase);
-    const registryCatalog = (await response.json()) as OPDSFeed;
+    const registryCatalog = (await response.json()) as OPDS2.LibraryRegistryFeed;
     const templateUrl = registryCatalog?.links.find(
-      link => link.rel === "http://librarysimplified.org/rel/registry/library"
+      link => link.rel === OPDS2.CatalogLinkTemplateRelation
     )?.href;
     if (!templateUrl) {
       throw new ApplicationError(
         `Template not present in response from: ${registryBase}`
       );
     }
-    return templateUrl;
+    return uuid => templateUrl.replace("{uuid}", uuid);
   } catch (e) {
     throw new ApplicationError(
       `Could not fetch the library template at: ${registryBase}`,
@@ -53,19 +61,21 @@ async function fetchLibraryTemplate(registryBase: string) {
   }
 }
 
-async function fetchRegistryEntry(librarySlug: string, registryBase: string) {
-  // get the template
-  // fill in the template
-  // fetch the registry
-  // convert to json
-  // check for catalogs
-  // return the first catalog
-  const template = await fetchLibraryTemplate(registryBase);
-  const libraryUrl = template.replace("{uuid}", librarySlug);
+async function fetchCatalogEntry(
+  librarySlug: string,
+  registryBase: string
+): Promise<CatalogEntry> {
+  const linkBuilder = await fetchCatalogLinkBuilder(registryBase);
+  const catalogFeedUrl = linkBuilder(librarySlug);
   try {
-    const response = await fetch(libraryUrl);
-    const catalog = (await response.json()) as OPDSFeed;
-    // const entry = catalog.catalogs
+    const response = await fetch(catalogFeedUrl);
+    const catalogFeed = (await response.json()) as OPDS2.LibraryRegistryFeed;
+    const catalogDescription = catalogFeed?.catalogs?.[0];
+    if (!catalogDescription)
+      throw new ApplicationError(
+        `LibraryRegistryFeed returned by ${catalogFeedUrl} does not contain a CatalogDescription.`
+      );
+    return catalogDescription;
   } catch (e) {
     throw new ApplicationError(
       `Could not fetch registry entry for library: ${librarySlug} at ${registryBase}`,
@@ -74,12 +84,16 @@ async function fetchRegistryEntry(librarySlug: string, registryBase: string) {
   }
 }
 
-const CATALOG_ROOT_REL = "http://opds-spec.org/catalog";
-function getCatalogRootUrlFromRegistryEntry(entry) {
-  return entry.links.find(link => link.rel === CATALOG_ROOT_REL)?.href;
+function findCatalogRootUrl(catalog: OPDS2.CatalogEntry) {
+  return catalog.links.find(link => link.rel === OPDS2.CatalogRootRelation)
+    ?.href;
 }
 
-export async function getCatalogUrl(librarySlug?: string) {
+/**
+ * Returns a url leading to an OPDS 1 Feed, either sourced from the
+ * env set at build time or from the library registry.
+ */
+export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
   if (CIRCULATION_MANAGER_BASE) {
     if (librarySlug) {
       throw new PageNotFoundError(
@@ -105,10 +119,13 @@ export async function getCatalogUrl(librarySlug?: string) {
   }
 
   if (REGISTRY_BASE) {
-    // fetch the registry entry
-    const entry = fetchRegistryEntry(librarySlug, REGISTRY_BASE);
-    // get the root url and return it
-    throw new UnimplementedError("Registry Base not implemented");
+    const catalogEntry = await fetchCatalogEntry(librarySlug, REGISTRY_BASE);
+    const catalogRootUrl = findCatalogRootUrl(catalogEntry);
+    if (!catalogRootUrl)
+      throw new Error(
+        `CatalogEntry did not contain a Catalog Root Url. Library UUID: ${librarySlug}`
+      );
+    return catalogRootUrl;
   }
   throw new AppSetupError(
     "One of CONFIG_FILE, REGISTRY_BASE, or SIMPLIFIED_CATALOG_BASE must be defined."
@@ -128,7 +145,7 @@ export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
   }
 }
 
-export function getLibraryData(
+export function buildLibraryData(
   authDoc: AuthDocument,
   catalogUrl: string,
   librarySlug: string | undefined

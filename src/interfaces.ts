@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { State } from "opds-web-client/lib/state";
 import { CollectionState } from "opds-web-client/lib/reducers/collection";
 import {
   CollectionData,
@@ -13,10 +12,11 @@ import {
  * an OPDS 2 Feed of OPDS 2 Catalogs from which we extract the catalog root url
  */
 
+export * as OPDS2 from "types/opds2";
+
 /**
  * OPDS1.2 DATA TYPES
  */
-
 export const AuthDocLinkRelation = "http://opds-spec.org/auth/document";
 export type OPDSLinkRelation =
   | typeof AuthDocLinkRelation
@@ -24,8 +24,13 @@ export type OPDSLinkRelation =
 
 export type OPDSLinkRole = string;
 
+export const OPDS1MediaType =
+  "application/atom+xml;profile=opds-catalog;kind=acquisition";
 export const HTMLMediaType = "text/html";
-export type CPWMediaType = typeof HTMLMediaType | MediaType;
+export type CPWMediaType =
+  | typeof HTMLMediaType
+  | typeof OPDS1MediaType
+  | MediaType;
 
 export interface OPDSLink {
   href: string;

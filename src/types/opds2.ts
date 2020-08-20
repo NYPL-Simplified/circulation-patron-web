@@ -1,0 +1,118 @@
+/* eslint-disable camelcase */
+/**
+ * OPDS 2.0 DATA TYPES
+ * Currently only used for support of a Library Regristry, which is
+ * an OPDS 2 Feed of OPDS 2 Catalogs from which we extract the catalog root url
+ *
+ * This is a working document that still has more to fill in.
+ */
+
+export interface Collection<M extends {} = {}> {
+  /**
+   * Must comply with "application/opds+json", but that is
+   * not necessarily marked as the type
+   */
+  metadata: M;
+  links: Link[];
+}
+// a feed is a collection since it has metadata, links and sub collections.
+export interface Feed<M = {}> extends Collection<M> {
+  // sub collections of with roles "navigation", "publication", "group"
+  navigation?: NavigationLink[];
+  publications?: Publication[];
+  groups?: Group[];
+}
+
+export interface NavigationLink extends Link {
+  title: string;
+}
+
+type GroupMetadata = { title: string };
+export interface Group extends Collection<GroupMetadata> {
+  /**
+   * For when a catalog has more than one collection of
+   * navigation or publications. It contains an array of
+   *
+   */
+  groups: Feed<GroupMetadata>[];
+}
+
+type LibraryRegistryFeedMetadata = { adobe_vendor_id: string; title: string };
+export interface LibraryRegistryFeed extends Feed<LibraryRegistryFeedMetadata> {
+  links: LibraryRegistryLink[];
+  /**
+   * When you fetch a templated url from a LibraryRegistryFeed, you
+   * get back another LibraryRegistryFeed, but with a single catalog
+   * in an array.
+   */
+  catalogs?: [CatalogEntry];
+}
+export interface LibraryRegistryLink extends Link {
+  templated: boolean;
+}
+
+type CatalogEntryMetadata = {
+  updated: string;
+  description: string;
+  id: string;
+  title: string;
+};
+export interface CatalogEntry extends Feed<CatalogEntryMetadata> {
+  /**
+   * The CatalogEntry is a Feed which describes an OPDS Catalog (v1 or v2).
+   * It contains a link to an AuthDocument, thus marking it the top level descriptor
+   * for a library with an authentication boundary. The AuthDocument and CatalogRootLink
+   * are nested within Links.
+   *
+   * Since there is no way in typescript to describe an array that must contain
+   * certain elements, this just extends Feed.
+   */
+}
+
+/**
+ * Publications must either be:
+ * a Readium Web Publication with no restrictions in terms of access
+ * (no payment, no credentials required, no limitations whatsoever),
+ * or an OPDS Publication
+ */
+export type Publication = ReadiumWebPub | OPDSPublication;
+
+export interface ReadiumWebPub extends Collection {
+  readingOrder: any[];
+}
+export interface OPDSPublication extends Collection {
+  /**
+   * An OPDS Publication is basically a ReadiumWebPub without
+   * the requirement that it contain a readingOrder collection
+   */
+}
+
+/**
+ * Links
+ */
+export const AuthDocumentRelation = "http://opds-spec.org/auth/document";
+export const CatalogLinkTemplateRelation =
+  "http://librarysimplified.org/rel/registry/library";
+export const CatalogRootRelation = "http://opds-spec.org/catalog";
+
+export type LinkRelation =
+  | typeof CatalogLinkTemplateRelation
+  | typeof CatalogRootRelation
+  | typeof AuthDocumentRelation
+  | "self"
+  | "search"
+  | "registry";
+
+export type MediaType =
+  | "application/opds+json"
+  | "application/opensearchdescription+xml"
+  | "application/opds+json;profile=https://librarysimplified.org/rel/profile/directory";
+
+export interface Link<
+  T extends string = MediaType,
+  R extends string = LinkRelation
+> {
+  href: string;
+  type: T;
+  rel: R;
+}

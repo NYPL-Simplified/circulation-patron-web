@@ -2,10 +2,10 @@ import { LibraryData, AppConfigFile } from "../interfaces";
 import { GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
 import {
-  getCatalogUrl,
+  getCatalogRootUrl,
   fetchCatalog,
   fetchAuthDocument,
-  getLibraryData,
+  buildLibraryData,
   getAuthDocHref
 } from "dataflow/getLibraryData";
 import ApplicationError from "errors";
@@ -44,11 +44,11 @@ export default function withAppProps(
      */
     try {
       const librarySlug = getLibraryFromParams(ctx.params);
-      const catalogUrl = await getCatalogUrl(librarySlug);
+      const catalogUrl = await getCatalogRootUrl(librarySlug);
       const catalog = await fetchCatalog(catalogUrl);
       const authDocHref = getAuthDocHref(catalog);
       const authDocument = await fetchAuthDocument(authDocHref);
-      const library = getLibraryData(authDocument, catalogUrl, librarySlug);
+      const library = buildLibraryData(authDocument, catalogUrl, librarySlug);
       // fetch the static props for the page
       const pageResult = (await pageGetServerSideProps?.(ctx)) ?? { props: {} };
 

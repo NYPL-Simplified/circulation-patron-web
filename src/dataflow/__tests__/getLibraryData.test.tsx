@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import {
   fetchCatalog,
-  getCatalogUrl,
+  getCatalogRootUrl,
   fetchAuthDocument,
-  getLibraryData,
+  buildLibraryData,
   getLibrarySlugs,
   getAuthDocHref
 } from "../getLibraryData";
@@ -33,7 +33,7 @@ function setEnv({
 describe("fetchCatalog", () => {
   test("calls fetch with catalog url", async () => {
     fetchMock.mockResponseOnce(rawCatalog);
-    const promise = await fetchCatalog("some-url");
+    await fetchCatalog("some-url");
     expect(fetchMock).toHaveBeenCalledWith("some-url");
   });
 
@@ -71,10 +71,10 @@ mockGetConfigFile.mockResolvedValue({
   anotherlib: "anotherliburl"
 });
 
-describe("getCatalogUrl", () => {
+describe("getCatalogRootUrl", () => {
   test("throws error if there is a library slug and CIRCULATION_MANAGER_BASE", async () => {
     setEnv({ CIRCULATION_MANAGER_BASE: "some-base" });
-    const promise = getCatalogUrl("some-slug");
+    const promise = getCatalogRootUrl("some-slug");
     await expect(promise).rejects.toThrowError(ApplicationError);
     await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
       `"App is running with a single Circ Manager, but you're trying to access a multi-library route: some-slug"`
@@ -85,7 +85,7 @@ describe("getCatalogUrl", () => {
     setEnv({
       CONFIG_FILE: "config-file"
     });
-    const promise = getCatalogUrl();
+    const promise = getCatalogRootUrl();
     await expect(promise).rejects.toThrowError(PageNotFoundError);
     await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Library slug must be provided when running with multiple libraries."`
@@ -96,7 +96,7 @@ describe("getCatalogUrl", () => {
     setEnv({
       CONFIG_FILE: "config-file"
     });
-    const promise = getCatalogUrl("not there slug");
+    const promise = getCatalogRootUrl("not there slug");
     await expect(promise).rejects.toThrowError(PageNotFoundError);
     await expect(promise).rejects.toMatchInlineSnapshot(
       `[Page Not Found Error: No CONFIG_FILE entry for library: not there slug]`
@@ -105,25 +105,25 @@ describe("getCatalogUrl", () => {
 
   test("returns url for existing library in config file", async () => {
     setEnv({ CONFIG_FILE: "config-file" });
-    const promise = getCatalogUrl("anotherlib");
+    const promise = getCatalogRootUrl("anotherlib");
     await expect(promise).resolves.toBe("anotherliburl");
   });
 
   test("Works for Registry Base", async () => {
     setEnv({ REGISTRY_BASE: "reg-base" });
-    const url = await getCatalogUrl("lib-on-registry");
+    const url = await getCatalogRootUrl("lib-on-registry");
     expect(url).toBe("http://lib-on-registry");
   });
 
   test("works for SIMPLIFIED_CATALOG_BASE", async () => {
     setEnv({ CIRCULATION_MANAGER_BASE: "hello" });
-    const url = await getCatalogUrl();
+    const url = await getCatalogRootUrl();
     expect(url).toBe("hello");
   });
 
   test("Throws AppSetupError if no env var is defined", async () => {
     setEnv({});
-    const promise = getCatalogUrl("hello");
+    const promise = getCatalogRootUrl("hello");
     expect(promise).rejects.toThrowError(AppSetupError);
     expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
       `"One of CONFIG_FILE, REGISTRY_BASE, or SIMPLIFIED_CATALOG_BASE must be defined."`
@@ -156,9 +156,9 @@ describe("fetchAuthDocument", () => {
   });
 });
 
-describe("getLibraryData", () => {
+describe("buildLibraryData", () => {
   test("returns correct response", () => {
-    const library = getLibraryData(
+    const library = buildLibraryData(
       fixtures.authDoc,
       "/catalog-url",
       "librarySlug"
@@ -178,12 +178,16 @@ describe("getLibraryData", () => {
   });
 
   test("works correctly without librarySlug", () => {
-    const library = getLibraryData(fixtures.authDoc, "/catalog-url", undefined);
+    const library = buildLibraryData(
+      fixtures.authDoc,
+      "/catalog-url",
+      undefined
+    );
     expect(library.slug).toBeNull();
   });
 
   test("correctly parses web_color_scheme", () => {
-    const library = getLibraryData(
+    const library = buildLibraryData(
       {
         ...fixtures.authDoc,
         web_color_scheme: {
@@ -245,7 +249,7 @@ describe("getLibraryData", () => {
       }
     ];
 
-    const library = getLibraryData(
+    const library = buildLibraryData(
       {
         ...fixtures.authDoc,
         links
