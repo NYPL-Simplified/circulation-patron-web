@@ -15,11 +15,7 @@ import {
   CONFIG_FILE
 } from "utils/env";
 import getConfigFile from "./getConfigFile";
-import ApplicationError, {
-  PageNotFoundError,
-  UnimplementedError,
-  AppSetupError
-} from "errors";
+import ApplicationError, { PageNotFoundError, AppSetupError } from "errors";
 import { CatalogEntry } from "types/opds2";
 
 export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
@@ -70,15 +66,15 @@ async function fetchCatalogEntry(
   try {
     const response = await fetch(catalogFeedUrl);
     const catalogFeed = (await response.json()) as OPDS2.LibraryRegistryFeed;
-    const catalogDescription = catalogFeed?.catalogs?.[0];
-    if (!catalogDescription)
+    const catalogEntry = catalogFeed?.catalogs?.[0];
+    if (!catalogEntry)
       throw new ApplicationError(
-        `LibraryRegistryFeed returned by ${catalogFeedUrl} does not contain a CatalogDescription.`
+        `LibraryRegistryFeed returned by ${catalogFeedUrl} does not contain a CatalogEntry.`
       );
-    return catalogDescription;
+    return catalogEntry;
   } catch (e) {
     throw new ApplicationError(
-      `Could not fetch registry entry for library: ${librarySlug} at ${registryBase}`,
+      `Could not fetch catalog entry for library: ${librarySlug} at ${registryBase}`,
       e
     );
   }
@@ -122,7 +118,7 @@ export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
     const catalogEntry = await fetchCatalogEntry(librarySlug, REGISTRY_BASE);
     const catalogRootUrl = findCatalogRootUrl(catalogEntry);
     if (!catalogRootUrl)
-      throw new Error(
+      throw new ApplicationError(
         `CatalogEntry did not contain a Catalog Root Url. Library UUID: ${librarySlug}`
       );
     return catalogRootUrl;
@@ -211,7 +207,11 @@ export async function getLibrarySlugs() {
   }
 
   if (REGISTRY_BASE) {
-    throw new UnimplementedError("REGISTRY BASE NOT IMPLEMENTED.");
+    /**
+     * We don't do any static generation when running with a
+     * library registry. Therefore, we return an empty array
+     */
+    return [];
   }
 
   throw new ApplicationError("Unable to get library slugs for current setup.");

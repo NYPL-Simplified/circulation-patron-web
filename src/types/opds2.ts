@@ -1,3 +1,4 @@
+import { BaseDocumentMediaType as OPDS1BaseDocumentMediaType } from "interfaces";
 /* eslint-disable camelcase */
 /**
  * OPDS 2.0 DATA TYPES
@@ -39,16 +40,13 @@ export interface Group extends Collection<GroupMetadata> {
 
 type LibraryRegistryFeedMetadata = { adobe_vendor_id: string; title: string };
 export interface LibraryRegistryFeed extends Feed<LibraryRegistryFeedMetadata> {
-  links: LibraryRegistryLink[];
+  links: Link[];
   /**
    * When you fetch a templated url from a LibraryRegistryFeed, you
    * get back another LibraryRegistryFeed, but with a single catalog
    * in an array.
    */
   catalogs?: [CatalogEntry];
-}
-export interface LibraryRegistryLink extends Link {
-  templated: boolean;
 }
 
 type CatalogEntryMetadata = {
@@ -95,7 +93,7 @@ export const CatalogLinkTemplateRelation =
   "http://librarysimplified.org/rel/registry/library";
 export const CatalogRootRelation = "http://opds-spec.org/catalog";
 
-export type LinkRelation =
+export type AnyLinkRelation =
   | typeof CatalogLinkTemplateRelation
   | typeof CatalogRootRelation
   | typeof AuthDocumentRelation
@@ -103,16 +101,35 @@ export type LinkRelation =
   | "search"
   | "registry";
 
-export type MediaType =
-  | "application/opds+json"
+export const BaseDocumentMediaType = "application/opds+json";
+export const AuthDocumentMediaType =
+  "application/vnd.opds.authentication.v1.0+json";
+
+export type AnyMediaType =
+  | typeof BaseDocumentMediaType
+  | typeof AuthDocumentMediaType
+  | typeof OPDS1BaseDocumentMediaType
   | "application/opensearchdescription+xml"
   | "application/opds+json;profile=https://librarysimplified.org/rel/profile/directory";
 
 export interface Link<
-  T extends string = MediaType,
-  R extends string = LinkRelation
+  R extends string = AnyLinkRelation,
+  T extends string = AnyMediaType
 > {
   href: string;
   type: T;
   rel: R;
 }
+
+export interface CatalogTemplateLink
+  extends Link<
+    typeof CatalogLinkTemplateRelation,
+    typeof BaseDocumentMediaType
+  > {
+  templated: true;
+}
+
+export interface AuthDocumentLink
+  extends Link<typeof AuthDocumentRelation, typeof AuthDocumentMediaType> {}
+export interface CatalogRootFeedLink
+  extends Link<typeof CatalogRootRelation, typeof OPDS1BaseDocumentMediaType> {}

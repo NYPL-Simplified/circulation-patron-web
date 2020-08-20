@@ -24,12 +24,12 @@ export type OPDSLinkRelation =
 
 export type OPDSLinkRole = string;
 
-export const OPDS1MediaType =
+export const BaseDocumentMediaType =
   "application/atom+xml;profile=opds-catalog;kind=acquisition";
 export const HTMLMediaType = "text/html";
 export type CPWMediaType =
   | typeof HTMLMediaType
-  | typeof OPDS1MediaType
+  | typeof BaseDocumentMediaType
   | MediaType;
 
 export interface OPDSLink {

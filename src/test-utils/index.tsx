@@ -20,11 +20,12 @@ import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
 import makeTheme from "../theme";
 import { enableFetchMocks } from "jest-fetch-mock";
+import setEnv from "./setEnv";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);
 
-export { fixtures };
+export { fixtures, setEnv };
 
 // configure the enzyme adapter
 configure({ adapter: new Adapter() });
