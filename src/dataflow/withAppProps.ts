@@ -30,7 +30,7 @@ export type AppProps = {
     name: string;
     statusCode?: number;
   };
-  configFile?: AppConfigFile;
+  configFile?: AppConfigFile | null;
 };
 
 export default function withAppProps(
@@ -51,7 +51,6 @@ export default function withAppProps(
       const library = buildLibraryData(authDocument, catalogUrl, librarySlug);
       // fetch the static props for the page
       const pageResult = (await pageGetServerSideProps?.(ctx)) ?? { props: {} };
-
       return {
         ...pageResult,
         props: {
@@ -62,12 +61,12 @@ export default function withAppProps(
       };
     } catch (e) {
       // if we are running with a config file, add it to the error
-      let configFile: AppConfigFile | undefined;
+      let configFile: AppConfigFile | null = null;
       if (CONFIG_FILE) {
         try {
           configFile = await getConfigFile(CONFIG_FILE);
         } catch {
-          configFile = undefined;
+          configFile = null;
         }
       }
 

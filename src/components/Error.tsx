@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import { H1 } from "./Text";
-import { Config } from "dataflow/LibraryDataCache";
 import Router from "next/router";
 import { SystemStyleObject } from "@styled-system/css";
 import { AppConfigFile } from "interfaces";
