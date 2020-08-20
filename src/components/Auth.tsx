@@ -4,7 +4,7 @@ import * as React from "react";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import useLibraryContext from "./context/LibraryContext";
 import useAuth from "../hooks/useAuth";
-import Modal from "./Modal";
+import Modal, { ModalButtonStyles } from "./Modal";
 import ClientOnly from "./ClientOnly";
 import { H2 } from "./Text";
 import Button from "components/Button";
@@ -150,16 +150,7 @@ const Auth: React.FC = ({ children }) => {
                 : typeof cancel === "function" && cancel()
             }
             sx={{
-              alignSelf: "flex-end",
-              m: 2,
-              mr: 0,
-              flex: "1 0 auto",
-              width: "280px",
-              height: "51px",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "0",
-              cursor: "pointer",
-              border: "none"
+              ...ModalButtonStyles
             }}
             variant="ghost"
           >

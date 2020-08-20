@@ -10,6 +10,8 @@ import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
+import { ModalButtonStyles } from "../components/Modal";
+
 type FormData = {
   login: string;
   password: string;
@@ -74,15 +76,7 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
       <Button
         type="submit"
         sx={{
-          alignSelf: "flex-end",
-          m: 2,
-          flex: "1 0 auto",
-          width: "280px",
-          height: "51px",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "0",
-          cursor: "pointer",
-          border: "none"
+          ...ModalButtonStyles
         }}
       >
         Login

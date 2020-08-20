@@ -4,6 +4,8 @@ import Button from "components/Button";
 import { AuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthButtonProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
+import { ModalButtonStyles } from "../components/Modal";
+
 const BasicAuthButton: React.FC<AuthButtonProps<AuthMethod>> = ({
   provider,
   onClick
@@ -22,16 +24,8 @@ const BasicAuthButton: React.FC<AuthButtonProps<AuthMethod>> = ({
       value={id}
       onClick={onClick}
       sx={{
-        m: 2,
-        flex: "1 0 auto",
-        width: "280px",
-        height: "51px",
-        backgroundSize: `280px 51px`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "0",
-        backgroundImage: `url(${imageUrl})`,
-        cursor: "pointer",
-        border: "none"
+        ...ModalButtonStyles,
+        backgroundImage: `url(${imageUrl})`
       }}
     >
       {!imageUrl ? "Login" : ""}
