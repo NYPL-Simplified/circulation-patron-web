@@ -5,6 +5,7 @@ import { DialogStateReturn, DialogBackdrop, Dialog } from "reakit";
 
 export const ModalButtonStyles = {
   m: 2,
+  display: "flex",
   flex: "1 0 auto",
   width: "280px",
   height: "51px",
