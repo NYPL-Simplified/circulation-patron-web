@@ -2,12 +2,12 @@ import * as React from "react";
 import { render, fixtures } from "../../test-utils";
 import merge from "deepmerge";
 import Footer from "components/Footer";
-import { LibraryData, Link } from "../../interfaces";
+import { LibraryData, OPDSLink } from "../../interfaces";
 import * as env from "../../utils/env";
 
-const link: Link = {
+const link: OPDSLink = {
   href: "/wherever",
-  rel: "rel"
+  rel: "navigation"
 };
 const libraryWithLinks: LibraryData = merge(fixtures.libraryData, {
   libraryLinks: {

@@ -20,7 +20,8 @@ export * as OPDS2 from "types/opds2";
 export const AuthDocLinkRelation = "http://opds-spec.org/auth/document";
 export type OPDSLinkRelation =
   | typeof AuthDocLinkRelation
-  | AuthDocLinkRelations;
+  | AuthDocLinkRelations
+  | "related";
 
 export type OPDSLinkRole = string;
 

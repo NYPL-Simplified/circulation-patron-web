@@ -58,9 +58,8 @@ describe("ContextProvider", () => {
   });
 
   test("renders child", () => {
-    const store = buildStore();
     const wrapper = shallow(
-      <AppContextProvider library={testLibrary} shortenUrls>
+      <AppContextProvider library={testLibrary}>
         <TestComponent />
       </AppContextProvider>
     );
@@ -109,9 +108,12 @@ describe("ContextProvider", () => {
     test("returns a path with no collection or book and no library id", () => {
       const libraryWithoutId: LibraryData = {
         libraryLinks: {},
-        id: undefined,
         catalogUrl: "http://example.com/home",
-        catalogName: "Example"
+        catalogName: "Example",
+        slug: null,
+        logoUrl: null,
+        colors: { primary: null, secondary: null },
+        headerLinks: []
       };
       const { result } = renderHook(() => usePathFor(), {
         wrapper: makeContextWrapper({ library: libraryWithoutId })

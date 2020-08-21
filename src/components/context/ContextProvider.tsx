@@ -22,7 +22,7 @@ import { SHORTEN_URLS } from "utils/env";
 
 type ProviderProps = {
   library: LibraryData;
-  store: Store<State>;
+  store?: Store<State>;
   actions?: ActionsCreator;
   fetcher?: DataFetcher;
 };

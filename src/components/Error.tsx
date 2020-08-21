@@ -21,7 +21,7 @@ const ErrorComponent = ({
   statusCode?: number;
   title?: string;
   detail?: string;
-  configFile?: AppConfigFile;
+  configFile?: AppConfigFile | null;
 }) => {
   const errorTitle =
     title || statusCodes[statusCode] || "An unexpected error has occurred";

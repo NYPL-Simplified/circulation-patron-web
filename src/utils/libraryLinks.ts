@@ -1,4 +1,4 @@
-import { Link, LibraryLinks } from "./../interfaces";
+import { OPDSLink, LibraryLinks } from "./../interfaces";
 
 /**
  * Parse the links provided in the LibraryData to get an object
@@ -12,7 +12,7 @@ const TOS_REL = "terms-of-service";
 const ABOUT_REL = "about";
 const LIBRARY_WEBSITE_REL = "alternate";
 
-export function parseLinks(links: Link[]): LibraryLinks {
+export function parseLinks(links: OPDSLink[]): LibraryLinks {
   const linkMap: LibraryLinks = {};
   links.forEach(link => {
     switch (link.rel) {
