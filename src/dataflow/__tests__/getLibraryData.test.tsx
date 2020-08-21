@@ -14,7 +14,6 @@ import ApplicationError, { PageNotFoundError, AppSetupError } from "errors";
 import rawCatalog from "test-utils/fixtures/raw-opds-feed";
 import { fixtures, setEnv } from "test-utils";
 import { AuthDocumentLink, OPDS2 } from "interfaces";
-import App from "next/app";
 
 describe("fetchCatalog", () => {
   test("calls fetch with catalog url", async () => {
@@ -221,10 +220,7 @@ describe("buildLibraryData", () => {
       catalogUrl: "/catalog-url",
       catalogName: "auth doc title",
       logoUrl: null,
-      colors: {
-        primary: null,
-        secondary: null
-      },
+      colors: null,
       headerLinks: [],
       libraryLinks: {}
     });

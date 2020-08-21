@@ -17,10 +17,7 @@ const testLibrary: LibraryData = {
   catalogName: "Example",
   libraryLinks: {},
   logoUrl: null,
-  colors: {
-    primary: null,
-    secondary: null
-  },
+  colors: null,
   headerLinks: []
 };
 
@@ -112,7 +109,7 @@ describe("ContextProvider", () => {
         catalogName: "Example",
         slug: null,
         logoUrl: null,
-        colors: { primary: null, secondary: null },
+        colors: null,
         headerLinks: []
       };
       const { result } = renderHook(() => usePathFor(), {

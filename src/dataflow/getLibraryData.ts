@@ -154,10 +154,13 @@ export function buildLibraryData(
     catalogUrl,
     catalogName: authDoc.title,
     logoUrl: logoUrl ?? null,
-    colors: {
-      primary: authDoc?.web_color_scheme?.primary ?? null,
-      secondary: authDoc?.web_color_scheme?.secondary ?? null
-    },
+    colors:
+      authDoc.web_color_scheme?.primary && authDoc.web_color_scheme.secondary
+        ? {
+            primary: authDoc.web_color_scheme.primary,
+            secondary: authDoc.web_color_scheme.secondary
+          }
+        : null,
     headerLinks,
     libraryLinks
   };

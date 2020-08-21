@@ -12,10 +12,7 @@ test("app sets and uses passed in primary and secondary colors", () => {
 });
 
 test("accepts nullish color scheme", () => {
-  const result = makeTheme({
-    primary: null,
-    secondary: null
-  });
+  const result = makeTheme(null);
 
   expect(result).toEqual(baseTheme);
 });

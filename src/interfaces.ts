@@ -127,9 +127,9 @@ export interface LibraryData {
   catalogName: string;
   logoUrl: string | null;
   colors: {
-    primary: string | null;
-    secondary: string | null;
-  };
+    primary: string;
+    secondary: string;
+  } | null;
   headerLinks: OPDSLink[];
   libraryLinks: LibraryLinks;
 }
