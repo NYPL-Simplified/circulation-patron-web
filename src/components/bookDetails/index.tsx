@@ -22,7 +22,7 @@ import ReportProblem from "./ReportProblem";
 import useTypedSelector from "../../hooks/useTypedSelector";
 import { NavButton } from "../Button";
 import Head from "next/head";
-import { H2, Text, H1 } from "components/Text";
+import { H1, H2, H3, Text } from "components/Text";
 import MediumIndicator from "components/MediumIndicator";
 import SimplyELogo from "components/SimplyELogo";
 import IosBadge from "components/storeBadges/IosBadge";
