@@ -10,7 +10,6 @@ import {
 } from "opds-web-client/lib/components/mergeRootProps";
 import { SetCollectionAndBook } from "../interfaces";
 import useAuth from "../hooks/useAuth";
-import Button from "./Button";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { ListView } from "./BookList";
 import { PageLoader } from "./LoadingIndicator";
