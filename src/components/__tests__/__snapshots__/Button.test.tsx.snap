@@ -44,6 +44,7 @@ exports[`LinkButton renders correct element 1`] = `
   color: white;
   -webkit-text-decoration: none;
   text-decoration: none;
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-0:active {
@@ -117,6 +118,7 @@ exports[`NavButton renders correct element 1`] = `
   color: white;
   -webkit-text-decoration: none;
   text-decoration: none;
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-0:active {
@@ -181,6 +183,7 @@ exports[`variants filled (default) 1`] = `
   color: white;
   -webkit-text-decoration: none;
   text-decoration: none;
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-0:active {
@@ -245,6 +248,7 @@ exports[`variants ghost 1`] = `
   color: var(--theme-ui-colors-brand-primary,#337ab7);
   -webkit-text-decoration: none;
   text-decoration: none;
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 <button

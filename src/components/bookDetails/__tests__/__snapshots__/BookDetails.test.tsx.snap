@@ -83,6 +83,7 @@ exports[`book details page handles error state 1`] = `
   color: white;
   -webkit-text-decoration: none;
   text-decoration: none;
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-2:active {
