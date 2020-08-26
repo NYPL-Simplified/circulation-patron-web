@@ -20,7 +20,7 @@ import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
  *  - uses the AuthPlugin system to render the auth form
  */
 
-function shouldShowButton(authProvider: AuthProvider<AuthMethod>): boolean {
+function shouldShowButton(authProvider: AuthProvider<AuthMethod> | undefined): boolean {
   return Boolean(
     authProvider?.plugin?.buttonComponent &&
       authProvider?.method?.description === "Clever"
@@ -37,8 +37,8 @@ const Auth: React.FC = ({ children }) => {
 
   const dialog = useDialogState();
   const library = useLibraryContext();
-  const [authProvider, setAuthProvider] = React.useState(
-    [][0] as AuthProvider<AuthMethod>
+  const [authProvider, setAuthProvider] = React.useState<AuthProvider<AuthMethod> | undefined>(
+    undefined
   );
 
   const { fetcher, actions, dispatch } = useActions();
@@ -66,23 +66,17 @@ const Auth: React.FC = ({ children }) => {
       setAuthProvider(providers?.[0]);
   }, [authProvider, providers]);
 
-  const handleChangeProvider: React.ChangeEventHandler<HTMLSelectElement> = e => {
+  const handleChangeProvider = (providerId: string) => {
     setAuthProvider(
-      providers?.find(provider => provider.id === e.target.value) ||
-        ([][0] as AuthProvider<AuthMethod>)
+      providers?.find(provider => provider.id === providerId)
     );
   };
 
   const cancelGoBackToAuthSelection = () => {
-    setAuthProvider([][0] as AuthProvider<AuthMethod>);
+    setAuthProvider(undefined);
   };
 
-  const visibleProviders = providers?.reduce((acc, provider) => {
-    if (shouldShowButton(provider) || shouldShowFormComponent(provider)) {
-      acc.push(provider);
-    }
-    return acc;
-  }, [] as AuthProvider<AuthMethod>[]);
+  const visibleProviders = providers?.filter(provider => shouldShowButton(provider) || shouldShowFormComponent(provider));
 
   const noAuth = (visibleProviders?.length ?? 0) === 0;
 
@@ -111,7 +105,7 @@ const Auth: React.FC = ({ children }) => {
           {showProviderComboBox && (
             <div sx={{ mb: 2 }}>
               <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
-              <Select id="login-method-select" onChange={handleChangeProvider}>
+              <Select id="login-method-select" onChange={(e) => handleChangeProvider(e.target.value)}>
                 {providers?.map(provider => (
                   <option key={provider.id} value={provider.id}>
                     {provider.method.description}
@@ -129,7 +123,7 @@ const Auth: React.FC = ({ children }) => {
                     <provider.plugin.buttonComponent
                       key={`${provider.id}${idx}`}
                       provider={provider}
-                      onClick={handleChangeProvider as () => void}
+                      onClick={() => handleChangeProvider(provider.id)}
                     />
                   )}
                 </>
