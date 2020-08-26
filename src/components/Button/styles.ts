@@ -1,6 +1,9 @@
 import { SystemStyleObject } from "@styled-system/css";
 import { darken, lightness } from "@theme-ui/color";
 import { ButtonSize, ButtonVariant } from "./index";
+import theme from "../../theme/theme";
+
+const { shadows } = theme;
 
 export const sizes = {
   sm: {},
@@ -51,8 +54,10 @@ export const styleProps = (
         "&:focus,&:hover": {
           bg: darken(color, 0.05),
           color: "white",
-          textDecoration: "none",
-          boxShadow: `0 0 0 0.2em rgba(0, 109, 255, 0.4)`
+          textDecoration: "none"
+        },
+        "&:focus": {
+          boxShadow: shadows.focus
         },
         "&:active": {
           bg: darken(color, 0.1)
@@ -76,8 +81,10 @@ export const styleProps = (
         "&:focus,&:hover": {
           bg: lightness(color, 0.85),
           color: color,
-          textDecoration: "none",
-          boxShadow: `0 0 0 0.2em rgba(0, 109, 255, 0.4)`
+          textDecoration: "none"
+        },
+        "&:focus": {
+          boxShadow: shadows.focus
         },
         "&:active": {
           // bg: darken(color, 0.1)

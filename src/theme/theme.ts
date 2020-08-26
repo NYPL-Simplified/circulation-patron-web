@@ -28,7 +28,8 @@ const zIndices = {
 };
 
 const shadows = {
-  modal: "0px 2px 7px 3px rgba(0,0,0,0.3)"
+  modal: "0px 2px 7px 3px rgba(0,0,0,0.3)",
+  focus: "0 0 0 0.2em rgba(0, 109, 255, 0.4)"
 };
 
 const theme = {
