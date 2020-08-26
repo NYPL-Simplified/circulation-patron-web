@@ -22,7 +22,7 @@ import ReportProblem from "./ReportProblem";
 import useTypedSelector from "../../hooks/useTypedSelector";
 import { NavButton } from "../Button";
 import Head from "next/head";
-import { H3, Text, H1 } from "components/Text";
+import { H1, H2, H3, Text } from "components/Text";
 import MediumIndicator from "components/MediumIndicator";
 import SimplyELogo from "components/SimplyELogo";
 import IosBadge from "components/storeBadges/IosBadge";
@@ -109,7 +109,7 @@ const Summary: React.FC<{ book: BookData; className?: string }> = ({
   className
 }) => (
   <div sx={{ my: 2 }} className={className} aria-label="Book summary">
-    <H3 sx={{ mb: 2 }}>Summary</H3>
+    <H2 sx={{ mb: 2, variant: "text.headers.tertiary" }}>Summary</H2>
     <div
       dangerouslySetInnerHTML={{
         __html: book.summary ?? "Summary not provided."
