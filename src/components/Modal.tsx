@@ -3,7 +3,7 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import { DialogStateReturn, DialogBackdrop, Dialog } from "reakit";
 
-export const ModalButtonStyles = {
+export const modalButtonStyles = {
   m: 2,
   display: "flex",
   flex: "1 0 auto",
@@ -13,7 +13,9 @@ export const ModalButtonStyles = {
   backgroundRepeat: "no-repeat",
   backgroundPosition: "0",
   cursor: "pointer",
-  border: "none"
+  border: "none",
+  alignItems: "center",
+  justifyContent: "center"
 };
 
 type ModalProps = {

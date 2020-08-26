@@ -4,7 +4,7 @@ import * as React from "react";
 import Button from "components/Button";
 import { ClientSamlMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
-import { ModalButtonStyles } from "../components/Modal";
+import { modalButtonStyles } from "../components/Modal";
 /**
  * Auth form
  */
@@ -18,7 +18,10 @@ const SamlAuthForm: React.FC<AuthFormProps<ClientSamlMethod>> = ({
     window.open(urlWithReferrer, "_self");
   };
   return (
-    <Button sx={{ ...ModalButtonStyles }} onClick={handleClick}>
+    <Button
+      sx={{ ...modalButtonStyles, marginLeft: "auto", marginRight: "auto" }}
+      onClick={handleClick}
+    >
       Login with {provider.method.description ?? "Unknown IDP"}
     </Button>
   );

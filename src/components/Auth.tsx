@@ -4,7 +4,7 @@ import * as React from "react";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import useLibraryContext from "./context/LibraryContext";
 import useAuth from "../hooks/useAuth";
-import Modal, { ModalButtonStyles } from "./Modal";
+import Modal, { modalButtonStyles } from "./Modal";
 import ClientOnly from "./ClientOnly";
 import { H2 } from "./Text";
 import Button from "components/Button";
@@ -20,7 +20,9 @@ import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
  *  - uses the AuthPlugin system to render the auth form
  */
 
-function shouldShowButton(authProvider: AuthProvider<AuthMethod> | undefined): boolean {
+function shouldShowButton(
+  authProvider: AuthProvider<AuthMethod> | undefined
+): boolean {
   return Boolean(
     authProvider?.plugin?.buttonComponent &&
       authProvider?.method?.description === "Clever"
@@ -37,9 +39,9 @@ const Auth: React.FC = ({ children }) => {
 
   const dialog = useDialogState();
   const library = useLibraryContext();
-  const [authProvider, setAuthProvider] = React.useState<AuthProvider<AuthMethod> | undefined>(
-    undefined
-  );
+  const [authProvider, setAuthProvider] = React.useState<
+    AuthProvider<AuthMethod> | undefined
+  >(undefined);
 
   const { fetcher, actions, dispatch } = useActions();
 
@@ -67,16 +69,16 @@ const Auth: React.FC = ({ children }) => {
   }, [authProvider, providers]);
 
   const handleChangeProvider = (providerId: string) => {
-    setAuthProvider(
-      providers?.find(provider => provider.id === providerId)
-    );
+    setAuthProvider(providers?.find(provider => provider.id === providerId));
   };
 
   const cancelGoBackToAuthSelection = () => {
     setAuthProvider(undefined);
   };
 
-  const visibleProviders = providers?.filter(provider => shouldShowButton(provider) || shouldShowFormComponent(provider));
+  const visibleProviders = providers?.filter(
+    provider => shouldShowButton(provider) || shouldShowFormComponent(provider)
+  );
 
   const noAuth = (visibleProviders?.length ?? 0) === 0;
 
@@ -105,7 +107,10 @@ const Auth: React.FC = ({ children }) => {
           {showProviderComboBox && (
             <div sx={{ mb: 2 }}>
               <FormLabel htmlFor="login-method-select">Login Method</FormLabel>
-              <Select id="login-method-select" onChange={(e) => handleChangeProvider(e.target.value)}>
+              <Select
+                id="login-method-select"
+                onChange={e => handleChangeProvider(e.target.value)}
+              >
                 {providers?.map(provider => (
                   <option key={provider.id} value={provider.id}>
                     {provider.method.description}
@@ -116,7 +121,13 @@ const Auth: React.FC = ({ children }) => {
           )}
 
           {showProviderButtons && !authProvider && (
-            <Stack direction="column">
+            <Stack
+              direction="column"
+              sx={{
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
               {providers?.map((provider, idx) => (
                 <>
                   {provider.plugin.buttonComponent && (
@@ -144,7 +155,8 @@ const Auth: React.FC = ({ children }) => {
                 : typeof cancel === "function" && cancel()
             }
             sx={{
-              ...ModalButtonStyles
+              ...modalButtonStyles,
+              margin: `0 auto`
             }}
             variant="ghost"
           >

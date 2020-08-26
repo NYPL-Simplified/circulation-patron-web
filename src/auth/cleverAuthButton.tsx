@@ -3,7 +3,7 @@ import { AuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthButtonProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import Button from "components/Button";
-import { ModalButtonStyles } from "components/Modal";
+import { modalButtonStyles } from "components/Modal";
 
 const CleverButton: React.FC<AuthButtonProps<AuthMethod>> = ({ provider }) => {
   const { actions, dispatch } = useActions();
@@ -32,7 +32,7 @@ const CleverButton: React.FC<AuthButtonProps<AuthMethod>> = ({ provider }) => {
         }
         type="submit"
         sx={{
-          ...ModalButtonStyles,
+          ...modalButtonStyles,
           color: "#ffffff",
           backgroundColor: "#2f67aa",
           backgroundImage: `url(${imageUrl})`
