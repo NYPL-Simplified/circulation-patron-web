@@ -109,7 +109,7 @@ const Summary: React.FC<{ book: BookData; className?: string }> = ({
   className
 }) => (
   <div sx={{ my: 2 }} className={className} aria-label="Book summary">
-    <H2 sx={{ mb: 2 }}>Summary</H2>
+    <H2 sx={{ mb: 2, variant: "text.headers.tertiary" }}>Summary</H2>
     <div
       dangerouslySetInnerHTML={{
         __html: book.summary ?? "Summary not provided."
