@@ -121,13 +121,7 @@ const Auth: React.FC = ({ children }) => {
           )}
 
           {showProviderButtons && !authProvider && (
-            <Stack
-              direction="column"
-              sx={{
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
+            <Stack direction="column">
               {providers?.map((provider, idx) => (
                 <>
                   {provider.plugin.buttonComponent && (
@@ -155,8 +149,7 @@ const Auth: React.FC = ({ children }) => {
                 : typeof cancel === "function" && cancel()
             }
             sx={{
-              ...modalButtonStyles,
-              margin: `0 auto`
+              ...modalButtonStyles
             }}
             variant="ghost"
           >

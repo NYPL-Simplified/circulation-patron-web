@@ -82,9 +82,7 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
       <Button
         type="submit"
         sx={{
-          ...modalButtonStyles,
-          marginLeft: "auto",
-          marginRight: "auto"
+          ...modalButtonStyles
         }}
       >
         Login

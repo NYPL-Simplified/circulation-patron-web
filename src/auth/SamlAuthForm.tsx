@@ -18,10 +18,7 @@ const SamlAuthForm: React.FC<AuthFormProps<ClientSamlMethod>> = ({
     window.open(urlWithReferrer, "_self");
   };
   return (
-    <Button
-      sx={{ ...modalButtonStyles, marginLeft: "auto", marginRight: "auto" }}
-      onClick={handleClick}
-    >
+    <Button sx={{ ...modalButtonStyles }} onClick={handleClick}>
       Login with {provider.method.description ?? "Unknown IDP"}
     </Button>
   );

@@ -14,8 +14,8 @@ export const modalButtonStyles = {
   backgroundPosition: "0",
   cursor: "pointer",
   border: "none",
-  alignItems: "center",
-  justifyContent: "center"
+  marginLeft: "auto",
+  marginRight: "auto"
 };
 
 type ModalProps = {
