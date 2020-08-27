@@ -1,5 +1,6 @@
 import AuthPlugin from "opds-web-client/lib/AuthPlugin";
 import BasicAuthForm from "./BasicAuthForm";
+import AuthButton from "./AuthButton";
 
 const BasicAuthPlugin: AuthPlugin = {
   type: "http://opds-spec.org/auth/basic",
@@ -8,7 +9,7 @@ const BasicAuthPlugin: AuthPlugin = {
   lookForCredentials: () => {},
 
   formComponent: BasicAuthForm,
-  buttonComponent: () => null
+  buttonComponent: AuthButton
 };
 
 export default BasicAuthPlugin;

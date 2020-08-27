@@ -1,14 +1,16 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import Button from "components/Button";
 import useTypedSelector from "hooks/useTypedSelector";
 import { useForm } from "react-hook-form";
+import Button from "components/Button";
 import FormInput from "components/form/FormInput";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
+
+import { modalButtonStyles } from "../components/Modal";
 
 type FormData = {
   login: string;
@@ -29,15 +31,6 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
   const usernameInputName = provider.method.labels.login;
   const passwordInputName = provider.method.labels.password;
 
-  let imageUrl;
-
-  for (const link of provider.method.links || []) {
-    if (link.rel === "logo") {
-      imageUrl = link.href;
-      break;
-    }
-  }
-
   const onSubmit = handleSubmit(async values => {
     const login = values[usernameInputName];
     const password = values[passwordInputName];
@@ -54,7 +47,13 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
     callback?.();
   });
   return (
-    <form onSubmit={onSubmit} sx={{ display: "flex", flexDirection: "column" }}>
+    <form
+      onSubmit={onSubmit}
+      sx={{
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
       <span sx={{ color: "ui.error" }}>
         {serverError && `Error: ${serverError}`}
       </span>
@@ -83,20 +82,10 @@ const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
       <Button
         type="submit"
         sx={{
-          alignSelf: "flex-end",
-          m: 2,
-          mr: 0,
-          flex: "1 0 auto",
-          width: "280px",
-          height: "51px",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "0",
-          backgroundImage: `url(${imageUrl})`,
-          cursor: "pointer",
-          border: "none"
+          ...modalButtonStyles
         }}
       >
-        {!imageUrl ? "Login" : ""}
+        Login
       </Button>
     </form>
   );

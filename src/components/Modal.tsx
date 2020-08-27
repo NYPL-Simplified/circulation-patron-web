@@ -3,6 +3,21 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import { DialogStateReturn, DialogBackdrop, Dialog } from "reakit";
 
+export const modalButtonStyles = {
+  m: 2,
+  display: "flex",
+  flex: "1 0 auto",
+  width: "280px",
+  height: "51px",
+  backgroundSize: `280px 51px`,
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "0",
+  cursor: "pointer",
+  border: "none",
+  marginLeft: "auto",
+  marginRight: "auto"
+};
+
 type ModalProps = {
   isVisible: boolean;
   dialog: DialogStateReturn;
