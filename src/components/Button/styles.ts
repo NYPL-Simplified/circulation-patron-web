@@ -1,9 +1,6 @@
 import { SystemStyleObject } from "@styled-system/css";
 import { darken, lightness } from "@theme-ui/color";
 import { ButtonSize, ButtonVariant } from "./index";
-import theme from "../../theme/theme";
-
-const { shadows } = theme;
 
 export const sizes = {
   sm: {},
@@ -57,7 +54,7 @@ export const styleProps = (
           textDecoration: "none"
         },
         "&:focus": {
-          boxShadow: shadows.focus
+          boxShadow: "focus"
         },
         "&:active": {
           bg: darken(color, 0.1)
@@ -84,7 +81,7 @@ export const styleProps = (
           textDecoration: "none"
         },
         "&:focus": {
-          boxShadow: shadows.focus
+          boxShadow: "focus"
         },
         "&:active": {
           // bg: darken(color, 0.1)
