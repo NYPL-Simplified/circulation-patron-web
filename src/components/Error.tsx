@@ -18,13 +18,16 @@ const ErrorComponent = ({
   detail,
   configFile
 }: {
-  statusCode?: number;
+  statusCode?: number | null;
   title?: string;
   detail?: string;
   configFile?: AppConfigFile | null;
 }) => {
-  const errorTitle =
-    title || statusCodes[statusCode] || "An unexpected error has occurred";
+  const errorTitle = title
+    ? title
+    : statusCode
+    ? statusCodes[statusCode]
+    : "An unexpected error has occurred";
   return (
     <>
       <H1 sx={{ fontSize: 3, textAlign: `center` }}>
