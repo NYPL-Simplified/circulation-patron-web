@@ -1,5 +1,5 @@
 export default class ApplicationError extends Error {
-  readonly statusCode?: number = undefined;
+  readonly statusCode: number | null = null;
 
   constructor(m: string, baseError?: Error) {
     super(`${m}${baseError ? `\nBase Error:\n${baseError.message}` : ""}`);

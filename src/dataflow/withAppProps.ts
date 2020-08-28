@@ -28,7 +28,7 @@ export type AppProps = {
   error?: {
     message: string;
     name: string;
-    statusCode?: number;
+    statusCode: number | null;
   };
   configFile?: AppConfigFile | null;
 };
