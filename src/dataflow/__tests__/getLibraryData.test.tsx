@@ -65,6 +65,41 @@ describe("getCatalogRootUrl", () => {
     );
   });
 
+  test("throws error if there is a CIRCULATION_MANAGER_BASE and REGISTRY_BASE at the same time", async () => {
+    setEnv({
+      CIRCULATION_MANAGER_BASE: "some-base",
+      REGISTRY_BASE: "something"
+    });
+    const promise = getCatalogRootUrl();
+    await expect(promise).rejects.toThrowError(AppSetupError);
+    await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"App is set up with SIMPLIFIED_CATALOG_BASE and either CONFIG_FILE or REGISTRY. You should only have one defined."`
+    );
+  });
+
+  test("throws error if there is a CIRCULATION_MANAGER_BASE and CONFIG_FILE at the same time", async () => {
+    setEnv({
+      CIRCULATION_MANAGER_BASE: "some-base",
+      CONFIG_FILE: "something"
+    });
+    const promise = getCatalogRootUrl();
+    await expect(promise).rejects.toThrowError(AppSetupError);
+    await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"App is set up with SIMPLIFIED_CATALOG_BASE and either CONFIG_FILE or REGISTRY. You should only have one defined."`
+    );
+  });
+
+  test("throws error if there is a CONFIG_FILE and REGISTRY_BASE at the same time", async () => {
+    setEnv({
+      CONFIG_FILE: "something",
+      REGISTRY_BASE: "some base"
+    });
+    const promise = getCatalogRootUrl("slug");
+    await expect(promise).rejects.toThrowError(AppSetupError);
+    await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"You can only have one of SIMPLIFIED_CATALOG_BASE and REGISTRTY_BASE defined at one time."`
+    );
+  });
   test("throws PageNotFoundError if running multiple libraries and no slug provided", async () => {
     setEnv({
       CONFIG_FILE: "config-file"
@@ -107,6 +142,7 @@ describe("getCatalogRootUrl", () => {
       `"One of CONFIG_FILE, REGISTRY_BASE, or SIMPLIFIED_CATALOG_BASE must be defined."`
     );
   });
+
   describe("with Registry Base", () => {
     test("Works for Registry Base", async () => {
       setEnv({ REGISTRY_BASE: "reg-base" });

@@ -93,8 +93,7 @@ function findCatalogRootUrl(catalog: OPDS2.CatalogEntry) {
 }
 
 /**
- * Returns a url leading to an OPDS 1 Feed, either sourced from the
- * env set at build time or from the library registry.
+ * Uses ENV vars to return a url leading to an OPDS 1 Feed.
  */
 export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
   if (CIRCULATION_MANAGER_BASE) {
@@ -102,6 +101,11 @@ export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
       throw new PageNotFoundError(
         "App is running with a single Circ Manager, but you're trying to access a multi-library route: " +
           librarySlug
+      );
+    }
+    if (CONFIG_FILE || REGISTRY_BASE) {
+      throw new AppSetupError(
+        "App is set up with SIMPLIFIED_CATALOG_BASE and either CONFIG_FILE or REGISTRY. You should only have one defined."
       );
     }
     return CIRCULATION_MANAGER_BASE;
@@ -113,6 +117,11 @@ export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
     );
 
   if (CONFIG_FILE) {
+    if (REGISTRY_BASE) {
+      throw new AppSetupError(
+        "You can only have one of SIMPLIFIED_CATALOG_BASE and REGISTRTY_BASE defined at one time."
+      );
+    }
     const configFile = await getConfigFile(CONFIG_FILE);
     const configEntry = configFile[librarySlug];
     if (configEntry) return configEntry;
