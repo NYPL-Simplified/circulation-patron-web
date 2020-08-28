@@ -116,7 +116,7 @@ describe("available to borrow book", () => {
     expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 
-  test.only("displays error message", () => {
+  test("displays error message", () => {
     const err: FetchErrorData = {
       response: "cannot loan more than 3 documents.",
       status: 403,
