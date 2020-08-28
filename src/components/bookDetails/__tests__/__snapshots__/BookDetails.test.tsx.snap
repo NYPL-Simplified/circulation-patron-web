@@ -85,6 +85,10 @@ exports[`book details page handles error state 1`] = `
   text-decoration: none;
 }
 
+.emotion-2:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
+}
+
 .emotion-2:active {
   background-color: #285f8f;
 }

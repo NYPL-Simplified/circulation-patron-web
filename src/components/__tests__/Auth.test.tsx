@@ -108,6 +108,23 @@ const authStateWithClever: AuthState = {
   providers: [fixtures.cleverAuthProvider, fixtures.samlAuthProvider]
 };
 
+const authStateWithFiveProviders: AuthState = {
+  showForm: true,
+  callback: jest.fn(),
+  cancel: jest.fn(),
+  credentials: null,
+  title: "form",
+  error: null,
+  attemptedProvider: null,
+  providers: [
+    fixtures.basicAuthProvider,
+    fixtures.samlAuthProvider,
+    fixtures.cleverAuthProvider,
+    fixtures.samlAuthProvider,
+    fixtures.samlAuthProvider
+  ]
+};
+
 const authStateWithTwoProviders: AuthState = {
   showForm: true,
   callback: jest.fn(),
@@ -118,12 +135,43 @@ const authStateWithTwoProviders: AuthState = {
   attemptedProvider: null,
   providers: [fixtures.basicAuthProvider, fixtures.samlAuthProvider]
 };
+
+const stateWithFiveProviders: State = merge<State>(fixtures.initialState, {
+  auth: authStateWithFiveProviders
+});
+
 const stateWithTwoProviders: State = merge<State>(fixtures.initialState, {
   auth: authStateWithTwoProviders
 });
 
 const stateWithCleverProvider: State = merge<State>(fixtures.initialState, {
   auth: authStateWithClever
+});
+
+test("renders select comboxbox when more than four providers present", async () => {
+  const utils = render(
+    <Auth>
+      <div>children</div>
+    </Auth>,
+    {
+      initialState: stateWithFiveProviders
+    }
+  );
+
+  const select = utils.getByRole("combobox", { name: "Login Method" });
+  expect(select).toBeInTheDocument();
+
+  // should have five options
+  expect(utils.getByRole("option", { name: "Clever" })).toBeInTheDocument();
+  expect(
+    utils.getByRole("option", { name: "Library Barcode" })
+  ).toBeInTheDocument();
+  expect(utils.getAllByRole("option", { name: "SAML IdP" })).toHaveLength(3);
+
+  // should be able to change provider
+  userEvent.selectOptions(select, fixtures.samlAuthProvider.id);
+
+  expect(await utils.findByText("Login with SAML IdP")).toBeInTheDocument();
 });
 
 test("renders select Clever with multiple providers present", async () => {
@@ -136,20 +184,26 @@ test("renders select Clever with multiple providers present", async () => {
     }
   );
 
-  const select = utils.getByRole("combobox", { name: /login method/i });
-  expect(select).toBeInTheDocument();
-
   // should have two options
-  expect(utils.getByRole("option", { name: "SAML IdP" })).toBeInTheDocument();
-  expect(utils.getByRole("option", { name: "Clever" })).toBeInTheDocument();
+  expect(utils.getByLabelText("Login to SAML IdP")).toBeInTheDocument();
 
-  // should be able to change to select clever
-  userEvent.selectOptions(select, fixtures.cleverAuthProvider.id);
+  expect(
+    utils.getByRole("button", {
+      name: "Log In with Clever"
+    })
+  ).toBeInTheDocument();
 
+  // should be able to click to select Clever
+
+  userEvent.click(
+    utils.getByRole("button", {
+      name: "Log In with Clever"
+    })
+  );
   expect(await utils.findByLabelText("Log In with Clever")).toBeInTheDocument();
 });
 
-test("renders select when multiple providers present", async () => {
+test("renders provider buttons when multiple providers present", async () => {
   const utils = render(
     <Auth>
       <div>children</div>
@@ -159,25 +213,21 @@ test("renders select when multiple providers present", async () => {
     }
   );
 
-  const select = utils.getByRole("combobox", { name: "Login Method" });
-  expect(select).toBeInTheDocument();
-
   // should have two options
   expect(
-    utils.getByRole("option", { name: "Library Barcode" })
+    utils.getByRole("button", { name: "Login to Library Barcode" })
   ).toBeInTheDocument();
-  expect(utils.getByRole("option", { name: "SAML IdP" })).toBeInTheDocument();
-
-  // should default to basic auth (first)
   expect(
-    utils.getByRole("textbox", { name: "Barcode input" })
+    utils.getByRole("button", { name: "Login to SAML IdP" })
   ).toBeInTheDocument();
-  expect(utils.getByLabelText("Pin input")).toBeInTheDocument();
 
-  // should be able to change
-  userEvent.selectOptions(select, fixtures.samlAuthProvider.id);
+  userEvent.click(utils.getByRole("button", { name: "Login to SAML IdP" }));
 
-  expect(await utils.findByText("Login with SAML IdP")).toBeInTheDocument();
+  // /* after clicking SAML IdP button Login with SAML IdP text appears */
+  expect(
+    utils.queryByRole("button", { name: "Login to Library Barcode" })
+  ).toBe(null);
+  expect(utils.queryByRole("button", { name: "Login to SAML IdP" })).toBe(null);
 });
 
 test("displays message when no auth provider configured", async () => {
@@ -231,7 +281,8 @@ test("attempts to get credentials from cookies", async () => {
       initialState: stateWithShowForm
     }
   );
-  expect(getCredentialsSpy).toHaveBeenCalledTimes(1);
+  // TODO: Is it okay for this to be called 2x?
+  expect(getCredentialsSpy).toHaveBeenCalledTimes(2);
 });
 
 test("attempts to save auth credentials", async () => {

@@ -53,6 +53,9 @@ export const styleProps = (
           color: "white",
           textDecoration: "none"
         },
+        "&:focus": {
+          boxShadow: "focus"
+        },
         "&:active": {
           bg: darken(color, 0.1)
         },
@@ -76,6 +79,9 @@ export const styleProps = (
           bg: lightness(color, 0.85),
           color: color,
           textDecoration: "none"
+        },
+        "&:focus": {
+          boxShadow: "focus"
         },
         "&:active": {
           // bg: darken(color, 0.1)

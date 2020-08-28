@@ -46,6 +46,10 @@ exports[`LinkButton renders correct element 1`] = `
   text-decoration: none;
 }
 
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
+}
+
 .emotion-0:active {
   background-color: #285f8f;
 }
@@ -119,6 +123,10 @@ exports[`NavButton renders correct element 1`] = `
   text-decoration: none;
 }
 
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
+}
+
 .emotion-0:active {
   background-color: #285f8f;
 }
@@ -183,6 +191,10 @@ exports[`variants filled (default) 1`] = `
   text-decoration: none;
 }
 
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
+}
+
 .emotion-0:active {
   background-color: #285f8f;
 }
@@ -245,6 +257,10 @@ exports[`variants ghost 1`] = `
   color: var(--theme-ui-colors-brand-primary,#337ab7);
   -webkit-text-decoration: none;
   text-decoration: none;
+}
+
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 <button
