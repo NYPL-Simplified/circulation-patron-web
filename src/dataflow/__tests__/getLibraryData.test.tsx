@@ -139,7 +139,16 @@ describe("getCatalogRootUrl", () => {
     const promise = getCatalogRootUrl("hello");
     expect(promise).rejects.toThrowError(AppSetupError);
     expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"One of CONFIG_FILE, REGISTRY_BASE, or SIMPLIFIED_CATALOG_BASE must be defined."`
+      `"Application must be run with one of SIMPLIFIED_CATALOG_BASE, CONFIG_FILE or REGISTRY_BASE."`
+    );
+  });
+
+  test("Throws AppSetupError if no env var is defined and no librarySlug provided", async () => {
+    setEnv({});
+    const promise = getCatalogRootUrl();
+    expect(promise).rejects.toThrowError(AppSetupError);
+    expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Application must be run with one of SIMPLIFIED_CATALOG_BASE, CONFIG_FILE or REGISTRY_BASE."`
     );
   });
 

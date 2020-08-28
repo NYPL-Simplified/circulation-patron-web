@@ -33,6 +33,7 @@ export interface Group extends Collection<GroupMetadata> {
   /**
    * For when a catalog has more than one collection of
    * navigation or publications. It contains an array of
+   * Feeds
    *
    */
   groups: Feed<GroupMetadata>[];

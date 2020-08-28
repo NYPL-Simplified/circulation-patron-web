@@ -27,6 +27,8 @@ export class UnimplementedError extends ApplicationError {
 }
 
 export class AppSetupError extends ApplicationError {
+  readonly statusCode = 500;
+
   constructor(m: string, baseError?: Error) {
     super(`${m}${baseError ? baseError.message : ""}`);
     Object.setPrototypeOf(this, AppSetupError.prototype);

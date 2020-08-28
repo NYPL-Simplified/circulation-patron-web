@@ -93,9 +93,14 @@ function findCatalogRootUrl(catalog: OPDS2.CatalogEntry) {
 }
 
 /**
- * Uses ENV vars to return a url leading to an OPDS 1 Feed.
+ * Interprets the env vars to return the catalog root url.
  */
 export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
+  if (!CIRCULATION_MANAGER_BASE && !REGISTRY_BASE && !CONFIG_FILE) {
+    throw new AppSetupError(
+      "Application must be run with one of SIMPLIFIED_CATALOG_BASE, CONFIG_FILE or REGISTRY_BASE."
+    );
+  }
   if (CIRCULATION_MANAGER_BASE) {
     if (librarySlug) {
       throw new PageNotFoundError(
@@ -139,9 +144,6 @@ export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
       );
     return catalogRootUrl;
   }
-  throw new AppSetupError(
-    "One of CONFIG_FILE, REGISTRY_BASE, or SIMPLIFIED_CATALOG_BASE must be defined."
-  );
 }
 
 /**
