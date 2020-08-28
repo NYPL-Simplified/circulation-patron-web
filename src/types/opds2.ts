@@ -1,5 +1,5 @@
-import { BaseDocumentMediaType as OPDS1BaseDocumentMediaType } from "interfaces";
 /* eslint-disable camelcase */
+import { BaseDocumentMediaType as OPDS1BaseDocumentMediaType } from "interfaces";
 /**
  * OPDS 2.0 DATA TYPES
  * Currently only used for support of a Library Regristry, which is

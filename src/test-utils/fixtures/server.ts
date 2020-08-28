@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable camelcase */
 import { basicAuthMethod } from "./auth";
 export const server401Response = {

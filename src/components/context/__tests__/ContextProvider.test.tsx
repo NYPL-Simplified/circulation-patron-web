@@ -2,7 +2,6 @@ import * as React from "react";
 import { shallow } from "enzyme";
 import { renderHook } from "@testing-library/react-hooks";
 import AppContextProvider from "../ContextProvider";
-import buildStore from "opds-web-client/lib/store";
 import { usePathFor } from "opds-web-client/lib/components/context/PathForContext";
 import { LibraryData } from "../../../interfaces";
 import { State } from "opds-web-client/lib/state";

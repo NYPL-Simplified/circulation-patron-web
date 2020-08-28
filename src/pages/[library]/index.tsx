@@ -4,9 +4,7 @@ import { NextPage, GetServerSideProps } from "next";
 import Page from "components/Page";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
 
-type Props = AppProps;
-
-const LibraryHome: NextPage<Props> = ({ library, error }) => {
+const LibraryHome: NextPage<AppProps> = ({ library, error }) => {
   return (
     <Page library={library} error={error}>
       <Collection title={`${library?.catalogName} Home`} />

@@ -4,9 +4,7 @@ import Page from "components/Page";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
 import MyBooks from "components/MyBooks";
 
-type Props = AppProps;
-
-const MyBooksPage: NextPage<Props> = ({ library, error }) => {
+const MyBooksPage: NextPage<AppProps> = ({ library, error }) => {
   return (
     <Page library={library} error={error}>
       <MyBooks />

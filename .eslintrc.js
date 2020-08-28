@@ -20,7 +20,6 @@ module.exports = {
     "react-hooks"
   ],
   extends: [
-    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
@@ -45,7 +44,7 @@ module.exports = {
     // redundant and doesn't function properly
     "react/prop-types": 0,
     "@typescript-eslint/no-unused-vars": [
-      "warn",
+      "error",
       {
         vars: "all",
         args: "after-used",
@@ -65,8 +64,9 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/class-name-casing": "error",
-    "@typescript-eslint/prefer-namespace-keyword": "error",
     camelcase: "error",
+    "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/prefer-namespace-keyword": "error",
     eqeqeq: ["error", "smart"],
     "id-blacklist": [
       "error",

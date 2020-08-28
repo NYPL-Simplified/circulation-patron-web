@@ -1,6 +1,5 @@
-import { OPDS2 } from "interfaces";
 /* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/camelcase */
+import { OPDS2 } from "interfaces";
 /**
  * An OPDS 2 Library Registry Feed
  */

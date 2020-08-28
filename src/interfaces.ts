@@ -8,7 +8,7 @@ import {
 
 /**
  * OPDS 2.0 DATA TYPES
- * Currently only used for support of a Library Regristry, which is
+ * Currently only used for support of a Library Registry, which is
  * an OPDS 2 Feed of OPDS 2 Catalogs from which we extract the catalog root url
  */
 
@@ -74,7 +74,6 @@ export interface AuthDocument {
   authentication: OPDSAuthProvider[];
 
   announcements?: Announcement[];
-  // eslint-disable-next-line camelcase
   web_color_scheme?: {
     primary?: string;
     secondary?: string;

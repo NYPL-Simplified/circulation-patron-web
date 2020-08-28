@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import {
   OPDS2,
   LibraryData,
@@ -18,6 +17,10 @@ import getConfigFile from "./getConfigFile";
 import ApplicationError, { PageNotFoundError, AppSetupError } from "errors";
 import { CatalogEntry } from "types/opds2";
 
+/**
+ * Fetches an OPDSFeed with a given catalogUrl. Parses it into an OPDSFeed and
+ * returns it.
+ */
 export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
   try {
     const catalogResponse = await fetch(catalogUrl);
@@ -31,7 +34,7 @@ export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
 }
 
 /**
- * Returns a function to construct a registry catalog ink, which leads to a
+ * Returns a function to construct a registry catalog link, which leads to a
  * LibraryRegistryFeed containing a single CatalogEntry.
  */
 async function fetchCatalogLinkBuilder(
@@ -57,6 +60,10 @@ async function fetchCatalogLinkBuilder(
   }
 }
 
+/**
+ * Fetches a CatalogEntry from a library registry given an identifier
+ * for the library.
+ */
 async function fetchCatalogEntry(
   librarySlug: string,
   registryBase: string
@@ -128,6 +135,10 @@ export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
   );
 }
 
+/**
+ * Fetches an auth document from the supplied url and returns it
+ * as a parsed AuthDocument
+ */
 export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
   try {
     const response = await fetch(url);
@@ -141,6 +152,10 @@ export async function fetchAuthDocument(url: string): Promise<AuthDocument> {
   }
 }
 
+/**
+ * Constructs the internal LibraryData state from an auth document,
+ * catalog url, and library slug.
+ */
 export function buildLibraryData(
   authDoc: AuthDocument,
   catalogUrl: string,
@@ -166,6 +181,9 @@ export function buildLibraryData(
   };
 }
 
+/**
+ * Extracts the href of an auth document from the links in an OPDSFeed.
+ */
 export function getAuthDocHref(catalog: OPDSFeed) {
   const link = catalog.links.find(link => link.rel === AuthDocLinkRelation);
   if (!link)
@@ -175,6 +193,9 @@ export function getAuthDocHref(catalog: OPDSFeed) {
   return link.href;
 }
 
+/**
+ * Parses the links array in an auth document into an object of links.
+ */
 function parseLinks(links: AuthDocumentLink[]): LibraryLinks {
   const parsed = links.reduce((links, link) => {
     switch (link.rel) {
@@ -200,6 +221,10 @@ function parseLinks(links: AuthDocumentLink[]): LibraryLinks {
   return parsed;
 }
 
+/**
+ * Attempts to create an array of all the libraries available with the
+ * current env settings.
+ */
 export async function getLibrarySlugs() {
   if (CIRCULATION_MANAGER_BASE) return [];
 

@@ -75,7 +75,7 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
 const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
   const { helpWebsite, libraryWebsite } = library.libraryLinks;
   const libraryName = library.catalogName;
-  const { signOutAndGoHome, isSignedIn, signIn } = useAuth();
+  const { isSignedIn, signIn } = useAuth();
 
   return (
     <div

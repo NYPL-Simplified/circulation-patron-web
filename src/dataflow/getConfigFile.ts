@@ -3,6 +3,10 @@ import { readFileSync, existsSync } from "fs";
 import path from "path";
 import { AppConfigFile } from "interfaces";
 
+/**
+ * Reads a config file either from local path or
+ * http request, parses it, and returns it as an object
+ */
 export default async function getConfigFile(
   configFileSetting: string
 ): Promise<AppConfigFile> {
@@ -17,6 +21,10 @@ export default async function getConfigFile(
   return parseConfigText(text);
 }
 
+/**
+ * Fetches a config file from the network, parses it into
+ * an object and returns it
+ */
 async function fetchConfigFile(configFileUrl: string): Promise<AppConfigFile> {
   try {
     const response = await fetch(configFileUrl);
@@ -28,6 +36,9 @@ async function fetchConfigFile(configFileUrl: string): Promise<AppConfigFile> {
   }
 }
 
+/**
+ * Parses the raw text of a config file into an object.
+ */
 function parseConfigText(raw: string): AppConfigFile {
   return raw
     .split("\n")
