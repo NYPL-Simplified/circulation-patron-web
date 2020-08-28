@@ -96,11 +96,6 @@ function findCatalogRootUrl(catalog: OPDS2.CatalogEntry) {
  * Interprets the env vars to return the catalog root url.
  */
 export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
-  if (!CIRCULATION_MANAGER_BASE && !REGISTRY_BASE && !CONFIG_FILE) {
-    throw new AppSetupError(
-      "Application must be run with one of SIMPLIFIED_CATALOG_BASE, CONFIG_FILE or REGISTRY_BASE."
-    );
-  }
   if (CIRCULATION_MANAGER_BASE) {
     if (librarySlug) {
       throw new PageNotFoundError(
@@ -116,34 +111,40 @@ export async function getCatalogRootUrl(librarySlug?: string): Promise<string> {
     return CIRCULATION_MANAGER_BASE;
   }
 
-  if (!librarySlug)
-    throw new PageNotFoundError(
-      "Library slug must be provided when running with multiple libraries."
-    );
+  // otherwise we are running with multiple libraries.
+  if (CONFIG_FILE || REGISTRY_BASE) {
+    if (!librarySlug)
+      throw new PageNotFoundError(
+        "Library slug must be provided when running with multiple libraries."
+      );
 
-  if (CONFIG_FILE) {
-    if (REGISTRY_BASE) {
-      throw new AppSetupError(
-        "You can only have one of SIMPLIFIED_CATALOG_BASE and REGISTRTY_BASE defined at one time."
+    if (CONFIG_FILE) {
+      if (REGISTRY_BASE) {
+        throw new AppSetupError(
+          "You can only have one of SIMPLIFIED_CATALOG_BASE and REGISTRTY_BASE defined at one time."
+        );
+      }
+      const configFile = await getConfigFile(CONFIG_FILE);
+      const configEntry = configFile[librarySlug];
+      if (configEntry) return configEntry;
+      throw new PageNotFoundError(
+        "No CONFIG_FILE entry for library: " + librarySlug
       );
     }
-    const configFile = await getConfigFile(CONFIG_FILE);
-    const configEntry = configFile[librarySlug];
-    if (configEntry) return configEntry;
-    throw new PageNotFoundError(
-      "No CONFIG_FILE entry for library: " + librarySlug
-    );
-  }
 
-  if (REGISTRY_BASE) {
-    const catalogEntry = await fetchCatalogEntry(librarySlug, REGISTRY_BASE);
-    const catalogRootUrl = findCatalogRootUrl(catalogEntry);
-    if (!catalogRootUrl)
-      throw new ApplicationError(
-        `CatalogEntry did not contain a Catalog Root Url. Library UUID: ${librarySlug}`
-      );
-    return catalogRootUrl;
+    if (REGISTRY_BASE) {
+      const catalogEntry = await fetchCatalogEntry(librarySlug, REGISTRY_BASE);
+      const catalogRootUrl = findCatalogRootUrl(catalogEntry);
+      if (!catalogRootUrl)
+        throw new ApplicationError(
+          `CatalogEntry did not contain a Catalog Root Url. Library UUID: ${librarySlug}`
+        );
+      return catalogRootUrl;
+    }
   }
+  throw new AppSetupError(
+    "Application must be run with one of SIMPLIFIED_CATALOG_BASE, CONFIG_FILE or REGISTRY_BASE."
+  );
 }
 
 /**
