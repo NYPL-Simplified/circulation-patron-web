@@ -12,7 +12,7 @@ async function fetchOPDS(url: string): Promise<OPDSEntry | OPDSFeed> {
   // check for an error code in the status
   if (!response.ok) {
     throw new ApplicationError(
-      `Error fetching collection. Response text: ${text}`
+      `Error fetching OPDS Data. Url: ${url} Response text: ${text}`
     );
   }
 
@@ -62,4 +62,8 @@ export function createCollectionUrl(
   collectionUrl: string
 ): string {
   return `${catalogUrl}/${collectionUrl}`;
+}
+
+export function stripUndefined(json: any) {
+  return JSON.parse(JSON.stringify(json));
 }

@@ -3,8 +3,12 @@ import Collection from "components/Collection";
 import { NextPage, GetServerSideProps } from "next";
 import Page from "components/Page";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
-import { feedToCollection } from "dataflow/opds/parse";
-import { fetchFeed, createCollectionUrl } from "dataflow/opds/fetch";
+import { feedToCollection } from "dataflow/opds1/parse";
+import {
+  fetchFeed,
+  createCollectionUrl,
+  stripUndefined
+} from "dataflow/opds1/fetch";
 
 type PageProps = {
   collection: any;
@@ -44,9 +48,5 @@ export const getServerSideProps: GetServerSideProps = withAppProps(
     };
   }
 );
-
-function stripUndefined(json: any) {
-  return JSON.parse(JSON.stringify(json));
-}
 
 export default CollectionPage;
