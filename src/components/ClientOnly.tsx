@@ -13,3 +13,13 @@ export default function ClientOnly({
 
   return mounted ? <>{children}</> : null;
 }
+
+export function withClientOnly<P>(Component: React.ComponentType<P>) {
+  const WithClientOnly = (props: P) => (
+    <ClientOnly>
+      <Component {...props} />
+    </ClientOnly>
+  );
+
+  return WithClientOnly;
+}

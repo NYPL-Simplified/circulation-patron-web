@@ -10,6 +10,7 @@ import { H2 } from "./Text";
 import { NavButton } from "./Button";
 import ArrowForward from "icons/ArrowForward";
 import Stack from "./Stack";
+import { withClientOnly } from "components/ClientOnly";
 
 type BookRefs = {
   [id: string]: React.RefObject<HTMLLIElement>;
@@ -257,4 +258,4 @@ const LaneErrorFallback: React.FC<{ message: string }> = ({ message }) => {
     </div>
   );
 };
-export default withErrorBoundary(Lane, LaneErrorFallback);
+export default withClientOnly(withErrorBoundary(Lane, LaneErrorFallback));

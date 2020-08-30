@@ -2,34 +2,32 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import useTypedSelector from "../hooks/useTypedSelector";
-import { SetCollectionAndBook } from "../interfaces";
-import useSetCollectionAndBook from "../hooks/useSetCollectionAndBook";
-import { connect } from "react-redux";
-import {
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-} from "opds-web-client/lib/components/mergeRootProps";
 import { PageLoader } from "../components/LoadingIndicator";
-import useNormalizedCollection from "../hooks/useNormalizedCollection";
 import { ListView, LanesView } from "./BookList";
 import Head from "next/head";
 import PageTitle from "./PageTitle";
 import { Text } from "./Text";
 import BreadcrumbBar from "./BreadcrumbBar";
+import { CollectionData } from "opds-web-client/lib/interfaces";
 
+/**
+ * To Do:
+ *  - pagination
+ *  - fetching
+ *  - if collection not passed in
+ *  - fetch loans and normalize with loan data
+ */
 export const Collection: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
+  collection: CollectionData;
   title?: string;
-}> = ({ setCollectionAndBook, title }) => {
-  useSetCollectionAndBook(setCollectionAndBook);
+}> = ({ collection, title }) => {
   const isFetching = useTypedSelector(state => state.collection.isFetching);
-  const collectionData = useNormalizedCollection();
+  // const collectionData = useNormalizedCollection();
 
-  const hasLanes = collectionData?.lanes && collectionData.lanes.length > 0;
-  const hasBooks = collectionData?.books && collectionData.books.length > 0;
+  const hasLanes = collection?.lanes && collection.lanes.length > 0;
+  const hasBooks = collection?.books && collection.books.length > 0;
 
-  const pageTitle = title ?? `Collection: ${collectionData.title ?? ""}`;
+  const pageTitle = title ?? `Collection: ${collection.title ?? ""}`;
 
   return (
     <div
@@ -48,9 +46,9 @@ export const Collection: React.FC<{
       {isFetching ? (
         <PageLoader />
       ) : hasLanes ? (
-        <LanesView lanes={collectionData.lanes ?? []} />
+        <LanesView lanes={collection.lanes ?? []} />
       ) : hasBooks ? (
-        <ListView books={collectionData.books} />
+        <ListView books={collection.books} />
       ) : (
         <div
           sx={{
@@ -67,10 +65,4 @@ export const Collection: React.FC<{
   );
 };
 
-const Connected = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-)(Collection);
-
-export default Connected;
+export default Collection;

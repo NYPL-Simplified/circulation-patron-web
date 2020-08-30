@@ -1,5 +1,5 @@
-import { LibraryData, AppConfigFile } from "../interfaces";
-import { GetServerSideProps } from "next";
+import { LibraryData, AppConfigFile, RequiredKeys } from "../interfaces";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
 import {
   getCatalogRootUrl,
@@ -33,6 +33,14 @@ export type AppProps = {
   configFile?: AppConfigFile | null;
 };
 
+type GetServerSideProps<
+  P extends { [key: string]: any } = { [key: string]: any },
+  Q extends ParsedUrlQuery = ParsedUrlQuery
+> = (
+  context: GetServerSidePropsContext<Q>,
+  appData: RequiredKeys<AppProps, "library">
+) => Promise<GetServerSidePropsResult<P>>;
+
 export default function withAppProps(
   pageGetServerSideProps?: GetServerSideProps
 ): GetServerSideProps<AppProps> {
@@ -50,7 +58,9 @@ export default function withAppProps(
       const authDocument = await fetchAuthDocument(authDocHref);
       const library = buildLibraryData(authDocument, catalogUrl, librarySlug);
       // fetch the static props for the page
-      const pageResult = (await pageGetServerSideProps?.(ctx)) ?? { props: {} };
+      const pageResult = (await pageGetServerSideProps?.(ctx, { library })) ?? {
+        props: {}
+      };
       return {
         ...pageResult,
         props: {
