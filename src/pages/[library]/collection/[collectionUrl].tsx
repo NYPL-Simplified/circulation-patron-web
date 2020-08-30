@@ -7,7 +7,7 @@ import withAppProps, { AppProps } from "dataflow/withAppProps";
 const CollectionPage: NextPage<AppProps> = ({ library, error }) => {
   return (
     <Page library={library} error={error}>
-      <Collection title={`${library?.catalogName} Home`} />
+      <Collection />
     </Page>
   );
 };
