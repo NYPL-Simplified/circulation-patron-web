@@ -20,8 +20,13 @@ import {
   FacetGroupData,
   SearchData,
   FulfillmentLink,
-  MediaType
+  MediaType,
+  BookAvailability
 } from "opds-web-client/lib/interfaces";
+
+/**
+ * Parses OPDS 1.x Feed or Entry into a Collection or Book
+ */
 
 /**
  * Type guards. Used for filtering links or narrowing the
@@ -62,6 +67,28 @@ function buildFulfillmentLink(feedUrl: string) {
       indirectType
     };
   };
+}
+
+/**
+ * HTML Sanitizer
+ */
+let sanitizeHtml;
+const createDOMPurify = require("dompurify");
+if (typeof window === "undefined") {
+  // sanitization needs to work server-side,
+  // so we use jsdom to build it a window object
+  const { JSDOM } = require("jsdom");
+  const jsdom = new JSDOM("<!doctype html><html><body></body></html>", {
+    url: "http://localhost",
+    FetchExternalResources: false,
+    ProcessExternalResources: false
+  });
+  const { window } = jsdom;
+  const { defaultView } = window;
+
+  sanitizeHtml = createDOMPurify(defaultView).sanitize;
+} else {
+  sanitizeHtml = createDOMPurify(window).sanitize;
 }
 
 /**
@@ -161,7 +188,12 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
     borrowUrl: borrowUrl,
     allBorrowLinks: allBorrowLinks,
     fulfillmentLinks: fulfillmentLinks,
-    availability: availability,
+    availability: {
+      ...availability,
+      // we type cast status because our internal types
+      // are stricter than those in OPDSFeedParser.
+      status: availability?.status as BookAvailability
+    },
     holds: holds,
     copies: copies,
     publisher: entry.publisher,
