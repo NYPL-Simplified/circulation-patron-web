@@ -130,7 +130,10 @@ export function bookIsAudiobook(book: BookData): boolean {
 }
 
 export const bookMediumMap: {
-  [key in BookMedium]: React.ReactNode;
+  [key in BookMedium]: {
+    name: string;
+    icon: React.ComponentType<{ className?: string }>;
+  };
 } = {
   "http://bib.schema.org/Audiobook": {
     name: "Audiobook",

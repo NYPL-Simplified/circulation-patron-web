@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PathFor, LibraryData } from "interfaces";
+import { LibraryData } from "interfaces";
 import UrlShortener from "UrlShortener";
 import { LibraryProvider } from "./LibraryContext";
 import PathForProvider from "opds-web-client/lib/components/context/PathForContext";
@@ -19,6 +19,7 @@ import CleverAuthPlugin from "auth/cleverAuthPlugin";
 import getPathFor from "utils/getPathFor";
 import { LinkUtilsProvider } from "./LinkUtilsContext";
 import { SHORTEN_URLS } from "utils/env";
+import { PathFor } from "opds-web-client/lib/interfaces";
 
 type ProviderProps = {
   library: LibraryData;

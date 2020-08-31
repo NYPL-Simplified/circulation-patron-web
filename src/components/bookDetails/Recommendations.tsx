@@ -77,7 +77,7 @@ const getRelatedUrl = (book: BookData): null | string => {
   const links = book.raw.link;
   if (!links) return null;
 
-  const relatedLink = links.find(link => link.$.rel.value === "related");
+  const relatedLink = links.find((link: any) => link.$.rel.value === "related");
 
   if (!relatedLink) return null;
 

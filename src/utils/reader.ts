@@ -32,7 +32,11 @@ export default async function (bookUrl: string, catalogName: string) {
   initBookSettings(element, finalUrl, catalogName);
 }
 
-function initBookSettings(element, webpubManifestUrl, catalogName) {
+function initBookSettings(
+  element: HTMLElement | null,
+  webpubManifestUrl: URL,
+  catalogName: string
+) {
   const store = new LocalStorageStore({
     prefix: webpubManifestUrl.href
   });
@@ -74,7 +78,7 @@ function initBookSettings(element, webpubManifestUrl, catalogName) {
     fontSizesInPixels: fontSizes,
     bookThemes: [day, sepia, night],
     bookViews: [paginator, scroller]
-  }).then(function (settings) {
+  }).then(function (settings: any) {
     IFrameNavigator.create({
       element: element,
       manifestUrl: webpubManifestUrl,

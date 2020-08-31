@@ -25,7 +25,7 @@
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@nypl/design-system-react-components": "^0.7.2",
-    "@theme-ui/color": "^0.3.1",
+    "@theme-ui/color": "^0.4.0-rc.3",
     "@theme-ui/components": "^0.3.1",
     "@theme-ui/match-media": "^0.3.1",
     "deepmerge": "^4.2.2",
@@ -39,7 +39,7 @@
     "next": "^9.5.2",
     "next-transpile-modules": "^4.0.0",
     "opds-feed-parser": "0.0.18",
-    "opds-web-client": "^0.5.4",
+    "opds-web-client": "github:NYPL-Simplified/opds-web-client#opds-web-client-v0.5.4-gitpkg",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^4.9.2",
@@ -51,8 +51,7 @@
     "request": "^2.88.2",
     "styled-system": "^5.1.2",
     "system-font-css": "^2.0.2",
-    "theme-ui": "^0.3.1",
-    "universal-url": "^1.0.1"
+    "theme-ui": "^0.3.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^9.4.0",
@@ -60,6 +59,8 @@
     "@testing-library/react": "^10.2.0",
     "@testing-library/react-hooks": "^3.2.1",
     "@testing-library/user-event": "^10.0.1",
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/history": "^4.7.5",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.11.0",

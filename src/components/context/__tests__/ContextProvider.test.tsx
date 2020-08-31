@@ -28,6 +28,8 @@ type MakeContextConfig = {
 
 const makeContextWrapper = (config: MakeContextConfig = {}) => ({
   children
+}: {
+  children: React.ReactNode;
 }) => {
   const { library = testLibrary } = config;
   return (

@@ -8,7 +8,9 @@ export default function useThunkReducer<R extends React.Reducer<any, any>, I>(
 
   // if the action is a function, call it with dispatch. That's all redux-thunk does.
   // wrap it in useCallback so the identity is stable for perf
-  const dispatchWithMiddleware = React.useCallback(
+  const dispatchWithMiddleware: (
+    action: React.ReducerAction<R>
+  ) => void = React.useCallback(
     (action: React.ReducerAction<R>) => {
       if (typeof action === "function") {
         return action(dispatchWithMiddleware);

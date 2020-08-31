@@ -6,7 +6,7 @@ import Recommendations from "../Recommendations";
 import { RecommendationsState } from "../../../interfaces";
 
 const renderWithRecState = (
-  children,
+  children: React.ReactNode,
   recState: RecommendationsState = fixtures.recommendationsState
 ) =>
   render(

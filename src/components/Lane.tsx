@@ -27,7 +27,9 @@ const getfilteredBooksAndRefs = (books: BookData[], omitIds?: string[]) => {
     if (!omitIds?.includes(book.id)) return book;
   });
   /** keep track of a ref for each book */
-  const bookRefs: BookRefs = filteredBooks.reduce((acc, value) => {
+  const bookRefs: BookRefs = filteredBooks.reduce<{
+    [id: string]: React.RefObject<HTMLLIElement>;
+  }>((acc, value) => {
     const ref = React.createRef<HTMLLIElement>();
     acc[value.id] = ref;
     return acc;

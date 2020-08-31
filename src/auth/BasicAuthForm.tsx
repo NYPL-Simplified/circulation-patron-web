@@ -13,8 +13,7 @@ import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelect
 import { modalButtonStyles } from "../components/Modal";
 
 type FormData = {
-  login: string;
-  password: string;
+  [key: string]: string;
 };
 
 /**

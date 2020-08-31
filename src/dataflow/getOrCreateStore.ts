@@ -23,7 +23,7 @@ function getOrCreateStore(pathFor: PathFor, initialState?: State) {
   }
 
   // Create store if unavailable on the client and set it on the window object
-  if (!window[__NEXT_REDUX_STORE__]) {
+  if (window[__NEXT_REDUX_STORE__]) {
     window[__NEXT_REDUX_STORE__] = buildStore(
       initialState,
       [BasicAuthPlugin, samlAuthPlugin, CleverAuthPlugin],

@@ -1,4 +1,5 @@
 import computeBreadcrumbs from "../computeBreadcrumbs";
+import { LinkData } from "opds-web-client/lib/interfaces";
 
 describe("computeBreadcrumbs", () => {
   const collection = {
@@ -9,7 +10,7 @@ describe("computeBreadcrumbs", () => {
     books: [],
     navigationLinks: []
   };
-  const history = [];
+  const history: LinkData[] = [];
 
   test("uses breadcrumbs if they're in the raw collection data", () => {
     const raw = {
