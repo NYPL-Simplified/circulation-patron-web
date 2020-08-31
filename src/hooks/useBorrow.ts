@@ -10,7 +10,9 @@ export default function useBorrow(book: BookData) {
   const bookError = useTypedSelector(state => state.book?.error);
   const errorStr = getErrorMsg(bookError);
   const errorMsg =
-    book.url && bookError && bookError.url.startsWith(book.url) ? errorStr : "";
+    book.url && bookError && bookError.url.startsWith(book.url)
+      ? errorStr
+      : undefined;
   const { actions, dispatch } = useActions();
 
   const borrowOrReserve = async () => {
