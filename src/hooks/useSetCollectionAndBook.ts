@@ -3,11 +3,8 @@ import { SetCollectionAndBook } from "../interfaces";
 import { useRouter } from "next/router";
 import useLinkUtils from "../components/context/LinkUtilsContext";
 
-function isString(query: string | string[]): query is string {
-  return typeof query === "string";
-}
 function extractString(query: string | string[]): string | undefined {
-  if (isString(query)) return query;
+  if (typeof query === "string") return query;
 }
 /**
  * Currently have to pass in setCollectionAndBook, which we get from
