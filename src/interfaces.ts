@@ -147,7 +147,7 @@ export type VariantProp<VType> = Exclude<keyof VType, keyof {}>;
  */
 export type SetCollectionAndBook = (
   collectionUrl: string,
-  bookUrl: string
+  bookUrl: string | undefined
 ) => Promise<{
   collectionData: CollectionData;
   bookData: BookData;

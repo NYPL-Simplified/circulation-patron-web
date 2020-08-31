@@ -27,9 +27,9 @@ const useSetCollectionAndBook = (
   const { urlShortener } = useLinkUtils();
 
   const fullCollectionUrl = decodeURIComponent(
-    urlShortener.expandCollectionUrl(finalCollectionUrl ?? "")
+    urlShortener.expandCollectionUrl(finalCollectionUrl)
   );
-  const fullBookUrl = urlShortener.expandBookUrl(stringBookUrl ?? "");
+  const fullBookUrl = urlShortener.expandBookUrl(stringBookUrl);
   // set the collection and book whenever the urls change
   React.useEffect(() => {
     setCollectionAndBook(fullCollectionUrl, fullBookUrl);
