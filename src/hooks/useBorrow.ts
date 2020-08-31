@@ -8,7 +8,11 @@ export default function useBorrow(book: BookData) {
   const isUnmounted = React.useRef(false);
   const [isLoading, setLoading] = React.useState(false);
   const bookError = useTypedSelector(state => state.book?.error);
-  const errorMsg = getErrorMsg(bookError);
+  const errorStr = getErrorMsg(bookError);
+  const errorMsg =
+    book.url && bookError && bookError.url.startsWith(book.url)
+      ? errorStr
+      : undefined;
   const { actions, dispatch } = useActions();
 
   const borrowOrReserve = async () => {

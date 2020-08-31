@@ -190,7 +190,7 @@ describe("available to borrow", () => {
     const err: FetchErrorData = {
       response: "cannot loan more than 3 documents.",
       status: 403,
-      url: "error-url"
+      url: "/test-book-url/error-url"
     };
     const utils = render(<FulfillmentCard book={closedAccessBook} />, {
       initialState: merge(fixtures.initialState, {
@@ -294,7 +294,7 @@ describe("ready to borrow", () => {
     const err: FetchErrorData = {
       response: "cannot loan more than 3 documents.",
       status: 403,
-      url: "error-url"
+      url: "/test-book-url/error-url"
     };
     const utils = render(<FulfillmentCard book={readyBook} />, {
       initialState: merge(fixtures.initialState, {
