@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { BaseDocumentMediaType as OPDS1BaseDocumentMediaType } from "interfaces";
+import { OPDS1 } from "interfaces";
 /**
  * OPDS 2.0 DATA TYPES
  * Currently only used for support of a Library Regristry, which is
@@ -109,7 +109,7 @@ export const AuthDocumentMediaType =
 export type AnyMediaType =
   | typeof BaseDocumentMediaType
   | typeof AuthDocumentMediaType
-  | typeof OPDS1BaseDocumentMediaType
+  | typeof OPDS1.BaseDocumentMediaType
   | "application/opensearchdescription+xml"
   | "application/opds+json;profile=https://librarysimplified.org/rel/profile/directory";
 
@@ -133,4 +133,7 @@ export interface CatalogTemplateLink
 export interface AuthDocumentLink
   extends Link<typeof AuthDocumentRelation, typeof AuthDocumentMediaType> {}
 export interface CatalogRootFeedLink
-  extends Link<typeof CatalogRootRelation, typeof OPDS1BaseDocumentMediaType> {}
+  extends Link<
+    typeof CatalogRootRelation,
+    typeof OPDS1.BaseDocumentMediaType
+  > {}

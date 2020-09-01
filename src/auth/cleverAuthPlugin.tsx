@@ -1,8 +1,9 @@
 import AuthPlugin from "opds-web-client/lib/AuthPlugin";
 import CleverButton from "./cleverAuthButton";
+import { CleverAuthType } from "interfaces";
 
 export const CleverAuthPlugin: AuthPlugin = {
-  type: "http://librarysimplified.org/authtype/OAuth-with-intermediary",
+  type: CleverAuthType,
 
   lookForCredentials: () => {
     // Check for Clever auth
