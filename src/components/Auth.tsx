@@ -14,10 +14,12 @@ import FormLabel from "./form/FormLabel";
 import Select from "./Select";
 import Stack from "./Stack";
 import { AuthProvider, AuthMethod } from "opds-web-client/lib/interfaces";
+
 /**
  *  - makes sure auth state is loaded from cookies
- *  - shows auth form modal based on redux state (showForm)
- *  - uses the AuthPlugin system to render the auth form
+ *  - catches UnauthorizedError to show auth form
+ *  - renders auth form based on methods present in LibraryData
+ *  - passes down a mutate funtion to allow children to mutate loans (eg when a book is borrowed)
  */
 
 function shouldShowButton(

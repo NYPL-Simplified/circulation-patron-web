@@ -67,6 +67,11 @@ export type AppAuthMethod =
   | OPDS1.BasicAuthMethod
   | ClientSamlMethod;
 
+export interface AuthCredentials {
+  method: AppAuthMethod;
+  token: string;
+}
+
 export interface LibraryData {
   slug: string | null;
   catalogUrl: string;

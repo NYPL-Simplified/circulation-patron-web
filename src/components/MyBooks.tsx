@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useSetCollectionAndBook from "../hooks/useSetCollectionAndBook";
 import { connect } from "react-redux";
 import {
   mapStateToProps,
@@ -10,7 +9,6 @@ import {
 } from "opds-web-client/lib/components/mergeRootProps";
 import { SetCollectionAndBook } from "../interfaces";
 import useAuth from "../hooks/useAuth";
-import useTypedSelector from "../hooks/useTypedSelector";
 import { ListView } from "./BookList";
 import { PageLoader } from "./LoadingIndicator";
 import Head from "next/head";
@@ -19,6 +17,10 @@ import { H3 } from "./Text";
 import { BookData } from "opds-web-client/lib/interfaces";
 import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
+import useSWR from "swr";
+import useTypedSelector from "hooks/useTypedSelector";
+import useLibraryContext from "components/context/LibraryContext";
+import { createCollectionUrl, fetchCollection } from "dataflow/opds1/fetch";
 
 const availableUntil = (book: BookData) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -34,20 +36,15 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
   });
 }
 
-export const MyBooks: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
-}> = ({ setCollectionAndBook }) => {
-  // here we pass in "loans" to make it look like we are at /collection/loans
-  // which is what used to be the route that is now /loans (ie. this page)
-  useSetCollectionAndBook(setCollectionAndBook, "loans");
-  const collection = useTypedSelector(state => state.collection);
+export const MyBooks: React.FC = () => {
+  const { catalogUrl } = useLibraryContext();
+  const loansUrl = createCollectionUrl(catalogUrl, "loans");
+  const { data: collection, isValidating } = useSWR(loansUrl, fetchCollection);
 
   const { isSignedIn } = useAuth();
 
   const books =
-    collection.data?.books &&
-    collection.data.books.length > 0 &&
-    collection.data.books;
+    collection?.books && collection.books.length > 0 && collection.books;
 
   const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
 
@@ -58,7 +55,7 @@ export const MyBooks: React.FC<{
       </Head>
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
-      {collection.isFetching ? (
+      {isValidating ? (
         <PageLoader />
       ) : !isSignedIn ? (
         <Unauthorized />

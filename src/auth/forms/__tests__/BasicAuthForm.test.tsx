@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fixtures, actions, waitFor } from "../../test-utils";
+import { render, fixtures, actions, waitFor } from "../../../test-utils";
 import merge from "deepmerge";
 import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthProvider, BasicAuthMethod } from "opds-web-client/lib/interfaces";
