@@ -41,7 +41,7 @@ jobs:
       - name: Cache and install node modules
         uses: bahmutov/npm-install@v1
       - name: Typecheck
-        run: tsc --noEmit
+        run: node_modules/typescript/bin/tsc --noEmit
 
   test:
     name: Test & Coverage
