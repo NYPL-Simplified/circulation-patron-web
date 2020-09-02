@@ -41,6 +41,7 @@ export const MyBooks: React.FC<{
   // which is what used to be the route that is now /loans (ie. this page)
   useSetCollectionAndBook(setCollectionAndBook, "loans");
   const collection = useTypedSelector(state => state.collection);
+  const storedLoans = useTypedSelector(state => state.loans);
 
   const { isSignedIn } = useAuth();
 
@@ -49,20 +50,28 @@ export const MyBooks: React.FC<{
     collection.data.books.length > 0 &&
     collection.data.books;
 
-  const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
+  const loans =
+    storedLoans?.books && storedLoans.books.length > 0 && storedLoans.books;
+
+  const sortedBooks = books
+    ? sortBooksByLoanExpirationDate(books)
+    : loans
+    ? sortBooksByLoanExpirationDate(loans)
+    : [];
 
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
       <Head>
         <title>My Books</title>
       </Head>
+
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
       {collection.isFetching ? (
         <PageLoader />
       ) : !isSignedIn ? (
         <Unauthorized />
-      ) : books ? (
+      ) : sortedBooks.length ? (
         <LoansContent books={sortedBooks} />
       ) : (
         <Empty />
