@@ -37,8 +37,7 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 }
 
 export const MyBooks: React.FC = () => {
-  const { catalogUrl } = useLibraryContext();
-  const loansUrl = createCollectionUrl(catalogUrl, "loans");
+  const { shelfUrl } = useLibraryContext();
   const { data: collection, isValidating } = useSWR(loansUrl, fetchCollection);
 
   const { isSignedIn } = useAuth();

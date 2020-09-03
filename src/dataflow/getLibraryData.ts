@@ -1,5 +1,5 @@
 import { OPDS2, LibraryData, LibraryLinks, OPDS1 } from "interfaces";
-import OPDSParser, { OPDSFeed } from "opds-feed-parser";
+import OPDSParser, { OPDSFeed, OPDSShelfLink } from "opds-feed-parser";
 import {
   CIRCULATION_MANAGER_BASE,
   REGISTRY_BASE,
@@ -160,22 +160,36 @@ export async function fetchAuthDocument(
 }
 
 /**
+ * Extracts the loans url from a catalog root
+ */
+function getShelfUrl(catalog: OPDSFeed): string | null {
+  return (
+    catalog.links.find(link => {
+      return link instanceof OPDSShelfLink;
+    })?.href ?? null
+  );
+}
+
+/**
  * Constructs the internal LibraryData state from an auth document,
  * catalog url, and library slug.
  */
 export function buildLibraryData(
   authDoc: OPDS1.AuthDocument,
   catalogUrl: string,
-  librarySlug: string | undefined
+  librarySlug: string | undefined,
+  catalog: OPDSFeed
 ): LibraryData {
   const logoUrl = authDoc.links?.find(link => link.rel === "logo")?.href;
   const headerLinks =
     authDoc.links?.filter(link => link.rel === "navigation") ?? [];
   const libraryLinks = parseLinks(authDoc.links);
   const authMethods = flattenSamlMethod(authDoc);
+  const shelfUrl = getShelfUrl(catalog);
   return {
     slug: librarySlug ?? null,
     catalogUrl,
+    shelfUrl: shelfUrl ?? null,
     catalogName: authDoc.title,
     logoUrl: logoUrl ?? null,
     colors:

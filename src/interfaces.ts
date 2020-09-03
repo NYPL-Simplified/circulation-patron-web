@@ -75,6 +75,7 @@ export interface AuthCredentials {
 export interface LibraryData {
   slug: string | null;
   catalogUrl: string;
+  shelfUrl: string | null;
   catalogName: string;
   logoUrl: string | null;
   colors: {

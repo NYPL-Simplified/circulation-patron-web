@@ -56,7 +56,12 @@ export default function withAppProps(
       const catalog = await fetchCatalog(catalogUrl);
       const authDocHref = getAuthDocHref(catalog);
       const authDocument = await fetchAuthDocument(authDocHref);
-      const library = buildLibraryData(authDocument, catalogUrl, librarySlug);
+      const library = buildLibraryData(
+        authDocument,
+        catalogUrl,
+        librarySlug,
+        catalog
+      );
       // fetch the static props for the page
       const pageResult = (await pageGetServerSideProps?.(ctx, { library })) ?? {
         props: {}
