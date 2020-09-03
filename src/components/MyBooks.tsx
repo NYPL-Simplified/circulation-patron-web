@@ -62,7 +62,7 @@ export const MyBooks: React.FC<{}> = () => {
         <PageLoader />
       ) : !isSignedIn ? (
         <Unauthorized />
-      ) : sortedBooks.length ? (
+      ) : books ? (
         <LoansContent books={sortedBooks} />
       ) : (
         <Empty />
