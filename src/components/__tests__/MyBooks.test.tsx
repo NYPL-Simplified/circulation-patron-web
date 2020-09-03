@@ -6,12 +6,8 @@ import merge from "deepmerge";
 import { State } from "opds-web-client/lib/state";
 import { mockPush } from "../../test-utils/mockNextRouter";
 
-const mockSetCollectionAndBook = jest.fn().mockReturnValue(Promise.resolve({}));
-
 test("shows message and button when not authenticated", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />
-  );
+  const utils = render(<MyBooks />);
 
   expect(
     utils.getByText("You need to be signed in to view this page.")
@@ -30,10 +26,7 @@ const emptyWithAuth: State = merge(fixtures.initialState, {
 });
 
 test("displays empty state when empty and signed in", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth }
-  );
+  const utils = render(<MyBooks />, { initialState: emptyWithAuth });
 
   expect(
     utils.queryByText("You need to be signed in to view this page.")
@@ -49,10 +42,7 @@ test("displays empty state when empty and signed in", () => {
 });
 
 test("sign out clears state and goes home", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth }
-  );
+  const utils = render(<MyBooks />, { initialState: emptyWithAuth });
 
   const signOut = utils.getByText("Sign Out");
   fireEvent.click(signOut);
@@ -78,34 +68,31 @@ const withAuthAndBooks: State = merge(fixtures.initialState, {
   auth: {
     credentials: authCredentials
   },
-  collection: {
-    data: {
-      books: [
-        ...fixtures.makeBooks(10),
-        fixtures.mergeBook({
-          title: "Book Title 10",
-          availability: {
-            until: "Jan 2 2020",
-            status: "available"
-          }
-        }),
-        fixtures.mergeBook({
-          title: "Book Title 11",
-          availability: {
-            until: "Jan 1 2020",
-            status: "available"
-          }
-        })
-      ]
-    }
+  loans: {
+    url: "www.fakeloan.com",
+
+    books: [
+      ...fixtures.makeBooks(10),
+      fixtures.mergeBook({
+        title: "Book Title 10",
+        availability: {
+          until: "Jan 2 2020",
+          status: "available"
+        }
+      }),
+      fixtures.mergeBook({
+        title: "Book Title 11",
+        availability: {
+          until: "Jan 1 2020",
+          status: "available"
+        }
+      })
+    ]
   }
 });
 
 test("displays books when signed in with data", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: withAuthAndBooks }
-  );
+  const utils = render(<MyBooks />, { initialState: withAuthAndBooks });
 
   expect(
     utils.queryByText("You need to be signed in to view this page.")
@@ -126,26 +113,11 @@ test("displays books when signed in with data", () => {
 });
 
 test("sorts books", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: withAuthAndBooks }
-  );
+  const utils = render(<MyBooks />, { initialState: withAuthAndBooks });
   const bookNames = utils.queryAllByText(/Book Title/);
   expect(bookNames[0]).toHaveTextContent("Book Title 11");
   expect(bookNames[1]).toHaveTextContent("Book Title 10");
   expect(bookNames[2]).toHaveTextContent("Book Title 0");
-});
-
-test("sets collection and book", () => {
-  render(<MyBooks setCollectionAndBook={mockSetCollectionAndBook} />, {
-    initialState: withAuthAndBooks
-  });
-
-  expect(mockSetCollectionAndBook).toHaveBeenCalledTimes(1);
-  expect(mockSetCollectionAndBook).toHaveBeenCalledWith(
-    "http://test-cm.com/catalogUrl/loans",
-    undefined
-  );
 });
 
 /**
@@ -163,12 +135,9 @@ const loading: State = merge(fixtures.initialState, {
 });
 
 test("shows loading state", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: loading
-    }
-  );
+  const utils = render(<MyBooks />, {
+    initialState: loading
+  });
 
   expect(
     utils.getByRole("heading", { name: "Loading..." })

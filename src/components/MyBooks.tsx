@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useSetCollectionAndBook from "../hooks/useSetCollectionAndBook";
+import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { connect } from "react-redux";
 import {
   mapStateToProps,
   mapDispatchToProps,
   mergeRootProps
 } from "opds-web-client/lib/components/mergeRootProps";
-import { SetCollectionAndBook } from "../interfaces";
 import useAuth from "../hooks/useAuth";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { ListView } from "./BookList";
@@ -34,30 +33,22 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
   });
 }
 
-export const MyBooks: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
-}> = ({ setCollectionAndBook }) => {
-  // here we pass in "loans" to make it look like we are at /collection/loans
-  // which is what used to be the route that is now /loans (ie. this page)
-  useSetCollectionAndBook(setCollectionAndBook, "loans");
-  const collection = useTypedSelector(state => state.collection);
-  const storedLoans = useTypedSelector(state => state.loans);
+export const MyBooks: React.FC<{}> = () => {
+  const { actions, dispatch } = useActions();
+
+  const loansUrl = useTypedSelector(state => {
+    return state.loans.url;
+  });
+
+  if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
+
+  const loans = useTypedSelector(state => state.loans);
 
   const { isSignedIn } = useAuth();
 
-  const books =
-    collection.data?.books &&
-    collection.data.books.length > 0 &&
-    collection.data.books;
+  const books = loans?.books && loans.books.length > 0 && loans.books;
 
-  const loans =
-    storedLoans?.books && storedLoans.books.length > 0 && storedLoans.books;
-
-  const sortedBooks = books
-    ? sortBooksByLoanExpirationDate(books)
-    : loans
-    ? sortBooksByLoanExpirationDate(loans)
-    : [];
+  const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
 
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
@@ -67,7 +58,7 @@ export const MyBooks: React.FC<{
 
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
-      {collection.isFetching ? (
+      {!loans ? (
         <PageLoader />
       ) : !isSignedIn ? (
         <Unauthorized />
