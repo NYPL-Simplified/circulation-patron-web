@@ -124,22 +124,3 @@ test("sorts books", () => {
  * - toggles between list and gallery view
  * - shows the reserved button
  */
-
-const loading: State = merge(fixtures.initialState, {
-  auth: {
-    credentials: authCredentials
-  },
-  collection: {
-    isFetching: true
-  }
-});
-
-test("shows loading state", () => {
-  const utils = render(<MyBooks />, {
-    initialState: loading
-  });
-
-  expect(
-    utils.getByRole("heading", { name: "Loading..." })
-  ).toBeInTheDocument();
-});

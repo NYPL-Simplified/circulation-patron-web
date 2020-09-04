@@ -11,7 +11,7 @@ import {
 import useAuth from "../hooks/useAuth";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { ListView } from "./BookList";
-import { PageLoader } from "./LoadingIndicator";
+
 import Head from "next/head";
 import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
@@ -36,17 +36,22 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 export const MyBooks: React.FC<{}> = () => {
   const { actions, dispatch } = useActions();
 
+  const [books, setBooks] = React.useState<false | BookData[] | undefined>(
+    undefined
+  );
+
   const loansUrl = useTypedSelector(state => {
     return state.loans.url;
   });
-
-  if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
 
   const loans = useTypedSelector(state => state.loans);
 
   const { isSignedIn } = useAuth();
 
-  const books = loans?.books && loans.books.length > 0 && loans.books;
+  React.useEffect(() => {
+    if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
+    setBooks(loans?.books && loans.books.length > 0 && loans.books);
+  }, [loans, loansUrl, actions, dispatch]);
 
   const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
 
@@ -58,9 +63,7 @@ export const MyBooks: React.FC<{}> = () => {
 
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
-      {!loans ? (
-        <PageLoader />
-      ) : !isSignedIn ? (
+      {!isSignedIn ? (
         <Unauthorized />
       ) : books ? (
         <LoansContent books={sortedBooks} />
