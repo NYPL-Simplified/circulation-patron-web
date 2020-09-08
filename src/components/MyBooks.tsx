@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { connect } from "react-redux";
 import {
   mapStateToProps,
@@ -34,25 +33,10 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 }
 
 export const MyBooks: React.FC<{}> = () => {
-  const { actions, dispatch } = useActions();
-
-  const [books, setBooks] = React.useState<false | BookData[] | undefined>(
-    undefined
-  );
-
-  const loansUrl = useTypedSelector(state => {
-    return state.loans.url;
-  });
-
   const loans = useTypedSelector(state => state.loans);
 
   const { isSignedIn } = useAuth();
-
-  React.useEffect(() => {
-    if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
-    setBooks(loans?.books && loans.books.length > 0 && loans.books);
-  }, [loans, loansUrl, actions, dispatch]);
-
+  const books = loans?.books && loans.books.length > 0 && loans.books;
   const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
 
   return (
