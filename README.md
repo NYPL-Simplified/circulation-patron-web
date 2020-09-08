@@ -80,6 +80,7 @@ The following environment variables can also be set to further configure the app
 - Set `CACHE_EXPIRATION_SECONDS` to control how often the app will check for changes to registry entries and circ manager authentication documents.
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 - Set `ANALYZE=true` to generate bundle analysis files inside `.next/analyze` which will show bundle sizes for server and client, as well as composition.
+- Set `NEXT_PUBLIC_AXIS_NOW_DECRYPT=true` to run with AxisNow decryption. See [Running with Decryption](#Running-with-Decryption) for more details
 
 #### Using a `.env` file
 
@@ -88,6 +89,16 @@ Next.js will automatically load environment variables set in a `.env` file. Ther
 #### ENV Vars and Building
 
 When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.txt npm run start` will not work, you have to set them at build time.
+
+### Running with Decryption
+
+Circulation-Patron-Web supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/NYPL-Simplified/axisnow-access-control-web)
+
+To run with decryption:  
+- Set `NEXT_PUBLIC_AXIS_NOW_DECRYPT=true`
+- Run `git submodule update`
+- Verify that `axisnow-access-control-web` folder exists.  
+- Run `npm install` as normal.
 
 ### Useful Scripts
 
