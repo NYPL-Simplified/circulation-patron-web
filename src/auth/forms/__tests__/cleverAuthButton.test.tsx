@@ -1,7 +1,6 @@
 import * as React from "react";
-import { render } from "../../../test-utils";
-
-import CleverButton from "../../cleverAuthButton";
+import { render } from "test-utils";
+import CleverButton from "auth/forms/cleverAuthButton";
 
 describe("CleverButton", () => {
   let wrapper;
