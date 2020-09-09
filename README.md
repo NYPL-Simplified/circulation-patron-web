@@ -80,6 +80,7 @@ The following environment variables can also be set to further configure the app
 - Set `CACHE_EXPIRATION_SECONDS` to control how often the app will check for changes to registry entries and circ manager authentication documents.
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 - Set `ANALYZE=true` to generate bundle analysis files inside `.next/analyze` which will show bundle sizes for server and client, as well as composition.
+- Set `NEXT_PUBLIC_AXIS_NOW_DECRYPT=true` to run with AxisNow decryption. See [Running with Decryption](#Running-with-Decryption) for more details
 
 #### Using a `.env` file
 
@@ -88,6 +89,16 @@ Next.js will automatically load environment variables set in a `.env` file. Ther
 #### ENV Vars and Building
 
 When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.txt npm run start` will not work, you have to set them at build time.
+
+### Running with Decryption
+
+Circulation-Patron-Web supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/NYPL-Simplified/axisnow-access-control-web)
+
+To run with decryption:  
+- Set `NEXT_PUBLIC_AXIS_NOW_DECRYPT=true`
+- Run `git submodule update`
+- Verify that `axisnow-access-control-web` folder exists.  
+- Run `npm install` as normal.
 
 ### Useful Scripts
 
@@ -218,7 +229,7 @@ docker run -d --name patronweb -p 3000:3000\
   nypl/patronweb
 ```
 
-To run the container with a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY` instead of a `CONFIG_FILE`, simply replace the env variable in the run command. You will also not need to provide the volume, since no config file is being read.
+To run the container with a `SIMPLIFIED_CATALOG_BASE` or `REISTRY_BASE` instead of a `CONFIG_FILE`, simply replace the env variable in the run command. You will also not need to provide the volume, since no config file is being read.
 
 ```
 docker run --name patronweb -d -p 3000:3000\
@@ -242,7 +253,7 @@ Instead of using the `docker run` command at the command line, it's also possibl
 
 To create the container using the `docker-compose.yml` file in this repository, simply run `docker-compose up`. This will build the image and start the container. To stop the container and remove it, run `docker-compose down`. Similarly you can run `docker-compose stop` to stop the container without removing it, and `docker-compose start` to restart a stopped container.
 
-If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
+If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
 
 #### Helpful commands
 

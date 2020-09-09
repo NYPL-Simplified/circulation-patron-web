@@ -123,7 +123,9 @@ describe("book details page", () => {
     expect(
       utils.getByText("This open-access book is available to keep forever.")
     );
-    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+    expect(
+      utils.getByRole("button", { name: "Borrow to read on a mobile device" })
+    ).toBeInTheDocument();
   });
 
   test("does not show simplyE callout when NEXT_PUBLIC_COMPANION_APP is 'openebooks'", () => {

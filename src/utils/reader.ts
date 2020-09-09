@@ -1,3 +1,5 @@
+import { NEXT_PUBLIC_AXIS_NOW_DECRYPT } from "../utils/env";
+
 import {
   SepiaTheme,
   SerifFont,
@@ -14,7 +16,11 @@ import {
   ScrollingBookView
 } from "library-simplified-webpub-viewer";
 
-export default async function (bookUrl: string, catalogName: string) {
+export default async function (
+  bookUrl: string,
+  catalogName: string,
+  decryptorParams?: any
+) {
   const element = document.getElementById("viewer");
   const webpubBookUrl = new URL(bookUrl, window.location.href);
   const containerHref = webpubBookUrl.href.endsWith("container.xml")
@@ -29,10 +35,15 @@ export default async function (bookUrl: string, catalogName: string) {
   const url = containerHref.replace("META-INF/container.xml", rootfile || "");
   const finalUrl = rootfile ? new URL(url) : webpubBookUrl;
 
-  initBookSettings(element, finalUrl, catalogName);
+  initBookSettings(element, finalUrl, catalogName, decryptorParams);
 }
 
-function initBookSettings(element, webpubManifestUrl, catalogName) {
+async function initBookSettings(
+  element: HTMLElement | null,
+  webpubManifestUrl: URL,
+  catalogName: string,
+  decryptorParams?: any
+) {
   const store = new LocalStorageStore({
     prefix: webpubManifestUrl.href
   });
@@ -68,30 +79,41 @@ function initBookSettings(element, webpubManifestUrl, catalogName) {
   const night = new NightTheme();
   const paginator = new ColumnsPaginatedBookView();
   const scroller = new ScrollingBookView();
-  BookSettings.create({
+
+  const Decryptor = NEXT_PUBLIC_AXIS_NOW_DECRYPT
+    ? await import("../../axisnow-access-control-web/src/decryptor")
+    : undefined;
+  const decryptor = Decryptor
+    ? await Decryptor.default.createDecryptor(decryptorParams)
+    : undefined;
+
+  const entryUrl: URL = decryptor
+    ? new URL(decryptor.getEntryUrl())
+    : webpubManifestUrl;
+  const bookSettings = await BookSettings.create({
     store: settingsStore,
     bookFonts: [publisher, serif, sans],
     fontSizesInPixels: fontSizes,
     bookThemes: [day, sepia, night],
     bookViews: [paginator, scroller]
-  }).then(function (settings) {
-    IFrameNavigator.create({
-      element: element,
-      manifestUrl: webpubManifestUrl,
-      store: store,
-      cacher: cacher,
-      settings: settings,
-      annotator: annotator,
-      publisher: publisher,
-      serif: serif,
-      sans: sans,
-      day: day,
-      sepia: sepia,
-      night: night,
-      paginator: paginator,
-      scroller: scroller,
-      upLink: upLink,
-      allowFullscreen: true
-    });
+  });
+  await IFrameNavigator.create({
+    decryptor,
+    element: element,
+    entryUrl: entryUrl,
+    store: store,
+    cacher: cacher,
+    settings: bookSettings,
+    annotator: annotator,
+    publisher: publisher,
+    serif: serif,
+    sans: sans,
+    day: day,
+    sepia: sepia,
+    night: night,
+    paginator: paginator,
+    scroller: scroller,
+    upLink: upLink,
+    allowFullscreen: true
   });
 }

@@ -133,7 +133,6 @@ test("sorts books", () => {
   const bookNames = utils.queryAllByText(/Book Title/);
   expect(bookNames[0]).toHaveTextContent("Book Title 11");
   expect(bookNames[1]).toHaveTextContent("Book Title 10");
-  expect(bookNames[2]).toHaveTextContent("Book Title 0");
 });
 
 test("sets collection and book", () => {
