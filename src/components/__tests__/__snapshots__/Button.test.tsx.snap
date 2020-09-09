@@ -31,7 +31,7 @@ exports[`LinkButton renders correct element 1`] = `
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
-  background-color: #337ab7;
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
   color: white;
@@ -55,8 +55,8 @@ exports[`LinkButton renders correct element 1`] = `
 }
 
 .emotion-0:disabled {
-  background-color: #e0e0e0;
-  color: #424242;
+  background-color: var(--theme-ui-colors-ui-gray-light,#e0e0e0);
+  color: var(--theme-ui-colors-ui-gray-extraDark,#424242);
   cursor: default;
 }
 
@@ -102,7 +102,7 @@ exports[`NavButton renders correct element 1`] = `
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
-  background-color: #337ab7;
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
   color: white;
@@ -132,8 +132,8 @@ exports[`NavButton renders correct element 1`] = `
 }
 
 .emotion-0:disabled {
-  background-color: #e0e0e0;
-  color: #424242;
+  background-color: var(--theme-ui-colors-ui-gray-light,#e0e0e0);
+  color: var(--theme-ui-colors-ui-gray-extraDark,#424242);
   cursor: default;
 }
 
@@ -176,7 +176,7 @@ exports[`variants filled (default) 1`] = `
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
-  background-color: #337ab7;
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
   color: white;
@@ -200,8 +200,8 @@ exports[`variants filled (default) 1`] = `
 }
 
 .emotion-0:disabled {
-  background-color: #e0e0e0;
-  color: #424242;
+  background-color: var(--theme-ui-colors-ui-gray-light,#e0e0e0);
+  color: var(--theme-ui-colors-ui-gray-extraDark,#424242);
   cursor: default;
 }
 
@@ -247,14 +247,14 @@ exports[`variants ghost 1`] = `
   background-color: transparent;
   height: 32px;
   min-width: 32px;
-  color: #337ab7;
-  fill: #337ab7;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
+  fill: var(--theme-ui-colors-brand-primary,#337ab7);
 }
 
 .emotion-0:focus,
 .emotion-0:hover {
   background-color: #c3daee;
-  color: #337ab7;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -303,13 +303,13 @@ exports[`variants link 1`] = `
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.5;
-  color: #337ab7;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
   padding: 0;
-  fill: #337ab7;
+  fill: var(--theme-ui-colors-brand-primary,#337ab7);
 }
 
 .emotion-0:hover {
-  color: #337ab7;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
 }
 
 <button

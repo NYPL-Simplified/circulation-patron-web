@@ -18,25 +18,25 @@ exports[`TextInput renders properly and passes styles through 1`] = `
 
 .emotion-0::-webkit-input-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-0::-moz-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-0:-ms-input-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-0::placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
@@ -64,25 +64,25 @@ exports[`type textarea renders properly and passes styles throug 1`] = `
 
 .emotion-0::-webkit-input-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-0::-moz-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-0:-ms-input-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-0::placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 

@@ -30,25 +30,25 @@ exports[`renders as expected 1`] = `
 
 .emotion-1::-webkit-input-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-1::-moz-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-1:-ms-input-placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
 .emotion-1::placeholder {
   font-style: italic;
-  color: #616161;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
   font-size: 0.875rem;
 }
 
