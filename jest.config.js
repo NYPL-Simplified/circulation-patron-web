@@ -34,7 +34,8 @@ module.exports = {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/src/test-utils/",
-    "/src/icons/"
+    "/src/icons/",
+    "/axisnow-access-control-web/"
   ],
 
   // A list of reporter names that Jest uses when writing coverage reports
@@ -156,7 +157,7 @@ module.exports = {
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+  testPathIgnorePatterns: ["/node_modules/", "/.next/", "/axisnow-access-control-web"],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
