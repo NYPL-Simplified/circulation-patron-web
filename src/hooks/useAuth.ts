@@ -3,7 +3,7 @@ import useTypedSelector from "./useTypedSelector";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { useRouter } from "next/router";
 import useLinkUtils from "components/context/LinkUtilsContext";
-import CleverAuthPlugin from "../auth/cleverAuthPlugin";
+import CleverAuthPlugin from "auth/cleverAuthPlugin";
 
 const SAML_AUTH_TYPE = "http://librarysimplified.org/authtype/SAML-2.0";
 

@@ -1,5 +1,5 @@
 import { getCredentials } from "../useAuth";
-import CleverAuthPlugin from "../../auth/cleverAuthPlugin";
+import CleverAuthPlugin from "auth//cleverAuthPlugin";
 
 describe("getCredentials", () => {
   const { location } = window;

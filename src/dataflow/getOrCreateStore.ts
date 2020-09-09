@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { State } from "opds-web-client/lib/state";
 import buildStore from "opds-web-client/lib/store";
-import BasicAuthPlugin from "../auth/basicAuthPlugin";
-import samlAuthPlugin from "auth/samlAuthPlugin";
-import CleverAuthPlugin from "auth/cleverAuthPlugin";
+import BasicAuthPlugin from "auth//basicAuthPlugin";
+import samlAuthPlugin from "auth//samlAuthPlugin";
+import CleverAuthPlugin from "auth//cleverAuthPlugin";
 import { PathFor } from "opds-web-client/lib/interfaces";
 import { IS_SERVER, __NEXT_REDUX_STORE__ } from "../utils/env";
 /**
