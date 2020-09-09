@@ -23,7 +23,9 @@ describe("open access book", () => {
 
   test("shows borrow button if not yet loaned", () => {
     const utils = render(<BookListItem book={fixtures.book} />);
-    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+    expect(
+      utils.getByRole("button", { name: "Borrow to read on a mobile device" })
+    ).toBeInTheDocument();
   });
 
   test("shows no borrow button when book is loaned", () => {
@@ -37,7 +39,7 @@ describe("open access book", () => {
       initialState: stateWithLoans
     });
 
-    expect(utils.queryByText("Borrow")).toBeNull();
+    expect(utils.queryByText("Borrow to read on a mobile device")).toBeNull();
     expectViewDetails(utils);
   });
 
@@ -49,7 +51,7 @@ describe("open access book", () => {
     expect(
       utils.getByText("This open-access book is available to keep forever.")
     ).toBeInTheDocument();
-    expect(utils.queryByText("Borrow")).toBeNull();
+    expect(utils.queryByText("Borrow to read on a mobile device")).toBeNull();
     expectViewDetails(utils);
   });
 
@@ -104,9 +106,9 @@ describe("available to borrow book", () => {
       })
     });
     // click borrow
-    userEvent.click(utils.getByText("Borrow"));
+    userEvent.click(utils.getByText("Borrow to read on a mobile device"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
-    expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
+    expect(updateBookSpy).toHaveBeenCalledWith("/epub-borrow-link");
     const borrowButton = await utils.findByRole("button", {
       name: /Borrowing.../i
     });
@@ -131,7 +133,7 @@ describe("available to borrow book", () => {
     });
     expect(
       utils.queryByText("10 out of 13 copies available.")
-    ).not.toBeInTheDocument();
+    ).toBeInTheDocument();
     expect(
       utils.getByText("Error: cannot loan more than 3 documents.")
     ).toBeInTheDocument();
@@ -178,9 +180,9 @@ describe("ready to borrow book", () => {
       })
     });
     // click borrow
-    userEvent.click(utils.getByText("Borrow"));
+    userEvent.click(utils.getByText("Borrow to read on a mobile device"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
-    expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
+    expect(updateBookSpy).toHaveBeenCalledWith("/epub-borrow-link");
     const borrowButton = utils.getByRole("button", {
       name: /Borrowing.../i
     });
@@ -204,10 +206,79 @@ describe("ready to borrow book", () => {
     });
     expect(
       utils.queryByText("You can now borrow this book!")
-    ).not.toBeInTheDocument();
+    ).toBeInTheDocument();
     expect(
       utils.getByText("Error: cannot loan more than 3 documents.")
     ).toBeInTheDocument();
+  });
+});
+
+describe("ready to borrow book with multiple borrowUrls", () => {
+  const readyBook = fixtures.mergeBook({
+    openAccessLinks: undefined,
+    fulfillmentLinks: undefined,
+    availability: {
+      status: "ready",
+      until: "2020-06-16"
+    },
+    allBorrowLinks: [
+      {
+        url: "/adobe-borrow-link",
+        type: "application/atom+xml;type=entry;profile=opds-catalog",
+        indirectType: "application/vnd.adobe.adept+xml"
+      },
+      {
+        url: "/axis-borrow-link",
+        type: "application/atom+xml;type=entry;profile=opds-catalog",
+        indirectType: "application/vnd.librarysimplified.axisnow+json"
+      }
+    ]
+  });
+
+  test("shows two borrow buttons if books there are multiple borrow urls", () => {
+    const utils = render(<BookListItem book={readyBook} />);
+    expect(
+      utils.getByRole("button", { name: "Borrow to read on a mobile device" })
+    ).toBeInTheDocument();
+    expect(
+      utils.getByRole("button", { name: "Borrow to read online" })
+    ).toBeInTheDocument();
+  });
+
+  test("shows loading state when borrowing, borrows, and doesn't refetch loans", async () => {
+    // mock the actions.updateBook
+    const updateBookSpy = jest
+      .spyOn(actions, "updateBook")
+      .mockImplementation(_url => _dispatch =>
+        new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fixtures.book);
+          }, 1000);
+        })
+      );
+    // also spy on fetchLoans
+    const fetchLoansSpy = jest.spyOn(actions, "fetchLoans");
+    const utils = render(<BookListItem book={readyBook} />, {
+      initialState: merge<State>(fixtures.initialState, {
+        loans: {
+          url: "/loans-url",
+          books: []
+        }
+      })
+    });
+    // click borrow
+    userEvent.click(utils.getByText("Borrow to read on a mobile device"));
+    expect(updateBookSpy).toHaveBeenCalledTimes(1);
+    expect(updateBookSpy).toHaveBeenCalledWith("/adobe-borrow-link");
+
+    // One button says "Borrowing..."
+    const borrowButton = await utils.findByRole("button", {
+      name: /Borrowing.../i
+    });
+    expect(borrowButton).toBeInTheDocument();
+    expect(borrowButton).toHaveAttribute("disabled", "");
+
+    expect(fetchLoansSpy).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -261,7 +332,7 @@ describe("available to reserve book", () => {
     // click reserve
     userEvent.click(utils.getByText("Reserve"));
     expect(updateBookSpy).toHaveBeenCalledTimes(1);
-    expect(updateBookSpy).toHaveBeenCalledWith("borrow url");
+    expect(updateBookSpy).toHaveBeenCalledWith("/epub-borrow-link");
     const reserveButton = utils.getByRole("button", {
       name: /Reserving.../i
     });
