@@ -42,7 +42,6 @@
     "opds-feed-parser": "0.0.18",
     "opds-web-client": "^0.5.4",
     "react": "16.13.1",
-    "react-cookie": "^4.0.3",
     "react-dom": "16.13.1",
     "react-hook-form": "^4.9.2",
     "react-hot-loader": "^4.12.20",
