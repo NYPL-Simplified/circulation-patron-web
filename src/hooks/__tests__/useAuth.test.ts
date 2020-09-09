@@ -18,7 +18,7 @@ describe("getCredentials", () => {
   const mockRouterWithEmptyQuery = { query: {} } as NextRouter;
   const mockRouterWithSAMLToken = ({
     query: {
-      //eslint-disable-next-line camelcase, @typescript-eslint/camelcase
+      //eslint-disable-next-line camelcase
       access_token: mockSAMLToken
     }
   } as unknown) as NextRouter;

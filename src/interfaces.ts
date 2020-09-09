@@ -140,7 +140,10 @@ export type { ComplaintsState } from "./hooks/useComplaints/reducer";
  */
 export type { AppTheme } from "theme";
 // helper for theme variant prop types
-export type VariantProp<VType> = Exclude<keyof VType, keyof {}>;
+export type VariantProp<VType> = Exclude<
+  keyof VType,
+  keyof Record<string, unknown>
+>;
 
 /**
  * Utils

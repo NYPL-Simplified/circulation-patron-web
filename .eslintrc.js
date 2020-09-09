@@ -60,10 +60,10 @@ module.exports = {
     "react/jsx-uses-react": "error",
     // disable this rule because it is unnecessarily strict for TS
     "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
     // if we want this, we should turn disallow any in tsconfig not here
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/class-name-casing": "error",
     camelcase: "error",
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/prefer-namespace-keyword": "error",

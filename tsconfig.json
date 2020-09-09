@@ -18,7 +18,7 @@
     "importHelpers": true,
     "baseUrl": "src"
   },
-  "exclude": ["node_modules", "config/srv"],
+  "exclude": ["node_modules", "config/srv", "jest.config.js"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

@@ -8,7 +8,7 @@ import { BaseDocumentMediaType as OPDS1BaseDocumentMediaType } from "interfaces"
  * This is a working document that still has more to fill in.
  */
 
-export interface Collection<M extends {} = {}> {
+export interface Collection<M extends AnyObject = AnyObject> {
   /**
    * Must comply with "application/opds+json", but that is
    * not necessarily marked as the type
@@ -17,13 +17,12 @@ export interface Collection<M extends {} = {}> {
   links: Link[];
 }
 // a feed is a collection since it has metadata, links and sub collections.
-export interface Feed<M = {}> extends Collection<M> {
+export interface Feed<M extends AnyObject = AnyObject> extends Collection<M> {
   // sub collections of with roles "navigation", "publication", "group"
   navigation?: NavigationLink[];
   publications?: Publication[];
   groups?: Group[];
 }
-
 export interface NavigationLink extends Link {
   title: string;
 }
@@ -134,3 +133,8 @@ export interface AuthDocumentLink
   extends Link<typeof AuthDocumentRelation, typeof AuthDocumentMediaType> {}
 export interface CatalogRootFeedLink
   extends Link<typeof CatalogRootRelation, typeof OPDS1BaseDocumentMediaType> {}
+
+/**
+ * Utility types
+ */
+export type AnyObject = Record<string, unknown>;

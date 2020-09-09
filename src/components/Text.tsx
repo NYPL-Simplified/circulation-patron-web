@@ -4,7 +4,7 @@ import * as React from "react";
 
 type NativeComponent<
   T extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>,
-  P = {}
+  P = Record<string, unknown>
 > = React.FC<React.ComponentProps<T> & P>;
 
 export const H1: NativeComponent<"h1"> = ({ children, ...rest }) => {
