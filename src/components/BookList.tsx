@@ -13,7 +13,6 @@ import {
   availabilityString
 } from "../utils/book";
 import Lane from "./Lane";
-import useBorrow from "../hooks/useBorrow";
 import Button, { NavButton } from "./Button";
 import LoadingIndicator from "./LoadingIndicator";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
@@ -23,6 +22,8 @@ import MediumIndicator from "components/MediumIndicator";
 import { ArrowForward } from "icons";
 import useIsBorrowed from "hooks/useIsBorrowed";
 import BookCover from "./BookCover";
+import Stack from "./Stack";
+import BorrowOrReserve from "./BorrowOrReserve";
 
 /**
  * In a collection you can:
@@ -81,7 +82,7 @@ export const BookListItem: React.FC<{
       aria-label={`Book: ${book.title}`}
     >
       <DS.Card
-        sx={{ bg: "ui.white" }}
+        sx={{ ".card__ctas": { margin: "auto" }, bg: "ui.white" }}
         image={
           <BookCover
             book={book}
@@ -137,7 +138,27 @@ export const BookListItem: React.FC<{
 const BookListCTA: React.FC<{ book: BookWithUrl }> = ({ book }) => {
   const isBorrowed = useIsBorrowed(book);
   const fulfillmentState = getFulfillmentState(book, isBorrowed);
-  const { borrowOrReserve, isLoading, errorMsg } = useBorrow(book);
+  const getCtaButtons = (isBorrow: boolean) => {
+    return (
+      <Stack
+        direction={"column"}
+        sx={{
+          mt: 2
+        }}
+      >
+        {book.allBorrowLinks?.map(link => {
+          return (
+            <BorrowOrReserve
+              key={link.url}
+              book={book}
+              borrowLink={link}
+              isBorrow={isBorrow}
+            />
+          );
+        })}
+      </Stack>
+    );
+  };
 
   switch (fulfillmentState) {
     case "AVAILABLE_OPEN_ACCESS":
@@ -162,24 +183,15 @@ const BookListCTA: React.FC<{ book: BookWithUrl }> = ({ book }) => {
     case "AVAILABLE_TO_BORROW":
       return (
         <>
-          <Button
-            onClick={borrowOrReserve}
-            color="ui.black"
-            loading={isLoading}
-            loadingText="Borrowing..."
+          {getCtaButtons(true)}
+
+          <Text
+            variant="text.body.italic"
+            sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
           >
-            Borrow
-          </Button>
-          {errorMsg ? (
-            <Text sx={{ color: "ui.error" }}>Error: {errorMsg}</Text>
-          ) : (
-            <Text
-              variant="text.body.italic"
-              sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
-            >
-              {availabilityString(book)}
-            </Text>
-          )}
+            {availabilityString(book)}
+          </Text>
+
           <NavButton
             variant="ghost"
             bookUrl={book.url}
@@ -193,14 +205,8 @@ const BookListCTA: React.FC<{ book: BookWithUrl }> = ({ book }) => {
     case "AVAILABLE_TO_RESERVE":
       return (
         <>
-          <Button
-            onClick={borrowOrReserve}
-            color="ui.black"
-            loading={isLoading}
-            loadingText="Reserving..."
-          >
-            Reserve
-          </Button>
+          {getCtaButtons(false)}
+
           <Text
             variant="text.body.italic"
             sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
@@ -247,25 +253,13 @@ const BookListCTA: React.FC<{ book: BookWithUrl }> = ({ book }) => {
     case "READY_TO_BORROW": {
       return (
         <>
-          <Button
-            onClick={borrowOrReserve}
-            color="ui.black"
-            loading={isLoading}
-            loadingText="Borrowing..."
+          {getCtaButtons(true)}
+          <Text
+            variant="text.body.italic"
+            sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
           >
-            Borrow
-          </Button>
-
-          {errorMsg ? (
-            <Text sx={{ color: "ui.error" }}>Error: {errorMsg}</Text>
-          ) : (
-            <Text
-              variant="text.body.italic"
-              sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
-            >
-              You can now borrow this book!
-            </Text>
-          )}
+            You can now borrow this book!
+          </Text>
           <NavButton
             variant="ghost"
             bookUrl={book.url}

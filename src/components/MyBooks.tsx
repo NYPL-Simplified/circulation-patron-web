@@ -7,10 +7,8 @@ import {
   mapDispatchToProps,
   mergeRootProps
 } from "opds-web-client/lib/components/mergeRootProps";
-import { SetCollectionAndBook } from "../interfaces";
 import useAuth from "../hooks/useAuth";
 import { ListView } from "./BookList";
-import { PageLoader } from "./LoadingIndicator";
 import Head from "next/head";
 import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
@@ -18,9 +16,9 @@ import { BookData } from "opds-web-client/lib/interfaces";
 import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 import useSWR from "swr";
-import useTypedSelector from "hooks/useTypedSelector";
 import useLibraryContext from "components/context/LibraryContext";
-import { createCollectionUrl, fetchCollection } from "dataflow/opds1/fetch";
+import { fetchCollection } from "dataflow/opds1/fetch";
+import { PageLoader } from 'components/LoadingIndicator';
 
 const availableUntil = (book: BookData) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -38,13 +36,12 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 
 export const MyBooks: React.FC = () => {
   const { shelfUrl } = useLibraryContext();
-  const { data: collection, isValidating } = useSWR(loansUrl, fetchCollection);
+  const { data: collection, isValidating } = useSWR(shelfUrl, fetchCollection);
 
   const { isSignedIn } = useAuth();
 
   const books =
     collection?.books && collection.books.length > 0 && collection.books;
-
   const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
 
   return (
@@ -52,6 +49,7 @@ export const MyBooks: React.FC = () => {
       <Head>
         <title>My Books</title>
       </Head>
+
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
       {isValidating ? (

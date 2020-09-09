@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
 import { CollectionState } from "opds-web-client/lib/reducers/collection";
-import { CollectionData, BookData } from "opds-web-client/lib/interfaces";
+import {
+  CollectionData,
+  BookData,
+  MediaType
+} from "opds-web-client/lib/interfaces";
 
 /**
  * OPDS 2.0 DATA TYPES
