@@ -9,6 +9,7 @@ import {
 } from "opds-web-client/lib/components/mergeRootProps";
 import useAuth from "../hooks/useAuth";
 import useTypedSelector from "../hooks/useTypedSelector";
+import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { ListView } from "./BookList";
 
 import Head from "next/head";
@@ -33,11 +34,18 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 }
 
 export const MyBooks: React.FC<{}> = () => {
+  const { actions, dispatch } = useActions();
   const loans = useTypedSelector(state => state.loans);
 
   const { isSignedIn } = useAuth();
   const books = loans?.books && loans.books.length > 0 && loans.books;
   const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
+
+  const loansUrl = useTypedSelector(state => {
+    return state.loans.url;
+  });
+
+  if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
 
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
