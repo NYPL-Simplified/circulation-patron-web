@@ -10,7 +10,7 @@ import { generateCredentials } from "opds-web-client/lib/utils/auth";
 import { BasicAuthMethod } from "opds-web-client/lib/interfaces";
 import { AuthFormProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 
-import { modalButtonStyles } from "../components/Modal";
+import { modalButtonStyles } from "components/Modal";
 
 type FormData = {
   login: string;

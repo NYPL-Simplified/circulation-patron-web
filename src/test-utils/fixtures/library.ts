@@ -21,7 +21,9 @@ export const libraryData: LibraryData = {
       role: "navigation"
     }
   ],
-  libraryLinks: {}
+  libraryLinks: {},
+  shelfUrl: "/shelf-url",
+  authMethods: []
 };
 
 export default libraryData;

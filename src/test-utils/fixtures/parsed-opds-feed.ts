@@ -1,9 +1,9 @@
 import { OPDSFeed, OPDSLink, OPDSEntry } from "opds-feed-parser";
-import { AuthDocLinkRelation } from "interfaces";
+import { OPDS1 } from "interfaces";
 
 const authDocLink: OPDSLink = {
   href: "/auth-doc",
-  rel: AuthDocLinkRelation,
+  rel: OPDS1.AuthDocLinkRelation,
   type: "some-type",
   title: "auth-doc-link-title",
   role: "auth-doc-role"
