@@ -6,7 +6,7 @@ describe("getCredentials", () => {
   const { location } = window;
 
   beforeEach(() => {
-    delete window.location;
+    delete (window as any).location;
   });
 
   afterEach(() => {
