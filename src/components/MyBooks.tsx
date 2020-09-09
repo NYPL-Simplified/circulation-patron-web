@@ -45,7 +45,9 @@ export const MyBooks: React.FC<{}> = () => {
     return state.loans.url;
   });
 
-  if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
+  React.useEffect(() => {
+    if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
+  }, [loansUrl, actions, dispatch]);
 
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>

@@ -5,6 +5,7 @@ import { AuthCredentials } from "opds-web-client/lib/interfaces";
 import merge from "deepmerge";
 import { State } from "opds-web-client/lib/state";
 import { mockPush } from "../../test-utils/mockNextRouter";
+import { actions } from "../../test-utils";
 
 test("shows message and button when not authenticated", () => {
   const utils = render(<MyBooks />);
@@ -69,8 +70,7 @@ const withAuthAndBooks: State = merge(fixtures.initialState, {
     credentials: authCredentials
   },
   loans: {
-    url: "www.fakeloan.com",
-
+    url: "http://test-cm.com/catalogUrl/loans",
     books: [
       ...fixtures.makeBooks(10),
       fixtures.mergeBook({
@@ -119,7 +119,15 @@ test("sorts books", () => {
   expect(bookNames[1]).toHaveTextContent("Book Title 10");
 });
 
-/**
- * - toggles between list and gallery view
- * - shows the reserved button
- */
+test("fetches loans", () => {
+  const mockFetchLoans = jest.spyOn(actions, "fetchLoans");
+
+  render(<MyBooks />, {
+    initialState: withAuthAndBooks
+  });
+
+  expect(mockFetchLoans).toHaveBeenCalledTimes(1);
+  expect(mockFetchLoans).toHaveBeenCalledWith(
+    "http://test-cm.com/catalogUrl/loans"
+  );
+});
