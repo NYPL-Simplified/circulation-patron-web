@@ -39,7 +39,7 @@
     "next": "^9.5.2",
     "next-transpile-modules": "^4.0.0",
     "opds-feed-parser": "0.0.18",
-    "opds-web-client": "github:NYPL-Simplified/opds-web-client#opds-web-client-v0.5.4-gitpkg",
+    "opds-web-client": "^0.5.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^4.9.2",
