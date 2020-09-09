@@ -6,11 +6,11 @@ import {
   fetchCatalog,
   fetchAuthDocument,
   buildLibraryData,
-  getAuthDocHref
 } from "dataflow/getLibraryData";
 import ApplicationError from "errors";
 import getConfigFile from "./getConfigFile";
 import { CONFIG_FILE } from "utils/env";
+import { getAuthDocHref } from 'utils/auth';
 
 const getLibraryFromParams = (
   query: ParsedUrlQuery | undefined

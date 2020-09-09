@@ -189,18 +189,6 @@ export function buildLibraryData(
 }
 
 /**
- * Extracts the href of an auth document from the links in an OPDSFeed.
- */
-export function getAuthDocHref(catalog: OPDSFeed) {
-  const link = catalog.links.find(link => link.rel === OPDS1.AuthDocLinkRelation);
-  if (!link)
-    throw new ApplicationError(
-      "OPDS Catalog did not contain an auth document link."
-    );
-  return link.href;
-}
-
-/**
  * Parses the links array in an auth document into an object of links.
  */
 function parseLinks(links: OPDS1.AuthDocumentLink[] | undefined): LibraryLinks {
