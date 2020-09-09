@@ -3,7 +3,9 @@ import { SetCollectionAndBook } from "../interfaces";
 import { useRouter } from "next/router";
 import useLinkUtils from "../components/context/LinkUtilsContext";
 
-function extractString(query: string | string[]): string | undefined {
+function extractString(
+  query: string | string[] | undefined
+): string | undefined {
   if (typeof query === "string") return query;
 }
 /**
