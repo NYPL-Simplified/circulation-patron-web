@@ -15,10 +15,8 @@ import { H3 } from "./Text";
 import { BookData } from "opds-web-client/lib/interfaces";
 import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
-import useSWR from "swr";
-import useLibraryContext from "components/context/LibraryContext";
-import { fetchCollection } from "dataflow/opds1/fetch";
 import { PageLoader } from 'components/LoadingIndicator';
+import useUser from 'hooks/useUser';
 
 const availableUntil = (book: BookData) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -35,14 +33,9 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 }
 
 export const MyBooks: React.FC = () => {
-  const { shelfUrl } = useLibraryContext();
-  const { data: collection, isValidating } = useSWR(shelfUrl, fetchCollection);
+  const { isAuthenticated, loans, isLoading } = useUser();
 
-  const { isSignedIn } = useAuth();
-
-  const books =
-    collection?.books && collection.books.length > 0 && collection.books;
-  const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
+  const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
 
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
@@ -52,11 +45,11 @@ export const MyBooks: React.FC = () => {
 
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
-      {isValidating ? (
+      {isLoading ? (
         <PageLoader />
-      ) : !isSignedIn ? (
+      ) : !isAuthenticated ? (
         <Unauthorized />
-      ) : books ? (
+      ) : sortedBooks ? (
         <LoansContent books={sortedBooks} />
       ) : (
         <Empty />
