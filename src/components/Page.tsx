@@ -10,6 +10,8 @@ import Head from "next/head";
 import Error from "components/Error";
 import { AppProps } from "dataflow/withAppProps";
 
+/* Page without Header and Footer should wrap pages that should not have sitewide navigation */
+
 const Page: React.FC<AppProps> = props => {
   /**
    * If there was no library or initialState provided, render the error page
