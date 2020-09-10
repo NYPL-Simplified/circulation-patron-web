@@ -13,6 +13,7 @@ const MediumIndicator: React.FC<{ book: BookData; className?: string }> = ({
   const medium = getMedium(book);
 
   if (Object.keys(bookMediumMap).indexOf(medium) === -1) return null;
+  if (medium === "") return null;
   const mediumInfo = bookMediumMap[medium];
   return (
     <Text sx={{ display: "flex", alignItems: "center" }} className={className}>
@@ -32,6 +33,7 @@ export const MediumIcon: React.FC<{ book: BookData; className?: string }> = ({
   const medium = getMedium(book);
 
   if (Object.keys(bookMediumMap).indexOf(medium) === -1) return null;
+  if (medium === "") return null;
   const mediumInfo = bookMediumMap[medium];
   const MediumSvg = mediumInfo.icon;
   return MediumSvg ? <MediumSvg className={className} {...rest} /> : null;

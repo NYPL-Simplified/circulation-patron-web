@@ -19,7 +19,7 @@ import CleverAuthPlugin from "auth/cleverAuthPlugin";
 import getPathFor from "utils/getPathFor";
 import { LinkUtilsProvider } from "./LinkUtilsContext";
 import { SHORTEN_URLS } from "utils/env";
-import { PathFor } from 'opds-web-client/lib/interfaces';
+import { PathFor } from "opds-web-client/lib/interfaces";
 
 type ProviderProps = {
   library: LibraryData;

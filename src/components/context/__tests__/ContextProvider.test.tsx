@@ -29,6 +29,8 @@ type MakeContextConfig = {
 // eslint-disable-next-line react/display-name
 const makeContextWrapper = (config: MakeContextConfig = {}) => ({
   children
+}: {
+  children: React.ReactNode;
 }) => {
   const { library = testLibrary } = config;
   return (

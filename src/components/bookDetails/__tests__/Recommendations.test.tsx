@@ -6,7 +6,7 @@ import Recommendations from "../Recommendations";
 import { RecommendationsState } from "../../../interfaces";
 
 const renderWithRecState = (
-  children,
+  children: React.ReactNode,
   recState: RecommendationsState = fixtures.recommendationsState
 ) =>
   render(
@@ -61,7 +61,7 @@ test("doesn't show recommendations if there are none", () => {
   const utils = renderWithRecState(<Recommendations book={fixtures.book} />, {
     ...fixtures.emptyRecommendationsState
   });
-  expect(utils.container).toBeEmpty();
+  expect(utils.container).toBeEmptyDOMElement();
 });
 
 test("recommendations are clickable", () => {

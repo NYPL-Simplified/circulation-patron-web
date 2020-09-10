@@ -15,8 +15,8 @@ import { H3 } from "./Text";
 import { BookData } from "opds-web-client/lib/interfaces";
 import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
-import { PageLoader } from 'components/LoadingIndicator';
-import useUser from 'hooks/useUser';
+import { PageLoader } from "components/LoadingIndicator";
+import useUser from "hooks/useUser";
 
 const availableUntil = (book: BookData) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";

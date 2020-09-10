@@ -7,7 +7,7 @@ export function truncateString(
   str: string,
   length: number,
   useWordBoundary = true
-) {
+): string {
   // if the string is empty, just return it
   if (str === "") return str;
 
