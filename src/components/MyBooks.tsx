@@ -1,18 +1,17 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useSetCollectionAndBook from "../hooks/useSetCollectionAndBook";
 import { connect } from "react-redux";
 import {
   mapStateToProps,
   mapDispatchToProps,
   mergeRootProps
 } from "opds-web-client/lib/components/mergeRootProps";
-import { SetCollectionAndBook } from "../interfaces";
 import useAuth from "../hooks/useAuth";
 import useTypedSelector from "../hooks/useTypedSelector";
+import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import { ListView } from "./BookList";
-import { PageLoader } from "./LoadingIndicator";
+
 import Head from "next/head";
 import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
@@ -34,33 +33,31 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
   });
 }
 
-export const MyBooks: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
-}> = ({ setCollectionAndBook }) => {
-  // here we pass in "loans" to make it look like we are at /collection/loans
-  // which is what used to be the route that is now /loans (ie. this page)
-  useSetCollectionAndBook(setCollectionAndBook, "loans");
-  const collection = useTypedSelector(state => state.collection);
+export const MyBooks: React.FC<{}> = () => {
+  const { actions, dispatch } = useActions();
+  const loans = useTypedSelector(state => state.loans);
 
   const { isSignedIn } = useAuth();
-
-  const books =
-    collection.data?.books &&
-    collection.data.books.length > 0 &&
-    collection.data.books;
-
+  const books = loans?.books && loans.books.length > 0 && loans.books;
   const sortedBooks = books ? sortBooksByLoanExpirationDate(books) : [];
+
+  const loansUrl = useTypedSelector(state => {
+    return state.loans.url;
+  });
+
+  React.useEffect(() => {
+    if (loansUrl) dispatch(actions.fetchLoans(loansUrl));
+  }, [loansUrl, actions, dispatch]);
 
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
       <Head>
         <title>My Books</title>
       </Head>
+
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
-      {collection.isFetching ? (
-        <PageLoader />
-      ) : !isSignedIn ? (
+      {!isSignedIn ? (
         <Unauthorized />
       ) : books ? (
         <LoansContent books={sortedBooks} />

@@ -5,13 +5,10 @@ import { AuthCredentials } from "opds-web-client/lib/interfaces";
 import merge from "deepmerge";
 import { State } from "opds-web-client/lib/state";
 import { mockPush } from "../../test-utils/mockNextRouter";
-
-const mockSetCollectionAndBook = jest.fn().mockReturnValue(Promise.resolve({}));
+import { actions } from "../../test-utils";
 
 test("shows message and button when not authenticated", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />
-  );
+  const utils = render(<MyBooks />);
 
   expect(
     utils.getByText("You need to be signed in to view this page.")
@@ -30,10 +27,7 @@ const emptyWithAuth: State = merge(fixtures.initialState, {
 });
 
 test("displays empty state when empty and signed in", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth }
-  );
+  const utils = render(<MyBooks />, { initialState: emptyWithAuth });
 
   expect(
     utils.queryByText("You need to be signed in to view this page.")
@@ -49,10 +43,7 @@ test("displays empty state when empty and signed in", () => {
 });
 
 test("sign out clears state and goes home", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth }
-  );
+  const utils = render(<MyBooks />, { initialState: emptyWithAuth });
 
   const signOut = utils.getByText("Sign Out");
   fireEvent.click(signOut);
@@ -78,34 +69,30 @@ const withAuthAndBooks: State = merge(fixtures.initialState, {
   auth: {
     credentials: authCredentials
   },
-  collection: {
-    data: {
-      books: [
-        ...fixtures.makeBooks(10),
-        fixtures.mergeBook({
-          title: "Book Title 10",
-          availability: {
-            until: "Jan 2 2020",
-            status: "available"
-          }
-        }),
-        fixtures.mergeBook({
-          title: "Book Title 11",
-          availability: {
-            until: "Jan 1 2020",
-            status: "available"
-          }
-        })
-      ]
-    }
+  loans: {
+    url: "http://test-cm.com/catalogUrl/loans",
+    books: [
+      ...fixtures.makeBooks(10),
+      fixtures.mergeBook({
+        title: "Book Title 10",
+        availability: {
+          until: "Jan 2 2020",
+          status: "available"
+        }
+      }),
+      fixtures.mergeBook({
+        title: "Book Title 11",
+        availability: {
+          until: "Jan 1 2020",
+          status: "available"
+        }
+      })
+    ]
   }
 });
 
 test("displays books when signed in with data", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: withAuthAndBooks }
-  );
+  const utils = render(<MyBooks />, { initialState: withAuthAndBooks });
 
   expect(
     utils.queryByText("You need to be signed in to view this page.")
@@ -126,50 +113,21 @@ test("displays books when signed in with data", () => {
 });
 
 test("sorts books", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: withAuthAndBooks }
-  );
+  const utils = render(<MyBooks />, { initialState: withAuthAndBooks });
   const bookNames = utils.queryAllByText(/Book Title/);
   expect(bookNames[0]).toHaveTextContent("Book Title 11");
   expect(bookNames[1]).toHaveTextContent("Book Title 10");
 });
 
-test("sets collection and book", () => {
-  render(<MyBooks setCollectionAndBook={mockSetCollectionAndBook} />, {
+test("fetches loans", () => {
+  const mockFetchLoans = jest.spyOn(actions, "fetchLoans");
+
+  render(<MyBooks />, {
     initialState: withAuthAndBooks
   });
 
-  expect(mockSetCollectionAndBook).toHaveBeenCalledTimes(1);
-  expect(mockSetCollectionAndBook).toHaveBeenCalledWith(
-    "http://test-cm.com/catalogUrl/loans",
-    undefined
+  expect(mockFetchLoans).toHaveBeenCalledTimes(1);
+  expect(mockFetchLoans).toHaveBeenCalledWith(
+    "http://test-cm.com/catalogUrl/loans"
   );
-});
-
-/**
- * - toggles between list and gallery view
- * - shows the reserved button
- */
-
-const loading: State = merge(fixtures.initialState, {
-  auth: {
-    credentials: authCredentials
-  },
-  collection: {
-    isFetching: true
-  }
-});
-
-test("shows loading state", () => {
-  const utils = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: loading
-    }
-  );
-
-  expect(
-    utils.getByRole("heading", { name: "Loading..." })
-  ).toBeInTheDocument();
 });
