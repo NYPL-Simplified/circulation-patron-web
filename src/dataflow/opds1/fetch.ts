@@ -85,9 +85,9 @@ export async function fetchCollection(
 
 export function createCollectionUrl(
   catalogUrl: string,
-  collectionUrl: string
+  collectionUrl: string | undefined
 ): string {
-  return `${catalogUrl}/${collectionUrl}`;
+  return `${catalogUrl}/${collectionUrl ?? ""}`;
 }
 
 export function stripUndefined(json: any) {

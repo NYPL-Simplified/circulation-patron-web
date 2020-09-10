@@ -1,16 +1,16 @@
 import { LibraryData, AppConfigFile, RequiredKeys } from "../interfaces";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+import { GetServerSidePropsResult, GetStaticPropsContext } from "next";
 import { ParsedUrlQuery } from "querystring";
 import {
   getCatalogRootUrl,
   fetchCatalog,
   fetchAuthDocument,
-  buildLibraryData,
+  buildLibraryData
 } from "dataflow/getLibraryData";
 import ApplicationError from "errors";
 import getConfigFile from "./getConfigFile";
 import { CONFIG_FILE } from "utils/env";
-import { getAuthDocHref } from 'utils/auth';
+import { getAuthDocHref } from "utils/auth";
 
 const getLibraryFromParams = (
   query: ParsedUrlQuery | undefined
@@ -33,18 +33,16 @@ export type AppProps = {
   configFile?: AppConfigFile | null;
 };
 
-type GetServerSideProps<
+type PageFetcher<
   P extends { [key: string]: any } = { [key: string]: any },
   Q extends ParsedUrlQuery = ParsedUrlQuery
 > = (
-  context: GetServerSidePropsContext<Q>,
+  context: GetStaticPropsContext<Q>,
   appData: RequiredKeys<AppProps, "library">
 ) => Promise<GetServerSidePropsResult<P>>;
 
-export default function withAppProps(
-  pageGetServerSideProps?: GetServerSideProps
-): GetServerSideProps<AppProps> {
-  return async ctx => {
+export default function withAppProps(pageGetServerSideProps?: PageFetcher) {
+  return async (ctx: GetStaticPropsContext) => {
     /**
      * Determine the catalog url
      * Get library catalog
