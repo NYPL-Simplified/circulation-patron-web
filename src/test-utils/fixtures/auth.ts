@@ -10,7 +10,7 @@ import AuthButton from "auth/AuthButton";
 
 import BasicAuthForm from "auth/BasicAuthForm";
 import { AuthState } from "opds-web-client/lib/reducers/auth";
-import SamlAuthForm from "auth/SamlAuthForm";
+import SamlAuthForm from "auth/SamlAuthButton";
 
 export const cleverAuthId =
   "http://librarysimplified.org/authtype/OAuth-with-intermediary";

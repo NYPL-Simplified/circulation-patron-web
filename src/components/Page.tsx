@@ -5,7 +5,7 @@ import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
 import getOrCreateStore from "../dataflow/getOrCreateStore";
 import { ThemeProvider } from "theme-ui";
-import Auth from "../components/Auth";
+import Auth from "../auth/AuthForm";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
 import Error from "components/Error";

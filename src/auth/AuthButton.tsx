@@ -1,18 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import Button from "components/Button";
-import { AuthMethod } from "opds-web-client/lib/interfaces";
-import { AuthButtonProps } from "opds-web-client/lib/components/AuthProviderSelectionForm";
 import { modalButtonStyles } from "components/Modal";
+import { OPDS1 } from "interfaces";
+import { AuthButtonProps } from "auth/authPlugins";
 
-const BasicAuthButton: React.FC<AuthButtonProps<AuthMethod>> = ({
-  provider,
+const BasicAuthButton: React.FC<AuthButtonProps<OPDS1.BasicAuthMethod>> = ({
+  method,
   onClick
 }) => {
-  if (!provider?.id || !provider?.method) {
-    return null;
-  }
-  const { id, method } = provider;
   const { description, links } = method;
   const imageUrl = links?.find(link => link.rel === "logo")?.href;
 
@@ -20,7 +16,6 @@ const BasicAuthButton: React.FC<AuthButtonProps<AuthMethod>> = ({
     <Button
       aria-label={`Login to ${description}`}
       type="submit"
-      value={id}
       onClick={onClick}
       sx={{
         ...modalButtonStyles,

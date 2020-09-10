@@ -1,10 +1,8 @@
-import AuthPlugin from "opds-web-client/lib/AuthPlugin";
-import CleverButton from "./cleverAuthButton";
 import { OPDS1 } from "interfaces";
+import CleverButton from "auth/cleverAuthButton";
+import { AuthPlugin } from "auth/authPlugins";
 
-export const CleverAuthPlugin: AuthPlugin = {
-  type: OPDS1.CleverAuthType,
-
+const cleverAuthPlugin: AuthPlugin<OPDS1.CleverAuthMethod> = {
   lookForCredentials: () => {
     // Check for Clever auth
     const isServer = typeof window === "undefined";
@@ -36,9 +34,8 @@ export const CleverAuthPlugin: AuthPlugin = {
       }
     }
   },
-
-  formComponent: undefined,
-  buttonComponent: CleverButton
+  button: CleverButton,
+  form: CleverButton
 };
 
-export default CleverAuthPlugin;
+export default cleverAuthPlugin;

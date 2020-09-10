@@ -11,15 +11,16 @@ function cookieName(librarySlug: string | null): string {
   return `${AUTH_COOKIE_NAME}/${librarySlug}`;
 }
 
-export function useAuthCredentials(
+/**
+ * We do not parse this into an object here
+ * because we want it to stay a string so that
+ * it passes === if it doesn't change.
+ */
+export function getCredentials(
   librarySlug: string | null
 ): AuthCredentials | undefined {
   const credentials = Cookie.get(cookieName(librarySlug));
-  // we want this to stay the same reference unless the cookie value changes
-  return React.useMemo(
-    () => (credentials ? JSON.parse(credentials) : undefined),
-    [credentials]
-  );
+  return credentials ? JSON.parse(credentials) : undefined;
 }
 
 export function setAuthCredentials(
@@ -27,4 +28,13 @@ export function setAuthCredentials(
   credentials: AuthCredentials
 ) {
   Cookie.set(cookieName(librarySlug), JSON.stringify(credentials));
+}
+
+export function clearCredentials(librarySlug: string | null) {
+  Cookie.remove(cookieName(librarySlug));
+}
+
+export function generateToken(username: string, password: string) {
+  const btoaStr = btoa(`${username}:${password}`);
+  return `Basic ${btoaStr}`;
 }

@@ -1,13 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { connect } from "react-redux";
-import {
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-} from "opds-web-client/lib/components/mergeRootProps";
-import useAuth from "../hooks/useAuth";
 import { ListView } from "./BookList";
 import Head from "next/head";
 import BreadcrumbBar from "./BreadcrumbBar";
@@ -17,6 +10,7 @@ import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 import { PageLoader } from "components/LoadingIndicator";
 import useUser from "hooks/useUser";
+import useAuthFormContext from "auth/AuthFormCotext";
 
 const availableUntil = (book: BookData) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -33,10 +27,16 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 }
 
 export const MyBooks: React.FC = () => {
-  const { isAuthenticated, loans, isLoading } = useUser();
+  const { isAuthenticated, loans, isValidating } = useUser();
+  const { showForm } = useAuthFormContext();
+
+  // show the auth form if we are unauthenticated
+  React.useEffect(() => {
+    if (!isAuthenticated) showForm();
+  }, [isAuthenticated, showForm]);
 
   const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
-
+  const noBooks = sortedBooks.length === 0;
   return (
     <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
       <Head>
@@ -45,14 +45,14 @@ export const MyBooks: React.FC = () => {
 
       <BreadcrumbBar currentLocation="My Books" />
       <PageTitle>My Books</PageTitle>
-      {isLoading ? (
+      {noBooks && isValidating ? (
         <PageLoader />
-      ) : !isAuthenticated ? (
-        <Unauthorized />
-      ) : sortedBooks ? (
+      ) : isAuthenticated && noBooks ? (
+        <Empty />
+      ) : isAuthenticated ? (
         <LoansContent books={sortedBooks} />
       ) : (
-        <Empty />
+        <Unauthorized />
       )}
     </div>
   );
@@ -106,9 +106,4 @@ const Empty = () => {
   );
 };
 
-const Connected = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-)(MyBooks);
-export default Connected;
+export default MyBooks;

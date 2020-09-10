@@ -2,7 +2,6 @@ import OPDSParser, { OPDSFeed, OPDSEntry } from "opds-feed-parser";
 import ApplicationError from "errors";
 import { CollectionData } from "opds-web-client/lib/interfaces";
 import { feedToCollection } from "dataflow/opds1/parse";
-import { AuthCredentials } from "interfaces";
 
 const parser = new OPDSParser();
 /**
@@ -11,9 +10,9 @@ const parser = new OPDSParser();
  */
 async function fetchOPDS(
   url: string,
-  credentials?: AuthCredentials
+  token?: string
 ): Promise<OPDSEntry | OPDSFeed> {
-  const headers = prepareHeaders(credentials);
+  const headers = prepareHeaders(token);
   const response = await fetch(url, {
     headers
   });
@@ -41,9 +40,9 @@ async function fetchOPDS(
  */
 export async function fetchFeed(
   url: string,
-  credentials?: AuthCredentials
+  token?: string
 ): Promise<OPDSFeed> {
-  const result = await fetchOPDS(url, credentials);
+  const result = await fetchOPDS(url, token);
   if (result instanceof OPDSFeed) {
     return result;
   }
@@ -57,9 +56,9 @@ export async function fetchFeed(
  */
 export async function fetchEntry(
   url: string,
-  credentials?: AuthCredentials
+  token?: string
 ): Promise<OPDSEntry> {
-  const result = await fetchOPDS(url, credentials);
+  const result = await fetchOPDS(url, token);
   if (result instanceof OPDSEntry) {
     return result;
   }
@@ -73,9 +72,9 @@ export async function fetchEntry(
  */
 export async function fetchCollection(
   url: string,
-  credentials?: AuthCredentials
+  token?: string
 ): Promise<CollectionData> {
-  const feed = await fetchFeed(url, credentials);
+  const feed = await fetchFeed(url, token);
   const collection = feedToCollection(feed, url);
   return collection;
 }
@@ -95,12 +94,14 @@ export function stripUndefined(json: any) {
   return JSON.parse(JSON.stringify(json));
 }
 
-function prepareHeaders(credentials?: AuthCredentials) {
-  const headers = {
+function prepareHeaders(token?: string) {
+  const headers: {
+    [key: string]: string;
+  } = {
     "X-Requested-With": "XMLHttpRequest"
   };
-  if (credentials) {
-    headers["Authorization"] = credentials.token;
+  if (token) {
+    headers["Authorization"] = token;
   }
   return headers;
 }

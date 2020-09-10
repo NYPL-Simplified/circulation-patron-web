@@ -1,13 +1,11 @@
-import AuthPlugin from "opds-web-client/lib/AuthPlugin";
-import SamlAuthForm from "./SamlAuthForm";
-import AuthButton from "./AuthButton";
-import { OPDS1, ClientSamlMethod } from "interfaces";
+import { ClientSamlMethod } from "interfaces";
+import SamlAuthButton from "auth/SamlAuthButton";
+import { AuthPlugin } from "auth/authPlugins";
 
 const samlAuthPlugin: AuthPlugin<ClientSamlMethod> = {
-  buttonComponent: AuthButton,
-  lookForCredentials: () => null,
-  type: OPDS1.SamlAuthType,
-  formComponent: SamlAuthForm
+  button: SamlAuthButton,
+  form: SamlAuthButton,
+  lookForCredentials: () => null
 };
 
 export default samlAuthPlugin;

@@ -1,10 +1,6 @@
 /* eslint-disable camelcase */
 import { CollectionState } from "opds-web-client/lib/reducers/collection";
-import {
-  CollectionData,
-  BookData,
-  MediaType
-} from "opds-web-client/lib/interfaces";
+import { CollectionData, BookData } from "opds-web-client/lib/interfaces";
 
 /**
  * OPDS 2.0 DATA TYPES
@@ -58,17 +54,18 @@ export type LibraryLinks = {
  * The server representation has multiple IDPs nested into the one.
  * We will flatten that out before placing into LibraryData.
  */
-export interface ClientSamlMethod extends OPDS1.AuthMethod {
+export interface ClientSamlMethod
+  extends OPDS1.AuthMethod<typeof OPDS1.SamlAuthType> {
   href: string;
 }
 
 export type AppAuthMethod =
-  | OPDS1.AuthMethod
+  | OPDS1.CleverAuthMethod
   | OPDS1.BasicAuthMethod
   | ClientSamlMethod;
 
 export interface AuthCredentials {
-  method: AppAuthMethod;
+  methodType: AppAuthMethod["type"];
   token: string;
 }
 

@@ -91,7 +91,7 @@ export const ImplicitGrantAuthType = "http://opds-spec.org/auth/oauth/implicit";
 export const PasswordCredentialsAuthType =
   "http://opds-spec.org/auth/oauth/password";
 
-type AnyAuthType =
+export type AnyAuthType =
   | typeof BasicAuthType
   | typeof SamlAuthType
   | typeof CleverAuthType
@@ -99,21 +99,28 @@ type AnyAuthType =
   | typeof PasswordCredentialsAuthType;
 
 // https://drafts.opds.io/authentication-for-opds-1.0
-export interface AuthMethod<L extends Link = Link> {
-  type: AnyAuthType;
+export interface AuthMethod<T extends AnyAuthType, L extends Link = Link> {
+  type: T;
   description?: string;
   // https://drafts.opds.io/authentication-for-opds-1.0#312-links
   links?: L[];
 }
-export interface ServerSamlMethod extends AuthMethod<SamlIdp> {}
+export interface ServerSamlMethod
+  extends AuthMethod<typeof SamlAuthType, SamlIdp> {}
 
-export interface BasicAuthMethod extends AuthMethod {
+export interface CleverAuthMethod extends AuthMethod<typeof CleverAuthType> {}
+
+export interface BasicAuthMethod extends AuthMethod<typeof BasicAuthType> {
   labels: {
     login: string;
     password: string;
   };
 }
-export type ServerAuthMethod = AuthMethod | BasicAuthMethod | ServerSamlMethod;
+
+export type ServerAuthMethod =
+  | CleverAuthMethod
+  | BasicAuthMethod
+  | ServerSamlMethod;
 
 export interface Announcement {
   id: string;
