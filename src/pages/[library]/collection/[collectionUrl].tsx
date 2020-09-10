@@ -1,14 +1,9 @@
 import * as React from "react";
 import Collection from "components/Collection";
-import { NextPage, GetServerSideProps } from "next";
+import { GetStaticPaths, NextPage } from "next";
 import Page from "components/Page";
-import withAppProps, { AppProps } from "dataflow/withAppProps";
-import { feedToCollection } from "dataflow/opds1/parse";
-import {
-  fetchFeed,
-  createCollectionUrl,
-  stripUndefined
-} from "dataflow/opds1/fetch";
+import getStaticCollection from "dataflow/getStaticCollection";
+import { AppProps } from "dataflow/withAppProps";
 
 type PageProps = {
   collection: any;
@@ -26,27 +21,13 @@ const CollectionPage: NextPage<AppProps & PageProps> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAppProps(
-  async ({ params }, { library }) => {
-    // get the collection url
-    // fetch the data
-    // parse the data from XML to JS
-    // return props
-    const { collectionUrl } = params;
-    const fullCollectionUrl = createCollectionUrl(
-      library.catalogUrl,
-      collectionUrl
-    );
-    console.log("Running getServerSideProps with ", fullCollectionUrl);
-    const feed = await fetchFeed(fullCollectionUrl);
-    const collection = feedToCollection(feed, fullCollectionUrl);
-    const withoutUndefined = stripUndefined(collection);
-    return {
-      props: {
-        collection: withoutUndefined
-      }
-    };
-  }
-);
+export const getStaticProps = getStaticCollection;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true
+  };
+};
 
 export default CollectionPage;

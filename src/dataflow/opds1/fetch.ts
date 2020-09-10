@@ -90,6 +90,10 @@ export function createCollectionUrl(
   return `${catalogUrl}/${collectionUrl ?? ""}`;
 }
 
+export function createBookUrl(catalogUrl: string, bookUrl: string) {
+  return `${catalogUrl}/${bookUrl}`;
+}
+
 export function stripUndefined(json: any) {
   return JSON.parse(JSON.stringify(json));
 }

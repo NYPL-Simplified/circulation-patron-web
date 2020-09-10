@@ -34,6 +34,7 @@ export const BookDetails: React.FC<{
   setCollectionAndBook: SetCollectionAndBook;
 }> = ({ setCollectionAndBook }) => {
   // set the collection and book
+  console.log("Rendering");
   useSetCollectionAndBook(setCollectionAndBook);
 
   const book = useNormalizedBook();
