@@ -5,6 +5,7 @@ module.exports = {
     node: true
   },
   parser: "@typescript-eslint/parser",
+  ignorePatterns: ["/axisnow-access-control-web/**"],
   parserOptions: {
     project: "tsconfig.json",
     sourceType: "module",
