@@ -65,7 +65,7 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
     .fn()
     .mockImplementation(origDispatch);
   store.dispatch = mockDispatch as typeof origDispatch;
-                           
+
   const AllTheProviders: React.FC = ({ children }) => {
     return (
       <MockNextRouterContextProvider router={options?.router}>
