@@ -33,7 +33,7 @@ configure({ adapter: new Adapter() });
  * available on jsdom
  */
 const mockCreateObjectURL = jest.fn();
-global["URL"].createObjectURL = mockCreateObjectURL;
+(global as any)["URL"].createObjectURL = mockCreateObjectURL;
 
 /**
  * We create the actions and fetcher here so that they can
@@ -65,8 +65,8 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
     .fn()
     .mockImplementation(origDispatch);
   store.dispatch = mockDispatch as typeof origDispatch;
-
-  const AllTheProviders = ({ children }) => {
+                           
+  const AllTheProviders: React.FC = ({ children }) => {
     return (
       <MockNextRouterContextProvider router={options?.router}>
         <ContextProvider

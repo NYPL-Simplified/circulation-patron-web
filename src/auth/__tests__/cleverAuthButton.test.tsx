@@ -4,8 +4,8 @@ import { render } from "../../test-utils";
 import CleverButton from "../cleverAuthButton";
 
 describe("CleverButton", () => {
-  let wrapper;
-  let provider;
+  let wrapper: any;
+  let provider: any;
 
   beforeEach(() => {
     provider = {

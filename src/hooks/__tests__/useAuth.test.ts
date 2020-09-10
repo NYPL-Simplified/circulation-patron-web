@@ -1,11 +1,12 @@
 import { getCredentials } from "../useAuth";
 import CleverAuthPlugin from "../../auth/cleverAuthPlugin";
+import { NextRouter } from "next/router";
 
 describe("getCredentials", () => {
   const { location } = window;
 
   beforeEach(() => {
-    delete window.location;
+    delete (window as any).location;
   });
 
   afterEach(() => {
@@ -14,13 +15,13 @@ describe("getCredentials", () => {
   });
 
   const mockSAMLToken = "potatokeyFH2";
-  const mockRouterWithEmptyQuery = { query: {} };
-  const mockRouterWithSAMLToken = {
+  const mockRouterWithEmptyQuery = { query: {} } as NextRouter;
+  const mockRouterWithSAMLToken = ({
     query: {
-      //eslint-disable-next-line camelcase, @typescript-eslint/camelcase
+      //eslint-disable-next-line camelcase
       access_token: mockSAMLToken
     }
-  };
+  } as unknown) as NextRouter;
 
   test("returns TOKEN_NOT_FOUND without a token when there is no access_token in query or access_token in window.location.hash", async () => {
     expect(getCredentials(mockRouterWithEmptyQuery)).toStrictEqual({

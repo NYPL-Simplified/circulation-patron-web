@@ -3,6 +3,11 @@ import { SetCollectionAndBook } from "../interfaces";
 import { useRouter } from "next/router";
 import useLinkUtils from "../components/context/LinkUtilsContext";
 
+function extractString(
+  query: string | string[] | undefined
+): string | undefined {
+  if (typeof query === "string") return query;
+}
 /**
  * Currently have to pass in setCollectionAndBook, which we get from
  * redux connect using opds mapStateToProps, mapDispatchToProps and
@@ -15,13 +20,15 @@ const useSetCollectionAndBook = (
   collectionUrlOverride?: string
 ) => {
   const { bookUrl, collectionUrl } = useRouter().query;
-  const finalCollectionUrl = collectionUrlOverride ?? collectionUrl;
+  const stringBookUrl = extractString(bookUrl);
+  const stringCollectionUrl = extractString(collectionUrl);
+  const finalCollectionUrl = collectionUrlOverride ?? stringCollectionUrl;
   const { urlShortener } = useLinkUtils();
 
   const fullCollectionUrl = decodeURIComponent(
     urlShortener.expandCollectionUrl(finalCollectionUrl)
   );
-  const fullBookUrl = urlShortener.expandBookUrl(bookUrl);
+  const fullBookUrl = urlShortener.expandBookUrl(stringBookUrl);
   // set the collection and book whenever the urls change
   React.useEffect(() => {
     setCollectionAndBook(fullCollectionUrl, fullBookUrl);

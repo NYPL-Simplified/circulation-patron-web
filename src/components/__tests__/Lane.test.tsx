@@ -50,7 +50,7 @@ test("renders breadcrumbs with 0 books", () => {
   expect(breadcrumb).toBeInTheDocument();
 
   // there should be no li elements
-  expect(utils.getByTestId("lane-list")).toBeEmpty();
+  expect(utils.getByTestId("lane-list")).toBeEmptyDOMElement();
 });
 
 test("filters books", () => {

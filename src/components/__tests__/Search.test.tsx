@@ -37,7 +37,7 @@ test("doesn't render if there is no searchData in the store", () => {
       }
     })
   });
-  expect(utils.container).toBeEmpty();
+  expect(utils.container).toBeEmptyDOMElement();
 });
 
 test("searching calls history.push with url", async () => {

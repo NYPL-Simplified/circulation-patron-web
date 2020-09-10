@@ -45,7 +45,7 @@ export function parseLinks(links: OPDSLink[]): LibraryLinks {
 
 export function getReportUrl(raw: any) {
   const reportLink = raw?.link?.find?.(
-    link => link?.["$"]?.["rel"]?.["value"] === "issues"
+    (link: any) => link?.["$"]?.["rel"]?.["value"] === "issues"
   );
 
   if (!reportLink) {

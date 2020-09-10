@@ -1,5 +1,3 @@
-import { URL } from "universal-url";
-
 export default class UrlShortener {
   private readonly catalogUrl: string;
   private readonly enabled: boolean;
@@ -38,7 +36,7 @@ export default class UrlShortener {
     return encodeURIComponent(url);
   }
 
-  expandCollectionUrl(collectionUrl): string {
+  expandCollectionUrl(collectionUrl: string | undefined): string {
     if (this.enabled) {
       return collectionUrl
         ? this.catalogBase() + "/" + collectionUrl
@@ -48,7 +46,7 @@ export default class UrlShortener {
     }
   }
 
-  expandBookUrl(bookUrl): string {
+  expandBookUrl(bookUrl: string | undefined): string | undefined {
     return bookUrl && this.enabled
       ? this.catalogBase() + "/works/" + bookUrl
       : bookUrl;

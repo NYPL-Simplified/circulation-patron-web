@@ -29,7 +29,7 @@ const computeBreadcrumbs = (
     collection.raw["simplified:breadcrumbs"][0].link
   ) {
     const rawLinks = collection.raw["simplified:breadcrumbs"][0].link;
-    links = rawLinks.map(link => {
+    links = rawLinks.map((link: any) => {
       return {
         url: link["$"].href.value,
         text: link["$"].title.value
