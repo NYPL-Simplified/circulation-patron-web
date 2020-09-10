@@ -33,7 +33,7 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
   });
 }
 
-export const MyBooks: React.FC<{}> = () => {
+export const MyBooks: React.FC = () => {
   const { actions, dispatch } = useActions();
   const loans = useTypedSelector(state => state.loans);
 
