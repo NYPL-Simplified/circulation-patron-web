@@ -29,6 +29,7 @@
     "@theme-ui/components": "^0.3.1",
     "@theme-ui/match-media": "^0.3.1",
     "deepmerge": "^4.2.2",
+    "dompurify": "^2.0.15",
     "downloadjs": "^1.4.7",
     "font-awesome": "^4.7.0",
     "history": "^4.10.1",

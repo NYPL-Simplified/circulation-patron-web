@@ -8,12 +8,17 @@ import Error from "components/Error";
 import makeTheme from "../theme";
 import { AppProps } from "dataflow/withAppProps";
 import Layout from "./Layout";
+import { useRouter } from "next/router";
+import { PageLoader } from "components/LoadingIndicator";
 
 const Page: React.FC<AppProps> = props => {
+  // render a loader
+  const { isFallback } = useRouter();
+  if (isFallback) return <PageLoader />;
+
   /**
    * If there was no library or initialState provided, render the error page
    */
-
   if (props.error || !props.library) {
     return (
       <Error

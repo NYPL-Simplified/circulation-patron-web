@@ -22,7 +22,7 @@ const Search: React.FC<SearchProps> = ({ className, ...props }) => {
   const { searchDescriptionUrl } = useLibraryContext();
 
   // fetch the search description
-  const { data } = useSWR(searchDescriptionUrl);
+  // const { data } = useSWR(searchDescriptionUrl);
 
   // show no searchbar if we cannot perform a search
   if (!searchDescriptionUrl) return null;
@@ -31,10 +31,10 @@ const Search: React.FC<SearchProps> = ({ className, ...props }) => {
   const onSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const searchTerms = encodeURIComponent(value);
-    const url = data.template(searchTerms);
-    if (!url) return;
-    const link = linkUtils.buildCollectionLink(url);
-    Router.push(link.href, link.as);
+    // const url = data.template(searchTerms);
+    // if (!url) return;
+    // const link = linkUtils.buildCollectionLink(url);
+    // Router.push(link.href, link.as);
   };
 
   return (
@@ -48,7 +48,7 @@ const Search: React.FC<SearchProps> = ({ className, ...props }) => {
         id="search-bar"
         type="search"
         name="search"
-        title={data.shortName}
+        // title={data.shortName}
         placeholder="Enter an author, keyword, etc..."
         aria-label="Enter search keyword or keywords"
         value={value}

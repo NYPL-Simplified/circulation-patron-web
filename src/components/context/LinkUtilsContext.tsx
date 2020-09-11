@@ -37,14 +37,14 @@ export const LinkUtilsProvider: React.FC<{
     }
     return buildMultiLibraryLink({
       href: "/collection/[collectionUrl]",
-      as: `/collection/${collectionUrl}`
+      as: `/collection/${encodeUrlParameter(collectionUrl)}`
     });
   };
 
   const buildBookLink: LinkBuilder = (bookUrl: string) => {
     return buildMultiLibraryLink({
       href: "/book/[bookUrl]",
-      as: `/book/${bookUrl}`
+      as: `/book/${encodeUrlParameter(bookUrl)}`
     });
   };
 
@@ -67,4 +67,8 @@ export default function useLinkUtils() {
     throw new Error("useLinkUtils must be used within a LinkUtilsProvider");
   }
   return context;
+}
+
+function encodeUrlParameter(url: string) {
+  return encodeURIComponent(url);
 }

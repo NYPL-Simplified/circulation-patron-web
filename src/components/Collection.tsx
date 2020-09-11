@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
  *  - fetch loans and normalize with loan data
  */
 export const Collection: React.FC<{
-  collection: CollectionData;
+  collection?: CollectionData;
   title?: string;
 }> = ({ collection, title }) => {
   // const collectionData = useNormalizedCollection();
@@ -27,7 +27,7 @@ export const Collection: React.FC<{
   const hasLanes = collection?.lanes && collection.lanes.length > 0;
   const hasBooks = collection?.books && collection.books.length > 0;
 
-  const pageTitle = title ?? `Collection: ${collection.title ?? ""}`;
+  const pageTitle = title ?? `Collection: ${collection?.title ?? ""}`;
 
   return (
     <div
@@ -46,9 +46,9 @@ export const Collection: React.FC<{
       {isFetching ? (
         <PageLoader />
       ) : hasLanes ? (
-        <LanesView lanes={collection.lanes ?? []} />
+        <LanesView lanes={collection?.lanes ?? []} />
       ) : hasBooks ? (
-        <ListView books={collection.books} />
+        <ListView books={collection?.books ?? []} />
       ) : (
         <div
           sx={{
