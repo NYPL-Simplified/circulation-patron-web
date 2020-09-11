@@ -2,9 +2,8 @@ import * as React from "react";
 import { render, fixtures, actions } from "test-utils";
 import merge from "deepmerge";
 import { BookListItem } from "components/BookList";
-import { State } from "opds-web-client/lib/state";
 import userEvent from "@testing-library/user-event";
-import { FetchErrorData } from "opds-web-client/lib/interfaces";
+import { FetchErrorData } from "interfaces";
 
 function expectViewDetails(utils: ReturnType<typeof render>) {
   const button = utils.getByRole("link", { name: "View Book Details" });

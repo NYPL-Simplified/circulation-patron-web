@@ -1,4 +1,4 @@
-import { BookData } from "opds-web-client/lib/interfaces";
+import { BookData } from "interfaces";
 import { getFulfillmentState, queueString, bookIsAudiobook } from "utils/book";
 import { book as bookFixture } from "../../test-utils/fixtures/book";
 import { getAuthors } from "../book";

@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { NavigateContext } from "opds-web-client/lib/interfaces";
 import { LibraryData } from "../interfaces";
 import Search from "./Search";
 import Button, { NavButton, AnchorButton } from "./Button";
@@ -13,10 +12,6 @@ import Stack from "./Stack";
 import SignOut from "./SignOut";
 import useUser from "hooks/useUser";
 import useAuthFormContext from "auth/AuthFormCotext";
-
-export interface HeaderContext extends NavigateContext {
-  library: LibraryData;
-}
 
 /**
  * will get the data it needs directly from context/

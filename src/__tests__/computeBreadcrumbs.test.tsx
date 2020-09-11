@@ -1,5 +1,5 @@
 import computeBreadcrumbs from "../computeBreadcrumbs";
-import { LinkData } from "opds-web-client/lib/interfaces";
+import { LinkData } from "interfaces";
 
 describe("computeBreadcrumbs", () => {
   const collection = {

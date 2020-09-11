@@ -5,7 +5,7 @@ import {
   BookData,
   LaneData,
   RequiredKeys
-} from "opds-web-client/lib/interfaces";
+} from "interfaces";
 import { truncateString, stripHTML } from "../utils/string";
 import {
   getAuthors,

@@ -9,6 +9,7 @@ import getConfigFile from "./getConfigFile";
 import ApplicationError, { PageNotFoundError, AppSetupError } from "errors";
 import { CatalogEntry } from "types/opds2";
 import { flattenSamlMethod } from "utils/auth";
+import { findSearchLink } from "dataflow/opds1/parse";
 
 /**
  * Fetches an OPDSFeed with a given catalogUrl. Parses it into an OPDSFeed and
@@ -186,6 +187,7 @@ export function buildLibraryData(
   const libraryLinks = parseLinks(authDoc.links);
   const authMethods = flattenSamlMethod(authDoc);
   const shelfUrl = getShelfUrl(catalog);
+  const searchDescriptionUrl = findSearchLink(catalog)?.href ?? null;
   return {
     slug: librarySlug ?? null,
     catalogUrl,
@@ -201,7 +203,8 @@ export function buildLibraryData(
         : null,
     headerLinks,
     libraryLinks,
-    authMethods
+    authMethods,
+    searchDescriptionUrl
   };
 }
 

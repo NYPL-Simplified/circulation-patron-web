@@ -3,15 +3,12 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import BookCover from "../BookCover";
 import Recommendations from "./Recommendations";
-import { BookData, FetchErrorData } from "opds-web-client/lib/interfaces";
 import { PageLoader } from "../LoadingIndicator";
 import FulfillmentCard from "./FulfillmentCard";
 import BreadcrumbBar from "../BreadcrumbBar";
 import { truncateString } from "../../utils/string";
-import useNormalizedBook from "../../hooks/useNormalizedBook";
 import DetailField from "../BookMetaDetail";
 import ReportProblem from "./ReportProblem";
-import useTypedSelector from "../../hooks/useTypedSelector";
 import { NavButton } from "../Button";
 import Head from "next/head";
 import { H1, H2, H3, Text } from "components/Text";
@@ -21,17 +18,12 @@ import IosBadge from "components/storeBadges/IosBadge";
 import GooglePlayBadge from "components/storeBadges/GooglePlayBadge";
 
 import { NEXT_PUBLIC_COMPANION_APP } from "../../utils/env";
+import { BookData, FetchErrorData } from "interfaces";
 
 export const BookDetails: React.FC<{
   book?: BookData;
 }> = ({ book }) => {
   // const book = useNormalizedBook();
-
-  const error = useTypedSelector(state => state.book.error);
-
-  if (error) {
-    return <Error error={error} />;
-  }
 
   if (!book) return <PageLoader />;
   return (

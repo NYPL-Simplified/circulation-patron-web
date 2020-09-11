@@ -2,8 +2,7 @@ import * as React from "react";
 import { render, fixtures } from "../../test-utils";
 import BreadcrumbBar from "../BreadcrumbBar";
 import merge from "deepmerge";
-import { State } from "opds-web-client/lib/state";
-import { CollectionData } from "opds-web-client/lib/interfaces";
+import { CollectionData } from "interfaces";
 import computeBreadcrumbs from "../../computeBreadcrumbs";
 
 const collectionData: CollectionData = {

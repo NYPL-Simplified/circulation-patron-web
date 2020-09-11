@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 
-import { BookData, FulfillmentLink } from "opds-web-client/lib/interfaces";
+import { BookData, FulfillmentLink } from "interfaces";
 import useBorrow from "hooks/useBorrow";
 import Button from "./Button";
 import { Text } from "./Text";

@@ -10,7 +10,7 @@ import {
   stripUndefined
 } from "dataflow/opds1/fetch";
 import { entryToBook } from "dataflow/opds1/parse";
-import { BookData } from "opds-web-client/lib/interfaces";
+import { BookData } from "interfaces";
 
 type PageProps = {
   book?: BookData;

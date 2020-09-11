@@ -1,14 +1,36 @@
-import useTypedSelector from "./useTypedSelector";
-import { collectionDataWithLoans } from "opds-web-client/lib/utils";
+import useUser from "hooks/useUser";
+import { BookData, CollectionData } from "interfaces";
 
 /**
  * A hook to give you the book state that has been updated with
  * loan data if any exists
  */
+export default function useNormalizedCollection(collection: CollectionData) {
+  const { loans } = useUser();
 
-export default function useNormalizedCollection() {
-  const collectionData = useTypedSelector(state => state.collection.data);
-  const loans = useTypedSelector(state => state.loans.books);
+  return {
+    ...collection,
+    books: collection.books.map(book => loanedBookData(book, loans))
+  };
+}
 
-  return collectionDataWithLoans(collectionData, loans);
+export function loanedBookData(
+  book: BookData,
+  loans: BookData[] | undefined,
+  bookUrl?: string
+): BookData {
+  if (!loans || loans.length === 0) {
+    return book;
+  }
+
+  const loan = loans.find(loanedBook => {
+    if (book) {
+      return loanedBook.id === book.id;
+    } else if (bookUrl) {
+      return loanedBook.url === bookUrl;
+    } else {
+      return false;
+    }
+  });
+  return loan || book;
 }

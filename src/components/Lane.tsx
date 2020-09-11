@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { LaneData, BookData } from "opds-web-client/lib/interfaces";
+import { LaneData, BookData } from "interfaces";
 import { Tabbable } from "reakit/Tabbable";
 import Book, { BOOK_HEIGHT } from "./BookCard";
 import { withErrorBoundary } from "./ErrorBoundary";

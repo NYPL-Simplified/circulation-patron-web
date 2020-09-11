@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useTypedSelector from "../hooks/useTypedSelector";
 import FormLabel from "./form/FormLabel";
 import Router from "next/router";
 import useLinkUtils from "./context/LinkUtilsContext";
 import Select from "./Select";
+import { CollectionData } from "interfaces";
 
 /**
  * This filter depends on the "Formats" facetGroup, which should have
@@ -15,15 +15,13 @@ import Select from "./Select";
  * It can optionally have an additional "All" facet. Note that the facet
  * labels must match the spelling and capitalization exactly.
  */
-const FormatFilter: React.FC = () => {
+const FormatFilter: React.FC<{ collection?: CollectionData }> = ({
+  collection
+}) => {
   const { buildCollectionLink } = useLinkUtils();
-  const isCollectionLoaded = useTypedSelector(
-    state => !!state.collection.data && !state.collection.isFetching
-  );
-  const formatFacetGroup = useTypedSelector(state =>
-    state.collection.data?.facetGroups?.find(
-      facetGroup => facetGroup.label === "Formats"
-    )
+  const isCollectionLoaded = !!collection;
+  const formatFacetGroup = collection?.facetGroups?.find(
+    facetGroup => facetGroup.label === "Formats"
   );
 
   const ebookFacet = formatFacetGroup?.facets.find(

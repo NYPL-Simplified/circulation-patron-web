@@ -7,16 +7,18 @@ import {
   getCredentials,
   setAuthCredentials
 } from "auth/credentials";
-import { CollectionData } from "opds-web-client/lib/interfaces";
+import { BookData, CollectionData } from "interfaces";
 import { AppAuthMethod } from "interfaces";
 
 type UserState = {
   loans: CollectionData["books"] | undefined;
   isValidating: boolean;
   isAuthenticated: boolean;
-  mutate: () => void;
+  refetch: () => void;
   signIn: (token: string, method: AppAuthMethod) => void;
   signOut: () => void;
+  // manually sets a book in the loans. For use after borrowing.
+  setBook: (book: BookData) => void;
 };
 
 /**
@@ -52,23 +54,37 @@ export default function useUser(): UserState {
 
   const isValidating = isAuthenticated && !data;
 
-  const signIn = (token: string, method: AppAuthMethod) => {
+  function signIn(token: string, method: AppAuthMethod) {
     setAuthCredentials(slug, { token, methodType: method.type });
     // this will invalidate the cash, causing a re-fetch with the
     // new token
     mutate();
-  };
-  const signOut = () => {
+  }
+  function signOut() {
     clearCredentials(slug);
     mutate();
-  };
+  }
+
+  function setBook(book: BookData) {
+    if (data) {
+      const newLoans: CollectionData = {
+        ...data,
+        books: [...data?.books, book]
+      };
+      mutate(newLoans, false);
+    } else {
+      // otherwise just refetch loans
+      mutate();
+    }
+  }
 
   return {
     isAuthenticated,
     loans: isAuthenticated ? data?.books ?? [] : undefined,
     isValidating,
-    mutate,
+    refetch: mutate,
     signIn,
-    signOut
+    signOut,
+    setBook
   };
 }

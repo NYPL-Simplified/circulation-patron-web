@@ -4,7 +4,7 @@ import * as React from "react";
 import Modal from "../Modal";
 import useComplaints from "../../hooks/useComplaints";
 import { DialogDisclosure } from "reakit";
-import { BookData } from "opds-web-client/lib/interfaces";
+import { BookData } from "interfaces";
 import { TextArea } from "../TextInput";
 import { useForm } from "react-hook-form";
 import Button from "../Button";

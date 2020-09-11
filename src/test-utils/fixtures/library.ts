@@ -23,7 +23,8 @@ export const libraryData: LibraryData = {
   ],
   libraryLinks: {},
   shelfUrl: "/shelf-url",
-  authMethods: []
+  authMethods: [],
+  searchDescriptionUrl: "/search-description-url"
 };
 
 export default libraryData;

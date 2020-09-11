@@ -20,9 +20,9 @@ import {
   FacetGroupData,
   SearchData,
   FulfillmentLink,
-  MediaType,
-  BookAvailability
-} from "opds-web-client/lib/interfaces";
+  BookAvailability,
+  OPDS1
+} from "interfaces";
 
 /**
  * Parses OPDS 1.x Feed or Entry into a Collection or Book
@@ -47,6 +47,9 @@ function isArtworkLink(link: OPDSLink): link is OPDSArtworkLink {
 function isCollectionLink(link: OPDSLink): link is OPDSCollectionLink {
   return link instanceof OPDSCollectionLink;
 }
+function isSearchLink(link: OPDSLink): link is SearchLink {
+  return link instanceof SearchLink;
+}
 function isDefined<T>(value: T | undefined): value is T {
   return typeof value !== "undefined";
 }
@@ -66,7 +69,7 @@ function buildFulfillmentLink(feedUrl: string) {
     if (!indirectType) return;
     return {
       url: resolve(feedUrl, link.href),
-      type: link.type as MediaType,
+      type: link.type as OPDS1.AnyMediaType,
       indirectType
     };
   };
@@ -142,7 +145,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
     .map(link => {
       return {
         url: resolve(feedUrl, link.href),
-        type: link.type as MediaType
+        type: link.type as OPDS1.AnyMediaType
       };
     });
 
@@ -410,4 +413,8 @@ export function feedToCollection(
     shelfUrl,
     links: filteredLinks
   };
+}
+
+export function findSearchLink(feed: OPDSFeed) {
+  return feed.links.find(isSearchLink);
 }

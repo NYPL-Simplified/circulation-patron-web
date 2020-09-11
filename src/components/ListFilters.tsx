@@ -1,30 +1,34 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useTypedSelector from "../hooks/useTypedSelector";
 import Select, { Label } from "./Select";
 import Router from "next/router";
 import useLinkUtils from "./context/LinkUtilsContext";
+import { CollectionData } from "interfaces";
 
 /**
  * This filter depends on the "Sort by" and "Availability" facet groups.
  * They must be named exactly that in the CM in order to show up here.
  */
-const ListFilters: React.FC = () => {
+const ListFilters: React.FC<{ collection: CollectionData }> = ({
+  collection
+}) => {
   return (
     <div sx={{ display: "flex", alignItems: "center" }}>
-      <FacetSelector facetLabel="Sort by" />
-      <FacetSelector facetLabel="Availability" />
+      <FacetSelector facetLabel="Sort by" collection={collection} />
+      <FacetSelector facetLabel="Availability" collection={collection} />
     </div>
   );
 };
 
-const FacetSelector: React.FC<{ facetLabel: string }> = ({ facetLabel }) => {
-  const facetGroup = useTypedSelector(state =>
-    state.collection.data?.facetGroups?.find(
-      facetGroup => facetGroup.label === facetLabel
-    )
+const FacetSelector: React.FC<{
+  facetLabel: string;
+  collection: CollectionData;
+}> = ({ facetLabel, collection }) => {
+  const facetGroup = collection.facetGroups?.find(
+    facetGroup => facetGroup.label === facetLabel
   );
+
   const linkUtils = useLinkUtils();
   if (!facetGroup) return null;
 

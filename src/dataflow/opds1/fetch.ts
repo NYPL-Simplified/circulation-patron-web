@@ -1,6 +1,6 @@
 import OPDSParser, { OPDSFeed, OPDSEntry } from "opds-feed-parser";
 import ApplicationError from "errors";
-import { CollectionData } from "opds-web-client/lib/interfaces";
+import { CollectionData } from "interfaces";
 import { feedToCollection } from "dataflow/opds1/parse";
 
 const parser = new OPDSParser();

@@ -1,19 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData } from "opds-web-client/lib/interfaces";
-import useRecommendationsState from "../context/RecommendationsContext";
+import { BookData } from "interfaces";
 import LoadingIndicator from "../LoadingIndicator";
 import { H3, H2 } from "components/Text";
 import Lane from "components/Lane";
 
 const Recommendations: React.FC<{ book: BookData }> = ({ book }) => {
   const relatedUrl = getRelatedUrl(book);
-  const {
-    recommendationsState,
-    recommendationsDispatch,
-    recommendationsActions
-  } = useRecommendationsState();
 
   // fetch the collection
   React.useEffect(() => {

@@ -1,14 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useTypedSelector from "../hooks/useTypedSelector";
 import { PageLoader } from "../components/LoadingIndicator";
 import { ListView, LanesView } from "./BookList";
 import Head from "next/head";
 import PageTitle from "./PageTitle";
 import { Text } from "./Text";
 import BreadcrumbBar from "./BreadcrumbBar";
-import { CollectionData } from "opds-web-client/lib/interfaces";
+import { CollectionData } from "interfaces";
+import { useRouter } from "next/router";
 
 /**
  * To Do:
@@ -21,8 +21,8 @@ export const Collection: React.FC<{
   collection: CollectionData;
   title?: string;
 }> = ({ collection, title }) => {
-  const isFetching = useTypedSelector(state => state.collection.isFetching);
   // const collectionData = useNormalizedCollection();
+  const isFetching = useRouter().isFallback;
 
   const hasLanes = collection?.lanes && collection.lanes.length > 0;
   const hasBooks = collection?.books && collection.books.length > 0;

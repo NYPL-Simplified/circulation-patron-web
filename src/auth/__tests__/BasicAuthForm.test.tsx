@@ -2,11 +2,8 @@ import * as React from "react";
 import { render, fixtures, actions, waitFor } from "../../../test-utils";
 import merge from "deepmerge";
 import BasicAuthForm from "auth/BasicAuthForm";
-import { AuthProvider, BasicAuthMethod } from "opds-web-client/lib/interfaces";
-import { AuthState } from "opds-web-client/lib/reducers/auth";
-import { State } from "opds-web-client/lib/state";
+import { AuthProvider, BasicAuthMethod } from "interfaces";
 import userEvent from "@testing-library/user-event";
-import * as authDep from "opds-web-client/lib/utils/auth";
 
 const provider: AuthProvider<BasicAuthMethod> = {
   id: "provider-id",

@@ -3,10 +3,8 @@ import { render, fixtures, actions, waitFor, fetcher } from "../../test-utils";
 
 import merge from "deepmerge";
 import Auth from "../../auth/AuthForm";
-import { State } from "opds-web-client/lib/state";
-import { AuthState } from "opds-web-client/lib/reducers/auth";
 import fetchMock from "fetch-mock-jest";
-import { AuthCredentials } from "opds-web-client/lib/interfaces";
+import { AuthCredentials } from "interfaces";
 import userEvent from "@testing-library/user-event";
 
 const stateWithAuth: State = merge<State>(fixtures.initialState, {

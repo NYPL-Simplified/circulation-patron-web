@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render, fixtures, actions, waitFor } from "../../../test-utils";
-import { CollectionData } from "opds-web-client/lib/interfaces";
+import { CollectionData } from "interfaces";
 import { RecommendationsStateContext } from "../../context/RecommendationsContext";
 import Recommendations from "../Recommendations";
 import { RecommendationsState } from "../../../interfaces";

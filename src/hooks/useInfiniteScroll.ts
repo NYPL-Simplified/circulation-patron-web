@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import useTypedSelector from "./useTypedSelector";
 
 const useInfiniteScroll = () => {

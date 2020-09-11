@@ -1,9 +1,8 @@
 import * as React from "react";
 import { render, fixtures } from "../../test-utils";
 import merge from "deepmerge";
-import { FacetGroupData, CollectionData } from "opds-web-client/lib/interfaces";
+import { FacetGroupData, CollectionData } from "interfaces";
 import PageTitle from "components/PageTitle";
-import { State } from "opds-web-client/lib/state";
 import userEvent from "@testing-library/user-event";
 import { mockPush } from "test-utils/mockNextRouter";
 

@@ -1,14 +1,8 @@
 import * as React from "react";
-import {
-  BookData,
-  FetchErrorData,
-  BookMedium,
-  MediaLink
-} from "opds-web-client/lib/interfaces";
+import { BookData, FetchErrorData, BookMedium, MediaLink } from "interfaces";
 import { BookFulfillmentState } from "interfaces";
 
 import { Book, Headset } from "../icons";
-import { getMedium } from "opds-web-client/lib/utils/book";
 
 export function getAuthors(book: BookData, lim?: number): string[] {
   // select contributors if the authors array is undefined or empty.
@@ -142,3 +136,13 @@ export const bookMediumMap: {
   "http://schema.org/EBook": { name: "eBook", icon: Book },
   "http://schema.org/Book": { name: "Book", icon: Book }
 };
+
+export function getMedium(book: BookData): BookMedium | "" {
+  if (!book.raw || !book.raw["$"] || !book.raw["$"]["schema:additionalType"]) {
+    return "";
+  }
+
+  return book.raw["$"]["schema:additionalType"].value
+    ? book.raw["$"]["schema:additionalType"].value
+    : "";
+}

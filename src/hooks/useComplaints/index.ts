@@ -2,8 +2,8 @@ import * as React from "react";
 import complaints, { initState } from "./reducer";
 import { fetchComplaintTypes, postComplaint } from "./actions";
 import { useDialogState } from "reakit";
-import { BookData } from "opds-web-client/lib/interfaces";
-import { getReportUrl } from "../../utils/libraryLinks";
+import { BookData } from "interfaces";
+import { getReportUrl } from "utils/libraryLinks";
 /**
  * We are using react useReducer instead of redux. The only real difference
  * here is that instead of using redux-thunk, we import the thunk actions

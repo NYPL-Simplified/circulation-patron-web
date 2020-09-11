@@ -1,23 +1,20 @@
 import * as React from "react";
-import useTypedSelector from "./useTypedSelector";
-import { getErrorMsg } from "utils/book";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
-import { BookData, FulfillmentLink } from "opds-web-client/lib/interfaces";
+import { BookData, FulfillmentLink } from "interfaces";
+import useUser from "hooks/useUser";
+import { fetchEntry } from "dataflow/opds1/fetch";
+import { entryToBook } from "dataflow/opds1/parse";
+import useLibraryContext from "components/context/LibraryContext";
 
 export default function useBorrow(
   book: BookData,
   isBorrow: boolean,
   borrowLink: FulfillmentLink
 ) {
+  const { catalogUrl } = useLibraryContext();
   const isUnmounted = React.useRef(false);
   const [isLoading, setLoading] = React.useState(false);
-  const bookError = useTypedSelector(state => state.book?.error);
-  const errorStr = getErrorMsg(bookError);
-  const errorMsg =
-    book.url && bookError && bookError.url.startsWith(book.url)
-      ? errorStr
-      : undefined;
-  const { actions, dispatch } = useActions();
+  const { setBook } = useUser();
+
   const loadingText = isBorrow ? "Borrowing..." : "Reserving...";
   const buttonLabel = isBorrow
     ? borrowLink.indirectType ===
@@ -26,11 +23,13 @@ export default function useBorrow(
       : "Borrow to read on a mobile device"
     : "Reserve";
 
-  const borrowOrReserve = async (url: string) => {
+  async function borrowOrReserve(url: string) {
     setLoading(true);
-    await dispatch(actions.updateBook(url));
+    const book = await borrowRequest(url, catalogUrl);
+    // set the book manually in loans
+    setBook(book);
     if (!isUnmounted.current) setLoading(false);
-  };
+  }
 
   React.useEffect(
     () => () => {
@@ -43,7 +42,15 @@ export default function useBorrow(
     isLoading,
     loadingText,
     buttonLabel,
-    borrowOrReserve,
-    errorMsg
+    borrowOrReserve
   };
+}
+
+async function borrowRequest(
+  url: string,
+  catalogUrl: string
+): Promise<BookData> {
+  const entry = await fetchEntry(url);
+  const book = entryToBook(entry, catalogUrl);
+  return book;
 }

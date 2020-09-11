@@ -1,7 +1,6 @@
 import { OPDS1, AppAuthMethod, ClientSamlMethod } from "interfaces";
 import { OPDSFeed } from "opds-feed-parser";
 import ApplicationError from "errors";
-import { ServerAuthMethod } from "types/opds1";
 
 /**
  * Extracts an array of auth providers from the authentication document
@@ -9,7 +8,7 @@ import { ServerAuthMethod } from "types/opds1";
 export function flattenSamlMethod(
   authDoc: OPDS1.AuthDocument
 ): AppAuthMethod[] {
-  return authDoc.authentication.reduce((flattened, method) => {
+  return authDoc.authentication.reduce<AppAuthMethod[]>((flattened, method) => {
     if (isServerSamlMethod(method)) {
       return [...flattened, ...serverToClientSamlMethods(method)];
     }
@@ -19,7 +18,7 @@ export function flattenSamlMethod(
 
 export const isServerSamlMethod = (
   method: OPDS1.ServerAuthMethod
-): method is ServerAuthMethod =>
+): method is OPDS1.ServerSamlMethod =>
   method.type === OPDS1.SamlAuthType && "links" in method;
 
 function serverToClientSamlMethods(

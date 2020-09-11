@@ -3,7 +3,7 @@ import Collection from "components/Collection";
 import { GetStaticPaths, NextPage } from "next";
 import Page from "components/Page";
 import { AppProps } from "dataflow/withAppProps";
-import { CollectionData } from "opds-web-client/lib/interfaces";
+import { CollectionData } from "interfaces";
 import { useRouter } from "next/router";
 import getStaticCollection from "dataflow/getStaticCollection";
 

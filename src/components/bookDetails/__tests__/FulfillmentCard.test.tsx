@@ -1,22 +1,15 @@
 import * as React from "react";
-import {
-  render,
-  fixtures,
-  actions,
-  waitForElementToBeRemoved
-} from "test-utils";
+import { render, fixtures, waitForElementToBeRemoved } from "test-utils";
 import { mergeBook } from "test-utils/fixtures";
 import merge from "deepmerge";
 import FulfillmentCard from "../FulfillmentCard";
-import { FetchErrorData } from "opds-web-client/lib/interfaces";
+import { FetchErrorData } from "interfaces";
 import userEvent from "@testing-library/user-event";
-import { State } from "opds-web-client/lib/state";
 import * as useBorrow from "hooks/useBorrow";
-import _download from "opds-web-client/lib/components/download";
 
 import * as env from "../../../utils/env";
 
-jest.mock("opds-web-client/lib/components/download");
+jest.mock("downloadjs");
 window.open = jest.fn();
 
 const loadingBorrowState = {

@@ -133,7 +133,7 @@ export interface AuthDocument {
   // used to display text prompt to authenticating user
   description?: string;
   links?: AuthDocumentLink[];
-  authentication: ServerSamlMethod[];
+  authentication: ServerAuthMethod[];
   announcements?: Announcement[];
   web_color_scheme?: {
     primary?: string;

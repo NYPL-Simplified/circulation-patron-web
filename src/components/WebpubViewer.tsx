@@ -1,29 +1,22 @@
-import { NEXT_PUBLIC_AXIS_NOW_DECRYPT } from "../utils/env";
-
+import { NEXT_PUBLIC_AXIS_NOW_DECRYPT } from "utils/env";
 import React from "react";
 import reader from "utils/reader";
 import { useRouter } from "next/router";
 import useLibraryContext from "./context/LibraryContext";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
-import DataFetcher from "opds-web-client/lib/DataFetcher";
 
 const initializeReader = async (
   entryUrl: string,
   catalogName: string,
-  useDecryptor: boolean,
-  fetcher: DataFetcher
+  useDecryptor: boolean
 ) => {
   if (useDecryptor) {
-    const loadDecryptor = async (
-      fetcher: DataFetcher,
-      webpubManifestUrl: any
-    ) => {
+    const loadDecryptor = async (webpubManifestUrl: any) => {
       const decryptorLocation =
         "../../axisnow-access-control-web/src/decryptor";
       const Decryptor = await import(decryptorLocation);
       if (Decryptor) {
         try {
-          const fulfillmentData = await fetcher.fetch(webpubManifestUrl);
+          const fulfillmentData = await fetch(webpubManifestUrl);
           const data = await fulfillmentData.json();
           //If a status thrown, there is an error
           if (data.status) {
@@ -36,7 +29,7 @@ const initializeReader = async (
       }
     };
 
-    const decryptorParams = await loadDecryptor(fetcher, entryUrl);
+    const decryptorParams = await loadDecryptor(entryUrl);
     return await reader(entryUrl, catalogName, decryptorParams);
   }
 
@@ -49,15 +42,9 @@ const BookPage = () => {
   const { bookUrl } = router.query;
 
   const { catalogName } = library;
-  const { fetcher } = useActions();
 
   React.useEffect(() => {
-    initializeReader(
-      `${bookUrl}`,
-      catalogName,
-      NEXT_PUBLIC_AXIS_NOW_DECRYPT,
-      fetcher
-    );
+    initializeReader(`${bookUrl}`, catalogName, NEXT_PUBLIC_AXIS_NOW_DECRYPT);
   });
 
   return (
