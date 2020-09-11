@@ -1,3 +1,4 @@
+import useLibraryContext from "components/context/LibraryContext";
 import * as React from "react";
 import encodeUrlParam from "utils/url";
 import { NextLinkConfig, LibraryData } from "../../interfaces";
@@ -17,6 +18,7 @@ const trailingSlashRegex = /\/$/;
 export const LinkUtilsProvider: React.FC<{
   library: LibraryData;
 }> = ({ library, children }) => {
+  const { catalogUrl } = useLibraryContext();
   const buildMultiLibraryLink: BuildMultiLibraryLink = ({ href, as }) => {
     if (library.slug) {
       return {
@@ -29,8 +31,11 @@ export const LinkUtilsProvider: React.FC<{
   };
 
   const buildCollectionLink: LinkBuilder = (collectionUrl: string) => {
-    // if there is no collection url, you should go home
-    if (!collectionUrl) {
+    // if there is no collection url, or it is the catalog root, go home
+    if (
+      !collectionUrl ||
+      collectionUrl.replace(trailingSlashRegex, "") === catalogUrl
+    ) {
       return buildMultiLibraryLink({
         href: "/",
         as: "/"
