@@ -1,8 +1,4 @@
-import {
-  createCollectionUrl,
-  fetchFeed,
-  stripUndefined
-} from "dataflow/opds1/fetch";
+import { fetchFeed, stripUndefined } from "dataflow/opds1/fetch";
 import { feedToCollection } from "dataflow/opds1/parse";
 import extractParam from "dataflow/utils";
 import withAppProps from "dataflow/withAppProps";
@@ -15,13 +11,11 @@ const getStaticCollection: GetStaticProps = withAppProps(
     // parse the data from XML to JS
     // return props
     const collectionUrl = extractParam(params, "collectionUrl");
-    const fullCollectionUrl = createCollectionUrl(
-      library.catalogUrl,
-      collectionUrl
-    );
-    console.log("Running getStaticProps with ", fullCollectionUrl);
-    const feed = await fetchFeed(fullCollectionUrl);
-    const collection = feedToCollection(feed, fullCollectionUrl);
+    // if there is no collection url, use the catalog root.
+    const url = collectionUrl ?? library.catalogUrl;
+    console.log("Running getStaticProps with ", url);
+    const feed = await fetchFeed(url);
+    const collection = feedToCollection(feed, url);
     const withoutUndefined = stripUndefined(collection);
     return {
       props: {

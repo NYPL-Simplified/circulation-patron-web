@@ -87,11 +87,11 @@ export function createCollectionUrl(
   catalogUrl: string,
   collectionUrl: string | undefined
 ): string {
-  return `${catalogUrl}/${collectionUrl ?? ""}`;
+  return `${collectionUrl ?? ""}`;
 }
 
 export function createBookUrl(catalogUrl: string, bookUrl: string) {
-  return `${catalogUrl}/${bookUrl}`;
+  return `${bookUrl}`;
 }
 
 export function stripUndefined(json: any) {

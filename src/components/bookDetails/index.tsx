@@ -1,17 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { SetCollectionAndBook } from "../../interfaces";
 import BookCover from "../BookCover";
 import Recommendations from "./Recommendations";
-import {
-  mapDispatchToProps,
-  mapStateToProps,
-  mergeRootProps
-} from "opds-web-client/lib/components/mergeRootProps";
 import { BookData, FetchErrorData } from "opds-web-client/lib/interfaces";
-import { connect } from "react-redux";
-import useSetCollectionAndBook from "../../hooks/useSetCollectionAndBook";
 import { PageLoader } from "../LoadingIndicator";
 import FulfillmentCard from "./FulfillmentCard";
 import BreadcrumbBar from "../BreadcrumbBar";
@@ -31,13 +23,9 @@ import GooglePlayBadge from "components/storeBadges/GooglePlayBadge";
 import { NEXT_PUBLIC_COMPANION_APP } from "../../utils/env";
 
 export const BookDetails: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
-}> = ({ setCollectionAndBook }) => {
-  // set the collection and book
-  console.log("Rendering");
-  useSetCollectionAndBook(setCollectionAndBook);
-
-  const book = useNormalizedBook();
+  book?: BookData;
+}> = ({ book }) => {
+  // const book = useNormalizedBook();
 
   const error = useTypedSelector(state => state.book.error);
 
@@ -189,12 +177,4 @@ const Error: React.FC<{ error: FetchErrorData }> = ({ error }) => {
   );
 };
 
-const Connected = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-)(BookDetails);
-
-// am doing this because typescript throws an error when trying to use
-// redux ConnectedComponent inside of Route
-export default Connected;
+export default BookDetails;
