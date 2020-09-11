@@ -30,8 +30,27 @@ export const BaseDocumentMediaType =
   "application/atom+xml;profile=opds-catalog;kind=acquisition";
 export const HTMLMediaType = "text/html";
 export const AuthDocMediaType = "application/opds-authentication+json";
+
+/**
+ * Book media types
+ */
+
+export const EpubMediaType = "application/epub+zip";
+export const KepubMediaType = "application/kepub+zip";
+export const PdfMediaType = "application/pdf";
+export const AdeptMediaType = "application/vnd.adobe.adept+xml";
+export const IncorrectAdeptMediaType = "vnd.adobe/adept+xml";
+export const MobiPocketMediaType = "application/x-mobipocket-ebook";
+export const Mobi8Mediatype = "application/x-mobi8-ebook";
+export const AudiobookMediaType = "application/audiobook+json";
 export const AtomMediaType =
   'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"';
+export const AtomXmlMediaType =
+  "application/atom+xml;type=entry;profile=opds-catalog";
+export const OverdriveAudiobookMediaType =
+  "application/vnd.overdrive.circulation.api+json;profile=audiobook";
+export const OverdriveEbookMediaType =
+  "application/vnd.overdrive.circulation.api+json;profile=ebook";
 export const AxisNowWebpubMediaType =
   "application/vnd.librarysimplified.axisnow+json";
 
@@ -39,23 +58,25 @@ export type ReadOnlineMediaType =
   | typeof AtomMediaType
   | typeof AxisNowWebpubMediaType;
 
+export type AnyBookMediaType =
+  | ReadOnlineMediaType
+  | typeof EpubMediaType
+  | typeof KepubMediaType
+  | typeof PdfMediaType
+  | typeof AdeptMediaType
+  | typeof IncorrectAdeptMediaType
+  | typeof MobiPocketMediaType
+  | typeof Mobi8Mediatype
+  | typeof AudiobookMediaType
+  | typeof AtomXmlMediaType
+  | typeof OverdriveAudiobookMediaType
+  | typeof OverdriveEbookMediaType;
+
 export type AnyMediaType =
+  | AnyBookMediaType
   | typeof HTMLMediaType
   | typeof BaseDocumentMediaType
-  | typeof AuthDocMediaType
-  | typeof AxisNowWebpubMediaType
-  | typeof AtomMediaType
-  | "application/epub+zip"
-  | "application/kepub+zip"
-  | "application/pdf"
-  | "application/vnd.adobe.adept+xml"
-  | "vnd.adobe/adept+xml"
-  | "application/x-mobipocket-ebook"
-  | "application/x-mobi8-ebook"
-  | "application/atom+xml;type=entry;profile=opds-catalog"
-  | "application/audiobook+json"
-  | "application/vnd.overdrive.circulation.api+json;profile=audiobook"
-  | "application/vnd.overdrive.circulation.api+json;profile=ebook";
+  | typeof AuthDocMediaType;
 
 export interface Link {
   href: string;

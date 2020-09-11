@@ -88,7 +88,7 @@ export interface LibraryData {
  */
 export interface MediaLink {
   url: string;
-  type: OPDS1.AnyMediaType;
+  type: OPDS1.AnyBookMediaType;
 }
 
 export interface FulfillmentLink extends MediaLink {

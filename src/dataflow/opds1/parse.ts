@@ -69,7 +69,7 @@ function buildFulfillmentLink(feedUrl: string) {
     if (!indirectType) return;
     return {
       url: resolve(feedUrl, link.href),
-      type: link.type as OPDS1.AnyMediaType,
+      type: link.type as OPDS1.AnyBookMediaType,
       indirectType
     };
   };
@@ -145,7 +145,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
     .map(link => {
       return {
         url: resolve(feedUrl, link.href),
-        type: link.type as OPDS1.AnyMediaType
+        type: link.type as OPDS1.AnyBookMediaType
       };
     });
 

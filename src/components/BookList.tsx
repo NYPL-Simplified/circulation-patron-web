@@ -1,11 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import {
-  BookData,
-  LaneData,
-  RequiredKeys
-} from "interfaces";
+import { BookData, LaneData, RequiredKeys } from "interfaces";
 import { truncateString, stripHTML } from "../utils/string";
 import {
   getAuthors,
@@ -15,7 +11,6 @@ import {
 import Lane from "./Lane";
 import Button, { NavButton } from "./Button";
 import LoadingIndicator from "./LoadingIndicator";
-import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import { H2, Text } from "./Text";
 import * as DS from "@nypl/design-system-react-components";
 import MediumIndicator from "components/MediumIndicator";

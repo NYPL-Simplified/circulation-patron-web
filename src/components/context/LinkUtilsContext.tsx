@@ -1,6 +1,5 @@
 import * as React from "react";
 import { NextLinkConfig, LibraryData } from "../../interfaces";
-import UrlShortener from "../../UrlShortener";
 
 type LinkBuilder = (url: string) => NextLinkConfig;
 type BuildMultiLibraryLink = (config: NextLinkConfig) => NextLinkConfig;
@@ -9,7 +8,6 @@ export type LinkUtils = {
   buildBookLink: LinkBuilder;
   buildCollectionLink: LinkBuilder;
   buildMultiLibraryLink: BuildMultiLibraryLink;
-  urlShortener: UrlShortener;
 };
 const LinkUtilsContext = React.createContext<LinkUtils | undefined>(undefined);
 
@@ -17,8 +15,7 @@ const trailingSlashRegex = /\/$/;
 
 export const LinkUtilsProvider: React.FC<{
   library: LibraryData;
-  urlShortener: UrlShortener;
-}> = ({ library, urlShortener, children }) => {
+}> = ({ library, children }) => {
   const buildMultiLibraryLink: BuildMultiLibraryLink = ({ href, as }) => {
     if (library.slug) {
       return {
@@ -31,11 +28,8 @@ export const LinkUtilsProvider: React.FC<{
   };
 
   const buildCollectionLink: LinkBuilder = (collectionUrl: string) => {
-    const preparedCollectionUrl = urlShortener.prepareCollectionUrl(
-      collectionUrl
-    );
     // if there is no prepared collection url, you should go home
-    if (!preparedCollectionUrl) {
+    if (!collectionUrl) {
       return buildMultiLibraryLink({
         href: "/",
         as: "/"
@@ -43,16 +37,14 @@ export const LinkUtilsProvider: React.FC<{
     }
     return buildMultiLibraryLink({
       href: "/collection/[collectionUrl]",
-      as: `/collection/${preparedCollectionUrl}`
+      as: `/collection/${collectionUrl}`
     });
   };
 
   const buildBookLink: LinkBuilder = (bookUrl: string) => {
-    const preparedBookUrl = urlShortener.prepareBookUrl(bookUrl);
-
     return buildMultiLibraryLink({
       href: "/book/[bookUrl]",
-      as: `/book/${preparedBookUrl}`
+      as: `/book/${bookUrl}`
     });
   };
 
@@ -61,8 +53,7 @@ export const LinkUtilsProvider: React.FC<{
       value={{
         buildMultiLibraryLink,
         buildBookLink,
-        buildCollectionLink,
-        urlShortener
+        buildCollectionLink
       }}
     >
       {children}

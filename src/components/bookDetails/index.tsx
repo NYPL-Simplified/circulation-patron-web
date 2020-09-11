@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import BookCover from "../BookCover";
-import Recommendations from "./Recommendations";
+// import Recommendations from "./Recommendations";
 import { PageLoader } from "../LoadingIndicator";
 import FulfillmentCard from "./FulfillmentCard";
 import BreadcrumbBar from "../BreadcrumbBar";
@@ -16,14 +16,14 @@ import MediumIndicator from "components/MediumIndicator";
 import SimplyELogo from "components/SimplyELogo";
 import IosBadge from "components/storeBadges/IosBadge";
 import GooglePlayBadge from "components/storeBadges/GooglePlayBadge";
-
 import { NEXT_PUBLIC_COMPANION_APP } from "../../utils/env";
 import { BookData, FetchErrorData } from "interfaces";
+import useNormalizedBook from "hooks/useNormalizedBook";
 
 export const BookDetails: React.FC<{
   book?: BookData;
-}> = ({ book }) => {
-  // const book = useNormalizedBook();
+}> = ({ book: rawBook }) => {
+  const book = useNormalizedBook(rawBook);
 
   if (!book) return <PageLoader />;
   return (
@@ -80,7 +80,7 @@ export const BookDetails: React.FC<{
           </div>
         </div>
       </div>
-      <Recommendations book={book} />
+      {/* <Recommendations book={book} /> */}
     </section>
   );
 };

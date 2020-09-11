@@ -297,7 +297,9 @@ const DownloadButton: React.FC<{
   link: MediaLink;
   title: string;
 }> = ({ link, title }) => {
-  const { fulfill, downloadLabel } = useDownloadButton(link, title);
+  const details = useDownloadButton(link, title);
+  if (!details) return null;
+  const { fulfill, downloadLabel } = details;
   return (
     <Button
       onClick={fulfill}

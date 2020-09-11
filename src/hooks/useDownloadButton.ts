@@ -1,10 +1,9 @@
 import { MediaLink, FulfillmentLink, OPDS1 } from "interfaces";
-import { generateFilename, typeMap } from "../utils/file";
-import download from "downloadjs";
+import { typeMap } from "utils/file";
 
 export function fixMimeType(
-  mimeType: OPDS1.AnyMediaType | "vnd.adobe/adept+xml"
-): OPDS1.AnyMediaType {
+  mimeType: OPDS1.AnyBookMediaType | "vnd.adobe/adept+xml"
+): OPDS1.AnyBookMediaType {
   return mimeType === "vnd.adobe/adept+xml"
     ? "application/vnd.adobe.adept+xml"
     : mimeType;
@@ -23,54 +22,41 @@ function isReadOnlineLink(
 type DownloadDetails = {
   fulfill: () => Promise<void>;
   downloadLabel: string;
-  mimeType: OPDS1.AnyMediaType;
+  mimeType: OPDS1.AnyBookMediaType;
   fileExtension: string;
   isReadOnline: boolean;
 };
-/**
- * We use typescript function overloads to show that if you pass in a link
- * you are guaranteed to get the download button details in an object. If
- * you might pass in undefined, you might get null
- */
-export default function useDownloadButton(
-  link: MediaLink | FulfillmentLink,
-  title: string
-): DownloadDetails;
+
 export default function useDownloadButton(
   link: MediaLink | FulfillmentLink | undefined,
   title: string
-): DownloadDetails | null;
-export default function useDownloadButton(
-  link: MediaLink | FulfillmentLink | undefined,
-  title: string
-) {
+): DownloadDetails | null {
   if (!link) {
+    console.warn("No download link for", title);
     return null;
   }
 
   const mimeTypeValue = fixMimeType(link.type);
 
-  // this ?? syntax is similar to x || y, except that it will only
-  // fall back if the predicate is undefined or null, not if it
-  // is falsy (false, 0, etc). Called nullish-coalescing
   const fileExtension = typeMap[mimeTypeValue]?.extension ?? "";
 
   const fulfill = async () => {
-    if (isReadOnlineLink(link)) {
-      const action = actions.indirectFulfillBook(link.url, link.indirectType);
-      const url = await dispatch(action);
-      window.open(url, "_blank");
-    } else {
-      // TODO: use mimeType variable once we fix the link type in our
-      // OPDS entries
-      const action = actions.fulfillBook(link.url);
-      const blob = await dispatch(action);
-      download(
-        blob,
-        generateFilename(title ?? "untitled", fileExtension),
-        mimeTypeValue
-      );
-    }
+    console.error("IMPLEMENT FULFILL BOOOK");
+    // if (isReadOnlineLink(link)) {
+    //   const action = actions.indirectFulfillBook(link.url, link.indirectType);
+    //   const url = await dispatch(action);
+    //   window.open(url, "_blank");
+    // } else {
+    //   // TODO: use mimeType variable once we fix the link type in our
+    //   // OPDS entries
+    //   const action = actions.fulfillBook(link.url);
+    //   const blob = await dispatch(action);
+    //   download(
+    //     blob,
+    //     generateFilename(title ?? "untitled", fileExtension),
+    //     mimeTypeValue
+    //   );
+    // }
   };
 
   const isReadOnline = isReadOnlineLink(link);
