@@ -34,7 +34,7 @@ export function makeBooks(
 
 export const book: BookData = {
   id: "urn:librarysimplified.org/terms/id/3M%20ID/crrmnr9",
-  url: "/test-book-url",
+  url: "http://test-book-url",
   title: "The Mayan Secrets",
   authors: ["Clive Cussler", "Thomas Perry"],
   contributors: ["contributor 1"],
