@@ -41,7 +41,7 @@ export const Collection: React.FC<{
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <BreadcrumbBar />
+      {/* <BreadcrumbBar /> */}
       <PageTitle>{pageTitle}</PageTitle>
       {isFetching ? (
         <PageLoader />

@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useBreadCrumbs from "../hooks/useBreadcrumbs";
 import Link from "./Link";
 import List, { ListItem } from "./List";
 

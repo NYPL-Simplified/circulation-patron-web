@@ -31,7 +31,7 @@ export const BookDetails: React.FC<{
       <Head>
         <title>{book.title}</title>
       </Head>
-      <BreadcrumbBar currentLocation={truncateString(book.title, 60, false)} />
+      {/* <BreadcrumbBar currentLocation={truncateString(book.title, 60, false)} /> */}
       <div sx={{ maxWidth: 1100, mx: "auto" }}>
         <div
           sx={{

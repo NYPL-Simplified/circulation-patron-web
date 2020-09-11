@@ -43,7 +43,7 @@ export const MyBooks: React.FC = () => {
         <title>My Books</title>
       </Head>
 
-      <BreadcrumbBar currentLocation="My Books" />
+      {/* <BreadcrumbBar currentLocation="My Books" /> */}
       <PageTitle>My Books</PageTitle>
       {noBooks && isValidating ? (
         <PageLoader />
