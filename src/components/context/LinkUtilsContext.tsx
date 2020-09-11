@@ -1,6 +1,6 @@
 import * as React from "react";
+import encodeUrlParam from "utils/url";
 import { NextLinkConfig, LibraryData } from "../../interfaces";
-import UrlShortener from "../../UrlShortener";
 
 type LinkBuilder = (url: string) => NextLinkConfig;
 type BuildMultiLibraryLink = (config: NextLinkConfig) => NextLinkConfig;
@@ -9,7 +9,6 @@ export type LinkUtils = {
   buildBookLink: LinkBuilder;
   buildCollectionLink: LinkBuilder;
   buildMultiLibraryLink: BuildMultiLibraryLink;
-  urlShortener: UrlShortener;
 };
 const LinkUtilsContext = React.createContext<LinkUtils | undefined>(undefined);
 
@@ -17,8 +16,7 @@ const trailingSlashRegex = /\/$/;
 
 export const LinkUtilsProvider: React.FC<{
   library: LibraryData;
-  urlShortener: UrlShortener;
-}> = ({ library, urlShortener, children }) => {
+}> = ({ library, children }) => {
   const buildMultiLibraryLink: BuildMultiLibraryLink = ({ href, as }) => {
     if (library.slug) {
       return {
@@ -31,11 +29,8 @@ export const LinkUtilsProvider: React.FC<{
   };
 
   const buildCollectionLink: LinkBuilder = (collectionUrl: string) => {
-    const preparedCollectionUrl = urlShortener.prepareCollectionUrl(
-      collectionUrl
-    );
-    // if there is no prepared collection url, you should go home
-    if (!preparedCollectionUrl) {
+    // if there is no collection url, you should go home
+    if (!collectionUrl) {
       return buildMultiLibraryLink({
         href: "/",
         as: "/"
@@ -43,16 +38,14 @@ export const LinkUtilsProvider: React.FC<{
     }
     return buildMultiLibraryLink({
       href: "/collection/[collectionUrl]",
-      as: `/collection/${preparedCollectionUrl}`
+      as: `/collection/${encodeUrlParam(collectionUrl)}`
     });
   };
 
   const buildBookLink: LinkBuilder = (bookUrl: string) => {
-    const preparedBookUrl = urlShortener.prepareBookUrl(bookUrl);
-
     return buildMultiLibraryLink({
       href: "/book/[bookUrl]",
-      as: `/book/${preparedBookUrl}`
+      as: `/book/${encodeUrlParam(bookUrl)}`
     });
   };
 
@@ -61,8 +54,7 @@ export const LinkUtilsProvider: React.FC<{
       value={{
         buildMultiLibraryLink,
         buildBookLink,
-        buildCollectionLink,
-        urlShortener
+        buildCollectionLink
       }}
     >
       {children}
