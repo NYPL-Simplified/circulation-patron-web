@@ -2,10 +2,9 @@ import * as React from "react";
 import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
 import Button from "components/Button";
 import { modalButtonStyles } from "components/Modal";
-import { AuthButtonProps } from "auth/authPlugins";
 import { OPDS1 } from "interfaces";
 
-const CleverButton: React.FC<AuthButtonProps<OPDS1.AuthMethod>> = ({
+const CleverButton: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
   method
 }) => {
   const { actions, dispatch } = useActions();

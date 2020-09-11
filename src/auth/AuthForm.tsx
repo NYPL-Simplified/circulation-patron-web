@@ -135,7 +135,7 @@ const SignInForm: React.FC<{
     case OPDS1.CleverAuthType:
       return <CleverButton method={method} />;
     default:
-      return null;
+      return <p>This authentication method is not supported.</p>;
   }
 };
 
@@ -146,13 +146,19 @@ const NoAuth: React.FC = () => {
 const Buttons: React.FC<{
   authMethods: AppAuthMethod[];
   handleChangeMethod: (type: string) => void;
-}> = ({ authMethods, handleChangeMethod: _ }) => {
+}> = ({ authMethods, handleChangeMethod }) => {
   return (
     <Stack direction="column">
       {authMethods.map(method => {
         switch (method.type) {
           case OPDS1.BasicAuthType:
-            return <BasicAuthButton method={method} key={method.type} />;
+            return (
+              <BasicAuthButton
+                method={method}
+                key={method.type}
+                onClick={handleChangeMethod}
+              />
+            );
           case OPDS1.SamlAuthType:
             return <SamlAuthButton method={method} key={method.type} />;
           case OPDS1.CleverAuthType:
