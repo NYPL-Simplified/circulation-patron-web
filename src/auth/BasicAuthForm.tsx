@@ -1,15 +1,12 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useTypedSelector from "hooks/useTypedSelector";
 import { useForm } from "react-hook-form";
 import Button from "components/Button";
 import FormInput from "components/form/FormInput";
 import { modalButtonStyles } from "components/Modal";
-import { AuthFormProps } from "auth/authPlugins";
 import { OPDS1 } from "interfaces";
-import { generateCredentials } from "opds-web-client/lib/utils/auth";
-import { generateToken, setAuthCredentials } from "auth/credentials";
+import { generateToken } from "auth/credentials";
 
 import useUser from "hooks/useUser";
 
@@ -20,7 +17,7 @@ type FormData = {
 /**
  * Auth form
  */
-const BasicAuthForm: React.FC<AuthFormProps<OPDS1.BasicAuthMethod>> = ({
+const BasicAuthForm: React.FC<{ method: OPDS1.BasicAuthMethod }> = ({
   method
 }) => {
   const { signIn } = useUser();

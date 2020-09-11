@@ -39,13 +39,16 @@ function isCatalogRootLink(link: OPDSLink): link is OPDSCatalogRootLink {
   return link instanceof OPDSCatalogRootLink;
 }
 function isAcquisitionLink(link: OPDSLink): link is OPDSAcquisitionLink {
-  return isInstanceOf(OPDSAcquisitionLink)(link);
+  return link instanceof OPDSAcquisitionLink;
+}
+function isArtworkLink(link: OPDSLink): link is OPDSArtworkLink {
+  return link instanceof OPDSArtworkLink;
+}
+function isCollectionLink(link: OPDSLink): link is OPDSCollectionLink {
+  return link instanceof OPDSCollectionLink;
 }
 function isDefined<T>(value: T | undefined): value is T {
   return typeof value !== "undefined";
-}
-function isInstanceOf<T extends Function>(someClass: T) {
-  return (value: any): value is T => value instanceof someClass;
 }
 
 /**
@@ -72,7 +75,7 @@ function buildFulfillmentLink(feedUrl: string) {
 /**
  * HTML Sanitizer
  */
-let sanitizeHtml;
+let sanitizeHtml: any;
 const createDOMPurify = require("dompurify");
 if (typeof window === "undefined") {
   // sanitization needs to work server-side,
@@ -105,7 +108,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
   });
 
   let imageUrl, imageThumbLink;
-  const artworkLinks = entry.links.filter(isInstanceOf(OPDSArtworkLink));
+  const artworkLinks = entry.links.filter(isArtworkLink);
   if (artworkLinks.length > 0) {
     imageThumbLink = artworkLinks.find(
       link => link.rel === "http://opds-spec.org/image/thumbnail"
@@ -258,7 +261,7 @@ function formatDate(inputDate: string): string {
 }
 
 function OPDSLinkToLinkData(
-  feedUrl,
+  feedUrl: string,
   link: OPDSLink | null = null
 ): LinkData | null {
   if (!link || !link.href) {
@@ -301,16 +304,14 @@ export function feedToCollection(
   feed.entries.forEach(entry => {
     if (feed instanceof AcquisitionFeed) {
       const book = entryToBook(entry, feedUrl);
-      const collectionLink: OPDSCollectionLink | undefined = entry.links.find(
-        isInstanceOf(OPDSCollectionLink)
-      );
+      const collectionLink = entry.links.find(isCollectionLink);
       if (collectionLink) {
         const { title, href } = collectionLink;
 
-        if (laneIndex[title]) {
-          laneIndex[title].books.push(book);
+        if (laneIndex[title as any]) {
+          laneIndex[title as any].books.push(book);
         } else {
-          laneIndex[title] = {
+          laneIndex[title as any] = {
             title,
             url: resolve(feedUrl, href),
             books: [book]

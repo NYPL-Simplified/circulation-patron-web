@@ -13,7 +13,7 @@ const LibraryHome: NextPage<AppProps & { collection: CollectionData }> = ({
   collection
 }) => {
   const { isFallback } = useRouter();
-  if (isFallback) return "loading...";
+  if (isFallback) return <div>loading...</div>;
   return (
     <Page library={library} error={error}>
       <Collection

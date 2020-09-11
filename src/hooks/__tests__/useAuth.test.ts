@@ -1,5 +1,3 @@
-import { getCredentials } from "../useAuth";
-import CleverAuthPlugin from "../../auth/cleverAuthPlugin";
 import { NextRouter } from "next/router";
 
 describe("getCredentials", () => {

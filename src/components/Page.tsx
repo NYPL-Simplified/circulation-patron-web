@@ -1,9 +1,5 @@
 import * as React from "react";
 import ContextProvider from "../components/context/ContextProvider";
-import { SHORTEN_URLS } from "../utils/env";
-import getPathFor from "../utils/getPathFor";
-import UrlShortener from "../UrlShortener";
-import getOrCreateStore from "../dataflow/getOrCreateStore";
 import { ThemeProvider } from "theme-ui";
 import Auth from "../auth/AuthForm";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -29,9 +25,6 @@ const Page: React.FC<AppProps> = props => {
   }
 
   const { library, children } = props;
-  const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
-  const pathFor = getPathFor(urlShortener, library.slug);
-  const store = getOrCreateStore(pathFor);
   const theme = makeTheme(library.colors);
 
   return (
@@ -40,7 +33,7 @@ const Page: React.FC<AppProps> = props => {
         {/* define the default title */}
         <title>{library.catalogName}</title>
       </Head>
-      <ContextProvider library={library} store={store}>
+      <ContextProvider library={library}>
         <ThemeProvider theme={theme}>
           <Auth>
             <Layout>{children}</Layout>

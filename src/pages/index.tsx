@@ -1,17 +1,36 @@
 import * as React from "react";
 import Collection from "components/Collection";
-import { NextPage, GetServerSideProps } from "next";
+import { GetStaticPaths, NextPage } from "next";
 import Page from "components/Page";
-import withAppProps, { AppProps } from "dataflow/withAppProps";
+import getStaticCollection from "dataflow/getStaticCollection";
+import { AppProps } from "dataflow/withAppProps";
 
-const CollectionPage: NextPage<AppProps> = ({ library, error }) => {
+type PageProps = {
+  collection: any;
+};
+
+const CollectionPage: NextPage<AppProps & PageProps> = ({
+  library,
+  error,
+  collection
+}) => {
   return (
     <Page library={library} error={error}>
-      <Collection title={`${library?.catalogName} Home`} />
+      <Collection
+        collection={collection}
+        title={`${library?.catalogName} Home`}
+      />
     </Page>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAppProps();
+export const getStaticProps = getStaticCollection;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true
+  };
+};
 
 export default CollectionPage;
