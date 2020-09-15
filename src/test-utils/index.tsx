@@ -1,7 +1,6 @@
 import * as React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { ThemeProvider } from "theme-ui";
 import ContextProvider from "../components/context/ContextProvider";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
@@ -18,7 +17,6 @@ import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
 import serializer from "jest-emotion";
 import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
-import makeTheme from "../theme";
 import { enableFetchMocks } from "jest-fetch-mock";
 import setEnv from "./setEnv";
 
@@ -68,23 +66,17 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
     .mockImplementation(origDispatch);
   store.dispatch = mockDispatch as typeof origDispatch;
 
-  const theme = makeTheme({
-    primary: "#337ab7",
-    secondary: "#d9534f"
-  });
   const AllTheProviders: React.FC = ({ children }) => {
     return (
       <MockNextRouterContextProvider router={options?.router}>
-        <ThemeProvider theme={theme}>
-          <ContextProvider
-            library={options?.library ?? library}
-            store={store}
-            fetcher={fetcher}
-            actions={actions}
-          >
-            {children}
-          </ContextProvider>
-        </ThemeProvider>
+        <ContextProvider
+          library={options?.library ?? library}
+          store={store}
+          fetcher={fetcher}
+          actions={actions}
+        >
+          {children}
+        </ContextProvider>
       </MockNextRouterContextProvider>
     );
   };

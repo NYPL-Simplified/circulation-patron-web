@@ -4,14 +4,13 @@ import { SHORTEN_URLS } from "../utils/env";
 import getPathFor from "../utils/getPathFor";
 import UrlShortener from "../UrlShortener";
 import getOrCreateStore from "../dataflow/getOrCreateStore";
-import { ThemeProvider } from "theme-ui";
 import Auth from "../components/Auth";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Head from "next/head";
 import Error from "components/Error";
-import makeTheme from "../theme";
 import { AppProps } from "dataflow/withAppProps";
-import Layout from "./Layout";
+
+/* Page without Header and Footer should wrap pages that should not have sitewide navigation */
 
 const Page: React.FC<AppProps> = props => {
   /**
@@ -32,7 +31,6 @@ const Page: React.FC<AppProps> = props => {
   const urlShortener = new UrlShortener(library.catalogUrl, SHORTEN_URLS);
   const pathFor = getPathFor(urlShortener, library.slug);
   const store = getOrCreateStore(pathFor);
-  const theme = makeTheme(library.colors);
 
   return (
     <ErrorBoundary fallback={AppErrorFallback}>
@@ -41,11 +39,7 @@ const Page: React.FC<AppProps> = props => {
         <title>{library.catalogName}</title>
       </Head>
       <ContextProvider library={library} store={store}>
-        <ThemeProvider theme={theme}>
-          <Auth>
-            <Layout>{children}</Layout>
-          </Auth>
-        </ThemeProvider>
+        <Auth>{children}</Auth>
       </ContextProvider>
     </ErrorBoundary>
   );

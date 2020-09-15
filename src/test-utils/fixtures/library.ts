@@ -9,8 +9,8 @@ export const libraryData: LibraryData = {
   catalogUrl: "http://test-cm.com/catalogUrl",
   catalogName: "XYZ Public Library",
   colors: {
-    primary: "#ffffff",
-    secondary: "#000000"
+    primary: "#337ab7",
+    secondary: "#d9534f"
   },
   headerLinks: [
     {

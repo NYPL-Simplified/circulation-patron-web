@@ -18,9 +18,11 @@ const initializeReader = async (
       fetcher: DataFetcher,
       webpubManifestUrl: any
     ) => {
-      const decryptorLocation =
-        "../../axisnow-access-control-web/src/decryptor";
-      const Decryptor = await import(decryptorLocation);
+      const Decryptor = await import(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        "../../axisnow-access-control-web/src/decryptor"
+      );
       if (Decryptor) {
         try {
           const fulfillmentData = await fetcher.fetch(webpubManifestUrl);

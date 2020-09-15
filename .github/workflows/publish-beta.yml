@@ -16,16 +16,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
+          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
+
+      - id: nvmrc
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+      - name: Use Node Version from nvmrc
+        uses: actions/setup-node@v1
+        with: { node-version: '${{ steps.nvmrc.outputs.NODE_VERSION }}' }
+
       - name: Get short SHA
         id: get_sha
         run: echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
+
       - name: Publish to Docker Hub
         id: publish_docker_hub
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: nypl/patron-web
           # tag the image with both beta and beta.short_sha
-          tags: beta, beta.${{ steps.get_sha.outputs.short_sha }}
+          tags: nypl/patron-web.beta, nypl/patron-web.beta.${{ steps.get_sha.outputs.short_sha }}
           add_git_labels: true

@@ -10,6 +10,8 @@ import { ActionsProvider } from "opds-web-client/lib/components/context/ActionsC
 import { Provider as ReakitProvider } from "reakit";
 import { State } from "opds-web-client/lib/state";
 import { Store } from "redux";
+import { ThemeProvider } from "theme-ui";
+import makeTheme from "../../theme";
 import DataFetcher from "opds-web-client/lib/DataFetcher";
 import ActionsCreator from "opds-web-client/lib/actions";
 import { adapter } from "opds-web-client/lib/OPDSDataAdapter";
@@ -49,33 +51,37 @@ const AppContextProvider: React.FC<ProviderProps> = ({
     [actions, computedFetcher]
   );
 
+  const theme = makeTheme(library.colors);
+
   return (
-    <ReakitProvider>
-      <RouterProvider>
-        <PathForProvider pathFor={pathFor}>
-          <OPDSStore
-            store={store}
-            authPlugins={[basicAuthPlugin, samlAuthPlugin, CleverAuthPlugin]}
-          >
-            <RecommendationsProvider>
-              <ActionsProvider
-                actions={computedActions}
-                fetcher={computedFetcher}
-              >
-                <LibraryProvider library={library}>
-                  <LinkUtilsProvider
-                    library={library}
-                    urlShortener={urlShortener}
-                  >
-                    {children}
-                  </LinkUtilsProvider>
-                </LibraryProvider>
-              </ActionsProvider>
-            </RecommendationsProvider>
-          </OPDSStore>
-        </PathForProvider>
-      </RouterProvider>
-    </ReakitProvider>
+    <ThemeProvider theme={theme}>
+      <ReakitProvider>
+        <RouterProvider>
+          <PathForProvider pathFor={pathFor}>
+            <OPDSStore
+              store={store}
+              authPlugins={[basicAuthPlugin, samlAuthPlugin, CleverAuthPlugin]}
+            >
+              <RecommendationsProvider>
+                <ActionsProvider
+                  actions={computedActions}
+                  fetcher={computedFetcher}
+                >
+                  <LibraryProvider library={library}>
+                    <LinkUtilsProvider
+                      library={library}
+                      urlShortener={urlShortener}
+                    >
+                      {children}
+                    </LinkUtilsProvider>
+                  </LibraryProvider>
+                </ActionsProvider>
+              </RecommendationsProvider>
+            </OPDSStore>
+          </PathForProvider>
+        </RouterProvider>
+      </ReakitProvider>
+    </ThemeProvider>
   );
 };
 
