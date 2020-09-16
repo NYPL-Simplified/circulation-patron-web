@@ -2,10 +2,10 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 
-import { BookData, FulfillmentLink } from "owc/interfaces";
 import useBorrow from "hooks/useBorrow";
 import Button from "./Button";
 import { Text } from "./Text";
+import { BookData, FulfillmentLink } from "interfaces";
 
 const BorrowOrReserve: React.FC<{
   book: BookData;

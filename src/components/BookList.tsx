@@ -1,11 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import {
-  BookData,
-  LaneData,
-  RequiredKeys
-} from "owc/interfaces";
 import { truncateString, stripHTML } from "../utils/string";
 import {
   getAuthors,
@@ -24,6 +19,7 @@ import useIsBorrowed from "hooks/useIsBorrowed";
 import BookCover from "./BookCover";
 import Stack from "./Stack";
 import BorrowOrReserve from "./BorrowOrReserve";
+import { BookData, LaneData, RequiredKeys } from "interfaces";
 
 /**
  * In a collection you can:

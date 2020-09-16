@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { SetCollectionAndBook } from "../../interfaces";
+import { BookData, SetCollectionAndBook } from "../../interfaces";
 import BookCover from "../BookCover";
 import Recommendations from "./Recommendations";
 import {
@@ -9,7 +9,7 @@ import {
   mapStateToProps,
   mergeRootProps
 } from "owc/mergeRootProps";
-import { BookData, FetchErrorData } from "owc/interfaces";
+import { FetchErrorData } from "owc/interfaces";
 import { connect } from "react-redux";
 import useSetCollectionAndBook from "../../hooks/useSetCollectionAndBook";
 import { PageLoader } from "../LoadingIndicator";

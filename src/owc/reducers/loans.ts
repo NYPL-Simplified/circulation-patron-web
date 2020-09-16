@@ -1,4 +1,4 @@
-import { BookData } from "../interfaces";
+import { BookData } from "interfaces";
 import ActionCreator from "../actions";
 
 export interface LoansState {
@@ -14,8 +14,8 @@ const initialState: LoansState = {
 export default (state: LoansState = initialState, action): LoansState => {
   switch (action.type) {
     case ActionCreator.COLLECTION_LOAD:
-      let loansUrl = action.data.shelfUrl || state.url;
-      let isLoans = action.url === loansUrl;
+      const loansUrl = action.data.shelfUrl || state.url;
+      const isLoans = action.url === loansUrl;
 
       return {
         ...state,
@@ -33,16 +33,16 @@ export default (state: LoansState = initialState, action): LoansState => {
 
     case ActionCreator.UPDATE_BOOK_LOAD:
       // A book has been updated, so the loans feed is now outdated.
-      let updatedBook = action.data;
-      let isReserved =
+      const updatedBook = action.data;
+      const isReserved =
         updatedBook.availability &&
         updatedBook.availability.status === "reserved";
-      let isBorrowed =
+      const isBorrowed =
         updatedBook.fulfillmentLinks && updatedBook.fulfillmentLinks.length > 0;
 
-      let newLoans: BookData[] = [];
+      const newLoans: BookData[] = [];
       // Copy over all the books except the updated one.
-      for (let loan of state.books) {
+      for (const loan of state.books) {
         if (loan.id !== updatedBook.id) {
           newLoans.push(loan);
         }

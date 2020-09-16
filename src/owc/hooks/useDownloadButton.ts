@@ -1,17 +1,11 @@
-import {
-  MediaLink,
-  FulfillmentLink,
-  MediaType,
-  ATOM_MEDIA_TYPE,
-  AXIS_NOW_WEBPUB_MEDIA_TYPE
-} from "owc/interfaces";
+import { MediaLink, FulfillmentLink, OPDS1 } from "interfaces";
 import download from "downloadjs";
 import { generateFilename, typeMap } from "../utils/file";
 import { useActions } from "owc/ActionsContext";
 
 export function fixMimeType(
-  mimeType: MediaType | "vnd.adobe/adept+xml"
-): MediaType {
+  mimeType: OPDS1.AnyBookMediaType | "vnd.adobe/adept+xml"
+): OPDS1.AnyBookMediaType {
   return mimeType === "vnd.adobe/adept+xml"
     ? "application/vnd.adobe.adept+xml"
     : mimeType;
@@ -22,15 +16,15 @@ function isReadOnlineLink(
 ): link is FulfillmentLink {
   return (
     (link.type === "application/atom+xml;type=entry;profile=opds-catalog" &&
-      (link as FulfillmentLink).indirectType === ATOM_MEDIA_TYPE) ||
-    link.type === AXIS_NOW_WEBPUB_MEDIA_TYPE
+      (link as FulfillmentLink).indirectType === OPDS1.AtomMediaType) ||
+    link.type === OPDS1.AxisNowWebpubMediaType
   );
 }
 
 type DownloadDetails = {
   fulfill: () => Promise<void>;
   downloadLabel: string;
-  mimeType: MediaType;
+  mimeType: OPDS1.AnyBookMediaType;
   fileExtension: string;
   isReadOnline: boolean;
 };

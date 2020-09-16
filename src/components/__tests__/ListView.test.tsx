@@ -2,7 +2,7 @@ import * as React from "react";
 import { render, fixtures } from "test-utils";
 import { ListView } from "../BookList";
 import merge from "deepmerge";
-import { BookData } from "owc/interfaces";
+import { BookData } from "interfaces";
 import useInfiniteScroll from "hooks/useInfiniteScroll";
 
 const mockUseInfiniteScroll = useInfiniteScroll as jest.Mock<

@@ -1,4 +1,4 @@
-import { BookData } from "owc/interfaces";
+import { BookData } from "interfaces";
 import merge from "deepmerge";
 
 export const mergeBook = (input: Partial<BookData>) =>

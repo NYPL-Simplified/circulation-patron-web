@@ -1,7 +1,7 @@
 import { RequiredKeys } from "./../interfaces";
 import { CollectionState } from "./collection";
 import { LoadAction } from "../actions";
-import { CollectionData, LinkData } from "../interfaces";
+import { CollectionData, LinkData } from "interfaces";
 
 function newCollectionIsOldCollection(
   newCollection: CollectionData,
@@ -66,7 +66,7 @@ export function addCollection(
 }
 
 export function shorten(history: LinkData[], newUrl: string) {
-  let newUrlIndex = history.findIndex(link => link.url === newUrl);
+  const newUrlIndex = history.findIndex(link => link.url === newUrl);
 
   if (newUrlIndex !== -1) {
     return history.slice(0, newUrlIndex);
@@ -91,8 +91,8 @@ export function onlyRoot(newCollection: CollectionWithRootLink) {
 
 export default (state: CollectionState, action: LoadAction<CollectionData>) => {
   let newHistory = state.history.slice(0);
-  let newCollection = Object.freeze(action.data);
-  let oldCollection = Object.freeze(state.data);
+  const newCollection = Object.freeze(action.data);
+  const oldCollection = Object.freeze(state.data);
 
   let cleared = false;
   if (shouldClear(newCollection, oldCollection)) {
@@ -100,9 +100,9 @@ export default (state: CollectionState, action: LoadAction<CollectionData>) => {
     cleared = true;
   }
 
-  let newHistoryCopy = newHistory.slice(0);
+  const newHistoryCopy = newHistory.slice(0);
   newHistory = shorten(newHistoryCopy, newCollection.url);
-  let shortened = newHistory !== newHistoryCopy;
+  const shortened = newHistory !== newHistoryCopy;
 
   if (
     !cleared &&

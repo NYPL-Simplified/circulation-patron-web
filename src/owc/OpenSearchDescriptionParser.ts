@@ -1,4 +1,4 @@
-import { SearchData } from "./interfaces";
+import { SearchData } from "interfaces";
 import * as xml2js from "xml2js";
 import * as url from "url";
 

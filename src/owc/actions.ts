@@ -1,9 +1,7 @@
+import { BookData, CollectionData, SearchData } from "interfaces";
 import DataFetcher from "./DataFetcher";
 import { RequestError } from "./DataFetcher";
 import {
-  CollectionData,
-  BookData,
-  SearchData,
   FetchErrorData,
   AuthCallback,
   AuthCredentials,

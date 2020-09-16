@@ -1,8 +1,9 @@
 import { AuthCredentials } from "hooks/useAuth";
 import DataFetcher from "owc/DataFetcher";
-import { CollectionData, BookData, AuthCallback } from "owc/interfaces";
+import { AuthCallback } from "owc/interfaces";
 import { adapter } from "owc/OPDSDataAdapter";
 import ActionsCreator from "owc/actions";
+import { BookData, CollectionData } from "interfaces";
 
 export function findBookInCollection(
   collection: CollectionData | null,

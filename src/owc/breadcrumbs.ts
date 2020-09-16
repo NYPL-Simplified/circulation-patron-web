@@ -1,4 +1,4 @@
-import { CollectionData, LinkData } from "owc/interfaces";
+import { CollectionData, LinkData } from "interfaces";
 
 /**
  * Computes breadcrumbs assuming that the OPDS feed is hierarchical - uses

@@ -1,4 +1,5 @@
-import { CollectionData, LinkData, FetchErrorData } from "../interfaces";
+import { CollectionData, LinkData } from "interfaces";
+import { FetchErrorData } from "owc/interfaces";
 import history from "./history";
 import ActionCreator from "../actions";
 

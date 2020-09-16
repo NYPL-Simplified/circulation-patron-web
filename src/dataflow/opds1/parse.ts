@@ -20,28 +20,43 @@ import {
   FacetGroupData,
   SearchData,
   FulfillmentLink,
-  MediaLink,
+  BookAvailability,
   OPDS1
 } from "interfaces";
 
 /**
- * Type guards used for filtering links or narrowing
- * the type of a value to something more specific
+ * Parses OPDS 1.x Feed or Entry into a Collection or Book
  */
+
+/**
+ * Type guards. Used for filtering links or narrowing the
+ * type of a value to something more specific.
+ */
+function isFacetLink(link: OPDSLink): link is OPDSFacetLink {
+  return link instanceof OPDSFacetLink;
+}
+function isCatalogRootLink(link: OPDSLink): link is OPDSCatalogRootLink {
+  return link instanceof OPDSCatalogRootLink;
+}
 function isAcquisitionLink(link: OPDSLink): link is OPDSAcquisitionLink {
   return link instanceof OPDSAcquisitionLink;
+}
+function isArtworkLink(link: OPDSLink): link is OPDSArtworkLink {
+  return link instanceof OPDSArtworkLink;
+}
+function isCollectionLink(link: OPDSLink): link is OPDSCollectionLink {
+  return link instanceof OPDSCollectionLink;
+}
+function isSearchLink(link: OPDSLink): link is SearchLink {
+  return link instanceof SearchLink;
 }
 function isDefined<T>(value: T | undefined): value is T {
   return typeof value !== "undefined";
 }
-function isFacetLink(link: OPDSLink): link is OPDSFacetLink {
-  return link instanceof OPDSFacetLink;
-}
 
 /**
- * Utilities
+ * Utils
  */
-
 const resolve = (base: string, relative: string) =>
   new URL(relative, base).toString();
 
@@ -51,7 +66,6 @@ function buildFulfillmentLink(feedUrl: string) {
     const first = indirects[0];
     const indirectType = first?.type as string | undefined;
     // it is possible that it doesn't exist in the array of indirects
-    if (!indirectType) return;
     return {
       url: resolve(feedUrl, link.href),
       type: link.type as OPDS1.AnyBookMediaType,
@@ -60,6 +74,9 @@ function buildFulfillmentLink(feedUrl: string) {
   };
 }
 
+/**
+ * HTML Sanitizer
+ */
 let sanitizeHtml: any;
 const createDOMPurify = require("dompurify");
 if (typeof window === "undefined") {
@@ -79,21 +96,9 @@ if (typeof window === "undefined") {
   sanitizeHtml = createDOMPurify(window).sanitize;
 }
 
-/** Converts OPDS data into the internal representation used by components. */
-export function adapter(
-  data: OPDSFeed | OPDSEntry,
-  url: string
-): CollectionData | BookData {
-  if (data instanceof OPDSFeed) {
-    const collectionData = feedToCollection(data, url);
-    return collectionData;
-  } else if (data instanceof OPDSEntry) {
-    const bookData = entryToBook(data, url);
-    return bookData;
-  } else {
-    throw "parsed data must be OPDSFeed or OPDSEntry";
-  }
-}
+/**
+ * Converters
+ */
 
 export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
   const authors = entry.authors.map(author => {
@@ -105,9 +110,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
   });
 
   let imageUrl, imageThumbLink;
-  const artworkLinks = entry.links.filter(link => {
-    return link instanceof OPDSArtworkLink;
-  });
+  const artworkLinks = entry.links.filter(isArtworkLink);
   if (artworkLinks.length > 0) {
     imageThumbLink = artworkLinks.find(
       link => link.rel === "http://opds-spec.org/image/thumbnail"
@@ -115,49 +118,46 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
     if (imageThumbLink) {
       imageUrl = resolve(feedUrl, imageThumbLink.href);
     } else {
-      console.log("WARNING: using possibly large image for " + entry.title);
+      console.log(
+        `WARNING: missing tumbnail image for ${entry.title}. Defaulting to use full image`
+      );
       imageUrl = resolve(feedUrl, artworkLinks[0].href);
     }
   }
 
-  let detailUrl;
   const detailLink = entry.links.find(
     link => link instanceof CompleteEntryLink
   );
-  if (detailLink) {
-    detailUrl = resolve(feedUrl, detailLink.href);
-  }
+  const detailUrl = detailLink?.href
+    ? resolve(feedUrl, detailLink.href)
+    : undefined;
 
   const categories = entry.categories
     .filter(category => !!category.label)
     .map(category => category.label);
 
   const openAccessLinks = entry.links
+    .filter(isAcquisitionLink)
     .filter(link => {
-      return (
-        link instanceof OPDSAcquisitionLink &&
-        link.rel === OPDSAcquisitionLink.OPEN_ACCESS_REL
-      );
+      return link.rel === OPDSAcquisitionLink.OPEN_ACCESS_REL;
     })
     .map(link => {
       return {
         url: resolve(feedUrl, link.href),
-        type: link.type
+        type: link.type as OPDS1.AnyBookMediaType
       };
     });
 
-  let borrowUrl;
-  const borrowLink = <OPDSAcquisitionLink>entry.links.find(link => {
+  const borrowLink = entry.links.find(link => {
     return (
-      link instanceof OPDSAcquisitionLink &&
-      link.rel === OPDSAcquisitionLink.BORROW_REL
+      isAcquisitionLink(link) && link.rel === OPDSAcquisitionLink.BORROW_REL
     );
   });
-  if (borrowLink) {
-    borrowUrl = resolve(feedUrl, borrowLink.href);
-  }
+  const borrowUrl = borrowLink?.href
+    ? resolve(feedUrl, borrowLink.href)
+    : undefined;
 
-  const allBorrowLinks: (FulfillmentLink | MediaLink)[] = entry.links
+  const allBorrowLinks: FulfillmentLink[] = entry.links
     .filter(isAcquisitionLink)
     .filter(link => {
       return link.rel === OPDSAcquisitionLink.BORROW_REL;
@@ -166,50 +166,39 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): BookData {
     .filter(isDefined);
 
   const fulfillmentLinks = entry.links
+    .filter(isAcquisitionLink)
     .filter(link => {
-      return (
-        link instanceof OPDSAcquisitionLink &&
-        link.rel === OPDSAcquisitionLink.GENERIC_REL
-      );
+      return link.rel === OPDSAcquisitionLink.GENERIC_REL;
     })
-    .map(link => {
-      let indirectType;
-      const indirects = (link as OPDSAcquisitionLink).indirectAcquisitions;
+    .map(buildFulfillmentLink(feedUrl))
+    .filter(isDefined);
 
-      if (indirects && indirects.length > 0) {
-        indirectType = indirects[0].type;
-      }
-      return {
-        url: resolve(feedUrl, link.href),
-        type: link.type,
-        indirectType
-      };
-    });
+  const linkWithAvailability = entry.links.find(
+    (link): link is OPDSAcquisitionLink => {
+      return link instanceof OPDSAcquisitionLink && !!link.availability;
+    }
+  );
+  const { availability, holds, copies } = linkWithAvailability ?? {};
 
-  let availability;
-  let holds;
-  let copies;
-  const linkWithAvailability = <OPDSAcquisitionLink>entry.links.find(link => {
-    return link instanceof OPDSAcquisitionLink && !!link.availability;
-  });
-  if (linkWithAvailability) {
-    ({ availability, holds, copies } = linkWithAvailability);
-  }
-
-  return <BookData>{
+  return {
     id: entry.id,
     title: entry.title,
     series: entry.series,
     authors: authors,
     contributors: contributors,
     subtitle: entry.subtitle,
-    summary: entry.summary.content && sanitizeHtml(entry.summary.content),
+    summary: entry.summary.content && sanitizeHtml?.(entry.summary.content),
     imageUrl: imageUrl,
     openAccessLinks: openAccessLinks,
     borrowUrl: borrowUrl,
     allBorrowLinks: allBorrowLinks,
     fulfillmentLinks: fulfillmentLinks,
-    availability: availability,
+    availability: {
+      ...availability,
+      // we type cast status because our internal types
+      // are stricter than those in OPDSFeedParser.
+      status: availability?.status as BookAvailability
+    },
     holds: holds,
     copies: copies,
     publisher: entry.publisher,
@@ -274,7 +263,7 @@ function formatDate(inputDate: string): string {
 }
 
 function OPDSLinkToLinkData(
-  feedUrl: any,
+  feedUrl: string,
   link: OPDSLink | null = null
 ): LinkData | null {
   if (!link || !link.href) {
@@ -292,7 +281,7 @@ export function feedToCollection(
   feed: OPDSFeed,
   feedUrl: string
 ): CollectionData {
-  const collection = <CollectionData>{
+  const collection = {
     id: feed.id,
     title: feed.title,
     url: feedUrl
@@ -309,17 +298,15 @@ export function feedToCollection(
   let facetGroups: FacetGroupData[] = [];
   let search: SearchData | undefined = undefined;
   let nextPageUrl: string | undefined = undefined;
-  let catalogRootLink: OPDSLink | undefined;
-  let parentLink: OPDSLink | undefined;
+  let catalogRootLink: OPDSLink | undefined = undefined;
+  let parentLink: OPDSLink | undefined = undefined;
   let shelfUrl: string | undefined = undefined;
   let links: OPDSLink[] = [];
 
   feed.entries.forEach(entry => {
     if (feed instanceof AcquisitionFeed) {
       const book = entryToBook(entry, feedUrl);
-      const collectionLink: OPDSCollectionLink | undefined = entry.links.find(
-        link => link instanceof OPDSCollectionLink
-      );
+      const collectionLink = entry.links.find(isCollectionLink);
       if (collectionLink) {
         const { title, href } = collectionLink;
 
@@ -349,8 +336,8 @@ export function feedToCollection(
     result.push(lane);
     return result;
   }, lanes);
-
   let facetLinks: OPDSFacetLink[] = [];
+
   if (feed.links) {
     facetLinks = feed.links.filter(isFacetLink);
 
@@ -368,9 +355,7 @@ export function feedToCollection(
       nextPageUrl = resolve(feedUrl, nextPageLink.href);
     }
 
-    catalogRootLink = feed.links.find(link => {
-      return link instanceof OPDSCatalogRootLink;
-    });
+    catalogRootLink = feed.links.find(isCatalogRootLink);
 
     parentLink = feed.links.find(link => link.rel === "up");
 
@@ -388,7 +373,7 @@ export function feedToCollection(
     const href = resolve(feedUrl, link.href);
     const active = link.activeFacet;
     const facet = { label, href, active };
-    const newResult: any[] = [];
+    const newResult: FacetGroupData[] = [];
     let foundGroup = false;
     result.forEach(group => {
       if (group.label === groupLabel) {
@@ -406,23 +391,29 @@ export function feedToCollection(
     return newResult;
   }, []);
 
-  collection.lanes = lanes;
-  collection.navigationLinks = navigationLinks;
-  collection.books = dedupeBooks(books);
-  collection.facetGroups = facetGroups;
-  collection.search = search;
-  collection.nextPageUrl = nextPageUrl;
-  collection.catalogRootLink = OPDSLinkToLinkData(feedUrl, catalogRootLink);
-  collection.parentLink = OPDSLinkToLinkData(feedUrl, parentLink);
-  collection.shelfUrl = shelfUrl;
   function notNull<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;
   }
-  collection.links = links
+  const filteredLinks = links
     .map(link => OPDSLinkToLinkData(feedUrl, link))
     // we have to filter out the null values in order for typescript to accept this
     .filter(notNull);
-  collection.raw = feed.unparsed;
-  Object.freeze(collection);
-  return collection;
+
+  return {
+    ...collection,
+    lanes,
+    books,
+    navigationLinks,
+    facetGroups,
+    search,
+    nextPageUrl,
+    catalogRootLink: OPDSLinkToLinkData(feedUrl, catalogRootLink),
+    parentLink: OPDSLinkToLinkData(feedUrl, parentLink),
+    shelfUrl,
+    links: filteredLinks
+  };
+}
+
+export function findSearchLink(feed: OPDSFeed) {
+  return feed.links.find(isSearchLink);
 }

@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData } from "owc/interfaces";
 import useRecommendationsState from "../context/RecommendationsContext";
 import LoadingIndicator from "../LoadingIndicator";
 import { H3, H2 } from "components/Text";
 import Lane from "components/Lane";
+import { BookData } from "interfaces";
 
 const Recommendations: React.FC<{ book: BookData }> = ({ book }) => {
   const relatedUrl = getRelatedUrl(book);

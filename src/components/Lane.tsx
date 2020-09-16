@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { LaneData, BookData } from "owc/interfaces";
 import { Tabbable } from "reakit/Tabbable";
 import Book, { BOOK_HEIGHT } from "./BookCard";
 import { withErrorBoundary } from "./ErrorBoundary";
@@ -10,6 +9,7 @@ import { H2 } from "./Text";
 import { NavButton } from "./Button";
 import ArrowForward from "icons/ArrowForward";
 import Stack from "./Stack";
+import { BookData, LaneData } from "interfaces";
 
 type BookRefs = {
   [id: string]: React.RefObject<HTMLLIElement>;

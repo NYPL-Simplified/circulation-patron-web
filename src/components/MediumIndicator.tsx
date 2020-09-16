@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData } from "owc/interfaces";
 import { Text } from "./Text";
 import { getMedium } from "owc/utils/book";
 import { bookMediumMap } from "utils/book";
+import { BookData } from "interfaces";
 
 const MediumIndicator: React.FC<{ book: BookData; className?: string }> = ({
   book,

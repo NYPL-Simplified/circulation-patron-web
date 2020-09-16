@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Button from "components/Button";
 import FormInput from "components/form/FormInput";
 import { generateCredentials } from "owc/utils/auth";
-import { BasicAuthMethod } from "owc/interfaces";
+import { OPDS1 } from "interfaces";
 import { modalButtonStyles } from "../components/Modal";
 import { AuthFormProps } from "owc/AuthPlugin";
 import { useActions } from "owc/ActionsContext";
@@ -18,7 +18,7 @@ type FormData = {
 /**
  * Auth form
  */
-const BasicAuthForm: React.FC<AuthFormProps<BasicAuthMethod>> = ({
+const BasicAuthForm: React.FC<AuthFormProps<OPDS1.BasicAuthMethod>> = ({
   provider
 }) => {
   const authState = useTypedSelector(state => state.auth);

@@ -1,4 +1,4 @@
-import { CollectionData, BookData } from "../interfaces";
+import { CollectionData, BookData } from "interfaces";
 
 /**
  * Utilities for dealing with redux state.
@@ -13,7 +13,7 @@ export function loanedBookData(
     return book;
   }
 
-  let loan = loans.find(loanedBook => {
+  const loan = loans.find(loanedBook => {
     if (book) {
       return loanedBook.id === book.id;
     } else if (bookUrl) {

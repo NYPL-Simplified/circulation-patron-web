@@ -15,7 +15,7 @@ import { ListView } from "./BookList";
 import Head from "next/head";
 import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
-import { BookData } from "owc/interfaces";
+import { BookData } from "interfaces";
 import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 

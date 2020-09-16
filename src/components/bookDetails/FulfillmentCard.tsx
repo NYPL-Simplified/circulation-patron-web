@@ -8,7 +8,6 @@ import {
   queueString,
   bookIsAudiobook
 } from "utils/book";
-import { BookData, MediaLink } from "owc/interfaces";
 import Button, { NavButton } from "../Button";
 import useDownloadButton from "owc/hooks/useDownloadButton";
 import { withErrorBoundary } from "../ErrorBoundary";
@@ -24,6 +23,7 @@ import {
   NEXT_PUBLIC_AXIS_NOW_DECRYPT
 } from "../../utils/env";
 import BorrowOrReserve from "components/BorrowOrReserve";
+import { BookData, MediaLink } from "interfaces";
 
 const FulfillmentCard: React.FC<{ book: BookData }> = ({ book }) => {
   return (

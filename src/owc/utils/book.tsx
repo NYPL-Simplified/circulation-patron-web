@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BookData, RequiredKeys, BookMedium } from "../interfaces";
+import { BookData, RequiredKeys, BookMedium } from "interfaces";
 import { AudioHeadphoneIcon, BookIcon } from "@nypl/dgx-svg-icons";
 
 /**

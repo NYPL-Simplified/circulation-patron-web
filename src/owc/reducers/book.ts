@@ -1,5 +1,6 @@
-import { BookData, FetchErrorData } from "../interfaces";
+import { FetchErrorData } from "../interfaces";
 import ActionCreator from "../actions";
+import { BookData } from "interfaces";
 
 export interface BookState {
   url: string | null;

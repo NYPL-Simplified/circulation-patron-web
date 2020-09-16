@@ -1,13 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData } from "owc/interfaces";
 import { getAuthors } from "../utils/book";
 import Link from "./Link";
 import BookCover from "./BookCover";
 import { truncateString } from "../utils/string";
 import { Text, H3 } from "./Text";
 import BookMediumIndicator from "./MediumIndicator";
+import { BookData } from "interfaces";
 
 export const BOOK_WIDTH = 215;
 export const BOOK_HEIGHT = 330;

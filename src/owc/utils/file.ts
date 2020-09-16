@@ -1,6 +1,9 @@
-import { MediaType } from "./../interfaces";
+import { OPDS1 } from "interfaces";
 
-export const typeMap: Record<MediaType, { extension: string; name: string }> = {
+export const typeMap: Record<
+  OPDS1.AnyBookMediaType,
+  { extension: string; name: string }
+> = {
   "application/vnd.overdrive.circulation.api+json;profile=audiobook": {
     extension: "",
     name: "Overdrive Audiobook"

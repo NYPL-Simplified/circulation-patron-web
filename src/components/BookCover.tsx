@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData } from "owc/interfaces";
 import { AspectRatio } from "@theme-ui/components";
 import { MediumIcon } from "./MediumIndicator";
+import { BookData } from "interfaces";
 /**
  * This is meant to be a book cover. Primarily the image and styling,
  * along with possibly extending it to lazy load the images in the future.

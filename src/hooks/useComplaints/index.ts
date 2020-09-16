@@ -2,7 +2,7 @@ import * as React from "react";
 import complaints, { initState } from "./reducer";
 import { fetchComplaintTypes, postComplaint } from "./actions";
 import { useDialogState } from "reakit";
-import { BookData } from "owc/interfaces";
+import { BookData } from "interfaces";
 import { getReportUrl } from "../../utils/libraryLinks";
 /**
  * We are using react useReducer instead of redux. The only real difference
