@@ -4,8 +4,10 @@
 
 - Feature: Add support for Clever auth providers.
 - Redesign: in Auth Modal display AuthProvider logos as selectable buttons when there are 2-4 AuthProviders instead of Combobox
+- Fix: Update CleverAuth button to use AnchorButton for a11y and semantic reasons
 - Fix: Get loans to display on /loans from state.loans instead of state.collection.
 - Fix: Removed site-wide navigation from webpub-viewer pages, as it overlapped with the reader. Created a LayoutPage component to wrap pages that require site-wide navigation and update the Page to be used directly for pages that do not require site-wide navigation.
+- Add: Remove books from local storage when a user logs out.
 
 # 2.3.0
 
