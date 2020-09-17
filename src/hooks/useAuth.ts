@@ -54,7 +54,17 @@ function useAuth() {
   const isSignedIn = !!authState?.credentials;
   const { actions, dispatch } = useActions();
   const { buildMultiLibraryLink } = useLinkUtils();
-  const signOut = () => dispatch(actions.clearAuthCredentials());
+
+  const clearWebpubViewerStorage = () => {
+    const WebpubViewerStorage = window?.indexedDB?.open("WebpubViewerDb");
+    if (WebpubViewerStorage) {
+      window.indexedDB.deleteDatabase("WebpubViewerDb");
+    }
+  };
+  const signOut = () => {
+    dispatch(actions.clearAuthCredentials());
+    clearWebpubViewerStorage();
+  };
   const signOutAndGoHome = () => {
     signOut();
     const link = buildMultiLibraryLink({ href: "/" });
