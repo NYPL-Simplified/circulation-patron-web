@@ -33,7 +33,7 @@
     "font-awesome": "^4.7.0",
     "history": "^4.10.1",
     "jsdom": "^16.2.2",
-    "library-simplified-webpub-viewer": "0.2.1",
+    "library-simplified-webpub-viewer": "0.2.2",
     "lodash": "^4.17.20",
     "moment": "^2.24.0",
     "next": "^9.5.3",
