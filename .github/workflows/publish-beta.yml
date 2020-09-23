@@ -1,43 +1,43 @@
-# This workflow will publish the beta image to docker hub
-name: Publish beta
+# # This workflow will publish the beta image to docker hub
+# name: Publish beta
 
-# action will only run when a pull request to the beta branch is closed.
-on:
-  pull_request:
-    branches: [beta]
-    types: [closed]
+# # action will only run when a pull request to the beta branch is closed.
+# on:
+#   pull_request:
+#     branches: [beta]
+#     types: [closed]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  publish_beta:
-    name: Publish beta image to Docker Hub
-    # only run if the PR is merged.
-    if: github.event.pull_request.merged
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
+# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs:
+#   publish_beta:
+#     name: Publish beta image to Docker Hub
+#     # only run if the PR is merged.
+#     if: github.event.pull_request.merged
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           submodules: true
+#           token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
 
-      - id: nvmrc
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+#       - id: nvmrc
+#         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
 
-      - name: Use Node Version from nvmrc
-        uses: actions/setup-node@v1
-        with: { node-version: '${{ steps.nvmrc.outputs.NODE_VERSION }}' }
+#       - name: Use Node Version from nvmrc
+#         uses: actions/setup-node@v1
+#         with: { node-version: '${{ steps.nvmrc.outputs.NODE_VERSION }}' }
 
-      - name: Get short SHA
-        id: get_sha
-        run: echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
+#       - name: Get short SHA
+#         id: get_sha
+#         run: echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
 
-      - name: Publish to Docker Hub
-        id: publish_docker_hub
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: nypl/patron-web
-          # tag the image with both beta and beta.short_sha
-          tags: beta, beta.${{ steps.get_sha.outputs.short_sha }}
-          add_git_labels: true
+#       - name: Publish to Docker Hub
+#         id: publish_docker_hub
+#         uses: docker/build-push-action@v1
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+#           repository: nypl/patron-web
+#           # tag the image with both beta and beta.short_sha
+#           tags: beta, beta.${{ steps.get_sha.outputs.short_sha }}
+#           add_git_labels: true
