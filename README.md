@@ -81,6 +81,7 @@ The following environment variables can also be set to further configure the app
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 - Set `ANALYZE=true` to generate bundle analysis files inside `.next/analyze` which will show bundle sizes for server and client, as well as composition.
 - Set `NEXT_PUBLIC_AXIS_NOW_DECRYPT=true` to run with AxisNow decryption. See [Running with Decryption](#Running-with-Decryption) for more details
+- Set `NEXT_PUBLIC_BUGSNAG_API_KEY` to configure error tracking with [Bugsnag](https://www.bugsnag.com/).
 
 #### Using a `.env` file
 
@@ -261,3 +262,7 @@ If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or prov
   ```
   docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
   ```
+
+### Credits
+
+![Bugsnag Logo](https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png)
