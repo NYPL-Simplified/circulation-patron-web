@@ -3,7 +3,7 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import { BugsnagErrorBoundary } from "utils/bugsnag";
 
-type FallbackProps = {
+export type FallbackProps = {
   error: Error;
   info: React.ErrorInfo;
   clearError: () => void;

@@ -11,7 +11,7 @@ import {
 import { BookData, MediaLink } from "opds-web-client/lib/interfaces";
 import Button, { NavButton } from "../Button";
 import useDownloadButton from "opds-web-client/lib/hooks/useDownloadButton";
-import { withErrorBoundary } from "../ErrorBoundary";
+import withErrorBoundary from "../ErrorBoundary";
 import Stack from "components/Stack";
 import { Text } from "components/Text";
 import { MediumIcon } from "components/MediumIndicator";
