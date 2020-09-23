@@ -21,6 +21,8 @@
     "generate-icons": "npx @svgr/cli --template src/icons/_template.js --typescript --icon --ext tsx --svg-props 'fill=currentColor' -d src/icons src/icons"
   },
   "dependencies": {
+    "@bugsnag/js": "^7.3.5",
+    "@bugsnag/plugin-react": "^7.3.5",
     "@csstools/normalize.css": "^10.1.0",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
@@ -87,7 +89,8 @@
     "prettier": "2.1.1",
     "react-axe": "^3.4.1",
     "react-test-renderer": "^16.13.1",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "webpack-bugsnag-plugins": "^1.4.3"
   },
   "prettier": {
     "arrowParens": "avoid",

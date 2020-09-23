@@ -28,3 +28,6 @@ export const IS_SERVER = typeof window === "undefined";
 export const __NEXT_REDUX_STORE__ = "__NEXT_REDUX_STORE__";
 // where we store the library data
 export const __LIBRARY_DATA__ = "__LIBRARY_DATA__";
+
+export const BUGSNAG_API_KEY = process.env.NEXT_PUBLIC_BUGSNAG_API_KEY;
+export const APP_VERSION = process.env.APP_VERSION;

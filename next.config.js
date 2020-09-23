@@ -1,6 +1,12 @@
 const withTM = require("next-transpile-modules")([
   "library-simplified-webpub-viewer"
 ]);
+const {
+  BugsnagBuildReporterPlugin,
+  BugsnagSourceMapUploaderPlugin
+} = require("webpack-bugsnag-plugins");
+
+const APP_VERSION = require("./package.json").version;
 
 const config = {
   env: {
@@ -8,9 +14,10 @@ const config = {
     SHORTEN_URLS: process.env.SHORTEN_URLS,
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
-    CACHE_EXPIRATION_SECONDS: process.env.CACHE_EXPIRATION_SECONDS
+    CACHE_EXPIRATION_SECONDS: process.env.CACHE_EXPIRATION_SECONDS,
+    APP_VERSION
   },
-  webpack: (config, { _buildId, _dev, isServer, _defaultLoaders, webpack }) => {
+  webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
     // Important: return the modified config
@@ -24,6 +31,16 @@ const config = {
       config.node = {
         fs: "empty"
       };
+    }
+
+    // add bugsnag if we are not in dev
+    if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
+      const config = {
+        apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
+        appVersion: APP_VERSION
+      };
+      config.plugins.push(new BugsnagBuildReporterPlugin(config));
+      config.plugins.push(new BugsnagSourceMapUploaderPlugin(config));
     }
 
     return config;

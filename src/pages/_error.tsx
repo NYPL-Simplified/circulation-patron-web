@@ -1,6 +1,7 @@
 import * as React from "react";
 import ErrorComponent from "../components/Error";
 import { NextPage } from "next";
+import Bugsgnag from "utils/bugsnag";
 
 const Error: NextPage<{
   statusCode: number;
@@ -13,6 +14,7 @@ const Error: NextPage<{
 };
 
 Error.getInitialProps = ({ res, err }) => {
+  if (err) Bugsgnag.notify(err);
   const statusCode = res?.statusCode ?? err?.statusCode ?? 404;
   return { statusCode };
 };

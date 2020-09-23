@@ -4,7 +4,7 @@ import * as React from "react";
 import { LaneData, BookData } from "opds-web-client/lib/interfaces";
 import { Tabbable } from "reakit/Tabbable";
 import Book, { BOOK_HEIGHT } from "./BookCard";
-import { withErrorBoundary } from "./ErrorBoundary";
+import withErrorBoundary from "./ErrorBoundary";
 import { lighten } from "@theme-ui/color";
 import { H2 } from "./Text";
 import { NavButton } from "./Button";
