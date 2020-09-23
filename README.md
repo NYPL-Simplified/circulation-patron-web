@@ -265,4 +265,4 @@ If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or prov
 
 ### Credits
 
-<img src="https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png" width="200px"/>
+<img alt="Bugsnag logo" src="https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png" width="200px"/>
