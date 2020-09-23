@@ -1,5 +1,4 @@
 import { PathFor } from "opds-web-client/lib/interfaces";
-import encodeUrlParam from "utils/url";
 
 const getPathFor = (librarySlug: string | null): PathFor => (
   collectionUrl?: string | null,
@@ -10,13 +9,13 @@ const getPathFor = (librarySlug: string | null): PathFor => (
     path += "/" + librarySlug;
   }
   if (collectionUrl) {
-    const preparedCollectionUrl = encodeUrlParam(collectionUrl);
+    const preparedCollectionUrl = encodeURIComponent(collectionUrl);
     if (preparedCollectionUrl) {
       path += `/collection/${preparedCollectionUrl}`;
     }
   }
   if (bookUrl) {
-    path += `/book/${encodeUrlParam(bookUrl)}`;
+    path += `/book/${encodeURIComponent(bookUrl)}`;
   }
   if (!path) {
     path = "/";

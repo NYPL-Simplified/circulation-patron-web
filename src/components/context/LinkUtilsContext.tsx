@@ -1,6 +1,5 @@
 import useLibraryContext from "components/context/LibraryContext";
 import * as React from "react";
-import encodeUrlParam from "utils/url";
 import { NextLinkConfig, LibraryData } from "../../interfaces";
 
 type LinkBuilder = (url: string) => NextLinkConfig;
@@ -43,14 +42,14 @@ export const LinkUtilsProvider: React.FC<{
     }
     return buildMultiLibraryLink({
       href: "/collection/[collectionUrl]",
-      as: `/collection/${encodeUrlParam(collectionUrl)}`
+      as: `/collection/${encodeURIComponent(collectionUrl)}`
     });
   };
 
   const buildBookLink: LinkBuilder = (bookUrl: string) => {
     return buildMultiLibraryLink({
       href: "/book/[bookUrl]",
-      as: `/book/${encodeUrlParam(bookUrl)}`
+      as: `/book/${encodeURIComponent(bookUrl)}`
     });
   };
 
