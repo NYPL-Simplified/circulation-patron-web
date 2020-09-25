@@ -4,6 +4,10 @@ import getOrCreateStore from "../dataflow/getOrCreateStore";
 import Head from "next/head";
 import Error from "components/Error";
 import { AppProps } from "dataflow/withAppProps";
+<<<<<<< HEAD
+=======
+import AuthModal from "auth/AuthModal";
+>>>>>>> auth-tests
 
 /* Page without Header and Footer should wrap pages that should not have sitewide navigation */
 
@@ -32,7 +36,11 @@ const Page: React.FC<AppProps> = props => {
         <title>{library.catalogName}</title>
       </Head>
       <ContextProvider library={library} store={store}>
+<<<<<<< HEAD
         {children}
+=======
+        <AuthModal>{children}</AuthModal>
+>>>>>>> auth-tests
       </ContextProvider>
     </>
   );

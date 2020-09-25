@@ -12,7 +12,7 @@ import { Text } from "./Text";
 import Stack from "./Stack";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
-import useAuthFormContext from "auth/AuthFormCotext";
+import useAuthModalContext from "auth/AuthModalContext";
 
 export interface HeaderContext extends NavigateContext {
   library: LibraryData;
@@ -77,7 +77,7 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
   const { helpWebsite, libraryWebsite } = library.libraryLinks;
   const libraryName = library.catalogName;
   const { isAuthenticated, isLoading } = useUser();
-  const { showForm } = useAuthFormContext();
+  const { showModal } = useAuthModalContext();
   return (
     <div
       sx={{
@@ -130,7 +130,7 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
       {isAuthenticated ? (
         <SignOut />
       ) : (
-        <Button onClick={showForm} loading={isLoading}>
+        <Button onClick={showModal} loading={isLoading}>
           Sign In
         </Button>
       )}
