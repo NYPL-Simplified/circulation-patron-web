@@ -34,7 +34,6 @@ export const UserProvider: React.FC = ({ children }) => {
   const { credentials, setCredentials, clearCredentials } = useCredentials(
     slug
   );
-  console.log(credentials);
   const { data, mutate, isValidating, error } = useSWR(
     // pass null if there are no credentials to tell SWR not to fetch at all.
     credentials
