@@ -9,6 +9,7 @@
 - Fix: Removed site-wide navigation from webpub-viewer pages, as it overlapped with the reader. Created a LayoutPage component to wrap pages that require site-wide navigation and update the Page to be used directly for pages that do not require site-wide navigation.
 - BREAKING CHANGE: Remove `SHORTEN_URLS` env var. Url parameters will no longer be shortened. We will look for a server solution to pretty urls in the future.
 - Add: Remove books from local storage when a user logs out.
+- Add: Optional error reporting via [Bugsnag](https://www.bugsnag.com/).
 
 # 2.3.0
 
