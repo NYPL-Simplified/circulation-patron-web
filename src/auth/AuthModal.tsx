@@ -13,7 +13,7 @@ import { AppAuthMethod, OPDS1 } from "interfaces";
 import BasicAuthForm from "auth/BasicAuthForm";
 import SamlAuthButton from "auth/SamlAuthButton";
 import CleverButton from "auth/cleverAuthButton";
-import { AuthFormProvider } from "auth/AuthFormCotext";
+import { AuthModalProvider } from "auth/AuthModalContext";
 import useUser from "components/context/UserContext";
 import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
@@ -75,7 +75,7 @@ const AuthForm: React.FC = ({ children }) => {
           even though we don't open the dialog with a button
       */}
       <DialogDisclosure sx={{ display: "none" }} {...dialog} />
-      <AuthFormProvider showForm={dialog.show}>{children}</AuthFormProvider>
+      <AuthModalProvider showModal={dialog.show}>{children}</AuthModalProvider>
     </React.Fragment>
   );
 };

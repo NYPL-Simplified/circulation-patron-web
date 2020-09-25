@@ -16,7 +16,7 @@ import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
 import { PageLoader } from "components/LoadingIndicator";
-import useAuthFormContext from "auth/AuthFormCotext";
+import useAuthModalContext from "auth/AuthModalContext";
 
 const availableUntil = (book: BookData) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -34,12 +34,12 @@ function sortBooksByLoanExpirationDate(books: BookData[]) {
 
 export const MyBooks: React.FC = () => {
   const { isAuthenticated, loans, isLoading } = useUser();
-  const { showForm } = useAuthFormContext();
+  const { showModal } = useAuthModalContext();
 
   // show the auth form if we are unauthenticated
   React.useEffect(() => {
-    if (!isAuthenticated) showForm();
-  }, [isAuthenticated, showForm]);
+    if (!isAuthenticated) showModal();
+  }, [isAuthenticated, showModal]);
 
   const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
   const noBooks = sortedBooks.length === 0;
