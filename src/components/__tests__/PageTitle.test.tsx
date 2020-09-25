@@ -13,16 +13,16 @@ const formatsFacet: FacetGroupData = {
     {
       label: "eBooks",
       active: true,
-      href: "/ebooks"
+      href: "http://ebooks"
     },
     {
       label: "Audiobooks",
-      href: "/audiobooks",
+      href: "http://audiobooks",
       active: false
     },
     {
       label: "All",
-      href: "/all",
+      href: "http://all",
       active: false
     }
   ]
@@ -78,14 +78,14 @@ describe("Format filters", () => {
       name: "Format"
     }) as HTMLSelectElement;
     // all is selected
-    expect(select.value).toBe("/ebooks");
+    expect(select.value).toBe("http://ebooks");
 
     // click works
-    userEvent.selectOptions(select, "/all");
+    userEvent.selectOptions(select, "http://all");
     expect(mockPush).toHaveBeenCalledTimes(1);
     expect(mockPush).toHaveBeenCalledWith(
       "/collection/[collectionUrl]",
-      "/collection/all"
+      "/collection/http%3A%2F%2Fall"
     );
   });
 });

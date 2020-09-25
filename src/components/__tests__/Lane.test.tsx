@@ -28,7 +28,7 @@ beforeEach(() => {
 
 const laneData: LaneData = {
   title: "my lane",
-  url: "/link-to-lane",
+  url: "http://link-to-lane",
   books: fixtures.makeBooks(4)
 };
 
@@ -70,5 +70,8 @@ test("more button navigates to the right link", () => {
 
   const moreButton = utils.getByText("See More").closest("a");
 
-  expect(moreButton).toHaveAttribute("href", "/collection/link-to-lane");
+  expect(moreButton).toHaveAttribute(
+    "href",
+    "/collection/http%3A%2F%2Flink-to-lane"
+  );
 });

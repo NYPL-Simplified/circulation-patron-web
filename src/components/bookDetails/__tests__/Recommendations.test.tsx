@@ -1,9 +1,9 @@
 import * as React from "react";
-import { render, fixtures, actions, waitFor } from "../../../test-utils";
+import { render, fixtures, actions, waitFor } from "test-utils";
 import { CollectionData } from "opds-web-client/lib/interfaces";
 import { RecommendationsStateContext } from "../../context/RecommendationsContext";
 import Recommendations from "../Recommendations";
-import { RecommendationsState } from "../../../interfaces";
+import { RecommendationsState } from "interfaces";
 
 const renderWithRecState = (
   children: React.ReactNode,
@@ -72,7 +72,7 @@ test("recommendations are clickable", () => {
   });
   expect(recommendationCover.closest("a")).toHaveAttribute(
     "href",
-    "/book/recommendation-1-url"
+    "/book/http%3A%2F%2Frecommendation-1-url"
   );
 });
 
@@ -81,7 +81,7 @@ test("displays a more button for recommendations", () => {
   const moreButton = utils.getByText("See More");
   expect(moreButton).toHaveAttribute(
     "href",
-    "/collection/works%2Fcontributor%2FJane%2520Austen%2Feng"
+    "/collection/http%3A%2F%2Ftest-cm.com%2FcatalogUrl%2Fworks%2Fcontributor%2FJane%2520Austen%2Feng%2F"
   );
 });
 

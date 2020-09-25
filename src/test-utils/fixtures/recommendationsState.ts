@@ -27,12 +27,12 @@ export const recommendationsState: RecommendationsState = {
       type: "start"
     }
   ],
-  url: "/related-url",
+  url: "http://related-url",
   data: {
     id:
       "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/related_books?available=all&after=0&collection=main&entrypoint=Book&order=author&size=50",
     title: "Related Books",
-    url: "/data-related-url",
+    url: "http://data-related-url",
     lanes: [
       {
         title: "Jane Austen",
@@ -86,7 +86,7 @@ export const recommendationsState: RecommendationsState = {
               "Historical Fiction"
             ],
             language: "en",
-            url: "/recommendation-1-url",
+            url: "http://recommendation-1-url",
             raw: {
               $: {
                 "schema:additionalType": {

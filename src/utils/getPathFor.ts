@@ -1,24 +1,21 @@
 import { PathFor } from "opds-web-client/lib/interfaces";
-import UrlShortener from "../UrlShortener";
 
-const getPathFor = (
-  urlShortener: UrlShortener,
-  librarySlug: string | null
-): PathFor => (collectionUrl, bookUrl) => {
+const getPathFor = (librarySlug: string | null): PathFor => (
+  collectionUrl?: string | null,
+  bookUrl?: string | null
+) => {
   let path = "";
   if (librarySlug) {
     path += "/" + librarySlug;
   }
   if (collectionUrl) {
-    const preparedCollectionUrl = urlShortener.prepareCollectionUrl(
-      collectionUrl
-    );
+    const preparedCollectionUrl = encodeURIComponent(collectionUrl);
     if (preparedCollectionUrl) {
       path += `/collection/${preparedCollectionUrl}`;
     }
   }
   if (bookUrl) {
-    path += `/book/${urlShortener.prepareBookUrl(bookUrl)}`;
+    path += `/book/${encodeURIComponent(bookUrl)}`;
   }
   if (!path) {
     path = "/";

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { SetCollectionAndBook } from "../interfaces";
 import { useRouter } from "next/router";
-import useLinkUtils from "../components/context/LinkUtilsContext";
 
 function extractString(
   query: string | string[] | undefined
@@ -22,13 +21,10 @@ const useSetCollectionAndBook = (
   const { bookUrl, collectionUrl } = useRouter().query;
   const stringBookUrl = extractString(bookUrl);
   const stringCollectionUrl = extractString(collectionUrl);
-  const finalCollectionUrl = collectionUrlOverride ?? stringCollectionUrl;
-  const { urlShortener } = useLinkUtils();
+  const finalCollectionUrl = collectionUrlOverride ?? stringCollectionUrl ?? "";
 
-  const fullCollectionUrl = decodeURIComponent(
-    urlShortener.expandCollectionUrl(finalCollectionUrl)
-  );
-  const fullBookUrl = urlShortener.expandBookUrl(stringBookUrl);
+  const fullCollectionUrl = decodeURIComponent(finalCollectionUrl);
+  const fullBookUrl = stringBookUrl;
   // set the collection and book whenever the urls change
   React.useEffect(() => {
     setCollectionAndBook(fullCollectionUrl, fullBookUrl);

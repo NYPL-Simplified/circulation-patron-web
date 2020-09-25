@@ -36,12 +36,21 @@ test("Renders proper href with collectionUrl prop", () => {
   expect(
     utils.getByText("click here").closest("a")?.href
   ).toMatchInlineSnapshot(
-    `"http://test-domain.com/collection/http%3A%2F%2Fsome.collection.com"`
+    `"http://test-domain.com/collection/http%3A%2F%2Fsome.collection.com%2F"`
   );
 });
 test("When collectionUrl is your base url, links to home", () => {
   const utils = render(
     <Link collectionUrl="http://test-cm.com/catalogUrl">click here</Link>
+  );
+  expect(utils.getByText("click here").closest("a")?.href).toEqual(
+    "http://test-domain.com/"
+  );
+});
+
+test("When collectionUrl is your base url (with slash), links to home", () => {
+  const utils = render(
+    <Link collectionUrl="http://test-cm.com/catalogUrl/">click here</Link>
   );
   expect(utils.getByText("click here").closest("a")?.href).toEqual(
     "http://test-domain.com/"

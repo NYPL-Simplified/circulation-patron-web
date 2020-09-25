@@ -9,7 +9,7 @@ import { FetchErrorData } from "opds-web-client/lib/interfaces";
 function expectViewDetails(utils: ReturnType<typeof render>) {
   const button = utils.getByRole("link", { name: "View Book Details" });
   expect(button).toBeInTheDocument();
-  expect(button).toHaveAttribute("href", "/book/test-book-url");
+  expect(button).toHaveAttribute("href", "/book/http%3A%2F%2Ftest-book-url");
 }
 
 describe("open access book", () => {
@@ -122,7 +122,7 @@ describe("available to borrow book", () => {
     const err: FetchErrorData = {
       response: "cannot loan more than 3 documents.",
       status: 403,
-      url: "/test-book-url/error-url"
+      url: "http://test-book-url/error-url"
     };
     const utils = render(<BookListItem book={closedAccessBook} />, {
       initialState: merge(fixtures.initialState, {
@@ -195,7 +195,7 @@ describe("ready to borrow book", () => {
     const err: FetchErrorData = {
       response: "cannot loan more than 3 documents.",
       status: 403,
-      url: "/test-book-url/error-url"
+      url: "http://test-book-url/error-url"
     };
     const utils = render(<BookListItem book={readyBook} />, {
       initialState: merge(fixtures.initialState, {

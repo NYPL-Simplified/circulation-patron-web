@@ -1,11 +1,11 @@
 import * as React from "react";
-import { render, fixtures } from "../../test-utils";
+import { render, fixtures } from "test-utils";
 import ListFilters from "../ListFilters";
 import merge from "deepmerge";
 import { FacetGroupData } from "opds-web-client/lib/interfaces";
 import { State } from "opds-web-client/lib/state";
 import userEvent from "@testing-library/user-event";
-import mockedRouter from "../../test-utils/mockNextRouter";
+import mockedRouter from "test-utils/mockNextRouter";
 
 /**
  * Sort by
@@ -26,12 +26,12 @@ const sortByFacet: FacetGroupData = {
   facets: [
     {
       label: "author",
-      href: "/author",
+      href: "http://author",
       active: true
     },
     {
       label: "title",
-      href: "/title",
+      href: "http://title",
       active: false
     }
   ]
@@ -42,17 +42,17 @@ const availabilityFacet: FacetGroupData = {
   facets: [
     {
       label: "All",
-      href: "/all",
+      href: "http://all",
       active: true
     },
     {
       label: "Yours to keep",
-      href: "/yours-to-keep",
+      href: "http://yours-to-keep",
       active: false
     },
     {
       label: "Available now",
-      href: "/now",
+      href: "http://now",
       active: false
     }
   ]
@@ -95,6 +95,6 @@ test("does redirect when selected", () => {
   expect(mockedRouter.push).toHaveBeenCalledTimes(1);
   expect(mockedRouter.push).toHaveBeenCalledWith(
     "/collection/[collectionUrl]",
-    "/collection/title"
+    "/collection/http%3A%2F%2Ftitle"
   );
 });
