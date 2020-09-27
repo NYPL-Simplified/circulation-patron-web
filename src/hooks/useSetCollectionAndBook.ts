@@ -1,6 +1,7 @@
 import * as React from "react";
 import { SetCollectionAndBook } from "../interfaces";
 import { useRouter } from "next/router";
+import useLibraryContext from "components/context/LibraryContext";
 
 function extractString(
   query: string | string[] | undefined
@@ -18,15 +19,18 @@ const useSetCollectionAndBook = (
   // my-books page has to override this and send in a hard coded collectionUrl
   collectionUrlOverride?: string
 ) => {
+  const { catalogUrl } = useLibraryContext();
   const { bookUrl, collectionUrl } = useRouter().query;
   const stringBookUrl = extractString(bookUrl);
   const stringCollectionUrl = extractString(collectionUrl);
-  const finalCollectionUrl = collectionUrlOverride ?? stringCollectionUrl ?? "";
+  const finalCollectionUrl =
+    collectionUrlOverride ?? stringCollectionUrl ?? catalogUrl;
 
   const fullCollectionUrl = decodeURIComponent(finalCollectionUrl);
   const fullBookUrl = stringBookUrl;
   // set the collection and book whenever the urls change
   React.useEffect(() => {
+    console.log("Calling use", fullCollectionUrl);
     setCollectionAndBook(fullCollectionUrl, fullBookUrl);
     /**
      * We will explicitly not have exhaustive deps here because
