@@ -12,7 +12,7 @@ import Stack from "../components/Stack";
 import { AppAuthMethod, OPDS1 } from "interfaces";
 import BasicAuthForm from "auth/BasicAuthForm";
 import SamlAuthButton from "auth/SamlAuthButton";
-import CleverButton from "auth/CleverAuthButton";
+import CleverButton from "auth/CleverButton";
 import { AuthModalProvider } from "auth/AuthModalContext";
 import useUser from "components/context/UserContext";
 import Button from "components/Button";

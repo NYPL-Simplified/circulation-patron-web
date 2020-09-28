@@ -26,7 +26,6 @@ function expectFetchWithToken(token: string) {
 
 const str = JSON.stringify;
 const mockCookie = Cookie as any;
-
 const useRouterSpy = jest.spyOn(router, "useRouter");
 
 /**
@@ -102,7 +101,6 @@ test("extracts SAML tokens from the url", () => {
 
   expect(fetch.fetchCollection).toHaveBeenCalledTimes(1);
   expectFetchWithToken("Bearer saml-token");
-
   expect(mockReplace).toHaveBeenCalledWith(
     "http://test-domain.com/",
     undefined,

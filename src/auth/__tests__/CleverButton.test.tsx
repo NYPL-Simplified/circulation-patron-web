@@ -1,6 +1,6 @@
 import * as React from "react";
-import { fixtures, render } from "test-utils";
-import CleverButton from "../CleverAuthButton";
+import { render } from "test-utils";
+import CleverButton from "../CleverButton";
 
 describe("CleverButton", () => {
   test("constructs proper authUrl", () => {
