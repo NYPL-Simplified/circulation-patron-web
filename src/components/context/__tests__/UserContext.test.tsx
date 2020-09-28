@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import * as React from "react";
-import { AuthCredentials, BookData, OPDS1 } from "interfaces";
+import { BookData, OPDS1 } from "interfaces";
 import { act, fixtures, render, waitFor } from "test-utils";
 import Cookie from "js-cookie";
 import * as router from "next/router";
 import useUser from "components/context/UserContext";
 import * as fetch from "dataflow/opds1/fetch";
-import mockAuthStateOnce, { creds } from "test-utils/mockAuthState";
+import { creds } from "test-utils/mockAuthState";
 import mockAuthenticatedOnce from "test-utils/mockAuthState";
 /**
  * This file tests both UserContext and useCredentials, as
