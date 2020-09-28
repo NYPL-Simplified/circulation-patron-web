@@ -20,7 +20,6 @@ function expectFetchWithToken(token: string) {
 
 const str = JSON.stringify;
 const mockCookie = Cookie as any;
-
 const useRouterSpy = jest.spyOn(router, "useRouter");
 
 /**
