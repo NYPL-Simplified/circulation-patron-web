@@ -18,6 +18,7 @@ import {
   BookData,
   LinkData,
   FacetGroupData,
+  SearchData,
   BookAvailability,
   OPDS1,
   MediaLink

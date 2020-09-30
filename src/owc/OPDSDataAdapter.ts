@@ -17,6 +17,7 @@ import {
   BookData,
   LinkData,
   FacetGroupData,
+  SearchData,
   MediaLink,
   OPDS1
 } from "interfaces";
