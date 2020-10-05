@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
+
 /**
  * Simply exporting processed env vars
  */
-
 export const NEXT_PUBLIC_COMPANION_APP =
   process.env.NEXT_PUBLIC_COMPANION_APP === "openebooks"
     ? "openebooks"

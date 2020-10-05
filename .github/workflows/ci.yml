@@ -23,10 +23,10 @@ jobs:
           token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
       - id: nvmrc
         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-      
+
       - name: Use Node Version from nvmrc
         uses: actions/setup-node@v1
-        with: { node-version: '${{ steps.nvmrc.outputs.NODE_VERSION }}' }
+        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
 
       - name: Cache and install node modules
         uses: bahmutov/npm-install@v1
@@ -45,10 +45,10 @@ jobs:
           token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
       - id: nvmrc
         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-      
+
       - name: Use Node Version from nvmrc
         uses: actions/setup-node@v1
-        with: { node-version: '${{ steps.nvmrc.outputs.NODE_VERSION }}' }
+        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
       - name: Cache and install node modules
         uses: bahmutov/npm-install@v1
       - name: Typecheck
@@ -66,10 +66,10 @@ jobs:
           token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
       - id: nvmrc
         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-      
+
       - name: Use Node Version from nvmrc
         uses: actions/setup-node@v1
-        with: { node-version: '${{ steps.nvmrc.outputs.NODE_VERSION }}' }
+        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
       - name: Cache and install node modules
         uses: bahmutov/npm-install@v1
       - name: Test
