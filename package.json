@@ -14,6 +14,7 @@
     "dev:axe": "REACT_AXE=true npm run dev",
     "build": "next build",
     "start": "next start",
+    "build-and-start": "npm run build && npm run start",
     "test": "TZ=UTC jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint '*/**/*.{ts,tsx}'",
