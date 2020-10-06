@@ -23,13 +23,22 @@ const AuthModal: React.FC = ({ children }) => {
   const dialog = useDialogState();
   const { hide } = dialog;
   const { catalogName, authMethods } = useLibraryContext();
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, clearCredentials } = useUser();
   /**
    * If the user becomes authenticated, we can hide the form
    */
   React.useEffect(() => {
     if (isAuthenticated) hide();
   }, [isAuthenticated, hide]);
+
+  const show = dialog.show;
+  /**
+   * When you show the login modal, clear any old credentials from the state
+   */
+  const showModal = React.useCallback(() => {
+    clearCredentials();
+    show();
+  }, [show, clearCredentials]);
 
   /**
    * The options:
@@ -76,7 +85,7 @@ const AuthModal: React.FC = ({ children }) => {
           even though we don't open the dialog with a button
       */}
       {/* <DialogDisclosure sx={{ display: "none" }} {...dialog} /> */}
-      <AuthModalProvider showModal={dialog.show}>{children}</AuthModalProvider>
+      <AuthModalProvider showModal={showModal}>{children}</AuthModalProvider>
     </React.Fragment>
   );
 };

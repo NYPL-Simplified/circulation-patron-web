@@ -1,13 +1,12 @@
 import useCredentials from "auth/useCredentials";
 import useLibraryContext from "components/context/LibraryContext";
 import { fetchCollection } from "dataflow/opds1/fetch";
-import { ServerError } from "errors";
 import { AppAuthMethod, BookData } from "interfaces";
 import * as React from "react";
 import useSWR from "swr";
 
 type Status = "authenticated" | "loading" | "unauthenticated";
-type UserState = {
+export type UserState = {
   loans: BookData[] | undefined;
   status: Status;
   isAuthenticated: boolean;
@@ -18,9 +17,12 @@ type UserState = {
   setBook: (book: BookData) => void;
   error: any;
   token?: string;
+  clearCredentials: () => void;
 };
 
-const UserContext = React.createContext<UserState | undefined>(undefined);
+export const UserContext = React.createContext<UserState | undefined>(
+  undefined
+);
 
 /**
  * Here we fetch the loans and provide functions to sign in
@@ -43,13 +45,13 @@ export const UserProvider: React.FC = ({ children }) => {
     {
       shouldRetryOnError: false,
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: false
       // clear credentials whenever we receive a 401
-      onError: err => {
-        if (err instanceof ServerError && err?.status === 401) {
-          // clearCredentials();
-        }
-      }
+      // onError: err => {
+      //   if (err instanceof ServerError && err?.status === 401) {
+      //     clearCredentials();
+      //   }
+      // }
     }
   );
 
@@ -80,7 +82,7 @@ export const UserProvider: React.FC = ({ children }) => {
 
   const isAuthenticated = status === "authenticated";
   const isLoading = status === "loading";
-  const user = {
+  const user: UserState = {
     status,
     isAuthenticated,
     isLoading,
@@ -90,7 +92,8 @@ export const UserProvider: React.FC = ({ children }) => {
     signOut,
     setBook,
     error,
-    token: credentials?.token
+    token: credentials?.token,
+    clearCredentials
   };
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
