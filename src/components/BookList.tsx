@@ -51,9 +51,17 @@ export const InfiniteBookList: React.FC<{ firstPageUrl: string }> = ({
     // otherwise return the next page url
     return previousData.nextPageUrl;
   }
-  const { data, size, setSize } = useSWRInfinite(getKey, fetchCollection);
+  const { data, size, error, setSize } = useSWRInfinite(
+    getKey,
+    fetchCollection
+  );
 
-  const isFetchingMore = size > (data?.length ?? 0);
+  const isFetchingInitialData = !data && !error;
+  const lastItem = data && data[data.length - 1];
+  const hasMore = !!lastItem?.nextPageUrl;
+  const isFetchingMore = !!(!error && hasMore && size > (data?.length ?? 0));
+  const isFetching = isFetchingInitialData || isFetchingMore;
+
   // extract the books from the array of collections in data
   const books =
     data?.reduce(
@@ -61,49 +69,36 @@ export const InfiniteBookList: React.FC<{ firstPageUrl: string }> = ({
       []
     ) ?? [];
 
-  const listRef = React.useRef<HTMLUListElement>(null);
-
-  // detect when we are at scroll bottom
-  React.useEffect(() => {
-    const isAtBottom = () => {
-      if (!listRef.current) return false;
-      const endOfList =
-        listRef.current.clientHeight + listRef.current.offsetTop;
-      // the 2 here indicates we are within one window height of scroll bottom
-      const scrollBottom = window.scrollY + 2 * window.innerHeight;
-
-      return scrollBottom >= endOfList;
-    };
-
-    const handleScroll = () => {
-      if (isAtBottom() && !isFetchingMore) {
-        // increase the index when we are at scroll bottom
-        setSize(size => size + 1);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [setSize, isFetchingMore]);
-
   return (
-    <BookList books={books} listRef={listRef} isFetchingMore={isFetchingMore} />
+    <>
+      <BookList books={books} />
+      {isFetching ? (
+        <ListLoadingIndicator />
+      ) : hasMore ? (
+        <div sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+          <Button
+            size="lg"
+            color="brand.primary"
+            onClick={() => setSize(size => size + 1)}
+            sx={{ maxWidth: 300 }}
+          >
+            View more
+          </Button>
+        </div>
+      ) : null}
+    </>
   );
 };
 
 export const BookList: React.FC<{
   books: BookData[];
-  listRef?: React.RefObject<HTMLUListElement>;
-  isFetchingMore?: boolean;
-}> = ({ books, listRef, isFetchingMore = false }) => {
+}> = ({ books }) => {
   return (
-    <React.Fragment>
-      <ul ref={listRef} sx={{ px: 5 }} data-testid="listview-list">
-        {books.map(book => (
-          <BookListItem key={book.id} book={book} />
-        ))}
-      </ul>
-      {isFetchingMore && <ListLoadingIndicator />}
-    </React.Fragment>
+    <ul sx={{ px: 5 }} data-testid="listview-list">
+      {books.map(book => (
+        <BookListItem key={book.id} book={book} />
+      ))}
+    </ul>
   );
 };
 
