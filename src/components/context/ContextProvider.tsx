@@ -7,9 +7,17 @@ import makeTheme from "../../theme";
 import { LinkUtilsProvider } from "./LinkUtilsContext";
 import { UserProvider } from "components/context/UserContext";
 import AuthModal from "auth/AuthModal";
+import { ConfigInterface, SWRConfig } from "swr";
 
 type ProviderProps = {
   library: LibraryData;
+};
+
+const swrOptions: ConfigInterface = {
+  // we don't generally need to revalidate our data very often
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  dedupingInterval: 2000
 };
 /**
  * Combines all of the apps context provider into a single component for simplicity
@@ -18,17 +26,19 @@ const AppContextProvider: React.FC<ProviderProps> = ({ children, library }) => {
   const theme = makeTheme(library.colors);
 
   return (
-    <ThemeProvider theme={theme}>
-      <ReakitProvider>
-        <LibraryProvider library={library}>
-          <LinkUtilsProvider library={library}>
-            <UserProvider>
-              <AuthModal>{children}</AuthModal>
-            </UserProvider>
-          </LinkUtilsProvider>
-        </LibraryProvider>
-      </ReakitProvider>
-    </ThemeProvider>
+    <SWRConfig value={swrOptions}>
+      <ThemeProvider theme={theme}>
+        <ReakitProvider>
+          <LibraryProvider library={library}>
+            <LinkUtilsProvider library={library}>
+              <UserProvider>
+                <AuthModal>{children}</AuthModal>
+              </UserProvider>
+            </LinkUtilsProvider>
+          </LibraryProvider>
+        </ReakitProvider>
+      </ThemeProvider>
+    </SWRConfig>
   );
 };
 
