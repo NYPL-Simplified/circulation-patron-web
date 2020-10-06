@@ -49,11 +49,6 @@ test("truncates authors", () => {
   expect(utils.queryByText("one, two, three")).toBeFalsy();
 });
 
-test("displays loader", () => {
-  const utils = render(<BookList books={[]} isFetchingMore={true} />);
-  expect(utils.getByText("Loading ...")).toBeInTheDocument();
-});
-
 test("doesn't render book if it has no url", () => {
   const utils = render(
     <BookList
@@ -63,7 +58,6 @@ test("doesn't render book if it has no url", () => {
           url: undefined
         }
       ]}
-      isFetchingMore={true}
     />
   );
   expect(utils.queryByText("The Mayan Secrets")).not.toBeInTheDocument();
@@ -123,13 +117,47 @@ describe("infinite loading book list", () => {
   });
 
   test("shows loading indicator when fetching more", () => {
+    const notFinalCollection: CollectionData = {
+      books: [fixtures.book],
+      id: "id!",
+      lanes: [],
+      navigationLinks: [],
+      title: "last collection",
+      url: "http://last.com",
+      nextPageUrl: "http://next-page.com"
+    };
     useSWRInfiniteMock.mockReturnValue({
-      size: 1,
+      size: 2,
       setSize: jest.fn(),
-      data: []
+      data: [notFinalCollection]
     } as any);
     const utils = render(<InfiniteBookList firstPageUrl="/fist-page" />);
 
     expect(utils.getByText("Loading ...")).toBeInTheDocument();
+  });
+
+  test("doesn't show loader when at end of list", () => {
+    const finalCollection: CollectionData = {
+      books: [fixtures.book],
+      id: "id!",
+      lanes: [],
+      navigationLinks: [],
+      title: "last collection",
+      url: "http://last.com"
+      // no nextPageUrl
+    };
+    useSWRInfiniteMock.mockReturnValue({
+      size: 2,
+      setSize: jest.fn(),
+      data: [finalCollection]
+    } as any);
+
+    const utils = render(
+      <InfiniteBookList firstPageUrl="http://first-page.com" />
+    );
+
+    expect(utils.getByText("The Mayan Secrets")).toBeInTheDocument();
+
+    expect(utils.queryByText("Loading...")).not.toBeInTheDocument();
   });
 });
