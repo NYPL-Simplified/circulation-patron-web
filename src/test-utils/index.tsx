@@ -28,6 +28,7 @@ export { fixtures, setEnv };
 configure({ adapter: new Adapter() });
 
 export const mockShowAuthModal = jest.fn();
+export const mockShowModalAndReset = jest.fn();
 
 /**
  * mock out the window.URL.createObjectURL since it isn't
@@ -65,7 +66,10 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
             <LibraryProvider library={library}>
               <LinkUtilsProvider library={library}>
                 <UserContext.Provider value={user}>
-                  <AuthModalProvider showModal={mockShowAuthModal}>
+                  <AuthModalProvider
+                    showModal={mockShowAuthModal}
+                    showModalAndReset={mockShowModalAndReset}
+                  >
                     {children}
                   </AuthModalProvider>
                 </UserContext.Provider>

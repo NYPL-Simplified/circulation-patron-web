@@ -18,12 +18,13 @@ import useUser from "components/context/UserContext";
 import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
 import BasicAuthButton from "auth/BasicAuthButton";
+import LoadingIndicator from "components/LoadingIndicator";
 
 const AuthModal: React.FC = ({ children }) => {
   const dialog = useDialogState();
   const { hide } = dialog;
   const { catalogName, authMethods } = useLibraryContext();
-  const { isAuthenticated, clearCredentials } = useUser();
+  const { isAuthenticated, clearCredentials, isLoading } = useUser();
   /**
    * If the user becomes authenticated, we can hide the form
    */
@@ -35,7 +36,7 @@ const AuthModal: React.FC = ({ children }) => {
   /**
    * When you show the login modal, clear any old credentials from the state
    */
-  const showModal = React.useCallback(() => {
+  const showModalAndReset = React.useCallback(() => {
     clearCredentials();
     show();
   }, [show, clearCredentials]);
@@ -47,14 +48,15 @@ const AuthModal: React.FC = ({ children }) => {
    *  - There are 1-5 methods. Show a button for each.
    *  - There are >5 methods. Show a combobox selector.
    */
-  const formStatus =
-    authMethods.length === 0
-      ? "no-auth"
-      : authMethods.length === 1
-      ? "single-auth"
-      : authMethods.length < 5
-      ? "buttons"
-      : "combobox";
+  const formStatus = isLoading
+    ? "loading"
+    : authMethods.length === 0
+    ? "no-auth"
+    : authMethods.length === 1
+    ? "single-auth"
+    : authMethods.length < 5
+    ? "buttons"
+    : "combobox";
 
   return (
     <React.Fragment>
@@ -68,9 +70,14 @@ const AuthModal: React.FC = ({ children }) => {
         >
           <div sx={{ textAlign: "center", p: 0 }}>
             <H2>{catalogName}</H2>
-            <h4>Login</h4>
+            {formStatus !== "loading" && <h4>Login</h4>}
           </div>
-          {formStatus === "no-auth" ? (
+          {formStatus === "loading" ? (
+            <Stack direction="column" sx={{ alignItems: "center" }}>
+              <LoadingIndicator />
+              Logging in...
+            </Stack>
+          ) : formStatus === "no-auth" ? (
             <NoAuth />
           ) : formStatus === "single-auth" ? (
             <SignInForm method={authMethods[0]} />
@@ -85,7 +92,12 @@ const AuthModal: React.FC = ({ children }) => {
           even though we don't open the dialog with a button
       */}
       {/* <DialogDisclosure sx={{ display: "none" }} {...dialog} /> */}
-      <AuthModalProvider showModal={showModal}>{children}</AuthModalProvider>
+      <AuthModalProvider
+        showModal={dialog.show}
+        showModalAndReset={showModalAndReset}
+      >
+        {children}
+      </AuthModalProvider>
     </React.Fragment>
   );
 };

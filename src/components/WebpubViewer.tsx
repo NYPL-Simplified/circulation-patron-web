@@ -33,7 +33,7 @@ const WebpubViewer = () => {
   const library = useLibraryContext();
   const router = useRouter();
   const bookUrl = extractParam(router.query, "bookUrl");
-  const { token } = useUser();
+  const { token, status } = useUser();
   const { showModal } = useAuthModalContext();
 
   const { catalogName } = library;
@@ -46,8 +46,8 @@ const WebpubViewer = () => {
    * Show the auth modal if the user is not logged in
    */
   React.useEffect(() => {
-    if (!token) showModal();
-  }, [token, showModal]);
+    if (status === "unauthenticated") showModal();
+  }, [status, showModal]);
 
   // this will be caught by an error boundary and display a 404
   if (!bookUrl)

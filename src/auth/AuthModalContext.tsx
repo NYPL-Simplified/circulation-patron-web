@@ -5,14 +5,14 @@ import * as React from "react";
  */
 
 const AuthModalContext = React.createContext<
-  { showModal: () => void } | undefined
+  { showModal: () => void; showModalAndReset: () => void } | undefined
 >(undefined);
 
-export const AuthModalProvider: React.FC<{ showModal: () => void }> = ({
-  showModal,
-  children
-}) => (
-  <AuthModalContext.Provider value={{ showModal }}>
+export const AuthModalProvider: React.FC<{
+  showModal: () => void;
+  showModalAndReset: () => void;
+}> = ({ showModal, showModalAndReset, children }) => (
+  <AuthModalContext.Provider value={{ showModal, showModalAndReset }}>
     {children}
   </AuthModalContext.Provider>
 );

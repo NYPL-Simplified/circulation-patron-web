@@ -72,7 +72,7 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
   const { helpWebsite, libraryWebsite } = library.libraryLinks;
   const libraryName = library.catalogName;
   const { isAuthenticated, isLoading } = useUser();
-  const { showModal } = useAuthModalContext();
+  const { showModalAndReset } = useAuthModalContext();
   return (
     <div
       sx={{
@@ -125,7 +125,7 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
       {isAuthenticated ? (
         <SignOut />
       ) : (
-        <Button onClick={showModal} loading={isLoading}>
+        <Button onClick={showModalAndReset} loading={isLoading}>
           Sign In
         </Button>
       )}
