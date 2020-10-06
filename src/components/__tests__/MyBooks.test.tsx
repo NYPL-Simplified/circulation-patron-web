@@ -2,7 +2,6 @@ import * as React from "react";
 import { render, fixtures, fireEvent } from "test-utils";
 import { MyBooks } from "../MyBooks";
 import { BookData } from "interfaces";
-import mockUser from "test-utils/mockUser";
 
 test("shows message and button when not authenticated", () => {
   const utils = render(<MyBooks />);
@@ -12,13 +11,13 @@ test("shows message and button when not authenticated", () => {
   ).toBeInTheDocument();
 });
 test("displays empty state when empty and signed in", async () => {
-  mockUser({
-    isAuthenticated: true,
-    loans: undefined,
-    isLoading: false
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: undefined,
+      isLoading: false
+    }
   });
-
-  const utils = render(<MyBooks />);
 
   expect(
     utils.queryByText("You need to be signed in to view this page.")
@@ -33,18 +32,24 @@ test("displays empty state when empty and signed in", async () => {
   expect(utils.getByText("Sign Out")).toBeInTheDocument();
 });
 
-test("sign out shows sign out modal", async () => {
-  mockUser({
-    isAuthenticated: true,
-    loans: undefined,
-    isLoading: false,
-    signOut: jest.fn()
+test("sign out calls sign out", async () => {
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: undefined,
+      isLoading: false
+    }
   });
 
-  const utils = render(<MyBooks />);
-
+  expect(fixtures.mockSignOut).toHaveBeenCalledTimes(0);
   const signOut = await utils.findByRole("button", { name: "Sign Out" });
   fireEvent.click(signOut);
+
+  // now get the confirmation button
+  const realSignOut = utils.getByLabelText("Confirm Sign Out");
+  fireEvent.click(realSignOut);
+
+  expect(fixtures.mockSignOut).toHaveBeenCalledTimes(1);
 });
 
 const books: BookData[] = [
@@ -68,12 +73,13 @@ const books: BookData[] = [
 ];
 
 test("displays books when signed in with data", async () => {
-  mockUser({
-    isAuthenticated: true,
-    loans: books,
-    isLoading: false
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: books,
+      isLoading: false
+    }
   });
-  const utils = render(<MyBooks />);
 
   expect(utils.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
   expect(utils.getByText(fixtures.makeBook(9).title)).toBeInTheDocument();
@@ -94,13 +100,13 @@ test("displays books when signed in with data", async () => {
 });
 
 test("sorts books", () => {
-  mockUser({
-    isAuthenticated: true,
-    loans: books,
-    isLoading: false
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: books,
+      isLoading: false
+    }
   });
-
-  const utils = render(<MyBooks />);
   const bookNames = utils.queryAllByText(/Book Title/);
   expect(bookNames[0]).toHaveTextContent("Book Title 11");
   expect(bookNames[1]).toHaveTextContent("Book Title 10");

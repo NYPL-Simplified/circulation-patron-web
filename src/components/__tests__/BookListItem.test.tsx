@@ -3,7 +3,6 @@ import { render, fixtures, waitFor } from "test-utils";
 import { BookListItem } from "components/BookList";
 import userEvent from "@testing-library/user-event";
 import * as fetch from "dataflow/opds1/fetch";
-import mockUser from "test-utils/mockUser";
 
 function expectViewDetails(utils: ReturnType<typeof render>) {
   const button = utils.getByRole("link", { name: "View Book Details" });
@@ -28,7 +27,6 @@ describe("open access book", () => {
   });
 
   test("shows no borrow button when book is loaned", async () => {
-    mockUser();
     const utils = render(
       <BookListItem
         book={{
@@ -99,14 +97,14 @@ describe("available to borrow book", () => {
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
     const mockSetBook = jest.fn();
-    mockUser({
-      setBook: mockSetBook,
-      isAuthenticated: true,
-      loans: fixtures.loans.books
-    });
     mockFetchBook.mockResolvedValue(closedAccessBook);
-
-    const utils = render(<BookListItem book={closedAccessBook} />);
+    const utils = render(<BookListItem book={closedAccessBook} />, {
+      user: {
+        setBook: mockSetBook,
+        isAuthenticated: true,
+        loans: fixtures.loans.books
+      }
+    });
 
     // click borrow
     userEvent.click(utils.getByText("Borrow to read on a mobile device"));
@@ -149,14 +147,15 @@ describe("ready to borrow book", () => {
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
     const mockSetBook = jest.fn();
-    mockUser({
-      setBook: mockSetBook,
-      isAuthenticated: true,
-      loans: fixtures.loans.books
-    });
     mockFetchBook.mockResolvedValue(readyBook);
 
-    const utils = render(<BookListItem book={readyBook} />);
+    const utils = render(<BookListItem book={readyBook} />, {
+      user: {
+        setBook: mockSetBook,
+        isAuthenticated: true,
+        loans: fixtures.loans.books
+      }
+    });
 
     // click borrow
     userEvent.click(utils.getByText("Borrow to read on a mobile device"));
@@ -211,14 +210,15 @@ describe("ready to borrow book with multiple borrowUrls", () => {
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
     const mockSetBook = jest.fn();
-    mockUser({
-      setBook: mockSetBook,
-      isAuthenticated: true,
-      loans: fixtures.loans.books
-    });
     mockFetchBook.mockResolvedValue(readyBook);
 
-    const utils = render(<BookListItem book={readyBook} />);
+    const utils = render(<BookListItem book={readyBook} />, {
+      user: {
+        setBook: mockSetBook,
+        isAuthenticated: true,
+        loans: fixtures.loans.books
+      }
+    });
 
     // click borrow
     userEvent.click(utils.getByText("Borrow to read on a mobile device"));
@@ -267,14 +267,15 @@ describe("available to reserve book", () => {
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
     const mockSetBook = jest.fn();
-    mockUser({
-      setBook: mockSetBook,
-      isAuthenticated: true,
-      loans: fixtures.loans.books
-    });
     mockFetchBook.mockResolvedValue(unavailableBook);
 
-    const utils = render(<BookListItem book={unavailableBook} />);
+    const utils = render(<BookListItem book={unavailableBook} />, {
+      user: {
+        setBook: mockSetBook,
+        isAuthenticated: true,
+        loans: fixtures.loans.books
+      }
+    });
 
     // click borrow
     userEvent.click(utils.getByText("Reserve"));

@@ -16,7 +16,7 @@ export type UserState = {
   signOut: () => void;
   setBook: (book: BookData) => void;
   error: any;
-  token?: string;
+  token: string | undefined;
   clearCredentials: () => void;
 };
 

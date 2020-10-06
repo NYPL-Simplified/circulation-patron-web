@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 import fetchMock from "jest-fetch-mock";
 import Cookie from "js-cookie";
 import { generateCredentials } from "utils/auth";
+import { UserProvider } from "components/context/UserContext";
 
 const mockCookie = Cookie as any;
 const method: OPDS1.BasicAuthMethod = {
@@ -43,7 +44,11 @@ test("sumbits", async () => {
         setTimeout(() => resolve(JSON.stringify(fixtures.loans)), 100)
       )
   );
-  const utils = render(<BasicAuthForm method={method} />);
+  const utils = render(
+    <UserProvider>
+      <BasicAuthForm method={method} />
+    </UserProvider>
+  );
 
   // act
   const barcode = utils.getByLabelText("Barcode input");
@@ -109,7 +114,11 @@ test("displays server error", async () => {
   fetchMock.mockResponseOnce(JSON.stringify(problemdoc), {
     status: 401
   });
-  const utils = render(<BasicAuthForm method={method} />);
+  const utils = render(
+    <UserProvider>
+      <BasicAuthForm method={method} />
+    </UserProvider>
+  );
 
   expect(fetchMock).toHaveBeenCalledWith("/shelf-url", {
     headers: {

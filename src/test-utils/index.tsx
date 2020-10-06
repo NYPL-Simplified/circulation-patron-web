@@ -1,18 +1,23 @@
 import * as React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import ContextProvider from "../components/context/ContextProvider";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
-import library from "./fixtures/library";
 import { LibraryData } from "../interfaces";
 import "./mockScrollTo";
 import * as fixtures from "./fixtures";
 import serializer from "jest-emotion";
+import { Provider as ReakitProvider } from "reakit";
 import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
 import { enableFetchMocks } from "jest-fetch-mock";
 import setEnv from "./setEnv";
+import { LibraryProvider } from "components/context/LibraryContext";
+import { LinkUtilsProvider } from "components/context/LinkUtilsContext";
+import { UserContext, UserState } from "components/context/UserContext";
+import { ThemeProvider } from "theme-ui";
+import makeTheme from "theme";
+import { AuthModalProvider } from "auth/AuthModalContext";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);
@@ -21,6 +26,8 @@ export { fixtures, setEnv };
 
 // configure the enzyme adapter
 configure({ adapter: new Adapter() });
+
+export const mockShowAuthModal = jest.fn();
 
 /**
  * mock out the window.URL.createObjectURL since it isn't
@@ -31,16 +38,41 @@ const mockCreateObjectURL = jest.fn();
 
 type CustomRenderOptions = Parameters<typeof render>[1] & {
   router?: Partial<NextRouter>;
-  library?: LibraryData;
-  colors?: { primary: string; secondary: string };
+  library?: Partial<LibraryData>;
+  user?: Partial<UserState>;
 };
+/**
+ * Our custom render function wraps components in mocked versions of our
+ * providers
+ */
 const customRender = (ui: any, options?: CustomRenderOptions) => {
+  const library: LibraryData = {
+    ...fixtures.libraryData,
+    ...options?.library
+  };
+  const theme = makeTheme(library.colors);
+
+  const user: UserState = {
+    ...fixtures.user,
+    ...options?.user
+  };
+
   const AllTheProviders: React.FC = ({ children }) => {
     return (
       <MockNextRouterContextProvider router={options?.router}>
-        <ContextProvider library={options?.library ?? library}>
-          {children}
-        </ContextProvider>
+        <ThemeProvider theme={theme}>
+          <ReakitProvider>
+            <LibraryProvider library={library}>
+              <LinkUtilsProvider library={library}>
+                <UserContext.Provider value={user}>
+                  <AuthModalProvider showModal={mockShowAuthModal}>
+                    {children}
+                  </AuthModalProvider>
+                </UserContext.Provider>
+              </LinkUtilsProvider>
+            </LibraryProvider>
+          </ReakitProvider>
+        </ThemeProvider>
       </MockNextRouterContextProvider>
     );
   };

@@ -1,8 +1,7 @@
 import * as React from "react";
-import { render } from "../../test-utils";
+import { fixtures, render } from "../../test-utils";
 import SignOut from "components/SignOut";
 import userEvent from "@testing-library/user-event";
-import Cookie from "js-cookie";
 
 // const mockCookie
 test("Shows button", () => {
@@ -52,7 +51,7 @@ test("signs out on click signout", () => {
     name: "Confirm Sign Out"
   });
 
-  expect(Cookie.remove).toHaveBeenCalledTimes(0);
+  expect(fixtures.mockSignOut).toHaveBeenCalledTimes(0);
   userEvent.click(signOutForReal);
-  expect(Cookie.remove).toHaveBeenCalledWith("CPW_AUTH_COOKIE/null");
+  expect(fixtures.mockSignOut).toHaveBeenCalledTimes(1);
 });

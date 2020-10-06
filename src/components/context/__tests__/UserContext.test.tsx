@@ -4,9 +4,8 @@ import { OPDS1 } from "interfaces";
 import { act, fixtures, render } from "test-utils";
 import Cookie from "js-cookie";
 import * as router from "next/router";
-import useUser from "components/context/UserContext";
+import useUser, { UserProvider } from "components/context/UserContext";
 import mockAuthenticatedOnce from "test-utils/mockAuthState";
-import { mockedFetchCollection } from "test-utils/mockLoans";
 import * as swr from "swr";
 import { makeSwrResponse } from "test-utils/mockSwr";
 
@@ -30,7 +29,7 @@ mockSWR.mockReturnValue(defaultMock);
  * render wraps everything with our ContextProvider already (see text-utils/index)
  */
 function renderUserContext() {
-  return render(<div>child</div>);
+  return render(<UserProvider>child</UserProvider>);
 }
 
 beforeEach(() => {
@@ -136,14 +135,17 @@ test("extracts SAML tokens from the url", () => {
 
 test("sign out clears cookies and data", async () => {
   mockAuthenticatedOnce();
-  mockedFetchCollection.mockResolvedValue(fixtures.loans);
   let extractedSignOut: any = null;
   function Extractor() {
     const { signOut } = useUser();
     extractedSignOut = signOut;
     return <div>hello</div>;
   }
-  render(<Extractor />);
+  render(
+    <UserProvider>
+      <Extractor />
+    </UserProvider>
+  );
 
   expect(mockSWR).toHaveBeenCalledWith(
     null,
@@ -178,7 +180,11 @@ test("sign in sets cookie", async () => {
     extractedSignIn = signIn;
     return <div>{token}</div>;
   }
-  render(<Extractor />);
+  render(
+    <UserProvider>
+      <Extractor />
+    </UserProvider>
+  );
   expect(mockSWR).toHaveBeenCalledWith(
     null,
     expect.anything(),

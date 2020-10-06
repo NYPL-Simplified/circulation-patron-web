@@ -3,13 +3,13 @@ import {
   render,
   fixtures,
   waitFor,
-  waitForElementToBeRemoved
+  waitForElementToBeRemoved,
+  mockShowAuthModal
 } from "test-utils";
 import BorrowOrReserve from "components/BorrowOrReserve";
 import { MediaLink } from "interfaces";
 import userEvent from "@testing-library/user-event";
 import * as fetch from "dataflow/opds1/fetch";
-import mockAuthenticatedOnce from "test-utils/mockAuthState";
 import { ServerError } from "errors";
 
 const borrowLink: MediaLink = {
@@ -54,17 +54,12 @@ test("shows reserve button for reservable book", () => {
  * Some mock utilites for the next tests
  */
 (fetch as any).fetchCollection = jest.fn();
-const mockedFetchCollection = fetch.fetchCollection as jest.MockedFunction<
-  typeof fetch.fetchCollection
->;
 (fetch as any).fetchBook = jest.fn();
 const mockedFetchBook = fetch.fetchBook as jest.MockedFunction<
   typeof fetch.fetchBook
 >;
 
 test("borrowing calls correct url with token", async () => {
-  // mock our credentials
-  mockAuthenticatedOnce();
   mockedFetchBook.mockResolvedValueOnce(fixtures.book);
   const utils = render(
     <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />
@@ -85,21 +80,24 @@ test("borrowing calls correct url with token", async () => {
   expect(mockedFetchBook).toHaveBeenCalledWith(
     "/epub-borrow-link",
     "http://test-cm.com/catalogUrl",
-    "some-token"
+    "user-token"
   );
 
   await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
 });
 
 test("shows auth form and error when not logged in", () => {
-  mockAuthenticatedOnce(null);
   const utils = render(
-    <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />
+    <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />,
+    {
+      user: { isAuthenticated: false, token: undefined }
+    }
   );
 
   const button = utils.getByRole("button", {
     name: "Borrow to read on a mobile device"
   });
+  expect(mockShowAuthModal).toHaveBeenCalledTimes(0);
 
   userEvent.click(button);
 
@@ -114,14 +112,11 @@ test("shows auth form and error when not logged in", () => {
   // doesn't call the borrow book
   expect(mockedFetchBook).not.toHaveBeenCalled();
 
-  // shows auth form
-  expect(
-    utils.getByRole("button", { name: "Login with Library Barcode" })
-  ).toBeInTheDocument();
+  // shows auth modal
+  expect(mockShowAuthModal).toHaveBeenCalledTimes(1);
 });
 
 test("catches and displays server errors", async () => {
-  mockAuthenticatedOnce();
   const utils = render(
     <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />
   );
@@ -152,7 +147,6 @@ test("catches and displays server errors", async () => {
 });
 
 test("catches unrecognized fetch errors", async () => {
-  mockAuthenticatedOnce();
   const utils = render(
     <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />
   );
@@ -176,21 +170,18 @@ test("catches unrecognized fetch errors", async () => {
   });
 });
 
-test("revalidates loans after borrowing", async () => {
-  mockAuthenticatedOnce();
+test("calls set book after borrowing", async () => {
   const utils = render(
     <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />
   );
   const button = utils.getByRole("button", {
     name: "Borrow to read on a mobile device"
   });
-  await waitFor(() => expect(mockedFetchCollection).toHaveBeenCalledTimes(1));
 
   mockedFetchBook.mockResolvedValueOnce(fixtures.book);
+  expect(fixtures.mockSetBook).toHaveBeenCalledTimes(0);
 
   userEvent.click(button);
 
-  await waitFor(() => {
-    expect(mockedFetchCollection).toHaveBeenCalledTimes(2);
-  });
+  await waitFor(() => expect(fixtures.mockSetBook).toHaveBeenCalledTimes(1));
 });
