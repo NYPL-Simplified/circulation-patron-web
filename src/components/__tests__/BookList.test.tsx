@@ -5,6 +5,7 @@ import merge from "deepmerge";
 import { BookData, CollectionData } from "interfaces";
 import { useSWRInfinite } from "swr";
 import { fetchCollection } from "dataflow/opds1/fetch";
+import userEvent from "@testing-library/user-event";
 
 const books = fixtures.makeBooks(3);
 
@@ -77,10 +78,6 @@ function mockCollection(data?: CollectionData[]) {
 }
 
 describe("infinite loading book list", () => {
-  /**
-   * - fetches collection
-   * - fetches at end of list
-   */
   test("fetches collection", () => {
     mockCollection();
     render(<InfiniteBookList firstPageUrl="/fist-page" />);
@@ -159,5 +156,35 @@ describe("infinite loading book list", () => {
     expect(utils.getByText("The Mayan Secrets")).toBeInTheDocument();
 
     expect(utils.queryByText("Loading...")).not.toBeInTheDocument();
+  });
+
+  test("shows view more button which loads more books on click", () => {
+    const notFinalCollection: CollectionData = {
+      books: [fixtures.book],
+      id: "id!",
+      lanes: [],
+      navigationLinks: [],
+      title: "last collection",
+      url: "http://last.com",
+      nextPageUrl: "http://next-page.com"
+    };
+    const mockSetSize = jest.fn();
+    useSWRInfiniteMock.mockReturnValue({
+      size: 1,
+      setSize: mockSetSize,
+      data: [notFinalCollection]
+    } as any);
+    const utils = render(<InfiniteBookList firstPageUrl="/fist-page" />);
+
+    const viewMore = utils.getByRole("button", {
+      name: "View more"
+    });
+
+    expect(viewMore).toBeInTheDocument();
+
+    // click it and you should fetch more
+    expect(mockSetSize).toHaveBeenCalledTimes(0);
+    userEvent.click(viewMore);
+    expect(mockSetSize).toHaveBeenCalledTimes(1);
   });
 });
