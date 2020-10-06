@@ -80,7 +80,7 @@ function mockCollection(data?: CollectionData[]) {
 describe("infinite loading book list", () => {
   test("fetches collection", () => {
     mockCollection();
-    render(<InfiniteBookList firstPageUrl="/fist-page" />);
+    render(<InfiniteBookList firstPageUrl="/first-page" />);
 
     expect(useSWRInfinite).toHaveBeenCalledWith(
       expect.anything(),
@@ -100,7 +100,7 @@ describe("infinite loading book list", () => {
         books: [fixtures.book]
       }
     ]);
-    const utils = render(<InfiniteBookList firstPageUrl="/fist-page" />);
+    const utils = render(<InfiniteBookList firstPageUrl="/first-page" />);
 
     expect(
       utils.getByRole("heading", { name: "Book Title 0" })
@@ -128,7 +128,7 @@ describe("infinite loading book list", () => {
       setSize: jest.fn(),
       data: [notFinalCollection]
     } as any);
-    const utils = render(<InfiniteBookList firstPageUrl="/fist-page" />);
+    const utils = render(<InfiniteBookList firstPageUrl="/first-page" />);
 
     expect(utils.getByText("Loading ...")).toBeInTheDocument();
   });
@@ -174,7 +174,7 @@ describe("infinite loading book list", () => {
       setSize: mockSetSize,
       data: [notFinalCollection]
     } as any);
-    const utils = render(<InfiniteBookList firstPageUrl="/fist-page" />);
+    const utils = render(<InfiniteBookList firstPageUrl="/first-page" />);
 
     const viewMore = utils.getByRole("button", {
       name: "View more"
