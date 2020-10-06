@@ -197,12 +197,6 @@ export interface LinkData {
 
 export type { ComplaintsState } from "./hooks/useComplaints/reducer";
 
-export interface FetchErrorData {
-  status: number | null;
-  response: string;
-  url: string;
-}
-
 /**
  * Theme
  */

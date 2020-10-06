@@ -2,9 +2,8 @@ import * as React from "react";
 import { render, fixtures, waitFor } from "test-utils";
 import { BookListItem } from "components/BookList";
 import userEvent from "@testing-library/user-event";
-import mockLoans from "test-utils/mockLoans";
-import { mockAuthenticated } from "test-utils/mockAuthState";
 import * as fetch from "dataflow/opds1/fetch";
+import mockUser from "test-utils/mockUser";
 
 function expectViewDetails(utils: ReturnType<typeof render>) {
   const button = utils.getByRole("link", { name: "View Book Details" });
@@ -29,8 +28,7 @@ describe("open access book", () => {
   });
 
   test("shows no borrow button when book is loaned", async () => {
-    mockAuthenticated();
-    mockLoans([fixtures.book]);
+    mockUser();
     const utils = render(
       <BookListItem
         book={{
@@ -81,10 +79,6 @@ describe("open access book", () => {
 const mockFetchBook = fetch.fetchBook as jest.MockedFunction<
   typeof fetch.fetchBook
 >;
-(fetch as any).fetchCollection = jest.fn();
-const mockFetchCollection = fetch.fetchCollection as jest.MockedFunction<
-  typeof fetch.fetchCollection
->;
 
 describe("available to borrow book", () => {
   const closedAccessBook = fixtures.mergeBook({
@@ -104,16 +98,15 @@ describe("available to borrow book", () => {
   });
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
-    mockAuthenticated();
-    mockLoans([]);
+    const mockSetBook = jest.fn();
+    mockUser({
+      setBook: mockSetBook,
+      isAuthenticated: true,
+      loans: fixtures.loans.books
+    });
     mockFetchBook.mockResolvedValue(closedAccessBook);
 
     const utils = render(<BookListItem book={closedAccessBook} />);
-    expect(mockFetchCollection).toHaveBeenCalledWith(
-      "/shelf-url",
-      "some-token"
-    );
-    expect(mockFetchCollection).toHaveBeenCalledTimes(1);
 
     // click borrow
     userEvent.click(utils.getByText("Borrow to read on a mobile device"));
@@ -121,7 +114,7 @@ describe("available to borrow book", () => {
     expect(mockFetchBook).toHaveBeenCalledWith(
       "/epub-borrow-link",
       "http://test-cm.com/catalogUrl",
-      "some-token"
+      "user-token"
     );
     const borrowButton = utils.getByRole("button", {
       name: /Borrowing.../i
@@ -130,10 +123,8 @@ describe("available to borrow book", () => {
     expect(borrowButton).toHaveAttribute("disabled", "");
 
     // we revalidate the loans
-    await waitFor(() => expect(mockFetchCollection).toHaveBeenCalledTimes(2));
-    expect(mockFetchCollection).toHaveBeenCalledWith(
-      "/shelf-url",
-      "some-token"
+    await waitFor(() =>
+      expect(mockSetBook).toHaveBeenCalledWith(closedAccessBook)
     );
   });
 });
@@ -157,18 +148,15 @@ describe("ready to borrow book", () => {
   });
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
-    mockAuthenticated();
-    mockLoans([]);
+    const mockSetBook = jest.fn();
+    mockUser({
+      setBook: mockSetBook,
+      isAuthenticated: true,
+      loans: fixtures.loans.books
+    });
     mockFetchBook.mockResolvedValue(readyBook);
 
     const utils = render(<BookListItem book={readyBook} />);
-    await waitFor(() =>
-      expect(mockFetchCollection).toHaveBeenCalledWith(
-        "/shelf-url",
-        "some-token"
-      )
-    );
-    expect(mockFetchCollection).toHaveBeenCalledTimes(1);
 
     // click borrow
     userEvent.click(utils.getByText("Borrow to read on a mobile device"));
@@ -176,7 +164,7 @@ describe("ready to borrow book", () => {
     expect(mockFetchBook).toHaveBeenCalledWith(
       "/epub-borrow-link",
       "http://test-cm.com/catalogUrl",
-      "some-token"
+      "user-token"
     );
     const borrowButton = utils.getByRole("button", {
       name: /Borrowing.../i
@@ -185,11 +173,7 @@ describe("ready to borrow book", () => {
     expect(borrowButton).toHaveAttribute("disabled", "");
 
     // we revalidate the loans
-    await waitFor(() => expect(mockFetchCollection).toHaveBeenCalledTimes(2));
-    expect(mockFetchCollection).toHaveBeenCalledWith(
-      "/shelf-url",
-      "some-token"
-    );
+    await waitFor(() => expect(mockSetBook).toHaveBeenCalledWith(readyBook));
   });
 });
 
@@ -226,18 +210,15 @@ describe("ready to borrow book with multiple borrowUrls", () => {
   });
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
-    mockAuthenticated();
-    mockLoans([]);
+    const mockSetBook = jest.fn();
+    mockUser({
+      setBook: mockSetBook,
+      isAuthenticated: true,
+      loans: fixtures.loans.books
+    });
     mockFetchBook.mockResolvedValue(readyBook);
 
     const utils = render(<BookListItem book={readyBook} />);
-    await waitFor(() =>
-      expect(mockFetchCollection).toHaveBeenCalledWith(
-        "/shelf-url",
-        "some-token"
-      )
-    );
-    expect(mockFetchCollection).toHaveBeenCalledTimes(1);
 
     // click borrow
     userEvent.click(utils.getByText("Borrow to read on a mobile device"));
@@ -245,7 +226,7 @@ describe("ready to borrow book with multiple borrowUrls", () => {
     expect(mockFetchBook).toHaveBeenCalledWith(
       "/adobe-borrow-link",
       "http://test-cm.com/catalogUrl",
-      "some-token"
+      "user-token"
     );
     const borrowButton = utils.getByRole("button", {
       name: /Borrowing.../i
@@ -254,11 +235,7 @@ describe("ready to borrow book with multiple borrowUrls", () => {
     expect(borrowButton).toHaveAttribute("disabled", "");
 
     // we revalidate the loans
-    await waitFor(() => expect(mockFetchCollection).toHaveBeenCalledTimes(2));
-    expect(mockFetchCollection).toHaveBeenCalledWith(
-      "/shelf-url",
-      "some-token"
-    );
+    await waitFor(() => expect(mockSetBook).toHaveBeenCalledWith(readyBook));
   });
 });
 
@@ -289,26 +266,23 @@ describe("available to reserve book", () => {
   });
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
-    mockAuthenticated();
-    mockLoans([]);
+    const mockSetBook = jest.fn();
+    mockUser({
+      setBook: mockSetBook,
+      isAuthenticated: true,
+      loans: fixtures.loans.books
+    });
     mockFetchBook.mockResolvedValue(unavailableBook);
 
     const utils = render(<BookListItem book={unavailableBook} />);
-    await waitFor(() =>
-      expect(mockFetchCollection).toHaveBeenCalledWith(
-        "/shelf-url",
-        "some-token"
-      )
-    );
-    expect(mockFetchCollection).toHaveBeenCalledTimes(1);
 
-    // click reserve
+    // click borrow
     userEvent.click(utils.getByText("Reserve"));
     expect(mockFetchBook).toHaveBeenCalledTimes(1);
     expect(mockFetchBook).toHaveBeenCalledWith(
       "/epub-borrow-link",
       "http://test-cm.com/catalogUrl",
-      "some-token"
+      "user-token"
     );
     const borrowButton = utils.getByRole("button", {
       name: /Reserving.../i
@@ -317,10 +291,8 @@ describe("available to reserve book", () => {
     expect(borrowButton).toHaveAttribute("disabled", "");
 
     // we revalidate the loans
-    await waitFor(() => expect(mockFetchCollection).toHaveBeenCalledTimes(2));
-    expect(mockFetchCollection).toHaveBeenCalledWith(
-      "/shelf-url",
-      "some-token"
+    await waitFor(() =>
+      expect(mockSetBook).toHaveBeenCalledWith(unavailableBook)
     );
   });
 });

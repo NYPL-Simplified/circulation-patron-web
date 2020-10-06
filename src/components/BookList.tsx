@@ -54,7 +54,6 @@ export const InfiniteBookList: React.FC<{ firstPageUrl: string }> = ({
   const { data, size, setSize } = useSWRInfinite(getKey, fetchCollection);
 
   const isFetchingMore = size > (data?.length ?? 0);
-
   // extract the books from the array of collections in data
   const books =
     data?.reduce(

@@ -52,7 +52,7 @@ describe("open-access", () => {
     expect(PDFButton).toBeInTheDocument();
   });
 
-  test("clicking download fetches book", () => {
+  test("clicking download fetches book", async () => {
     mockUser({
       loans: [fixtures.book],
       isAuthenticated: true
@@ -71,6 +71,7 @@ describe("open-access", () => {
         "X-Requested-With": "XMLHttpRequest"
       }
     });
+    await waitForElementToBeRemoved(() => utils.getByText("Downloading..."));
   });
 
   test("doesn't show duplicate download options", () => {
@@ -465,7 +466,7 @@ describe("available to download", () => {
     expect(PDFButton).toBeInTheDocument();
   });
 
-  test("download button fetches book", () => {
+  test("download button fetches book", async () => {
     mockUser();
     const utils = render(<FulfillmentCard book={downloadableBook} />);
     const downloadButton = utils.getByText("Download EPUB");
@@ -479,9 +480,10 @@ describe("available to download", () => {
         "X-Requested-With": "XMLHttpRequest"
       }
     });
+    await waitForElementToBeRemoved(() => utils.getByText("Downloading..."));
   });
 
-  test("download button fetches opds entry to indirectly fulfill book", () => {
+  test("download button fetches opds entry to indirectly fulfill book", async () => {
     const bookWithIndirect = mergeBook({
       ...downloadableBook,
       fulfillmentLinks: [
@@ -509,9 +511,14 @@ describe("available to download", () => {
         "X-Requested-With": "XMLHttpRequest"
       }
     });
+
+    // some error will be shown, and we need to await it or our test will
+    // warn about the unexpected promise.
+    await utils.findByText(/error:/gi);
   });
 
-  test("download button says download Adobe Epub when book has adobe type", () => {
+  test("download button says download Adobe Epub when book has adobe type", async () => {
+    mockUser();
     const bookWithIndirect = mergeBook({
       ...downloadableBook,
       fulfillmentLinks: [
@@ -535,6 +542,8 @@ describe("available to download", () => {
         "X-Requested-With": "XMLHttpRequest"
       }
     });
+
+    await waitForElementToBeRemoved(() => utils.getByText("Downloading..."));
   });
 
   test("does not show download links for audiobooks", () => {

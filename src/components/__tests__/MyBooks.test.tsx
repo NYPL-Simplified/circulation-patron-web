@@ -50,6 +50,7 @@ test("sign out shows sign out modal", async () => {
 const books: BookData[] = [
   ...fixtures.makeBooks(10),
   fixtures.mergeBook({
+    id: "book 10",
     title: "Book Title 10",
     availability: {
       until: "Jan 2 2020",
@@ -57,6 +58,7 @@ const books: BookData[] = [
     }
   }),
   fixtures.mergeBook({
+    id: "book 11",
     title: "Book Title 11",
     availability: {
       until: "Jan 1 2020",

@@ -5,69 +5,64 @@ import { useRouter } from "next/router";
 import useLibraryContext from "./context/LibraryContext";
 import useUser from "components/context/UserContext";
 import fetchWithHeaders from "dataflow/fetch";
+import extractParam from "dataflow/utils";
+import { PageNotFoundError, ServerError } from "errors";
+import useAuthModalContext from "auth/AuthModalContext";
 
 const initializeReader = async (
   entryUrl: string,
   catalogName: string,
-  useDecryptor: boolean,
   token: string
 ) => {
-  if (useDecryptor) {
-    const loadDecryptor = async (webpubManifestUrl: any) => {
-      const Decryptor = await import(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        "../../axisnow-access-control-web/src/decryptor"
-      );
-      if (Decryptor) {
-        try {
-          const fulfillmentData = await fetchWithHeaders(
-            webpubManifestUrl,
-            token
-          );
-          const data = await fulfillmentData.json();
-          //If a status thrown, there is an error
-          if (data.status) {
-            throw new Error(data.detail);
-          }
-          return data;
-        } catch (err) {
-          throw new Error("Could not fetch decryptor entry link" + err);
-        }
-      }
-    };
+  const loadDecryptorParams = async (webpubManifestUrl: any) => {
+    if (!NEXT_PUBLIC_AXIS_NOW_DECRYPT) return;
+    const response = await fetchWithHeaders(webpubManifestUrl, token);
+    const data = await response.json();
+    // there should never be a status code in the json
+    if (!response.ok || data.status) {
+      throw new ServerError(webpubManifestUrl, response.status, data);
+    }
+    return data;
+  };
 
-    const decryptorParams = await loadDecryptor(entryUrl);
-    return await reader(entryUrl, token, catalogName, decryptorParams);
-  }
-
-  return await reader(entryUrl, token, catalogName);
+  const decryptorParams = await loadDecryptorParams(entryUrl);
+  return await reader(entryUrl, token, catalogName, decryptorParams);
 };
 
-const BookPage = () => {
+const WebpubViewer = () => {
   const library = useLibraryContext();
   const router = useRouter();
-  const { bookUrl } = router.query;
+  const bookUrl = extractParam(router.query, "bookUrl");
   const { token } = useUser();
+  const { showModal } = useAuthModalContext();
 
   const { catalogName } = library;
 
   React.useEffect(() => {
-    if (token)
-      initializeReader(
-        `${bookUrl}`,
-        catalogName,
-        NEXT_PUBLIC_AXIS_NOW_DECRYPT,
-        token
-      );
+    if (token && bookUrl) initializeReader(bookUrl, catalogName, token);
   }, [token, bookUrl, catalogName]);
 
-  if (!token) return <div>You need to be logged in to view this page.</div>;
+  /**
+   * Show the auth modal if the user is not logged in
+   */
+  React.useEffect(() => {
+    if (!token) showModal();
+  }, [token, showModal]);
+
+  // this will be caught by an error boundary and display a 404
+  if (!bookUrl)
+    throw new PageNotFoundError(
+      "The requested URL is missing a bookUrl parameter."
+    );
+
+  if (!token) {
+    return <div>You need to be logged in to view this page.</div>;
+  }
 
   return (
     <>
       <div id="viewer" />
-      <style global jsx>{`
+      <style test-id="viewer-styles" global jsx>{`
         :root {
           -webkit-text-size-adjust: 100%;
           zoom: reset;
@@ -1030,4 +1025,4 @@ const BookPage = () => {
   );
 };
 
-export default BookPage;
+export default WebpubViewer;

@@ -19,7 +19,7 @@ import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
 import BasicAuthButton from "auth/BasicAuthButton";
 
-const AuthForm: React.FC = ({ children }) => {
+const AuthModal: React.FC = ({ children }) => {
   const dialog = useDialogState();
   const { hide } = dialog;
   const { catalogName, authMethods } = useLibraryContext();
@@ -155,15 +155,19 @@ const Buttons: React.FC<{
             case OPDS1.BasicAuthType:
               return (
                 <BasicAuthButton
-                  key={method.type}
+                  key={getIdForMethod(method)}
                   method={method}
                   onClick={() => handleChangeMethod(OPDS1.BasicAuthType)}
                 />
               );
             case OPDS1.SamlAuthType:
-              return <SamlAuthButton method={method} key={method.type} />;
+              return (
+                <SamlAuthButton method={method} key={getIdForMethod(method)} />
+              );
             case OPDS1.CleverAuthType:
-              return <CleverButton method={method} key={method.type} />;
+              return (
+                <CleverButton method={method} key={getIdForMethod(method)} />
+              );
             default:
               return null;
           }
@@ -209,7 +213,7 @@ const Combobox: React.FC<{
         onChange={e => handleChangeMethod(e.target.value)}
       >
         {authMethods?.map(method => (
-          <option key={method.type} value={getIdForMethod(method)}>
+          <option key={getIdForMethod(method)} value={getIdForMethod(method)}>
             {method.description}
           </option>
         ))}
@@ -235,4 +239,4 @@ function getMethodForId(
   );
 }
 
-export default AuthForm;
+export default AuthModal;

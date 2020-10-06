@@ -1,31 +1,33 @@
 /* eslint-disable camelcase */
 import * as React from "react";
-import { BookData, OPDS1 } from "interfaces";
-import { act, fixtures, render, waitFor } from "test-utils";
+import { OPDS1 } from "interfaces";
+import { act, fixtures, render } from "test-utils";
 import Cookie from "js-cookie";
 import * as router from "next/router";
 import useUser from "components/context/UserContext";
-import mockAuthenticatedOnce, { creds } from "test-utils/mockAuthState";
+import mockAuthenticatedOnce from "test-utils/mockAuthState";
 import { mockedFetchCollection } from "test-utils/mockLoans";
-/**
- * This file tests both UserContext and useCredentials, as
- * the latter is only used within the former. It doesn't have
- * to pass the user provider in to the render function, because
- * render wraps everything with our ContextProvider already (see text-utils/index)
- */
+import * as swr from "swr";
+import { makeSwrResponse } from "test-utils/mockSwr";
 
-function expectFetchWithToken(token: string) {
-  expect(mockedFetchCollection).toHaveBeenCalledWith("/shelf-url", token);
-}
+const mockSWR = jest.spyOn(swr, "default");
 
 const str = JSON.stringify;
 const mockCookie = Cookie as any;
 const useRouterSpy = jest.spyOn(router, "useRouter");
 
+const mutateMock = jest.fn();
+const defaultMock = makeSwrResponse({
+  data: fixtures.emptyCollection,
+  mutate: mutateMock
+});
+mockSWR.mockReturnValue(defaultMock);
+
 /**
- * Our custom `render` already wraps passing in components
- * with a UserProvider automatically, so we don't need to
- * pass the component in manually here.
+ * This file tests both UserContext and useCredentials, as
+ * the latter is only used within the former. It doesn't have
+ * to pass the user provider in to the render function, because
+ * render wraps everything with our ContextProvider already (see text-utils/index)
  */
 function renderUserContext() {
   return render(<div>child</div>);
@@ -39,12 +41,15 @@ beforeEach(() => {
   } as any);
 });
 
-test("fetches loans when credentials are present", () => {
+test("fetches loans when credentials are present", async () => {
   mockAuthenticatedOnce();
   renderUserContext();
 
-  expect(mockedFetchCollection).toHaveBeenCalledTimes(1);
-  expectFetchWithToken(creds.token);
+  expect(mockSWR).toHaveBeenCalledWith(
+    ["/shelf-url", "some-token", "http://opds-spec.org/auth/basic"],
+    expect.anything(),
+    expect.anything()
+  );
 });
 
 test("does not fetch loans if no credentials are present", () => {
@@ -63,13 +68,26 @@ test("extracts clever tokens from the url", () => {
   useRouterSpy.mockReturnValue({ replace: mockReplace, query: {} } as any);
   renderUserContext();
 
+  expect(mockSWR).toHaveBeenCalledWith(
+    null,
+    expect.anything(),
+    expect.anything()
+  );
+
   expect(Cookie.set).toHaveBeenCalledTimes(1);
   expect(Cookie.set).toHaveBeenCalledWith(
     "CPW_AUTH_COOKIE/null",
     str({ token: "Bearer fry6H3", methodType: OPDS1.CleverAuthType })
   );
-  expect(mockedFetchCollection).toHaveBeenCalledTimes(1);
-  expectFetchWithToken("Bearer fry6H3");
+  expect(mockSWR).toHaveBeenCalledWith(
+    [
+      "/shelf-url",
+      "Bearer fry6H3",
+      "http://librarysimplified.org/authtype/OAuth-with-intermediary"
+    ],
+    expect.anything(),
+    expect.anything()
+  );
 
   // mock the router
   expect(mockReplace).toHaveBeenCalledTimes(1);
@@ -87,14 +105,27 @@ test("extracts SAML tokens from the url", () => {
   } as any);
   renderUserContext();
 
+  expect(mockSWR).toHaveBeenCalledWith(
+    null,
+    expect.anything(),
+    expect.anything()
+  );
+
   expect(Cookie.set).toHaveBeenCalledTimes(1);
   expect(Cookie.set).toHaveBeenCalledWith(
     "CPW_AUTH_COOKIE/null",
     str({ token: "Bearer saml-token", methodType: OPDS1.SamlAuthType })
   );
 
-  expect(mockedFetchCollection).toHaveBeenCalledTimes(1);
-  expectFetchWithToken("Bearer saml-token");
+  expect(mockSWR).toHaveBeenCalledWith(
+    [
+      "/shelf-url",
+      "Bearer saml-token",
+      "http://librarysimplified.org/authtype/SAML-2.0"
+    ],
+    expect.anything(),
+    expect.anything()
+  );
 
   expect(mockReplace).toHaveBeenCalledWith(
     "http://test-domain.com/",
@@ -107,19 +138,25 @@ test("sign out clears cookies and data", async () => {
   mockAuthenticatedOnce();
   mockedFetchCollection.mockResolvedValue(fixtures.loans);
   let extractedSignOut: any = null;
-  let extractedLoans: BookData[] | undefined = undefined;
   function Extractor() {
-    const { signOut, loans } = useUser();
+    const { signOut } = useUser();
     extractedSignOut = signOut;
-    extractedLoans = loans;
     return <div>hello</div>;
   }
   render(<Extractor />);
 
+  expect(mockSWR).toHaveBeenCalledWith(
+    null,
+    expect.anything(),
+    expect.anything()
+  );
+
   // make sure fetch was called and you have the right data
-  expect(mockedFetchCollection).toHaveBeenCalledTimes(1);
-  expectFetchWithToken(creds.token);
-  await waitFor(() => expect(extractedLoans).toHaveLength(1));
+  expect(mockSWR).toHaveBeenCalledWith(
+    ["/shelf-url", "some-token", "http://opds-spec.org/auth/basic"],
+    expect.anything(),
+    expect.anything()
+  );
 
   // now sign out
   act(() => {
@@ -130,27 +167,37 @@ test("sign out clears cookies and data", async () => {
   expect(Cookie.remove).toHaveBeenCalledTimes(1);
   expect(Cookie.remove).toHaveBeenCalledWith("CPW_AUTH_COOKIE/null");
 
-  // data should be removed
-  expect(extractedLoans).toBeUndefined();
+  // data should be revalidated
+  expect(mutateMock).toHaveBeenCalledTimes(1);
 });
 
-test("sign in sets cookie", () => {
-  mockAuthenticatedOnce();
+test("sign in sets cookie", async () => {
   let extractedSignIn: any = null;
   function Extractor() {
-    const { signIn } = useUser();
+    const { signIn, token } = useUser();
     extractedSignIn = signIn;
-    return <div>hello</div>;
+    return <div>{token}</div>;
   }
   render(<Extractor />);
+  expect(mockSWR).toHaveBeenCalledWith(
+    null,
+    expect.anything(),
+    expect.anything()
+  );
 
   expect(Cookie.set).toHaveBeenCalledTimes(0);
 
-  extractedSignIn("token", { type: "type" });
+  act(() => extractedSignIn("a-token", { type: "type" }));
 
   expect(mockCookie.set).toHaveBeenCalledTimes(1);
   expect(mockCookie.set).toHaveBeenCalledWith(
     "CPW_AUTH_COOKIE/null",
-    str({ token: "token", methodType: "type" })
+    str({ token: "a-token", methodType: "type" })
+  );
+
+  expect(mockSWR).toHaveBeenCalledWith(
+    ["/shelf-url", "a-token", "type"],
+    expect.anything(),
+    expect.anything()
   );
 });

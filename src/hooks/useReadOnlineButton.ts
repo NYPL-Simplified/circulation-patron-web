@@ -1,14 +1,20 @@
 import useLibraryContext from "components/context/LibraryContext";
 import useUser from "components/context/UserContext";
 import { ServerError } from "errors";
+import useIsMounted from "hooks/useIsMounted";
 import * as React from "react";
 import { ReadExternalDetails } from "utils/fulfill";
 
 export default function useReadOnlineButton(details: ReadExternalDetails) {
   const { catalogUrl } = useLibraryContext();
+  const isMounted = useIsMounted();
   const { token } = useUser();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<null | string>(null);
+
+  function setLoadingIfMounted(state: boolean) {
+    if (isMounted.current) setLoading(state);
+  }
   async function open() {
     setLoading(true);
     setError(null);
@@ -16,10 +22,10 @@ export default function useReadOnlineButton(details: ReadExternalDetails) {
       // the url may be behind indirection, so we fetch it with the
       // provided function
       const url = await details.getUrl(catalogUrl, token);
-      setLoading(false);
+      setLoadingIfMounted(false);
       window.open(url, "__blank");
     } catch (e) {
-      setLoading(false);
+      setLoadingIfMounted(false);
       if (e instanceof ServerError) {
         setError(`Error: ${e.info.detail}`);
         return;

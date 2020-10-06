@@ -65,7 +65,7 @@ const resolve = (base: string, relative: string) =>
 function buildFulfillmentLink(feedUrl: string) {
   return (link: OPDSAcquisitionLink): MediaLink | undefined => {
     const indirects = link.indirectAcquisitions;
-    const first = indirects[0];
+    const first = indirects?.[0];
     const indirectType = first?.type as OPDS1.AnyBookMediaType | undefined;
     // it is possible that it doesn't exist in the array of indirects
     return {
@@ -290,7 +290,8 @@ export function feedToCollection(
   const collection = {
     id: feed.id,
     title: feed.title,
-    url: feedUrl
+    url: feedUrl,
+    raw: feed.unparsed
   };
   const books: BookData[] = [];
   const navigationLinks: LinkData[] = [];

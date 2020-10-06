@@ -4,6 +4,7 @@ import { render, fixtures } from "test-utils";
 import * as dialog from "reakit/Dialog";
 import userEvent from "@testing-library/user-event";
 import * as user from "components/context/UserContext";
+import mockUser from "test-utils/mockUser";
 
 const useUserSpy = jest.spyOn(user, "default");
 
@@ -150,6 +151,9 @@ test("shows combobox with five auth methods configured", () => {
 });
 
 test("hides form when user becomes authenticated", async () => {
+  mockUser({
+    isAuthenticated: false
+  });
   const utils = render(<div>child</div>, {
     library: {
       ...fixtures.libraryData,
@@ -162,7 +166,7 @@ test("hides form when user becomes authenticated", async () => {
   expect(loginButton).toBeInTheDocument();
   expect(mockHide).toHaveBeenCalledTimes(0);
 
-  useUserSpy.mockReturnValueOnce({ isAuthenticated: true } as any);
+  useUserSpy.mockReturnValue({ isAuthenticated: true } as any);
   utils.rerender(<div>child</div>);
   // hide gets called
   expect(mockHide).toHaveBeenCalledTimes(1);

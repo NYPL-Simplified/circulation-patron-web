@@ -1,5 +1,5 @@
 import React from "react";
-import WebpubViewer from "../../components/WebpubViewer";
+import WebpubViewer from "components/WebpubViewer";
 import Page from "components/Page";
 import { NextPage, GetServerSideProps } from "next";
 import withAppProps, { AppProps } from "dataflow/withAppProps";

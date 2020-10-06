@@ -1,5 +1,10 @@
 import * as React from "react";
-import { render, fixtures, waitFor } from "test-utils";
+import {
+  render,
+  fixtures,
+  waitFor,
+  waitForElementToBeRemoved
+} from "test-utils";
 import BorrowOrReserve from "components/BorrowOrReserve";
 import { MediaLink } from "interfaces";
 import userEvent from "@testing-library/user-event";
@@ -60,6 +65,7 @@ const mockedFetchBook = fetch.fetchBook as jest.MockedFunction<
 test("borrowing calls correct url with token", async () => {
   // mock our credentials
   mockAuthenticatedOnce();
+  mockedFetchBook.mockResolvedValueOnce(fixtures.book);
   const utils = render(
     <BorrowOrReserve book={fixtures.book} isBorrow borrowLink={borrowLink} />
   );
@@ -81,6 +87,8 @@ test("borrowing calls correct url with token", async () => {
     "http://test-cm.com/catalogUrl",
     "some-token"
   );
+
+  await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
 });
 
 test("shows auth form and error when not logged in", () => {
