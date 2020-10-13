@@ -18,7 +18,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: true
-  }
-}
+  };
+};
 
 export default LibraryHome;
