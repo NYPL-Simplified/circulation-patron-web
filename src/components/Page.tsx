@@ -13,7 +13,8 @@ import { PageLoader } from "components/LoadingIndicator";
 const Page: React.FC<AppProps> = props => {
   const { isFallback } = useRouter();
   /**
-   * If we are in a static generation fallback, render a loader
+   * If we are in a static generation fallback, we have no
+   * library information yet so render a loader.
    */
   if (isFallback) {
     return (
