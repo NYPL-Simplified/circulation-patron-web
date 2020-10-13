@@ -68,7 +68,9 @@ export default function withAppProps(
               name: e.name,
               statusCode: e.statusCode
             }
-          }
+          },
+          // library data will be revalidated once per hour.
+          revalidate: 60 * 60
         };
       }
       // otherwise we probably can't recover at all,
