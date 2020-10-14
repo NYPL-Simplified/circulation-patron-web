@@ -209,15 +209,6 @@ docker run -d --name patronweb -p 3000:3000\
   nypl/patronweb
 ```
 
-To run the container with a `SIMPLIFIED_CATALOG_BASE` or `REISTRY_BASE` instead of a `CONFIG_FILE`, simply replace the env variable in the run command. You will also not need to provide the volume, since no config file is being read.
-
-```
-docker run --name patronweb -d -p 3000:3000\
-  --restart=unless-stopped \
-  -e "SIMPLIFIED_CATALOG_BASE=https://example.catalog-base.com/" \
-  nypl/patron-web
-```
-
 What are these commands doing?
 
 - `--name` - allows you to name your docker container
