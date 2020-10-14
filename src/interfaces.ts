@@ -20,7 +20,6 @@ export type AppConfig = {
   mediaSupport: MediaSupportConfig;
   libraries: LibraryRegistryBase | LibrariesConfig;
   companionApp: "simplye" | "openebooks";
-  axisNowDecrypt: boolean;
   bugsnagApiKey: string | null;
   gtmId: string | null;
 };

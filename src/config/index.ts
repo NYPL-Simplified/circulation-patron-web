@@ -5,7 +5,6 @@ function parseConfig(unparsed: any): AppConfig {
   // specifically set defaults for a couple values.
   const companionApp =
     unparsed.companion_app === "openebooks" ? "openebooks" : "simplye";
-  const axisNowDecrypt = unparsed.axisnow_decrypt === true;
 
   // otherwise assume the file is properly structured.
   return {
@@ -13,7 +12,6 @@ function parseConfig(unparsed: any): AppConfig {
     mediaSupport: unparsed.media_support ?? {},
     bugsnagApiKey: unparsed.bugsnagApiKey ?? null,
     gtmId: unparsed.gtmId ?? null,
-    axisNowDecrypt,
     companionApp
   };
 }

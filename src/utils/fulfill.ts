@@ -93,7 +93,7 @@ export function getFulfillmentDetails(
 
     case OPDS1.AxisNowWebpubMediaType:
       // you can only read these if you can decrypt them.
-      if (!APP_CONFIG.axisNowDecrypt) {
+      if (!process.env.NEXT_PUBLIC_AXISNOW_DECRYPT) {
         return { type: "unsupported" };
       }
       return {

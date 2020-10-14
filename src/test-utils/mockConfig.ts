@@ -12,7 +12,6 @@ const defaultMock: AppConfig = {
   bugsnagApiKey: null,
   gtmId: null,
   companionApp: "simplye",
-  axisNowDecrypt: true,
   libraries: {
     lib1: "http://lib1.com"
   },

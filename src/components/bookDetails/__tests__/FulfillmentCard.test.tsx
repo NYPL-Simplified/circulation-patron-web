@@ -272,7 +272,8 @@ describe("FulfillableBook", () => {
   });
 
   test("constructs link to viewer for OpenAxis Books", () => {
-    mockConfig({ companionApp: "openebooks", axisNowDecrypt: true });
+    mockConfig({ companionApp: "openebooks" });
+    process.env.NEXT_PUBLIC_AXISNOW_DECRYPT = "true";
     const utils = render(<FulfillmentCard book={viewableAxisNowBook} />);
     const readerButton = utils.getByRole("button", {
       name: /Read/i
@@ -328,7 +329,7 @@ describe("FulfillableBook", () => {
   });
 
   test("internal read online button tracks open_book event", async () => {
-    mockConfig({ axisNowDecrypt: true });
+    process.env.NEXT_PUBLIC_AXISNOW_DECRYPT = "true";
     const readOnlineBook = mergeBook<FulfillableBook>({
       status: "fulfillable",
       revokeUrl: "/revoke",

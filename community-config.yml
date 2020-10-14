@@ -39,11 +39,6 @@ media_support:
 # default is "simplye"
 companion_app: simplye
 
-# tells the app that it should attempt to decrypt AxisNow documents
-# the default is false. Only set this to true if the build environment
-# has access to the axisnow submodule
-# axisnow_decrypt: true
-
 # defines the bugsnag api key to integrate error tracking
 # bugsnag_api_key: xxx
 
