@@ -15,7 +15,7 @@ import {
 } from "library-simplified-webpub-viewer";
 import fetchWithHeaders from "dataflow/fetch";
 import ApplicationError from "errors";
-import { AXISNOW_DECRYPTOR_PATH } from "utils/env";
+import Decryptor from "AxisNowDecryptor";
 
 export default async function reader(
   bookUrl: string,
@@ -85,13 +85,8 @@ async function initBookSettings(
   let decryptor: any = undefined;
 
   try {
-    const Decryptor = process.env.NEXT_PUBLIC_AXISNOW_DECRYPT
-      ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        await import(AXISNOW_DECRYPTOR_PATH)
-      : undefined;
     decryptor = Decryptor
-      ? await Decryptor.default.createDecryptor(decryptorParams)
+      ? await Decryptor.createDecryptor(decryptorParams)
       : undefined;
   } catch (e) {
     throw new ApplicationError(
