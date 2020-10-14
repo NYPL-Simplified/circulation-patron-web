@@ -12,7 +12,6 @@ import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { LibraryProvider } from "components/context/LibraryContext";
-import { LinkUtilsProvider } from "components/context/LinkUtilsContext";
 import { UserContext, UserState } from "components/context/UserContext";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "theme";
@@ -63,16 +62,14 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
         <ThemeProvider theme={theme}>
           <ReakitProvider>
             <LibraryProvider library={library}>
-              <LinkUtilsProvider library={library}>
-                <UserContext.Provider value={user}>
-                  <AuthModalProvider
-                    showModal={mockShowAuthModal}
-                    showModalAndReset={mockShowModalAndReset}
-                  >
-                    {children}
-                  </AuthModalProvider>
-                </UserContext.Provider>
-              </LinkUtilsProvider>
+              <UserContext.Provider value={user}>
+                <AuthModalProvider
+                  showModal={mockShowAuthModal}
+                  showModalAndReset={mockShowModalAndReset}
+                >
+                  {children}
+                </AuthModalProvider>
+              </UserContext.Provider>
             </LibraryProvider>
           </ReakitProvider>
         </ThemeProvider>
