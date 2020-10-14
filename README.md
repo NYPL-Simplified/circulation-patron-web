@@ -44,6 +44,7 @@ The following environment variables can be set to further configure the applicat
 
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 - Set `ANALYZE=true` to generate bundle analysis files inside `.next/analyze` which will show bundle sizes for server and client, as well as composition.
+- Set `NEXT_PUBLIC_AXISNOW_DECRYPT=true` to indicate that the build environment has access to the axisnow decryptor submodule. Default is false.
 
 ## Manager, Registry, and Application Configurations
 
