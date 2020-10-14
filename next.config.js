@@ -11,10 +11,8 @@ const APP_VERSION = require("./package.json").version;
 
 const config = {
   env: {
-    SIMPLIFIED_CATALOG_BASE: process.env.SIMPLIFIED_CATALOG_BASE,
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
-    CACHE_EXPIRATION_SECONDS: process.env.CACHE_EXPIRATION_SECONDS,
     APP_VERSION
   },
   webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
