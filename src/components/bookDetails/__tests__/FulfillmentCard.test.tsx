@@ -15,6 +15,7 @@ import {
 import { ProblemDocument } from "types/opds1";
 import fetchMock from "jest-fetch-mock";
 import { mockPush } from "test-utils/mockNextRouter";
+import * as env from "utils/env";
 
 jest.mock("downloadjs");
 window.open = jest.fn();
@@ -273,7 +274,8 @@ describe("FulfillableBook", () => {
 
   test("constructs link to viewer for OpenAxis Books", () => {
     mockConfig({ companionApp: "openebooks" });
-    process.env.NEXT_PUBLIC_AXISNOW_DECRYPT = "true";
+    (env as any).AXISNOW_DECRYPT = "true";
+
     const utils = render(<FulfillmentCard book={viewableAxisNowBook} />);
     const readerButton = utils.getByRole("button", {
       name: /Read/i
@@ -329,7 +331,7 @@ describe("FulfillableBook", () => {
   });
 
   test("internal read online button tracks open_book event", async () => {
-    process.env.NEXT_PUBLIC_AXISNOW_DECRYPT = "true";
+    (env as any).AXISNOW_DECRYPT = "true";
     const readOnlineBook = mergeBook<FulfillableBook>({
       status: "fulfillable",
       revokeUrl: "/revoke",
