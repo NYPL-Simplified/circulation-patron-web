@@ -35,17 +35,6 @@ media_support:
   # Bearer Token Exchange (web app currently doesn't support this)
   # application/vnd.librarysimplified.bearer-token+json:
 
-# define the catalog root and shortname for each library on this instance.
-# the homepage of the library will then be at https://domain.com/:library/
-libraries:
-  brazoria: https://simplye.amigos.org/txbrazoria
-  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib
-  openqa: https://qa-circulation.openebooks.us/USOEI/groups
-  lyrasis: https://demo.lyrasistechnology.org/lyrasis
-
-# if you would like to use a library registry, instead define the registry url
-# libraries: https://some-registry.com/
-
 # defines the companion app for the instance. Can be "simplye" or "openebooks"
 # default is "simplye"
 companion_app: simplye
@@ -64,3 +53,16 @@ companion_app: simplye
 # There are also some environment variables that can be set in the .env.local
 # file. They are set there because they're for development, not production
 # configuration.
+
+# REQUIRED LIBRARY CONFIG
+
+# if you would like to use a library registry, define the registry url
+# libraries: https://some-registry.com/
+
+# Or define the catalog root and shortname for each library on this instance.
+# the homepage of the library will then be at https://domain.com/:library/
+libraries:
+  brazoria: https://simplye.amigos.org/txbrazoria
+  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib
+  openqa: https://qa-circulation.openebooks.us/USOEI/groups
+  lyrasis: https://demo.lyrasistechnology.org/lyrasis
