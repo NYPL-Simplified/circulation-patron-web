@@ -72,7 +72,6 @@ const LibraryList: React.FC<{ libraries: string[] }> = ({ libraries }) => {
         {libraries.map(lib => (
           <li key={lib}>
             <Link
-              replace
               sx={{
                 ...buttonBase,
                 display: "block",
