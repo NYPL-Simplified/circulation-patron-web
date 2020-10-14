@@ -9,3 +9,7 @@ export const REACT_AXE = process.env.REACT_AXE;
 export const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 export const IS_SERVER = typeof window === "undefined";
 export const APP_VERSION = process.env.APP_VERSION;
+
+export const AXISNOW_DECRYPTOR_PATH = process.env.NEXT_PUBLIC_AXISNOW_DECRYPTOR
+  ? "../../axisnow-access-control-web/src/decryptor"
+  : "./stub-decruptor.ts";
