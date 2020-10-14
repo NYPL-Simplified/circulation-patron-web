@@ -15,7 +15,7 @@ import {
 } from "library-simplified-webpub-viewer";
 import fetchWithHeaders from "dataflow/fetch";
 import ApplicationError from "errors";
-import { APP_CONFIG } from "config";
+import Decryptor from "AxisNowDecryptor";
 
 export default async function reader(
   bookUrl: string,
@@ -85,13 +85,8 @@ async function initBookSettings(
   let decryptor: any = undefined;
 
   try {
-    const Decryptor = APP_CONFIG.axisNowDecrypt
-      ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        await import("../../axisnow-access-control-web/src/decryptor")
-      : undefined;
     decryptor = Decryptor
-      ? await Decryptor.default.createDecryptor(decryptorParams)
+      ? await Decryptor.createDecryptor(decryptorParams)
       : undefined;
   } catch (e) {
     throw new ApplicationError(

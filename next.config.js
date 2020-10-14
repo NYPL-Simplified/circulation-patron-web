@@ -5,15 +5,14 @@ const {
   BugsnagBuildReporterPlugin,
   BugsnagSourceMapUploaderPlugin
 } = require("webpack-bugsnag-plugins");
+const path = require("path");
 
 const APP_VERSION = require("./package.json").version;
 
 const config = {
   env: {
-    SIMPLIFIED_CATALOG_BASE: process.env.SIMPLIFIED_CATALOG_BASE,
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
-    CACHE_EXPIRATION_SECONDS: process.env.CACHE_EXPIRATION_SECONDS,
     APP_VERSION
   },
   webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
@@ -30,6 +29,20 @@ const config = {
       config.node = {
         fs: "empty"
       };
+    }
+
+    // stub out the axisnow decryptor if we don't have access to it
+    if (process.env.NEXT_PUBLIC_AXISNOW_DECRYPT) {
+      console.log("Running with AxisNow Decryption");
+      config.resolve.alias.AxisNowDecryptor = path.resolve(
+        __dirname,
+        "axisnow-access-control-web/src/decryptor"
+      );
+    } else {
+      config.resolve.alias.AxisNowDecryptor = path.resolve(
+        __dirname,
+        "src/utils/stub-decryptor"
+      );
     }
 
     // add bugsnag if we are not in dev

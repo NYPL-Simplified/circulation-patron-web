@@ -44,6 +44,7 @@ The following environment variables can be set to further configure the applicat
 
 - Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
 - Set `ANALYZE=true` to generate bundle analysis files inside `.next/analyze` which will show bundle sizes for server and client, as well as composition.
+- Set `NEXT_PUBLIC_AXISNOW_DECRYPT=true` to indicate that the build environment has access to the axisnow decryptor submodule. Default is false.
 
 ## Manager, Registry, and Application Configurations
 
@@ -207,15 +208,6 @@ docker run -d --name patronweb -p 3000:3000\
   -e "CONFIG_FILE=/config_volume/config.yml" \
   -v $PATH_TO_LOCAL_VOLUME:/config_volume \
   nypl/patronweb
-```
-
-To run the container with a `SIMPLIFIED_CATALOG_BASE` or `REISTRY_BASE` instead of a `CONFIG_FILE`, simply replace the env variable in the run command. You will also not need to provide the volume, since no config file is being read.
-
-```
-docker run --name patronweb -d -p 3000:3000\
-  --restart=unless-stopped \
-  -e "SIMPLIFIED_CATALOG_BASE=https://example.catalog-base.com/" \
-  nypl/patron-web
 ```
 
 What are these commands doing?

@@ -25,6 +25,7 @@ import { AnyBook, CollectionData, LaneData } from "interfaces";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import { useSWRInfinite } from "swr";
 import ApplicationError from "errors";
+import useUser from "components/context/UserContext";
 
 const ListLoadingIndicator = () => (
   <div
@@ -105,7 +106,11 @@ export const BookList: React.FC<{
 
 export const BookListItem: React.FC<{
   book: AnyBook;
-}> = ({ book }) => {
+}> = ({ book: collectionBook }) => {
+  const { loans } = useUser();
+  // if the book exists in loans, use that version
+  const loanedBook = loans?.find(loan => loan.id === collectionBook.id);
+  const book = loanedBook ?? collectionBook;
   return (
     <li
       sx={{
