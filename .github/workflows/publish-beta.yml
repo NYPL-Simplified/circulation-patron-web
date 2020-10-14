@@ -2,10 +2,10 @@
 # name: Publish beta
 
 # # action will only run when a pull request to the beta branch is closed.
-# on:
-#   pull_request:
-#     branches: [beta]
-#     types: [closed]
+on:
+  pull_request:
+    branches: [beta]
+    types: [closed]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
