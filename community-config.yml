@@ -17,8 +17,8 @@ media_support:
   application/vnd.overdrive.circulation.api+json;profile=ebook: show
   # External read online type (Like Overdrive)
   text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media": show
-  # AxisNow document (read online in Webpub Viewer)
-  application/vnd.librarysimplified.axisnow+json: show
+  # AxisNow document (read online in Webpub Viewer) - not supported in community version
+  # application/vnd.librarysimplified.axisnow+json: show
   # Audiobooks
   application/audiobook+json: redirect
   application/vnd.overdrive.circulation.api+json;profile=audiobook: redirect
@@ -41,7 +41,6 @@ libraries:
   brazoria: https://simplye.amigos.org/txbrazoria
   xyzlib: http://simplye-dev-cm.amigos.org/xyzlib
   openqa: https://qa-circulation.openebooks.us/USOEI/groups
-  local: http://localhost:6500/kristo/groups
   lyrasis: https://demo.lyrasistechnology.org/lyrasis
 
 # if you would like to use a library registry, instead define the registry url
