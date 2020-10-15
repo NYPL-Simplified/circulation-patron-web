@@ -39,7 +39,7 @@ export const Collection: React.FC<{
 
   const hasLanes = collection?.lanes && collection.lanes.length > 0;
   const hasBooks = collection?.books && collection.books.length > 0;
-  const pageTitle = title ?? `Collection: ${collection?.title ?? ""}`;
+  const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
   const breadcrumbs = computeBreadcrumbs(collection);
   return (
@@ -47,7 +47,8 @@ export const Collection: React.FC<{
       sx={{
         flex: "1 1 auto",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        bg: hasBooks ? "ui.gray.lightWarm" : "ui.white"
       }}
     >
       <Head>
