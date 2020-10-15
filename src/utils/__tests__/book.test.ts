@@ -1,5 +1,9 @@
-import { book as bookFixture } from "../../test-utils/fixtures/book";
+import { AnyBook } from "interfaces";
+import { queueString, bookIsAudiobook } from "utils/book";
+import { makeBorrowableBooks } from "../../test-utils/fixtures/book";
 import { getAuthors } from "../book";
+
+const bookFixture = makeBorrowableBooks(1)[0];
 
 describe("get authors", () => {
   /**
@@ -41,5 +45,41 @@ describe("get authors", () => {
       contributors: []
     };
     expect(getAuthors(book)).toStrictEqual(["Authors unknown"]);
+  });
+});
+
+describe("queue string formatter", () => {
+  test("returns empty string with no holds data", () => {
+    const book: AnyBook = {
+      ...bookFixture,
+      holds: null
+    };
+    expect(queueString(book)).toBe("");
+  });
+  test("returns formatted string when total holds provided", () => {
+    const book: AnyBook = {
+      ...bookFixture,
+      holds: {
+        total: 10
+      }
+    };
+    expect(queueString(book)).toBe("There are 10 other patrons in the queue.");
+  });
+});
+
+describe("book is audiobook", () => {
+  test("correctly recognizes audiobook", () => {
+    const book: AnyBook = {
+      ...bookFixture,
+      raw: {
+        $: {
+          "schema:additionalType": {
+            value: "http://bib.schema.org/Audiobook"
+          }
+        }
+      }
+    };
+
+    expect(bookIsAudiobook(book)).toBe(true);
   });
 });

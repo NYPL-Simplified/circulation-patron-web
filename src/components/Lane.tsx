@@ -1,15 +1,15 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { LaneData, BookData } from "opds-web-client/lib/interfaces";
-import useCatalogLink from "../hooks/useCatalogLink";
-import ArrowRight from "../icons/ArrowRight";
 import { Tabbable } from "reakit/Tabbable";
-import { NavButton } from "./Button";
 import Book, { BOOK_HEIGHT } from "./BookCard";
-import BreadcrumbBar from "./BreadcrumbBar";
-import { withErrorBoundary } from "./ErrorBoundary";
+import withErrorBoundary, { FallbackProps } from "./ErrorBoundary";
 import { lighten } from "@theme-ui/color";
+import { H2 } from "./Text";
+import { NavButton } from "./Button";
+import ArrowForward from "icons/ArrowForward";
+import Stack from "./Stack";
+import { AnyBook, LaneData } from "interfaces";
 
 type BookRefs = {
   [id: string]: React.RefObject<HTMLLIElement>;
@@ -22,12 +22,14 @@ type CurrentBook = {
   snap: boolean;
 };
 
-const getfilteredBooksAndRefs = (books: BookData[], omitIds?: string[]) => {
+const getfilteredBooksAndRefs = (books: AnyBook[], omitIds?: string[]) => {
   const filteredBooks = books.filter(book => {
     if (!omitIds?.includes(book.id)) return book;
   });
   /** keep track of a ref for each book */
-  const bookRefs: BookRefs = filteredBooks.reduce((acc, value) => {
+  const bookRefs: BookRefs = filteredBooks.reduce<{
+    [id: string]: React.RefObject<HTMLLIElement>;
+  }>((acc, value) => {
     const ref = React.createRef<HTMLLIElement>();
     acc[value.id] = ref;
     return acc;
@@ -38,10 +40,11 @@ const getfilteredBooksAndRefs = (books: BookData[], omitIds?: string[]) => {
  * - scrolls automatically on button clicks
  * - allows the user to free scroll / swipe also
  */
-const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
-  omitIds,
-  lane: { title, books, url }
-}) => {
+const Lane: React.FC<{
+  lane: LaneData;
+  omitIds?: string[];
+  titleTag?: React.ComponentType;
+}> = ({ omitIds, titleTag: TitleTag = H2, lane: { title, books, url } }) => {
   /**
    * We compute these values within a useMemo hook so that they don't change
    * on every render
@@ -102,7 +105,7 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
     const currentIndex = currentBook.index;
     // we explicitly state this can be undefined because the array might be empty
     // and typescript doesn't catch this kind of error
-    const nextBook: BookData | undefined = filteredBooks[currentIndex];
+    const nextBook: AnyBook | undefined = filteredBooks[currentIndex];
     // if the nextBook is undefined, don't do anything
     if (!nextBook) return;
     const nextBookRef = bookRefs[nextBook.id];
@@ -148,19 +151,29 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
     setCurrentBook({ index: currentIndex, snap: false });
   };
 
-  const laneUrl = useCatalogLink(undefined, url);
   return (
-    <div>
-      <BreadcrumbBar currentLocation={title}>
-        <NavButton to={laneUrl} sx={{ fontSize: 1, fontWeight: 2 }}>
-          View all {title}
+    <li sx={{ m: 0, p: 0, mb: 3, listStyle: "none" }} aria-label={title}>
+      <Stack
+        sx={{
+          justifyContent: ["space-between", "initial"],
+          px: [3, 5],
+          alignItems: "baseline"
+        }}
+      >
+        <TitleTag sx={{ pr: [3, 5], m: 0, mb: 3 }}>{title}</TitleTag>
+        <NavButton
+          variant="link"
+          collectionUrl={url}
+          iconRight={ArrowForward}
+          sx={{ variant: "text.body.bold", textDecoration: "none" }}
+        >
+          See More
         </NavButton>
-      </BreadcrumbBar>
+      </Stack>
       <div
         sx={{
           display: "flex",
           flexDirection: "row",
-          width: "100vw",
           position: "relative"
         }}
       >
@@ -171,10 +184,11 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
           data-testid="lane-list"
           sx={{
             p: 0,
-            my: 2,
+            m: 0,
             display: "flex",
             transition: "transform 300ms ease 100ms",
             overflowX: "scroll",
+            overflowY: "hidden",
             position: "relative",
             width: "100%"
           }}
@@ -187,7 +201,7 @@ const Lane: React.FC<{ lane: LaneData; omitIds?: string[] }> = ({
 
         <PrevNextButton onClick={handleRightClick} disabled={isAtEnd} />
       </div>
-    </div>
+    </li>
   );
 };
 
@@ -200,23 +214,25 @@ const PrevNextButton: React.FC<{
     <Tabbable
       as="div"
       sx={{
-        fontSize: 60,
+        flex: "0 0 64px",
+        fontSize: 4,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
         "&:hover": {
-          backgroundColor: "primaries.light"
-        }
+          backgroundColor: "ui.gray.medium"
+        },
+        transition: "all 100ms ease-in"
       }}
       onClick={onClick}
       role="button"
       aria-label={isPrev ? "scroll left" : "scroll right"}
       disabled={disabled}
     >
-      <ArrowRight
+      <ArrowForward
         sx={{
-          fill: disabled ? "grey" : "primary",
+          fill: disabled ? "ui.gray.medium" : "ui.gray.extraDark",
           transform: isPrev ? "rotate(180deg)" : ""
         }}
       />
@@ -224,7 +240,7 @@ const PrevNextButton: React.FC<{
   );
 };
 
-const LaneErrorFallback: React.FC<{ message: string }> = ({ message }) => {
+const LaneErrorFallback: React.FC<FallbackProps> = () => {
   return (
     <div
       sx={{
@@ -239,7 +255,8 @@ const LaneErrorFallback: React.FC<{ message: string }> = ({ message }) => {
         borderRadius: "card"
       }}
     >
-      {message}
+      There was an error displaying this lane. We&apos;ve reported the error to
+      administrative staff. Please refresh and try again.
     </div>
   );
 };

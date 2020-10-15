@@ -4,16 +4,17 @@ import typography from "./typography";
 import variants from "./variants";
 import styles from "./styles";
 
-const radii = [0, 2, 4, 8] as Overloadable<number[], number>;
-radii.card = radii[3];
+const radii = [0, 2, 4] as Overloadable<number[], number>;
+radii.card = radii[2];
+radii.button = radii[1];
 
 const borders = {
-  solid: "1px solid"
+  solid: `1px solid ${colors.ui.gray.medium}`
 };
 
 const breakpoints = ["40em", "52em", "64em"];
 
-const space = [0, 4, 8, 16, 32, 64, 128, 256, 512];
+const space = [0, 4, 8, 16, 32, 64, 72, 128, 256, 512];
 
 const sizes = {
   container: 850 // This is currently only used on bookdetails. Might be useful elsewhere tho. We'll see
@@ -27,7 +28,8 @@ const zIndices = {
 };
 
 const shadows = {
-  modal: "0px 2px 7px 3px rgba(0,0,0,0.3)"
+  modal: "0px 2px 7px 3px rgba(0,0,0,0.3)",
+  focus: "0 0 0 0.2em rgba(0, 109, 255, 0.4)"
 };
 
 const theme = {

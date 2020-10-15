@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextInput renders properly and passes styles through 1`] = `
+.emotion-0 {
+  border-radius: 2px;
+  border: 1px solid #bdbdbd;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 1rem;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  width: 100%;
+  color: red;
+}
+
+.emotion-0::-webkit-input-placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+.emotion-0::-moz-placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+.emotion-0:-ms-input-placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+.emotion-0::placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+<input
+  class="emotion-0"
+  type="text"
+/>
+`;
+
+exports[`type textarea renders properly and passes styles throug 1`] = `
+.emotion-0 {
+  border-radius: 2px;
+  border: 1px solid #bdbdbd;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 1rem;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  width: 100%;
+  color: maroon;
+}
+
+.emotion-0::-webkit-input-placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+.emotion-0::-moz-placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+.emotion-0:-ms-input-placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+.emotion-0::placeholder {
+  font-style: italic;
+  color: var(--theme-ui-colors-ui-gray-dark,#616161);
+  font-size: 0.875rem;
+}
+
+<textarea
+  class="emotion-0"
+/>
+`;

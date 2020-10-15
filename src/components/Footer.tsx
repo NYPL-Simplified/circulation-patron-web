@@ -1,8 +1,15 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
 import ExternalLink from "./ExternalLink";
 import useLibraryContext from "./context/LibraryContext";
+import List, { ListItem } from "./List";
+import { H3, Text } from "./Text";
+import { NavButton } from "./Button";
+import SvgPhone from "icons/Phone";
+import IosBadge from "./storeBadges/IosBadge";
+import GooglePlayBadge from "./storeBadges/GooglePlayBadge";
+import { APP_CONFIG } from "config";
 
 const Footer: React.FC<{ className?: string }> = ({ className }) => {
   const library = useLibraryContext();
@@ -19,78 +26,110 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <footer
-      sx={{ backgroundColor: "primaries.dark", color: "white" }}
+      sx={{
+        bg: "ui.gray.extraLight",
+        px: [3, 5],
+        pb: 7,
+        display: "flex",
+        flexWrap: "wrap"
+      }}
       className={className}
     >
-      <div
-        sx={{ display: "flex", alignItems: "flex-start", letterSpacing: 0.9 }}
-      >
-        <div sx={{ m: 4 }}>
-          <Styled.h5 sx={{ m: 0 }}>{title}</Styled.h5>
-          <Styled.ul>
-            <Styled.li>
-              {libraryWebsite && (
-                <FooterExternalLink href={libraryWebsite.href}>
-                  Library Website
-                </FooterExternalLink>
-              )}
-            </Styled.li>
-            <Styled.li>
-              {registration && (
-                <FooterExternalLink href={registration.href}>
-                  Patron Registration
-                </FooterExternalLink>
-              )}
-            </Styled.li>
-          </Styled.ul>
-        </div>
-        <div sx={{ m: 4, mb: 2 }}>
-          <Styled.h5 sx={{ m: 0 }}>Patron Support</Styled.h5>
-          <Styled.ul>
-            {helpEmail && (
-              <Styled.li>
-                <FooterExternalLink href={helpEmail.href}>
-                  Email Support
-                </FooterExternalLink>
-              </Styled.li>
+      <div sx={{ flex: "0 0 auto", mt: 5, mr: 5 }}>
+        <H3 sx={{ mt: 0, maxWidth: "100%" }}>{title}</H3>
+        <FooterList>
+          {libraryWebsite && (
+            <ListItem>
+              <FooterExternalLink href={libraryWebsite.href}>
+                Library Homepage
+              </FooterExternalLink>
+            </ListItem>
+          )}
+          <ListItem>
+            <NavButton variant="link" href="/loans" color="ui.black">
+              My Books
+            </NavButton>
+          </ListItem>
+          <ListItem>
+            {registration && (
+              <FooterExternalLink href={registration.href}>
+                Need a library card?
+              </FooterExternalLink>
             )}
-            {helpWebsite && (
-              <Styled.li>
-                <FooterExternalLink href={helpWebsite.href}>
-                  Help Website
-                </FooterExternalLink>
-              </Styled.li>
-            )}
-          </Styled.ul>
-        </div>
-      </div>
-      <div sx={{ mx: 4, my: 2, fontSize: 1 }}>
-        {/* <span sx={{ mr: 2 }}>Copyright</span> */}
-        <Styled.ul sx={{ display: "inline-flex", "&>li": { mx: 2 } }}>
+          </ListItem>
           {privacyPolicy && (
-            <Styled.li>
+            <ListItem>
               <FooterExternalLink href={privacyPolicy.href}>
                 Privacy
               </FooterExternalLink>
-            </Styled.li>
+            </ListItem>
           )}
           {tos && (
-            <Styled.li>
+            <ListItem>
               <FooterExternalLink href={tos.href}>
                 Terms of Use
               </FooterExternalLink>
-            </Styled.li>
+            </ListItem>
           )}
           {about && (
-            <Styled.li>
+            <ListItem>
               <FooterExternalLink href={about.href}>About</FooterExternalLink>
-            </Styled.li>
+            </ListItem>
           )}
-        </Styled.ul>
+        </FooterList>
       </div>
+      <div sx={{ flex: "0 0 auto", mt: 5, mr: [3, 5] }}>
+        <H3 sx={{ mt: 0 }}>Patron Support</H3>
+        <FooterList>
+          {helpEmail && (
+            <ListItem>
+              <FooterExternalLink href={helpEmail.href}>
+                Email Support
+              </FooterExternalLink>
+            </ListItem>
+          )}
+          {helpWebsite && (
+            <ListItem>
+              <FooterExternalLink href={helpWebsite.href}>
+                Help Website
+              </FooterExternalLink>
+            </ListItem>
+          )}
+        </FooterList>
+      </div>
+      <div sx={{ flex: "1 1 0" }} />
+      {APP_CONFIG.companionApp === "simplye" && <DownloadSimplyECallout />}
     </footer>
   );
 };
+
+const DownloadSimplyECallout = () => (
+  <div sx={{ maxWidth: 300, flex: "0 1 auto", mt: 5 }}>
+    <H3 sx={{ mt: 0, display: "flex", alignItems: "center" }}>
+      <SvgPhone sx={{ mr: 1 }} />
+      Download SimplyE
+    </H3>
+    <Text>
+      Our mobile app lets you browse, borrow and read from our whole collection
+      of eBooks and Audiobooks right on your phone!
+    </Text>
+    <div sx={{ width: "75%", overflow: "hidden", ml: -3 }}>
+      <IosBadge sx={{ p: 3, pb: 0 }} />
+      <GooglePlayBadge />
+    </div>
+  </div>
+);
+
+const FooterList = (props: React.ComponentProps<typeof List>) => (
+  <List
+    sx={{
+      "&>li": {
+        my: 2
+      }
+    }}
+    {...props}
+  />
+);
 
 const FooterExternalLink: React.FC<React.HTMLProps<HTMLAnchorElement>> = ({
   children,
@@ -98,11 +137,7 @@ const FooterExternalLink: React.FC<React.HTMLProps<HTMLAnchorElement>> = ({
   ...props
 }) => {
   return (
-    <ExternalLink
-      sx={{ color: "primaries.medium", textDecoration: "none", fontSize: 1 }}
-      className={className}
-      {...props}
-    >
+    <ExternalLink sx={{ color: "ui.black" }} className={className} {...props}>
       {children}
     </ExternalLink>
   );

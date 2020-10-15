@@ -1,29 +1,18 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
+import { BugsnagErrorBoundary } from "utils/bugsnag";
 
-type OnError = (error: Error, componentStack: string) => void;
-
-type Props = {
-  onError?: OnError;
-  fallback: React.ComponentType<{ error: Error | null; message: string }>;
-};
-
-type ErrorInfo = {
-  componentStack: string;
-};
-
-type State = {
-  error: Error | null;
+export type FallbackProps = {
+  error: Error;
+  info: React.ErrorInfo;
+  clearError: () => void;
 };
 
 const DEFAULT_MESSAGE =
   "Something went wrong. Please refresh and try again. If the issue persists, contact your library support staff.";
 
-export const DefaultFallback: React.FC<{
-  error: Error | null;
-  message: string;
-}> = ({ error, message = DEFAULT_MESSAGE }) => {
+export const DefaultFallback: React.FC<FallbackProps> = ({ error }) => {
   return (
     <div
       sx={{
@@ -31,57 +20,78 @@ export const DefaultFallback: React.FC<{
         maxWidth: "100vw",
         textAlign: "center",
         backgroundColor: "warn",
-        color: "white",
+        color: "ui.white",
         cursor: "help",
         borderRadius: "card"
       }}
       title={error?.toString()}
     >
-      <p>{message}</p>
+      <p>{DEFAULT_MESSAGE}</p>
     </div>
   );
 };
 
-export default class ErrorBoundary extends React.Component<Props, State> {
-  static defaultProps = {
-    fallback: DefaultFallback
-  };
-
-  state = { error: null };
-
+type ErrorState = { error?: Error; info?: React.ErrorInfo };
+const initialState: ErrorState = { error: undefined, info: undefined };
+class DefaultErrorBoundary extends React.Component<
+  {
+    FallbackComponent: React.ComponentType<FallbackProps>;
+  },
+  ErrorState
+> {
   static getDerivedStateFromError(error: Error) {
-    // Update state so the next render will show the fallback UI.
     return { error };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
-    const { onError } = this.props;
-    console.error(error, info.componentStack);
-    onError?.(error, info.componentStack);
+  state = initialState;
+
+  handleClearError() {
+    this.setState(initialState);
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    this.setState({
+      error,
+      info: errorInfo
+    });
   }
 
   render() {
-    const { children, fallback: Fallback } = this.props;
-    const { error } = this.state;
+    const { error, info } = this.state;
+    const { FallbackComponent } = this.props;
 
-    if (error !== null) {
-      return <Fallback error={error} message={DEFAULT_MESSAGE} />;
+    if (error && info) {
+      return (
+        <FallbackComponent
+          clearError={this.handleClearError}
+          error={error}
+          info={info}
+        />
+      );
     }
 
-    return children;
+    return this.props.children;
   }
 }
 
-export function withErrorBoundary<T>(
+export default function withErrorBoundary<T>(
   Component: React.ComponentType<T>,
-  Fallback?: React.ComponentType<{ error: Error | null; message: string }>,
-  onError?: OnError
+  Fallback: React.ComponentType<FallbackProps> = DefaultFallback
 ) {
-  const Wrapped = (props: T) => (
-    <ErrorBoundary fallback={Fallback} onError={onError}>
-      <Component {...props} />
-    </ErrorBoundary>
-  );
+  const Wrapped = (props: T) => {
+    if (!BugsnagErrorBoundary) {
+      return (
+        <DefaultErrorBoundary FallbackComponent={Fallback}>
+          <Component {...props} />
+        </DefaultErrorBoundary>
+      );
+    }
+    return (
+      <BugsnagErrorBoundary FallbackComponent={Fallback}>
+        <Component {...props} />
+      </BugsnagErrorBoundary>
+    );
+  };
 
   // Format for display in DevTools
   const name = Component.displayName || Component.name;

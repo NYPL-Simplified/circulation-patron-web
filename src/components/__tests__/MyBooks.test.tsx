@@ -1,167 +1,117 @@
 import * as React from "react";
-import { render, fixtures, fireEvent } from "../../test-utils";
+import { render, fixtures, fireEvent } from "test-utils";
 import { MyBooks } from "../MyBooks";
-import { AuthCredentials } from "opds-web-client/lib/interfaces";
-import merge from "deepmerge";
-import { State } from "opds-web-client/lib/state";
-import Layout from "../Layout";
-import userEvent from "@testing-library/user-event";
-import { useBreakpointIndex } from "@theme-ui/match-media";
-
-const mockSetCollectionAndBook = jest.fn().mockReturnValue(Promise.resolve({}));
+import { FulfillableBook } from "interfaces";
 
 test("shows message and button when not authenticated", () => {
-  const node = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />
-  );
+  const utils = render(<MyBooks />);
 
   expect(
-    node.getByText("You need to be signed in to view this page.")
+    utils.getByText("You need to be signed in to view this page.")
   ).toBeInTheDocument();
 });
-
-const authCredentials: AuthCredentials = {
-  provider: "auth-provider",
-  credentials: "auth-credentials"
-};
-
-const emptyWithAuth: State = merge(fixtures.initialState, {
-  auth: {
-    credentials: authCredentials
-  }
-});
-
-test("displays empty state when empty and signed in", () => {
-  const node = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth }
-  );
-
-  expect(
-    node.queryByText("You need to be signed in to view this page.")
-  ).toBeFalsy();
-
-  expect(
-    node.getByText(
-      "Your books will show up here when you have any loaned or on hold."
-    )
-  ).toBeInTheDocument();
-
-  expect(node.getByText("Sign Out")).toBeInTheDocument();
-});
-
-test("sign out clears state and goes home", () => {
-  const node = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: emptyWithAuth, route: "/loans" }
-  );
-
-  const signOut = node.getByText("Sign Out");
-  fireEvent.click(signOut);
-
-  expect(node.history.location.pathname).toBe("/");
-
-  expect(node.store.getState().auth.credentials).toBeFalsy();
-  /**
-   * even though the location shows home, we should still be able to assert on the MyBooks
-   * because we are rendering it no matter what route we are on
-   */
-  expect(
-    node.getByText("You need to be signed in to view this page.")
-  ).toBeInTheDocument();
-});
-
-const withAuthAndBooks: State = merge(fixtures.initialState, {
-  auth: {
-    credentials: authCredentials
-  },
-  collection: {
-    data: {
-      books: fixtures.makeBooks(10)
+test("displays empty state when empty and signed in", async () => {
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: undefined,
+      isLoading: false
     }
-  }
-});
-
-test("displays books when signed in with data", () => {
-  const node = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    { initialState: withAuthAndBooks }
-  );
-
-  expect(
-    node.queryByText("You need to be signed in to view this page.")
-  ).toBeFalsy();
-
-  expect(
-    node.queryByText(
-      "Your books will show up here when you have any loaned or on hold."
-    )
-  ).toBeFalsy();
-
-  expect(node.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
-  expect(node.getByText(fixtures.makeBook(9).title)).toBeInTheDocument();
-
-  expect(
-    node.getByText(fixtures.makeBook(0).authors.join(", "))
-  ).toBeInTheDocument();
-});
-
-test("sets collection and book", () => {
-  render(<MyBooks setCollectionAndBook={mockSetCollectionAndBook} />, {
-    initialState: withAuthAndBooks
   });
 
-  expect(mockSetCollectionAndBook).toHaveBeenCalledTimes(1);
-  expect(mockSetCollectionAndBook).toHaveBeenCalledWith(
-    "http://simplye-dev-cm.amigos.org/xyzlib/loans",
-    undefined
-  );
+  expect(
+    utils.queryByText("You need to be signed in to view this page.")
+  ).not.toBeInTheDocument();
+
+  expect(
+    utils.getByText(
+      "Your books will show up here when you have any loaned or on hold."
+    )
+  ).toBeInTheDocument();
+
+  expect(utils.getByText("Sign Out")).toBeInTheDocument();
 });
 
-/**
- * - toggles between list and gallery view
- * - shows the reserved button
- */
-
-const loading: State = merge(fixtures.initialState, {
-  auth: {
-    credentials: authCredentials
-  },
-  collection: {
-    isFetching: true
-  }
-});
-
-test("shows loading state", () => {
-  const node = render(
-    <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />,
-    {
-      initialState: loading
+test("sign out calls sign out", async () => {
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: undefined,
+      isLoading: false
     }
-  );
+  });
 
-  expect(node.getByText("Loading...")).toBeInTheDocument();
+  expect(fixtures.mockSignOut).toHaveBeenCalledTimes(0);
+  const signOut = await utils.findByRole("button", { name: "Sign Out" });
+  fireEvent.click(signOut);
+
+  // now get the confirmation button
+  const realSignOut = utils.getByLabelText("Confirm Sign Out");
+  fireEvent.click(realSignOut);
+
+  expect(fixtures.mockSignOut).toHaveBeenCalledTimes(1);
 });
 
-jest.mock("@theme-ui/match-media");
-const mockeduseBreakpointsIndex = useBreakpointIndex as jest.MockedFunction<
-  typeof useBreakpointIndex
->;
-mockeduseBreakpointsIndex.mockReturnValue(1);
+const books: FulfillableBook[] = [
+  ...fixtures.makeFulfillableBooks(10),
+  fixtures.mergeBook<FulfillableBook>({
+    status: "fulfillable",
+    fulfillmentLinks: [fixtures.fulfillmentLink],
+    revokeUrl: "/revoke-10",
+    id: "book 10",
+    title: "Book Title 10",
+    availability: {
+      until: "Jan 2 2020",
+      status: "available"
+    }
+  }),
+  fixtures.mergeBook<FulfillableBook>({
+    status: "fulfillable",
+    fulfillmentLinks: [fixtures.fulfillmentLink],
+    revokeUrl: "/revoke-11",
+    id: "book 11",
+    title: "Book Title 11",
+    availability: {
+      until: "Jan 1 2020",
+      status: "available"
+    }
+  })
+];
 
-test("toggles between list and gallery view", () => {
-  const node = render(
-    <Layout>
-      <MyBooks setCollectionAndBook={mockSetCollectionAndBook} />
-    </Layout>,
-    { initialState: withAuthAndBooks }
-  );
+test("displays books when signed in with data", async () => {
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: books,
+      isLoading: false
+    }
+  });
 
-  const galleryRadio = node.getByLabelText("Gallery View");
-  const listRadio = node.getByLabelText("List View");
-  expect(galleryRadio).toHaveAttribute("aria-selected", "true");
+  expect(utils.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
+  expect(utils.getByText(fixtures.makeBook(9).title)).toBeInTheDocument();
 
-  userEvent.click(listRadio);
+  expect(
+    utils.queryByText("You need to be signed in to view this page.")
+  ).not.toBeInTheDocument();
 
-  expect(listRadio).toHaveAttribute("aria-selected", "true");
+  expect(
+    utils.queryByText(
+      "Your books will show up here when you have any loaned or on hold."
+    )
+  ).toBeFalsy();
+
+  expect(utils.getByText("Book 0 author")).toBeInTheDocument();
+});
+
+test("sorts books", () => {
+  const utils = render(<MyBooks />, {
+    user: {
+      isAuthenticated: true,
+      loans: books,
+      isLoading: false
+    }
+  });
+  const bookNames = utils.queryAllByText(/Book Title/);
+  expect(bookNames[0]).toHaveTextContent("Book Title 11");
+  expect(bookNames[1]).toHaveTextContent("Book Title 10");
 });

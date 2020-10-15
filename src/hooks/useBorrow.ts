@@ -1,74 +1,59 @@
 import * as React from "react";
-import { BookData } from "opds-web-client/lib/interfaces";
-import useTypedSelector from "./useTypedSelector";
-import { getErrorMsg, getAvailabilityString } from "../utils/book";
-import { useActions } from "opds-web-client/lib/components/context/ActionsContext";
-import {
-  bookIsReserved,
-  bookIsReady,
-  bookIsBorrowed,
-  bookIsBorrowable
-} from "opds-web-client/lib/utils/book";
+import { fetchBook } from "dataflow/opds1/fetch";
+import useUser from "components/context/UserContext";
+import useLibraryContext from "components/context/LibraryContext";
+import { ServerError } from "errors";
+import useAuthModalContext from "auth/AuthModalContext";
 
-export default function useBorrow(book: BookData) {
+export default function useBorrow(isBorrow: boolean) {
+  const { catalogUrl } = useLibraryContext();
+  const { setBook, token } = useUser();
+  const { showModal } = useAuthModalContext();
+  const isUnmounted = React.useRef(false);
   const [isLoading, setLoading] = React.useState(false);
-  const bookError = useTypedSelector(state => state.book?.error);
-  const errorMsg = getErrorMsg(bookError);
-  const availability = getAvailabilityString(book);
-  const { actions, dispatch } = useActions();
-  const loansUrl = useTypedSelector(state => state.loans.url);
+  const [error, setError] = React.useState<string | undefined>();
 
-  // Book can either be available to borrow, available to reserve, or reserved
-  const isReserved = bookIsReserved(book);
-  const isBorrowed = bookIsBorrowed(book);
-  const isReservable =
-    !isReserved &&
-    !isBorrowed &&
-    !bookIsReady(book) &&
-    book.copies?.available === 0;
-  const isBorrowable = bookIsBorrowable(book);
+  const loadingText = isBorrow ? "Borrowing..." : "Reserving...";
+  const buttonLabel = isBorrow ? "Borrow" : "Reserve";
 
-  /**
-   * Priority
-   *  - Loading
-   *  - Borrowed
-   *  - Reserved
-   *  - Reservable
-   *  - Borrowable (default)
-   */
-  const label = isLoading
-    ? "Loading..."
-    : isBorrowed
-    ? "Borrowed"
-    : isReserved
-    ? "Reserved"
-    : isReservable
-    ? "Reserve"
-    : "Borrow";
-
-  const borrowOrReserve = async () => {
-    if (book.borrowUrl) {
-      setLoading(true);
-      await dispatch(actions.updateBook(book.borrowUrl));
+  const borrowOrReserve = async (url: string) => {
+    setLoading(true);
+    setError(undefined);
+    if (!token) {
+      // TODO: register a callback to call if the sign in works
+      showModal();
+      setError("You must be signed in to borrow this book.");
       setLoading(false);
-    } else {
-      throw Error("No borrow url present for book");
+      return;
     }
-    // refetch the loans
-    if (loansUrl) {
-      await dispatch(actions.fetchLoans(loansUrl));
+    try {
+      const book = await fetchBook(url, catalogUrl, token);
+      setBook(book);
+    } catch (e) {
+      // TODO: Report error to bug catcher here.
+      if (e instanceof ServerError) {
+        console.log("ERR", e.info);
+        setError(e.info.detail);
+      } else {
+        setError("An error occurred while borrowing this book.");
+      }
     }
+
+    if (!isUnmounted.current) setLoading(false);
   };
+
+  React.useEffect(
+    () => () => {
+      isUnmounted.current = true;
+    },
+    []
+  );
 
   return {
     isLoading,
-    availability,
+    loadingText,
+    buttonLabel,
     borrowOrReserve,
-    isReserved,
-    isReservable,
-    isBorrowed,
-    isBorrowable,
-    errorMsg,
-    label
+    error
   };
 }

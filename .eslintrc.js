@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     node: true
@@ -6,18 +7,19 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "tsconfig.json",
-    sourceType: "module"
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true
+    }
   },
   plugins: [
     "react",
     "@typescript-eslint",
-    // "@typescript-eslint/tslint",
     "jsx-a11y",
     "prettier",
     "react-hooks"
   ],
   extends: [
-    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
@@ -42,27 +44,29 @@ module.exports = {
     // redundant and doesn't function properly
     "react/prop-types": 0,
     "@typescript-eslint/no-unused-vars": [
-      "warn",
+      "error",
       {
         vars: "all",
         args: "after-used",
         // ignore underscore _vars or jsx imports or React imports
         argsIgnorePattern: "^_.*",
-        varsIgnorePattern: "^jsx$|^React$",
+        varsIgnorePattern: "^jsx$|^React$|^_.*",
         ignoreRestSiblings: true
       }
     ],
+    "no-underscore-dangle": 0,
     // these are meant to allow jsx to mark react as used. Not working right now though
     "react/jsx-uses-vars": "error",
     "react/jsx-uses-react": "error",
     // disable this rule because it is unnecessarily strict for TS
     "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
     // if we want this, we should turn disallow any in tsconfig not here
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/class-name-casing": "error",
-    "@typescript-eslint/prefer-namespace-keyword": "error",
     camelcase: "error",
+    "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/prefer-namespace-keyword": "error",
     eqeqeq: ["error", "smart"],
     "id-blacklist": [
       "error",
@@ -78,7 +82,6 @@ module.exports = {
     "id-match": "error",
     "no-eval": "error",
     "no-redeclare": "error",
-    "no-underscore-dangle": "error",
     "no-var": "error"
   },
   settings: {

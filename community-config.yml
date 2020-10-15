@@ -1,0 +1,63 @@
+# APP MEDIA SUPPORT
+# Each entry has a setting of "show", "redirect" or "show-and-redirect".
+# 
+# "redirect" tells the app to display a prompt directing the 
+# user to read the book in the companion mobile app (usually SimplyE).
+# 
+# The default for unlisted entries is unsupported. The format will be 
+# completely hidden. Any OPDS Entry with only this one unsupported format
+# will not be visible in the app.
+media_support:
+  # standard download types
+  application/epub+zip: show
+  application/kepub+zip: show
+  application/pdf: show
+  application/x-mobipocket-ebook: show
+  application/x-mobi8-ebook: show
+  application/vnd.overdrive.circulation.api+json;profile=ebook: show
+  # External read online type (Like Overdrive)
+  text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media": show
+  # AxisNow document (read online in Webpub Viewer) - not supported in community version
+  # application/vnd.librarysimplified.axisnow+json: show
+  # Audiobooks
+  application/audiobook+json: redirect
+  application/vnd.overdrive.circulation.api+json;profile=audiobook: redirect
+
+  ### INDIRECT TYPES
+  # OPDS Entry Indirection type
+  application/atom+xml;type=entry;profile=opds-catalog: 
+    text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media": show
+
+  # Adobe Encryption
+  application/vnd.adobe.adept+xml: 
+    application/epub+zip: redirect-and-show
+
+  # Bearer Token Exchange (web app currently doesn't support this)
+  # application/vnd.librarysimplified.bearer-token+json:
+
+# defines the companion app for the instance. Can be "simplye" or "openebooks"
+# default is "simplye"
+companion_app: simplye
+
+# defines the bugsnag api key to integrate error tracking
+# bugsnag_api_key: xxx
+
+# defines the google tag manager id to integrate web analytics
+# gtm_id: xxx
+
+# There are also some environment variables that can be set in the .env.local
+# file. They are set there because they're for development, not production
+# configuration.
+
+# REQUIRED LIBRARY CONFIG
+
+# if you would like to use a library registry, define the registry url
+# libraries: https://some-registry.com/
+
+# Or define the catalog root and shortname for each library on this instance.
+# the homepage of the library will then be at https://domain.com/:library/
+libraries:
+  brazoria: https://simplye.amigos.org/txbrazoria
+  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib
+  openqa: https://qa-circulation.openebooks.us/USOEI/groups
+  lyrasis: https://demo.lyrasistechnology.org/lyrasis

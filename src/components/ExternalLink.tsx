@@ -2,20 +2,21 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { VisuallyHidden } from "reakit";
+import { AnchorButton } from "./Button";
 
-const ExternalLink: React.FC<React.HTMLProps<HTMLAnchorElement>> = ({
+const ExternalLink: React.FC<React.ComponentPropsWithoutRef<"a">> = ({
   children,
   ...props
 }) => (
-  <a
-    sx={{ textDecoration: "underline" }}
+  <AnchorButton
+    variant="link"
     target="__blank"
     rel="noopener noreferrer"
     {...props}
   >
     {children}
     <VisuallyHidden>(Opens in a new tab)</VisuallyHidden>
-  </a>
+  </AnchorButton>
 );
 
 export default ExternalLink;

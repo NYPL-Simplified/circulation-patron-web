@@ -3,28 +3,28 @@ import { render } from "../../test-utils";
 import FormInput from "../form/FormInput";
 
 test("renders as expected", () => {
-  const node = render(<FormInput name="input-name" label="Email" />);
-  expect(node.container.firstChild).toMatchSnapshot();
+  const utils = render(<FormInput name="input-name" label="Email" />);
+  expect(utils.container.firstChild).toMatchSnapshot();
 });
 
 test("displays star when required", () => {
-  const node = render(<FormInput required name="input-name" label="Email" />);
-  expect(node.getByText("*")).toBeInTheDocument();
+  const utils = render(<FormInput required name="input-name" label="Email" />);
+  expect(utils.getByText("*")).toBeInTheDocument();
 });
 
 test("no star when not required", () => {
-  const node = render(<FormInput name="input-name" label="Email" />);
-  expect(node.queryByText("*")).toBeNull();
+  const utils = render(<FormInput name="input-name" label="Email" />);
+  expect(utils.queryByText("*")).toBeNull();
 });
 
 test("displays label", () => {
-  const node = render(<FormInput name="input-name" label="Email" />);
-  expect(node.getByText("Email")).toBeInTheDocument();
+  const utils = render(<FormInput name="input-name" label="Email" />);
+  expect(utils.getByText("Email")).toBeInTheDocument();
 });
 
 test("shows error when present", () => {
-  const node = render(
+  const utils = render(
     <FormInput name="input-name" label="Email" error="Something went wrong" />
   );
-  expect(node.getByText("Something went wrong")).toBeInTheDocument();
+  expect(utils.getByText("Something went wrong")).toBeInTheDocument();
 });

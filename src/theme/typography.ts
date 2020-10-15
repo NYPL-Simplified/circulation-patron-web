@@ -1,24 +1,26 @@
 const typography = {
   fonts: {
-    body: "Oswald, system-ui, sans-serif",
-    heading: "inherit",
-    monospace: "Menlo, monospace",
-    bookTitle: "Merriweather, serif"
+    body: "-apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+    heading: "-apple-system, BlinkMacSystemFont, system-ui, sans-seri",
+    monospace: "Menlo, monospace"
   },
-  fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
+  fontSizes: {
+    "-2": "0.75rem",
+    "-1": "0.875rem",
+    "0": "1rem",
+    "1": "1.125rem",
+    "2": "1.25rem",
+    "3": "1.75rem",
+    "4": "2.25rem",
+    "5": "3rem"
+  },
   fontWeights: {
-    light: 200,
-    body: 300,
-    heading: 400,
-    semibold: 500,
+    light: 300,
+    regular: 400,
+    medium: 500,
     bold: 700
   },
-  lineHeights: {
-    normal: "normal",
-    none: 1,
-    body: 1.5,
-    heading: 1.125
-  },
+  lineHeights: [1, 1.1, 1.25, 1.5],
   letterSpacings: {
     tighter: "-0.05em",
     tight: "-0.025em",

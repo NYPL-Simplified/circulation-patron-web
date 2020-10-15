@@ -1,20 +1,31 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "target": "es5",
-    "outDir": "lib",
-    "lib": ["es2017", "dom"],
-    "rootDir": "src",
-    "types": ["jest", "node"],
-    "jsx": "react",
-    "baseUrl": "src",
-    "paths": {
-      "*": ["node_modules/@types/*", "*"]
-    },
-    "strictNullChecks": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
     "esModuleInterop": true,
-    "downlevelIteration": true
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "strictNullChecks": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "baseUrl": "src",
   },
-  "include": ["./src"],
-  "exclude": ["lib", "node_modules"]
+  "exclude": ["node_modules", "config/srv", "jest.config.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    ".eslintrc.js",
+    "**/*.tsx",
+    "next.config.js",
+    "src/config/load-config.js",
+    "src/config/fetch-config.js"
+  ]
 }

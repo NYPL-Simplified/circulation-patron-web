@@ -1,41 +1,66 @@
-import { BASIC_AUTH_ID } from "./../../utils/auth";
-import { AuthProvider, BasicAuthMethod } from "opds-web-client/lib/interfaces";
-import BasicAuthForm from "../../components/BasicAuthForm";
-import { AuthState } from "opds-web-client/lib/reducers/auth";
+import { ClientSamlMethod, CollectionData } from "interfaces";
+import { OPDS1 } from "interfaces";
+import { makeFulfillableBooks } from "test-utils/fixtures/book";
 
-export const basicAuthType = "http://opds-spec.org/auth/basic";
+export const basicAuthId = "http://opds-spec.org/auth/basic";
+export const samlAuthId = "http://librarysimplified.org/authtype/SAML-2.0";
 
-export const basicAuthMethod = {
+export const basicAuthMethod: OPDS1.BasicAuthMethod = {
   labels: {
     login: "Barcode",
     password: "Pin"
   },
-  type: basicAuthType,
+  type: basicAuthId,
   description: "Library Barcode",
-  inputs: {
-    login: { keyboard: "Default" },
-    password: { keyboard: "Default" }
-  }
+  // inputs: {
+  //   login: { keyboard: "Default" },
+  //   password: { keyboard: "Default" }
+  // },
+  links: [
+    {
+      href: "https://example.com/LoginButton280.png",
+      rel: "logo"
+    }
+  ]
 };
 
-export const basicAuthProvider: AuthProvider<BasicAuthMethod> = {
-  id: BASIC_AUTH_ID,
-  plugin: {
-    type: basicAuthType,
-    formComponent: BasicAuthForm,
-    buttonComponent: jest.fn(),
-    lookForCredentials: jest.fn()
-  },
-  method: basicAuthMethod
+export const cleverAuthMethod: OPDS1.CleverAuthMethod = {
+  description: "Clever",
+  links: [
+    {
+      href: "https://example.com/oauth_authenticate?provider=Clever",
+      rel: "authenticate"
+    },
+    {
+      href: "https://example.com/CleverLoginButton280.png",
+      rel: "logo"
+    }
+  ],
+  type: OPDS1.CleverAuthType
 };
 
-export const unauthenticatedAuthState: AuthState = {
-  showForm: false,
-  callback: null,
-  cancel: null,
-  credentials: null,
-  title: null,
-  error: null,
-  attemptedProvider: null,
-  providers: [basicAuthProvider]
+export const samlAuthHref = "/saml-auth-url";
+export const clientSamlMethod: ClientSamlMethod = createSamlMethod(0);
+
+export function createSamlMethod(num: number): ClientSamlMethod {
+  return {
+    href: `/saml-auth-url/${num}`,
+    type: OPDS1.SamlAuthType,
+    description: `SAML IdP ${num}`,
+    links: [
+      {
+        href: "https://example.com/LoginButton280.png",
+        rel: "logo"
+      }
+    ]
+  };
+}
+
+export const loans: CollectionData = {
+  id: "loans-id",
+  url: "/loans-url",
+  title: "My Loans",
+  lanes: [],
+  books: makeFulfillableBooks(1),
+  navigationLinks: []
 };

@@ -1,4 +1,4 @@
-import truncateString from "../truncate";
+import { truncateString } from "../string";
 
 test("truncates at correct length and word boundary by default", () => {
   expect(truncateString("1234 67 9", 9)).toBe("1234 67...");

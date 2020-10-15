@@ -1,15 +1,21 @@
+import {
+  basicAuthMethod,
+  cleverAuthMethod,
+  createSamlMethod
+} from "test-utils/fixtures/auth";
 import { LibraryData } from "../../interfaces";
 
 /**
  * Copied via chrome console from sample app.
  */
 export const libraryData: LibraryData = {
-  onlyLibrary: true,
-  catalogUrl: "http://simplye-dev-cm.amigos.org/xyzlib",
+  slug: "testlib",
+  logoUrl: null,
+  catalogUrl: "http://test-cm.com/catalogUrl",
   catalogName: "XYZ Public Library",
   colors: {
-    foreground: "#ffffff",
-    background: "#000000"
+    primary: "#337ab7",
+    secondary: "#d9534f"
   },
   headerLinks: [
     {
@@ -20,15 +26,15 @@ export const libraryData: LibraryData = {
       role: "navigation"
     }
   ],
-  cssLinks: [
-    {
-      href:
-        "http://simplye-dev-web.amigos.org/resources/xyzlib/styles/test-css.css",
-      type: "text/css",
-      rel: "stylesheet"
-    }
-  ],
-  libraryLinks: {}
+  libraryLinks: {},
+  shelfUrl: "/shelf-url",
+  authMethods: [basicAuthMethod, createSamlMethod(0), cleverAuthMethod],
+  searchData: {
+    url: "/search-url",
+    description: "search-description",
+    shortName: "search shortname",
+    template: "/search/{searchTerms}"
+  }
 };
 
 export default libraryData;

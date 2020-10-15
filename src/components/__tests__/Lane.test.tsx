@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render, fixtures } from "../../test-utils";
 import Lane from "../Lane";
-import { LaneData } from "opds-web-client/lib/interfaces";
+import { LaneData } from "interfaces";
 /**
  * Lane
 
@@ -28,13 +28,13 @@ beforeEach(() => {
 
 const laneData: LaneData = {
   title: "my lane",
-  url: "/link-to-lane",
-  books: fixtures.makeBooks(4)
+  url: "http://link-to-lane",
+  books: fixtures.makeBorrowableBooks(4)
 };
 
 test("Renders", () => {
-  const node = render(<Lane lane={laneData} />);
-  const book1 = node.getByText("Book Title 1");
+  const utils = render(<Lane lane={laneData} />);
+  const book1 = utils.getByText("Book Title 1");
   expect(book1).toBeInTheDocument();
 });
 
@@ -43,32 +43,35 @@ test("renders breadcrumbs with 0 books", () => {
     ...laneData,
     books: []
   };
-  const node = render(<Lane lane={withNoBooks} />);
+  const utils = render(<Lane lane={withNoBooks} />);
 
   // it should just show the breadcrumb
-  const breadcrumb = node.getByText("my lane");
+  const breadcrumb = utils.getByText("my lane");
   expect(breadcrumb).toBeInTheDocument();
 
   // there should be no li elements
-  expect(node.getByTestId("lane-list")).toBeEmpty();
+  expect(utils.getByTestId("lane-list")).toBeEmptyDOMElement();
 });
 
 test("filters books", () => {
-  const node = render(
+  const utils = render(
     <Lane lane={laneData} omitIds={["Book Id 1", "Book Id 2"]} />
   );
 
-  expect(node.queryByText("Book Title 1")).toBeNull();
-  expect(node.queryByText("Book Title 2")).toBeNull();
+  expect(utils.queryByText("Book Title 1")).toBeNull();
+  expect(utils.queryByText("Book Title 2")).toBeNull();
 
-  expect(node.getByText("Book Title 0")).toBeInTheDocument();
-  expect(node.getByText("Book Title 3")).toBeInTheDocument();
+  expect(utils.getByText("Book Title 0")).toBeInTheDocument();
+  expect(utils.getByText("Book Title 3")).toBeInTheDocument();
 });
 
 test("more button navigates to the right link", () => {
-  const node = render(<Lane lane={laneData} />);
+  const utils = render(<Lane lane={laneData} />);
 
-  const moreButton = node.getByText("View all my lane").closest("a");
+  const moreButton = utils.getByText("See More").closest("a");
 
-  expect(moreButton).toHaveAttribute("href", "/collection/link-to-lane");
+  expect(moreButton).toHaveAttribute(
+    "href",
+    "/testlib/collection/http%3A%2F%2Flink-to-lane"
+  );
 });

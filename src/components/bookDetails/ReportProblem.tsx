@@ -1,29 +1,32 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
 import Modal from "../Modal";
 import useComplaints from "../../hooks/useComplaints";
 import { DialogDisclosure } from "reakit";
-import { BookData } from "opds-web-client/lib/interfaces";
 import { TextArea } from "../TextInput";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
-import { ComplaintData } from "../../interfaces";
+import { AnyBook, ComplaintData } from "../../interfaces";
 import LoadingIndicator from "../LoadingIndicator";
 import Select, { Label } from "../Select";
+import { H1 } from "components/Text";
+import { getReportUrl } from "utils/libraryLinks";
 
 const getDisplayType = (type: string) =>
   type
     .replace("http://librarysimplified.org/terms/problem/", "")
     .replace(/-/g, " ")
     .split(" ")
-    .map(t => t[0].toUpperCase() + t.slice(1))
+    .map(t => (t ? t[0].toUpperCase() + t.slice(1) : ""))
     .join(" ");
 
 type ComplaintFormData = Required<ComplaintData>;
 
-const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
+const ReportProblem: React.FC<{ book: AnyBook }> = ({ book }) => {
   const { state, dialog, dispatch, postComplaint } = useComplaints(book);
+
+  const hasReportUrl = Boolean(getReportUrl(book.raw));
   const handleClick = () => dispatch({ type: "REPORT_PROBLEM" });
 
   const { register, handleSubmit, errors, reset } = useForm<
@@ -37,6 +40,11 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
   const onSubmit = handleSubmit(({ type, detail }) => {
     postComplaint({ type, detail });
   });
+
+  if (!hasReportUrl) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <Modal
@@ -48,9 +56,9 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
       >
         {state.success ? (
           <div sx={{ display: "flex", flexDirection: "column" }}>
-            <Styled.h1 sx={{ fontSize: 3, textAlign: "center" }}>
+            <H1 sx={{ fontSize: 3, textAlign: "center" }}>
               Your problem was reported. Thank you!
-            </Styled.h1>
+            </H1>
             <Button sx={{ alignSelf: "flex-end" }} onClick={cancel}>
               Done
             </Button>
@@ -72,9 +80,9 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
               }
             }}
           >
-            <Styled.h1 sx={{ alignSelf: "center", fontSize: [3, 4] }}>
+            <H1 sx={{ alignSelf: "center", fontSize: [3, 4] }}>
               Report a problem
-            </Styled.h1>
+            </H1>
             <Label htmlFor="complaint-type">Complaint Type</Label>
             <Select
               id="complaint-type"
@@ -91,7 +99,7 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
             {errors.type && (
               <span
                 id="complaint-type-error"
-                sx={{ color: "warn", fontStyle: "italic" }}
+                sx={{ color: "ui.error", fontStyle: "italic" }}
               >
                 Error: {errors.type.message}
               </span>
@@ -109,13 +117,13 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
             {errors.detail && (
               <span
                 id="complaint-body-error"
-                sx={{ color: "warn", fontStyle: "italic" }}
+                sx={{ color: "ui.error", fontStyle: "italic" }}
               >
                 Error: {errors.detail.message}
               </span>
             )}
             <div sx={{ mt: 3, "&>button": { ml: 2 }, alignSelf: "flex-end" }}>
-              <Button variant="flat" onClick={cancel}>
+              <Button variant="ghost" onClick={cancel}>
                 Cancel
               </Button>
               <Button type="submit">Submit</Button>
@@ -123,12 +131,15 @@ const ReportProblem: React.FC<{ book: BookData }> = ({ book }) => {
           </form>
         )}
       </Modal>
+
       <DialogDisclosure
         {...dialog}
         onClick={handleClick}
-        as={Styled.a}
-        sx={{ fontStyle: "italic", mt: 2, display: "inline-block" }}
+        as={Button}
         data-testid="report-problem-link"
+        variant="link"
+        color="ui.gray.extraDark"
+        sx={{ fontStyle: "italic", alignSelf: "flex-start", my: 2 }}
       >
         Report a problem
       </DialogDisclosure>

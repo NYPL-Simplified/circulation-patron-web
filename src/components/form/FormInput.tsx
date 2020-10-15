@@ -21,7 +21,7 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
       <div role="group" sx={{ mb: 2 }}>
         <FormLabel sx={{ mb: 1, display: "inline-block" }} htmlFor={name}>
           {label}
-          {required && <span sx={{ color: "warn" }}>*</span>}
+          {required && <span sx={{ color: "ui.error" }}>*</span>}
         </FormLabel>
         <TextInput
           id={name}
@@ -32,12 +32,15 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
           type={type}
           sx={{
             display: "block",
-            borderColor: error ? "warn" : undefined
+            borderColor: error ? "ui.error" : undefined
           }}
           {...props}
         />
         {error && (
-          <span id={describedById} sx={{ color: "warn", fontStyle: "italic" }}>
+          <span
+            id={describedById}
+            sx={{ color: "ui.error", fontStyle: "italic" }}
+          >
             {error}
           </span>
         )}

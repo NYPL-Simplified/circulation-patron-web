@@ -1,7 +1,5 @@
 import { ComplaintData } from "../../interfaces";
 
-require("isomorphic-fetch");
-
 export type ComplaintType = string;
 
 export type ComplaintsAction =

@@ -1,87 +1,81 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
-import useTypedSelector from "../hooks/useTypedSelector";
-import { SetCollectionAndBook } from "../interfaces";
-import useSetCollectionAndBook from "../hooks/useSetCollectionAndBook";
-import { connect } from "react-redux";
-import {
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-} from "opds-web-client/lib/components/mergeRootProps";
 import { PageLoader } from "../components/LoadingIndicator";
-import useNormalizedCollection from "../hooks/useNormalizedCollection";
-import { Helmet } from "react-helmet-async";
-import { GalleryView, ListView, LanesView } from "./BookList";
-import useView from "./context/ViewContext";
-import ListFilters from "./ListFilters";
+import { InfiniteBookList, LanesView } from "./BookList";
+import Head from "next/head";
+import PageTitle from "./PageTitle";
+import { Text } from "./Text";
+import BreadcrumbBar from "./BreadcrumbBar";
+import computeBreadcrumbs from "computeBreadcrumbs";
+import useLibraryContext from "components/context/LibraryContext";
+import { fetchCollection } from "dataflow/opds1/fetch";
+import extractParam from "dataflow/utils";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import { cacheCollectionBooks } from "utils/cache";
 
 export const Collection: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
-}> = ({ setCollectionAndBook }) => {
-  useSetCollectionAndBook(setCollectionAndBook);
-  const { view } = useView();
-  // the first hook just provides the collection, the second subs in loaned book data if existing
-  const collection = useTypedSelector(state => state.collection);
-  const collectionData = useNormalizedCollection();
+  title?: string;
+}> = ({ title }) => {
+  const { catalogUrl } = useLibraryContext();
+  const { query } = useRouter();
+  const collectionUrlParam = extractParam(query, "collectionUrl");
+  // use catalog url if you're at home
+  const collectionUrl = decodeURIComponent(collectionUrlParam ?? catalogUrl);
 
-  if (collection.isFetching) {
-    return <PageLoader />;
-  }
+  const { data: collection, isValidating } = useSWR(
+    collectionUrl,
+    fetchCollection
+  );
 
-  // if we have lanes, show them
-  if (collectionData?.lanes && collectionData.lanes.length > 0) {
-    const lanes = collectionData?.lanes ?? [];
-    return (
-      <div>
-        <Helmet>
-          <title>{collectionData.title}</title>
-        </Helmet>
-        <LanesView lanes={lanes} />
-      </div>
-    );
-  }
-  // alternatively, we might have books instead
-  if (collectionData?.books && collectionData.books.length > 0) {
-    const books = collectionData.books;
-    return (
-      <React.Fragment>
-        <Helmet>
-          <title>{collectionData.title}</title>
-        </Helmet>
-        {view === "LIST" ? (
-          <ListView books={books} breadcrumb={<ListFilters />} />
-        ) : (
-          <GalleryView books={books} breadcrumb={<ListFilters />} />
-        )}
-      </React.Fragment>
-    );
-  }
+  // extract the books from the collection and set them in the SWR cache
+  // so we don't have to refetch them when you click a book.
+  React.useEffect(() => {
+    cacheCollectionBooks(collection);
+  }, [collection]);
 
-  // otherwise it is empty
+  const isLoading = !collection && isValidating;
+
+  const hasLanes = collection?.lanes && collection.lanes.length > 0;
+  const hasBooks = collection?.books && collection.books.length > 0;
+  const pageTitle = title ?? `Collection: ${collection?.title ?? ""}`;
+
+  const breadcrumbs = computeBreadcrumbs(collection);
   return (
     <div
       sx={{
-        display: "flex",
+        bg: "ui.gray.lightWarm",
         flex: "1 1 auto",
-        alignItems: "center",
-        justifyContent: "center"
+        display: "flex",
+        flexDirection: "column"
       }}
     >
-      <Styled.h3 sx={{ color: "primaries.medium", fontStyle: "italic" }}>
-        This collection is empty.
-      </Styled.h3>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
+      <BreadcrumbBar breadcrumbs={breadcrumbs} />
+      <PageTitle collection={collection}>{pageTitle}</PageTitle>
+      {isLoading ? (
+        <PageLoader />
+      ) : hasLanes ? (
+        <LanesView lanes={collection?.lanes ?? []} />
+      ) : hasBooks ? (
+        <InfiniteBookList firstPageUrl={collectionUrl} />
+      ) : (
+        <div
+          sx={{
+            display: "flex",
+            flex: "1 1 auto",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <Text variant="text.callouts.italic">This collection is empty.</Text>
+        </div>
+      )}
     </div>
   );
 };
 
-const Connected = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-)(Collection);
-
-// // we have to do this due to a typing error in react-router-dom
-const Wrapper = props => <Connected {...props} />;
-export default Wrapper;
+export default Collection;

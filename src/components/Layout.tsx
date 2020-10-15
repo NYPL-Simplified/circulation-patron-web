@@ -7,17 +7,8 @@ import Footer from "./Footer";
 import SkipNavigation from "./SkipNavigation";
 
 export const CONTENT_ID = "cpw-content";
-/**
- * Will take over from opds-web-client to handle layout
- * of the app: header, main, footer. Will import from
- * opds web client as necessary
- *
- * How will it handle the data that opds<Root> is passing in to
- * each of the components it renders? Should that be available in
- * context or should it be passed via render prop or what?
- */
 
-const Layout: React.FC = ({ children }) => {
+const Layout: React.FC<{ bg?: string }> = ({ children, bg }) => {
   return (
     <Styled.root
       sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
@@ -31,7 +22,8 @@ const Layout: React.FC = ({ children }) => {
           flex: "1 1 auto",
           width: "100%",
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
+          bg
         }}
       >
         {children}

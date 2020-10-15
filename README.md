@@ -1,19 +1,50 @@
 # circulation-patron-web
 
-![Docker Image Version (latest semver)](https://img.shields.io/docker/v/nypl/patron-web?label=Docker%20Hub&logo=docker&sort=semver&style=flat)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/NYPL-Simplified/circulation-patron-web/CI?label=Tests&logo=github&style=flat)
+<div>
+  <a aria-label="Docker images" href="https://hub.docker.com/r/nypl/patron-web/tags">
+    <img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/nypl/patron-web?label=Docker%20Hub&logo=docker&sort=semver">
+  </a>
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/CI?label=Tests&logo=github">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Production Release?label=Build%20%28master%29&logo=github">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Publish beta?label=Build%20%28beta%29&logo=github">
+</div>
 
-A Circulation catalog web interface for library patrons.
+An OPDS web catalog client for library patrons.
 
 ## Background
 
-The `circulation-patron-web` application serves as a way for libraries to view their collections on the web. A library _must_ be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and _can_ be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). Currently, in order for a library to be part of Library Simplified and show up in the SimplyE application, they must register with NYPL's Library Registry. A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format.
+The `circulation-patron-web` application serves as a way for libraries to publish their collections to the web. A library _must_ be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and _can_ be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). Currently, in order for a library to be part of Library Simplified and show up in the SimplyE application, they must register with NYPL's Library Registry. A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format.
 
-The `circulation-patron-web` app can be used for single-library and multi-library scenarios. The most common scenario may be for a single-library where the app renders the _main_ library of a Circulation Manager. Alternatively, it's possible to use one instance of the `circulation-patron-web` app for multiple libraries, either from a single Circulation Manager or from multiple Circulation Managers.
+This app can support many libraries, each at their own url: `http://example.com/library1` can be one library, and `http://example.com/library2` another library. You configure the libraries for the app in the [config file](#configuration-file).
 
-## Installation
+# Configuring the application
 
-Once you have a [Library Registry](https://github.com/NYPL-Simplified/library_registry) or [Circulation Manager](https://github.com/NYPL-Simplified/circulation), run `npm install` in this repository to install the dependencies.
+## Configuration File
+
+To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the catalog root url, and each library the app runs has a unique catalog root url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured. 
+
+The production configuration is defined in a YAML config file. You can find more details on the options in the `sample-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. See [environment variables](#environment-variables) below for more information.
+
+## Environment Variables
+
+The main app configuration is done in the [config file](#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file. 
+
+Setting via the command line:
+```
+> CONFIG_FILE=config.yml npm run start
+```
+
+Setting in a `.env.local` file:
+```
+CONFIG_FILE=config.yml
+```
+The app can then be run with `npm run start`, and it will pick up the env from your env file.
+
+The following environment variables can be set to further configure the application.
+
+- Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
+- Set `ANALYZE=true` to generate bundle analysis files inside `.next/analyze` which will show bundle sizes for server and client, as well as composition.
+- Set `NEXT_PUBLIC_AXISNOW_DECRYPT=true` to indicate that the build environment has access to the axisnow decryptor submodule. Default is false.
 
 ## Manager, Registry, and Application Configurations
 
@@ -21,55 +52,38 @@ Any Circulation Manager you'll be using with the app also needs a configuration 
 
 If you are using a Library Registry, this configuration will automatically be created when you register libraries with the Registry, but you need to configure the URL in the Library Registry by running `bin/configuration/configure_site_setting --setting="web_client_url=http://library.org/{uuid}"` (replace the URL with your web client URL). Otherwise, you'll need to create a sitewide setting for it in the Circulation Manager. Finally, make sure that the libraries are registered to the Library Registry you are using.
 
+
+# Development
+
+We use [Next.js](https://nextjs.org/) as our react framework. This handles build configuration as well as server management, providing simple APIs to allow server-rendering or even static-rendering
+
+## Installing Dependencies
+
+Run `npm install` in this repository to install the dependencies. If you get errors, you may be using the wrong Node version. We define our node version in `.nvmrc`. You can use [Node Version Manager](https://github.com/nvm-sh/nvm) to pick that up or manually install that version. It's possible that older versions will work, but the version in `.nvmrc` is the version all our tests and QA are run on.
+
 ## Running the Application
 
 Once the dependencies are installed and application environments configured, the following two base commands can be used to start the application:
 
-- `npm run dev` - This command will watch the code for changes and rebuild the front-end code, but won't reload the server code. Unless you have a library registry running locally, remember to have a manager, registry or config file set when running this. eg. `CONFIG_FILE=config/cm_libraries.txt npm run dev`
-- `npm run build:prod` - This will build both the server and the client code into `/lib` and `/dist` respectively. You can then run `npm run start` to start the built server.
+- `npm run dev` - This command will start the development server, which builds pages lazily (when you request them) to shorten the startup time.
+- `npm run dev:https` - This will run the app in development with https enabled. This uses the `dev-server.js` script to load https keys. It's useful when developing features that require https to be enabled.
+- `npm run build` - This will build both the server and the client code into `./next`. You can then run `npm run start` to start the server.
 
 The application will start at the base URL of `localhost:3000`.
 
-### Application Startup Configurations
+### Running with Decryption
 
-There are three ways to run this application:
+This app supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/NYPL-Simplified/axisnow-access-control-web)
 
-- with a [Library Registry](https://github.com/NYPL-Simplified/library_registry)
-- with a single library on a [Circulation Manager](https://github.com/NYPL-Simplified/circulation)
-- with a configuration file for multiple Circulation Manager URLs
+To run with decryption:  
+- Set `axisnow_decrypt=true` in your app's `config.yml` file.
+- Run `git submodule update`
+- Verify that `axisnow-access-control-web` folder exists.  
+- Run `npm install` as normal.
 
-By default, this application expects a Library Registry to be running at http://localhost:7000. For all three variations below, make sure that the Circulation Manager is running at the same time. For the first variation, make sure that the library is registered to the Library Registry (setting "Registry Stage" to "production").
+### ENV Vars and Building
 
-Set one of the following environment variables when running the application:
-
-- `REGISTRY_BASE` - to use a Library Registry
-
-  - Example: `REGISTRY_BASE=http://localhost:7000 npm run dev`
-  - A Library Registry is required for this build.
-  - This is the default setting which will point to a Library Registry located at `localhost:7000`. The libraries can be viewed in the app (running locally) by going to `localhost:3000/{urn:uuid}` where `urn:uuid` is the `urn:uuid` of the library. Get the `urn:uuid` from the Library Registry admin under the `internal_urn` label for its basic information.
-
-- `SIMPLIFIED_CATALOG_BASE` - to use a Circulation Manager
-
-  - Example: `SIMPLIFIED_CATALOG_BASE=http://localhost:6500 npm run dev`.
-  - Point this environment variable to the URL of the Circulation Manager (which defaults to `localhost:6500`). This will load the _main_ library in the Circulation Manager in the app by going to `localhost:3000`.
-
-- `CONFIG_FILE` - to use a configuration file
-  - Example: `CONFIG_FILE=config_file.txt npm run prod`
-  - Set `CONFIG_FILE` to point to a local file or a remote URL.
-    Each line in the file should be a library's desired URL path in the web catalog and the library's Circulation Manager URL (the domain of the Circulation Manager along with the library's shortname), separated by a pipe character. For example:
-  - ```
-     library1|http://circulationmanager.org/L1
-     library2|http://localhost:6500/L2
-     library3|http://anothercirculationmanager.org/L3
-    ```
-  - From the example above, when running the command you can visit the different libraries (running locally) at `localhost:3000/library1`, `localhost:3000/library2`, and `localhost:3000/library3`.
-  - This is for cases when an organization wants to use the same circulation-patron-web instance for multiple libraries and they are not running their own Library Registry or do not want to run a Library Registry when it's not needed for anything else.
-
-The following environment variables can also be set to further configure the application.
-
-- Set `SHORTEN_URLS=false` to stop the app from removing common parts of the circulation manager URLs from the web app's URLs.
-- Set `CACHE_EXPIRATION_SECONDS` to control how often the app will check for changes to registry entries and circ manager authentication documents.
-- Set `AXE_TEST=true` to run the application with `react-axe` enabled (only works when `NODE_ENV` is "development").
+When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.txt npm run start` will not work, you have to set them at build time.
 
 ### Useful Scripts
 
@@ -138,30 +152,34 @@ test("fetches search description", async () => {
     "fetchSearchDescription"
   );
   /**
-   * node will contain
+   * utils will contain
    *  - the result of render
    *  - the redux store
    *  - the history object
    *  - the spied on dispatch function
    */
-  const node = render(<Search />, {
+  const utils = render(<Search />, {
     initialState
   });
 
   expect(mockedFetchSearchDescription).toHaveBeenCalledTimes(1);
   expect(mockedFetchSearchDescription).toHaveBeenCalledWith("/search-url");
   // we can assert on the app's dispatch like this
-  expect(node.dispatch).toHaveBeenCalledTimes(1);
+  expect(utils.dispatch).toHaveBeenCalledTimes(1);
 });
 ```
 
-## Deploying
+## Links and Routing
+
+When creating links using `<Link>`, you don't need to worry about whether it is for a single or multi-library route config. Write the `as` and `href` like you would if the package only supported one-library setups, and the `<Link>` will prepend `/[libraryId]` to your routes if needed.
+
+# Deploying
 
 This repository includes a Dockerfile, and the master branch is built as an image in Docker Hub in the Hub repository [nypl/patron-web](https://hub.docker.com/r/nypl/patron-web). You can deploy the application simply by running the image from Docker Hub. You can either use the `latest` tag in Docker Hub, or a specific version tagged with the version number. There will also be an image tagged `beta` for the most recent code on the `beta` branch.
 
 Alternatively, you can build your own container from local changes as described below. If you would like to deploy from Docker Hub, skip to [Running a container from the image](#running-a-container-from-the-image).
 
-### Build a docker container
+## Build a docker container
 
 When you have code changes you wish to review locally, you will need to build a local Docker image with your changes included. There are a few steps to get a working build:
 
@@ -187,18 +205,9 @@ This command will download the image from NYPL's Docker Hub repo, and then run i
 ```
 docker run -d --name patronweb -p 3000:3000\
   --restart=unless-stopped \
-  -e "CONFIG_FILE=/config/cm_libraries.txt" \
-  -v $PATH_TO_LOCAL_VOLUME:/config \
+  -e "CONFIG_FILE=/config_volume/config.yml" \
+  -v $PATH_TO_LOCAL_VOLUME:/config_volume \
   nypl/patronweb
-```
-
-To run the container with a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY` instead of a `CONFIG_FILE`, simply replace the env variable in the run command. You will also not need to provide the volume, since no config file is being read.
-
-```
-docker run --name patronweb -d -p 3000:3000\
-  --restart=unless-stopped \
-  -e "SIMPLIFIED_CATALOG_BASE=https://example.catalog-base.com/" \
-  nypl/patron-web
 ```
 
 What are these commands doing?
@@ -216,7 +225,7 @@ Instead of using the `docker run` command at the command line, it's also possibl
 
 To create the container using the `docker-compose.yml` file in this repository, simply run `docker-compose up`. This will build the image and start the container. To stop the container and remove it, run `docker-compose down`. Similarly you can run `docker-compose stop` to stop the container without removing it, and `docker-compose start` to restart a stopped container.
 
-If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
+If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
 
 #### Helpful commands
 
@@ -224,3 +233,7 @@ If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `LIBRARY_REGISTRY`, or p
   ```
   docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
   ```
+
+### Credits
+
+<img alt="Bugsnag logo" src="https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png" width="200px"/>

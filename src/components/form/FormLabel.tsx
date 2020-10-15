@@ -11,7 +11,11 @@ type FormLabelProps = HTMLLabelProps & {
  * can have errors as well.
  */
 const FormLabel: React.FC<FormLabelProps> = ({ children, ...rest }) => {
-  return <label {...rest}>{children}</label>;
+  return (
+    <label sx={{ fontSize: "-1", fontWeight: "medium", mr: 2 }} {...rest}>
+      {children}
+    </label>
+  );
 };
 
 export default FormLabel;

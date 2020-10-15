@@ -1,46 +1,92 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import {
-  Link as BaseLink,
-  LinkProps as RouterLinkProps
-} from "react-router-dom";
-import { useGetCatalogLink } from "../hooks/useCatalogLink";
+import BaseLink from "next/link";
+import useLinkUtils from "hooks/useLinkUtils";
 
-type CatalogLinkProps = Omit<RouterLinkProps, "to"> & {
-  collectionUrl?: string | null;
-  bookUrl?: string | null;
+type CollectionLinkProps = {
+  collectionUrl: string;
 };
-type LinkProps = { ref?: React.Ref<any> } & (
-  | RouterLinkProps
-  | CatalogLinkProps
-);
+type BookLinkProps = {
+  bookUrl: string;
+};
+type OtherLinkProps = {
+  href: string;
+};
 
-function isBaseLinkProps(props: LinkProps): props is RouterLinkProps {
-  return !!(props as RouterLinkProps).to;
-}
+type BaseLinkProps = Omit<
+  React.ComponentProps<typeof BaseLink>,
+  "href" | "as"
+> &
+  Omit<React.ComponentPropsWithoutRef<"a">, "href"> & {
+    className?: string;
+  };
+
+export type LinkProps = BaseLinkProps &
+  (CollectionLinkProps | BookLinkProps | OtherLinkProps);
+
 /**
- * Extends the react router link to:
- *  - add styles
- *  - allow user to optionally pass in a collectionUrl/bookUrl combo
- *    and let the link compute the "to" prop
+ * converts bookUrl and collectionUrl to as/href props
+ * prepends with multi library path if needed
+ * removes consumed props and returns normalized props
  */
-const Link: React.FC<LinkProps> = React.forwardRef(
-  ({ ...props }: LinkProps, ref: React.Ref<any>) => {
-    const getCatalogLink = useGetCatalogLink();
-    const computedTo = isBaseLinkProps(props)
-      ? props.to
-      : getCatalogLink(props.bookUrl, props.collectionUrl);
-
-    delete (props as CatalogLinkProps).collectionUrl;
-    delete (props as CatalogLinkProps).bookUrl;
+const buildLinkFromProps = (
+  props: LinkProps,
+  linkUtils: ReturnType<typeof useLinkUtils>
+) => {
+  if ("bookUrl" in props) {
+    const { bookUrl, ...rest } = props;
+    return { href: linkUtils.buildBookLink(bookUrl), ...rest };
+  }
+  if ("collectionUrl" in props) {
+    const { collectionUrl, ...rest } = props;
+    return { href: linkUtils.buildCollectionLink(collectionUrl), ...rest };
+  }
+  const { href, ...rest } = props;
+  return { href: linkUtils.buildMultiLibraryLink(href), ...rest };
+};
+/**
+ * Extends next/Link to:
+ *  - add styles
+ *  - automatically prepend the library ID if using multiple libraries.
+ *  - allows user to pass in ONE OF:
+ *    - "href" and "as", a normal next/Link
+ *    - "bookUrl"
+ *    - "collectionUrl"
+ */
+const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+  ({ children, className, ...props }, ref) => {
+    const linkUtils = useLinkUtils();
+    const {
+      href,
+      prefetch,
+      replace,
+      scroll,
+      shallow,
+      ...rest
+    } = buildLinkFromProps(props, linkUtils);
     return (
       <BaseLink
-        to={computedTo}
-        sx={{ textDecoration: "none", color: "inherit" }}
-        ref={ref}
-        {...props}
-      />
+        href={href}
+        prefetch={prefetch}
+        replace={replace}
+        scroll={scroll}
+        shallow={shallow}
+        passHref
+      >
+        <a
+          ref={ref}
+          sx={{
+            textDecoration: "none",
+            color: "inherit",
+            "&:hover": { color: "inherit", textDecoration: "underline" }
+          }}
+          className={className}
+          {...rest}
+        >
+          {children}
+        </a>
+      </BaseLink>
     );
   }
 );

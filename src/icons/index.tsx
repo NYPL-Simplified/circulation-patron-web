@@ -1,6 +1,13 @@
 export { default as ArrowRight } from "./ArrowRight";
+export { default as ArrowForward } from "./ArrowForward";
 export { default as Book } from "./Book";
+export { default as ChevronRight } from "./ChevronRight";
+export { default as Download } from "./Download";
+export { default as ExpandMore } from "./ExpandMore";
+export { default as ExternalOpen } from "./ExternalOpen";
 export { default as Gallery } from "./Gallery";
 export { default as Headset } from "./Headset";
 export { default as List } from "./List";
+export { default as Phone } from "./Phone";
+export { default as Search } from "./Search";
 export { default as Settings } from "./Settings";

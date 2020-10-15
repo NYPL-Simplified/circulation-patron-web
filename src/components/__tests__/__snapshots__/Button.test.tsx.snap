@@ -2,52 +2,61 @@
 
 exports[`LinkButton renders correct element 1`] = `
 .emotion-0 {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.5;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   text-align: center;
-  line-height: inherit;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: 700;
-  margin: 0;
+  white-space: nowrap;
+  vertical-align: middle;
   padding-left: 16px;
   padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  text-transform: uppercase;
-  -webkit-letter-spacing: 0.05em;
-  -moz-letter-spacing: 0.05em;
-  -ms-letter-spacing: 0.05em;
-  letter-spacing: 0.05em;
-  background-color: var(--theme-ui-colors-primary,#0467a6);
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
+  height: 32px;
+  min-width: 32px;
   color: white;
   fill: white;
 }
 
 .emotion-0:focus,
 .emotion-0:hover {
-  background-color: #03588d;
+  background-color: #2d6da3;
+  color: white;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-0:active {
-  background-color: #034874;
+  background-color: #285f8f;
 }
 
 .emotion-0:disabled {
-  background-color: var(--theme-ui-colors-disabled,#B3B9BE);
+  background-color: var(--theme-ui-colors-ui-gray-light,#e0e0e0);
+  color: var(--theme-ui-colors-ui-gray-extraDark,#424242);
   cursor: default;
 }
 
@@ -64,173 +73,135 @@ exports[`NavButton renders correct element 1`] = `
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.5;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   text-align: center;
-  line-height: inherit;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: 700;
-  margin: 0;
+  white-space: nowrap;
+  vertical-align: middle;
   padding-left: 16px;
   padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  text-transform: uppercase;
-  -webkit-letter-spacing: 0.05em;
-  -moz-letter-spacing: 0.05em;
-  -ms-letter-spacing: 0.05em;
-  letter-spacing: 0.05em;
-  background-color: var(--theme-ui-colors-primary,#0467a6);
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
+  height: 32px;
+  min-width: 32px;
   color: white;
   fill: white;
 }
 
+.emotion-0:hover {
+  color: inherit;
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
 .emotion-0:focus,
 .emotion-0:hover {
-  background-color: #03588d;
+  background-color: #2d6da3;
+  color: white;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-0:active {
-  background-color: #034874;
+  background-color: #285f8f;
 }
 
 .emotion-0:disabled {
-  background-color: var(--theme-ui-colors-disabled,#B3B9BE);
+  background-color: var(--theme-ui-colors-ui-gray-light,#e0e0e0);
+  color: var(--theme-ui-colors-ui-gray-extraDark,#424242);
   cursor: default;
 }
 
 <a
   class="emotion-0"
-  href="/somewhere"
+  href="/testlib/somewhere"
 >
   child
 </a>
 `;
 
-exports[`disabled style 1`] = `
+exports[`variants filled (default) 1`] = `
 .emotion-0 {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.5;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   text-align: center;
-  line-height: inherit;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: 700;
-  margin: 0;
+  white-space: nowrap;
+  vertical-align: middle;
   padding-left: 16px;
   padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  text-transform: uppercase;
-  -webkit-letter-spacing: 0.05em;
-  -moz-letter-spacing: 0.05em;
-  -ms-letter-spacing: 0.05em;
-  letter-spacing: 0.05em;
-  background-color: var(--theme-ui-colors-primary,#0467a6);
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: var(--theme-ui-colors-brand-primary,#337ab7);
+  height: 32px;
+  min-width: 32px;
   color: white;
   fill: white;
 }
 
 .emotion-0:focus,
 .emotion-0:hover {
-  background-color: #03588d;
-}
-
-.emotion-0:active {
-  background-color: #034874;
-}
-
-.emotion-0:disabled {
-  background-color: var(--theme-ui-colors-disabled,#B3B9BE);
-  cursor: default;
-}
-
-<button
-  aria-disabled="true"
-  class="emotion-0"
-  disabled=""
-  style="pointer-events: none;"
-  type="button"
->
-  child
-</button>
-`;
-
-exports[`variants accent 1`] = `
-.emotion-0 {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  text-align: center;
-  line-height: inherit;
+  background-color: #2d6da3;
+  color: white;
   -webkit-text-decoration: none;
   text-decoration: none;
-  font-size: inherit;
-  font-weight: 700;
-  margin: 0;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
-  text-transform: uppercase;
-  -webkit-letter-spacing: 0.05em;
-  -moz-letter-spacing: 0.05em;
-  -ms-letter-spacing: 0.05em;
-  letter-spacing: 0.05em;
-  background-color: var(--theme-ui-colors-accent,#D00854);
-  color: white;
-  fill: white;
 }
 
-.emotion-0:focus,
-.emotion-0:hover {
-  background-color: #b7074a;
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 .emotion-0:active {
-  background-color: #9f0640;
+  background-color: #285f8f;
 }
 
 .emotion-0:disabled {
-  background-color: var(--theme-ui-colors-disabled,#B3B9BE);
+  background-color: var(--theme-ui-colors-ui-gray-light,#e0e0e0);
+  color: var(--theme-ui-colors-ui-gray-extraDark,#424242);
   cursor: default;
 }
 
@@ -242,54 +213,54 @@ exports[`variants accent 1`] = `
 </button>
 `;
 
-exports[`variants flat 1`] = `
+exports[`variants ghost 1`] = `
 .emotion-0 {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.5;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   text-align: center;
-  line-height: inherit;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: 700;
-  margin: 0;
+  white-space: nowrap;
+  vertical-align: middle;
   padding-left: 16px;
   padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  text-transform: uppercase;
-  -webkit-letter-spacing: 0.05em;
-  -moz-letter-spacing: 0.05em;
-  -ms-letter-spacing: 0.05em;
-  letter-spacing: 0.05em;
-  background-color: white;
-  color: blues.dark;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: transparent;
+  height: 32px;
+  min-width: 32px;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
+  fill: var(--theme-ui-colors-brand-primary,#337ab7);
 }
 
 .emotion-0:focus,
 .emotion-0:hover {
-  background-color: rgba(4,103,166,0.2);
+  background-color: #c3daee;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
+  -webkit-text-decoration: none;
+  text-decoration: none;
 }
 
-.emotion-0:active {
-  background-color: rgba(4,103,166,0.4);
-}
-
-.emotion-0:disabled {
-  color: var(--theme-ui-colors-grey,#B3B9BE);
-  cursor: default;
+.emotion-0:focus {
+  box-shadow: 0 0 0 0.2em rgba(0,109,255,0.4);
 }
 
 <button
@@ -300,55 +271,45 @@ exports[`variants flat 1`] = `
 </button>
 `;
 
-exports[`variants primary (default) 1`] = `
+exports[`variants link 1`] = `
 .emotion-0 {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   text-align: center;
-  line-height: inherit;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: 700;
-  margin: 0;
+  white-space: nowrap;
+  vertical-align: middle;
   padding-left: 16px;
   padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  text-transform: uppercase;
-  -webkit-letter-spacing: 0.05em;
-  -moz-letter-spacing: 0.05em;
-  -ms-letter-spacing: 0.05em;
-  letter-spacing: 0.05em;
-  background-color: var(--theme-ui-colors-primary,#0467a6);
-  color: white;
-  fill: white;
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  background-color: transparent;
+  font-family: -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
+  padding: 0;
+  fill: var(--theme-ui-colors-brand-primary,#337ab7);
 }
 
-.emotion-0:focus,
 .emotion-0:hover {
-  background-color: #03588d;
-}
-
-.emotion-0:active {
-  background-color: #034874;
-}
-
-.emotion-0:disabled {
-  background-color: var(--theme-ui-colors-disabled,#B3B9BE);
-  cursor: default;
+  color: var(--theme-ui-colors-brand-primary,#337ab7);
 }
 
 <button

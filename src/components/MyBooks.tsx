@@ -1,108 +1,110 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
-import useSetCollectionAndBook from "../hooks/useSetCollectionAndBook";
-import { connect } from "react-redux";
-import {
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-} from "opds-web-client/lib/components/mergeRootProps";
-import { SetCollectionAndBook } from "../interfaces";
-import useAuth from "../hooks/useAuth";
-import Button from "./Button";
-import useTypedSelector from "../hooks/useTypedSelector";
-import { ListView, GalleryView } from "./BookList";
-import { PageLoader } from "./LoadingIndicator";
-import { Helmet } from "react-helmet-async";
-import useView from "./context/ViewContext";
+import { BookList } from "./BookList";
+import Head from "next/head";
+import BreadcrumbBar from "./BreadcrumbBar";
+import { H3 } from "./Text";
+import { AnyBook } from "interfaces";
+import PageTitle from "./PageTitle";
+import SignOut from "./SignOut";
+import useUser from "components/context/UserContext";
+import { PageLoader } from "components/LoadingIndicator";
+import useAuthModalContext from "auth/AuthModalContext";
 
-export const MyBooks: React.FC<{
-  setCollectionAndBook: SetCollectionAndBook;
-}> = ({ setCollectionAndBook }) => {
-  // here we pass in "loans" to make it look like we are at /collection/loans
-  // which is what used to be the route that is now /loans (ie. this page)
-  useSetCollectionAndBook(setCollectionAndBook, "loans");
-  const collection = useTypedSelector(state => state.collection);
+const availableUntil = (book: AnyBook) =>
+  book.availability?.until ? new Date(book.availability.until) : "NaN";
 
-  const { view } = useView();
+function sortBooksByLoanExpirationDate(books: AnyBook[]) {
+  return books.sort((a, b) => {
+    const aDate = availableUntil(a);
+    const bDate = availableUntil(b);
+    if (typeof aDate === "string") return 1;
+    if (typeof bDate === "string") return -1;
+    if (aDate <= bDate) return -1;
+    return 1;
+  });
+}
 
-  const { isSignedIn, signOutAndGoHome } = useAuth();
+export const MyBooks: React.FC = () => {
+  const { isAuthenticated, loans, isLoading } = useUser();
+  const { showModal } = useAuthModalContext();
 
-  if (collection.isFetching) {
-    return <PageLoader />;
-  }
-  if (!isSignedIn)
-    return (
-      <div
-        sx={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column"
-        }}
-      >
-        <Helmet>
-          <title>My Books</title>
-        </Helmet>
-        <Styled.h4>You need to be signed in to view this page.</Styled.h4>
-      </div>
-    );
-  if (collection.data?.books && collection.data.books.length > 0) {
-    const signOutButton = (
-      <Button aria-label="Sign out and go home" onClick={signOutAndGoHome}>
-        Sign out
-      </Button>
-    );
-    return (
-      <React.Fragment>
-        <Helmet>
-          <title>My Books</title>
-        </Helmet>
-        {view === "LIST" ? (
-          <ListView
-            books={collection.data?.books}
-            showBorrowButton
-            breadcrumb={signOutButton}
-          />
-        ) : (
-          <GalleryView
-            books={collection.data.books}
-            showBorrowButton
-            breadcrumb={signOutButton}
-          />
-        )}
-      </React.Fragment>
-    );
-  }
+  // show the auth form if we are unauthenticated
+  React.useEffect(() => {
+    if (!isAuthenticated) showModal();
+  }, [isAuthenticated, showModal]);
 
-  // otherwise you have no loans / holds
+  const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
+  const noBooks = sortedBooks.length === 0;
+
+  return (
+    <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
+      <Head>
+        <title>My Books</title>
+      </Head>
+
+      <BreadcrumbBar currentLocation="My Books" />
+      <PageTitle>My Books</PageTitle>
+      {noBooks && isLoading ? (
+        <PageLoader />
+      ) : isAuthenticated && noBooks ? (
+        <Empty />
+      ) : isAuthenticated ? (
+        <LoansContent books={sortedBooks} />
+      ) : (
+        <Unauthorized />
+      )}
+    </div>
+  );
+};
+
+const LoansContent: React.FC<{ books: AnyBook[] }> = ({ books }) => {
+  return (
+    <React.Fragment>
+      <BookList books={books} />
+    </React.Fragment>
+  );
+};
+
+const Unauthorized = () => {
   return (
     <div
       sx={{
         flex: 1,
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
+        alignItems: "center",
         flexDirection: "column"
       }}
     >
-      <Helmet>
+      <Head>
         <title>My Books</title>
-      </Helmet>
-      <Styled.h3 sx={{ color: "primaries.medium" }}>
-        Your books will show up here when you have any loaned or on hold.
-      </Styled.h3>
-      <Button onClick={signOutAndGoHome}>Sign Out</Button>
+      </Head>
+      <h4>You need to be signed in to view this page.</h4>
     </div>
   );
 };
 
-const Connected = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeRootProps
-)(MyBooks);
-const Wrapper = props => <Connected {...props} />;
-export default Wrapper;
+const Empty = () => {
+  return (
+    <>
+      <div
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          px: [3, 5]
+        }}
+      >
+        <H3>
+          Your books will show up here when you have any loaned or on hold.
+        </H3>
+        <SignOut />
+      </div>
+    </>
+  );
+};
+
+export default MyBooks;

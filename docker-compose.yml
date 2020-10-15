@@ -4,9 +4,9 @@ services:
     container_name: patron-web
     build: ./
     environment:
-      CONFIG_FILE: /config/cm_libraries.txt
+      CONFIG_FILE: /config/config.yml
       NODE_ENV: production
     volumes:
-      - ./config:/config
+      - ./config:/app/config
     ports:
       - 3000:3000

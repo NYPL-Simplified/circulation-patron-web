@@ -1,67 +1,53 @@
 /** @jsx jsx */
-import { jsx, Styled } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData } from "opds-web-client/lib/interfaces";
-import useCatalogLink from "../hooks/useCatalogLink";
 import { getAuthors } from "../utils/book";
 import Link from "./Link";
 import BookCover from "./BookCover";
-import truncateString from "../utils/truncate";
-import Button from "./Button";
-import useBorrow from "../hooks/useBorrow";
+import { truncateString } from "../utils/string";
+import { Text, H3 } from "./Text";
+import BookMediumIndicator from "./MediumIndicator";
+import { AnyBook } from "interfaces";
 
-export const BOOK_HEIGHT = 200;
+export const BOOK_WIDTH = 215;
+export const BOOK_HEIGHT = 330;
 
 const BookCard = React.forwardRef<
   HTMLLIElement,
-  { book: BookData; className?: string; showBorrowButton?: boolean }
->(({ book, className, showBorrowButton = false }, ref) => {
-  const {
-    borrowOrReserve,
-    label,
-    isBorrowed,
-    isReserved,
-    isBorrowable
-  } = useBorrow(book);
-  const link = useCatalogLink(book.url);
+  { book: AnyBook; className?: string }
+>(({ book, className }, ref) => {
   const authors = getAuthors(book, 2);
+
+  // if the book url is undefined, there is no sense displaying it.
+  if (!book.url) return null;
   return (
     <li
       className={className}
       ref={ref}
       sx={{
         listStyle: "none",
-        display: "block",
-        border: "1px solid",
-        borderColor: "primaries.dark",
+        display: "flex",
+        flexDirection: "column",
+        border: "solid",
+        bg: "ui.white",
         borderRadius: "card",
-        py: 3,
-        px: 2,
-        flex: `0 0 ${BOOK_HEIGHT}px`,
-        mx: 2,
-        textAlign: "center"
+        flex: `0 0 ${BOOK_WIDTH}px`,
+        height: BOOK_HEIGHT,
+        mx: 2
       }}
     >
-      <Link to={link}>
-        <BookCover book={book} sx={{ mx: 4 }} />
-        <Styled.h2
-          sx={{
-            variant: "text.bookTitle",
-            fontSize: 2
-          }}
-        >
-          {truncateString(book.title, 50, true)}
-        </Styled.h2>
-        <span sx={{ color: "primary" }}>{authors.join(", ")}</span>
-        {showBorrowButton && (
-          <Button
-            disabled={isBorrowed || isReserved || !isBorrowable}
-            onClick={borrowOrReserve}
-            sx={{ mt: 3 }}
-          >
-            {label}
-          </Button>
-        )}
+      <Link
+        bookUrl={book.url}
+        aria-label={`View ${book.title}`}
+        sx={{ p: 3, "&:hover": { textDecoration: "none" } }}
+      >
+        <BookCover book={book} sx={{ mx: 40 - 16 }} />
+        <div sx={{ flex: "1 1 auto" }} />
+        <H3 sx={{ m: 0, mt: 2, fontSize: 0 }}>
+          {truncateString(book.title, 39, true)}
+        </H3>
+        <Text>{authors.join(", ")}</Text>
+        <BookMediumIndicator book={book} sx={{ color: "ui.gray.dark" }} />
       </Link>
     </li>
   );

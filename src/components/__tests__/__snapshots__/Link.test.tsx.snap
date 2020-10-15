@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders expected styles 1`] = `
+.emotion-0 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.emotion-0:hover {
+  color: inherit;
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+<a
+  class="emotion-0"
+  href="/testlib/somewhere"
+>
+  click here
+</a>
+`;

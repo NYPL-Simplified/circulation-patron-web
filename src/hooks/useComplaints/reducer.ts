@@ -22,10 +22,10 @@ export const initState: ComplaintsState = {
   types: []
 };
 
-export default (
+export default function complaintsReducer(
   state: ComplaintsState = initState,
   action: ComplaintsAction
-): ComplaintsState => {
+): ComplaintsState {
   switch (action.type) {
     case "REPORT_PROBLEM":
       return {
@@ -78,4 +78,4 @@ export default (
     default:
       return state;
   }
-};
+}

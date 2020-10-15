@@ -1,13 +1,22 @@
 import * as React from "react";
-import { render, fixtures, fireEvent } from "../../test-utils";
+import { render, fixtures } from "test-utils";
 import { Collection } from "../Collection";
-import merge from "deepmerge";
-import { State } from "opds-web-client/lib/state";
-import { LaneData } from "opds-web-client/lib/interfaces";
-import Layout from "../Layout";
-import { useBreakpointIndex } from "@theme-ui/match-media";
+import { CollectionData, LaneData } from "interfaces";
+import { makeSwrResponse, MockSwr } from "test-utils/mockSwr";
+import { fetchCollection } from "dataflow/opds1/fetch";
+import useSWR, { useSWRInfinite } from "swr";
 
-const setCollectionAndBook = jest.fn().mockResolvedValue({});
+jest.mock("swr");
+
+const mockedSWR = useSWR as jest.MockedFunction<typeof useSWR>;
+const mockedSWRInfinite = useSWRInfinite as jest.MockedFunction<
+  typeof useSWRInfinite
+>;
+
+const defaultMock = makeSwrResponse({ data: fixtures.emptyCollection });
+const mockSwr: MockSwr<CollectionData> = (value = defaultMock) => {
+  mockedSWR.mockReturnValue(makeSwrResponse(value));
+};
 
 beforeEach(() => {
   /**
@@ -17,169 +26,111 @@ beforeEach(() => {
   jest.useFakeTimers();
 });
 
-test("calls setCollectionAndBook", () => {
-  render(<Collection setCollectionAndBook={setCollectionAndBook} />);
+test("calls swr to fetch collection", () => {
+  mockSwr();
+  render(<Collection />, {
+    router: { query: { collectionUrl: "/collection" } }
+  });
 
-  expect(setCollectionAndBook).toHaveBeenCalledTimes(1);
+  expect(mockedSWR).toHaveBeenCalledTimes(1);
+  expect(mockedSWR).toHaveBeenCalledWith("/collection", fetchCollection);
 });
 
 test("displays loader", () => {
-  const node = render(
-    <Collection setCollectionAndBook={setCollectionAndBook} />,
-    {
-      initialState: merge(fixtures.initialState, {
-        collection: {
-          isFetching: true
-        }
-      })
-    }
-  );
-  expect(node.getByText("Loading...")).toBeInTheDocument();
+  mockSwr({
+    isValidating: true,
+    data: undefined
+  });
+  const utils = render(<Collection />);
+  expect(
+    utils.getByRole("heading", { name: "Loading..." })
+  ).toBeInTheDocument();
 });
 
 test("displays lanes when present", () => {
   const laneData: LaneData = {
     title: "my lane",
     url: "/link-to-lane",
-    books: fixtures.makeBooks(10)
+    books: fixtures.makeBorrowableBooks(10)
   };
-  const initialState: State = merge(fixtures.initialState, {
-    collection: {
-      data: {
-        books: [],
-        lanes: [laneData]
-      }
+  mockSwr({
+    data: {
+      id: "id",
+      url: "url",
+      title: "title",
+      navigationLinks: [],
+      books: [],
+      lanes: [laneData]
     }
   });
-  const node = render(
-    <Collection setCollectionAndBook={setCollectionAndBook} />,
-    {
-      initialState
-    }
-  );
+  const utils = render(<Collection />);
 
   // expect there to be a lane with books
-  const laneTitle = node.getByText("my lane");
+  const laneTitle = utils.getByText("my lane");
   expect(laneTitle).toBeInTheDocument();
-  expect(node.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
-  expect(
-    node.getByText(fixtures.makeBook(0).authors.join(", "))
-  ).toBeInTheDocument();
+  expect(utils.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
+  expect(utils.getByText("Book 0 author")).toBeInTheDocument();
 });
 
 test("prefers lanes over books", () => {
   const laneData: LaneData = {
     title: "my lane",
     url: "/link-to-lane",
-    books: fixtures.makeBooks(10)
+    books: fixtures.makeBorrowableBooks(10)
   };
-  const initialState: State = merge(fixtures.initialState, {
-    collection: {
-      data: {
-        books: fixtures.makeBooks(10),
-        lanes: [laneData]
-      }
+  mockSwr({
+    data: {
+      id: "id",
+      url: "url",
+      title: "title",
+      navigationLinks: [],
+      books: fixtures.makeBorrowableBooks(2),
+      lanes: [laneData]
     }
   });
-  const node = render(
-    <Collection setCollectionAndBook={setCollectionAndBook} />,
-    {
-      initialState
-    }
-  );
+  const utils = render(<Collection />);
 
   // expect the lane title to be rendered, indicating it chose
   // lanes over books
-  const laneTitle = node.getByText("my lane");
+  const laneTitle = utils.getByText("my lane");
   expect(laneTitle).toBeInTheDocument();
 });
 
-test("renders books in list/gallery view if no lanes", () => {
-  const initialState: State = merge(fixtures.initialState, {
-    collection: {
-      data: {
-        books: fixtures.makeBooks(10),
-        lanes: null
-      }
+test("renders books in list view if no lanes", () => {
+  mockSwr({
+    isValidating: false,
+    data: {
+      id: "id",
+      url: "url",
+      title: "title",
+      navigationLinks: [],
+      books: fixtures.makeBorrowableBooks(2),
+      lanes: []
     }
   });
-  const node = render(
-    <Collection setCollectionAndBook={setCollectionAndBook} />,
-    {
-      initialState
-    }
-  );
+  mockedSWRInfinite.mockReturnValue({
+    data: [{ books: fixtures.makeBorrowableBooks(2) }],
+    isValidating: false
+  } as any);
+  const utils = render(<Collection />);
 
-  // the default display is gallery, so it should be in a gallery now
-  const list = node.getByTestId("gallery-list");
+  const list = utils.getByTestId("listview-list");
   expect(list).toBeInTheDocument();
-  expect(node.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
-  expect(
-    node.getByText(fixtures.makeBook(0).authors.join(", "))
-  ).toBeInTheDocument();
 });
 
 test("renders empty state if no lanes or books", () => {
-  const initialState: State = merge(fixtures.initialState, {
-    collection: {
-      data: {
-        books: [],
-        lanes: null
-      }
+  mockSwr({
+    isValidating: false,
+    data: {
+      id: "id",
+      url: "url",
+      title: "title",
+      navigationLinks: [],
+      books: [],
+      lanes: []
     }
   });
-  const node = render(
-    <Collection setCollectionAndBook={setCollectionAndBook} />,
-    {
-      initialState
-    }
-  );
+  const utils = render(<Collection />);
 
-  expect(node.getByText("This collection is empty.")).toBeInTheDocument();
-});
-
-jest.mock("@theme-ui/match-media");
-const mockeduseBreakpointsIndex = useBreakpointIndex as jest.MockedFunction<
-  typeof useBreakpointIndex
->;
-mockeduseBreakpointsIndex.mockReturnValue(1);
-
-test("list/gallery selector works", () => {
-  const initialState: State = merge(fixtures.initialState, {
-    collection: {
-      data: {
-        books: fixtures.makeBooks(10),
-        lanes: null
-      }
-    }
-  });
-  const node = render(
-    <Layout>
-      <Collection setCollectionAndBook={setCollectionAndBook} />
-    </Layout>,
-    {
-      initialState
-    }
-  );
-
-  // the default display is gallery, so it should be in a gallery now
-  const list1 = node.getByTestId("gallery-list");
-  expect(list1).toBeInTheDocument();
-  expect(setCollectionAndBook).toHaveBeenCalledTimes(1);
-
-  // now we will click the list view button
-  const listViewSelector = node.getByLabelText("List View");
-  fireEvent.click(listViewSelector);
-
-  // setCollectionAndBook should not have been re-called
-  expect(setCollectionAndBook).toHaveBeenCalledTimes(1);
-  // expect it to now be in list view
-  const list2 = node.getByTestId("listview-list");
-  expect(list2).toBeInTheDocument();
-
-  // click the gallery option and make sure it switches back again.
-  const galleryViewSelector = node.getByLabelText("Gallery View");
-  fireEvent.click(galleryViewSelector);
-  const list3 = node.getByTestId("gallery-list");
-  expect(list3).toBeInTheDocument();
+  expect(utils.getByText("This collection is empty.")).toBeInTheDocument();
 });

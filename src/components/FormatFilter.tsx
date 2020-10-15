@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import { Group } from "reakit";
 import * as React from "react";
-import useTypedSelector from "../hooks/useTypedSelector";
-import { Route } from "react-router-dom";
-import { Book, Headset } from "../icons";
-import FilterButton from "./FilterButton";
+import FormLabel from "./form/FormLabel";
+import Router from "next/router";
+import Select from "./Select";
+import { CollectionData } from "interfaces";
+import useLinkUtils from "hooks/useLinkUtils";
 
 /**
  * This filter depends on the "Formats" facetGroup, which should have
@@ -15,12 +15,15 @@ import FilterButton from "./FilterButton";
  * It can optionally have an additional "All" facet. Note that the facet
  * labels must match the spelling and capitalization exactly.
  */
-const FormatFilter: React.FC = () => {
-  const formatFacetGroup = useTypedSelector(state =>
-    state.collection.data?.facetGroups?.find(
-      facetGroup => facetGroup.label === "Formats"
-    )
+const FormatFilter: React.FC<{ collection: CollectionData }> = ({
+  collection
+}) => {
+  const { buildCollectionLink } = useLinkUtils();
+
+  const formatFacetGroup = collection?.facetGroups?.find(
+    facetGroup => facetGroup.label === "Formats"
   );
+
   const ebookFacet = formatFacetGroup?.facets.find(
     facet => facet.label === "eBooks"
   );
@@ -30,42 +33,41 @@ const FormatFilter: React.FC = () => {
   const allFacet = formatFacetGroup?.facets.find(
     facet => facet.label === "All"
   );
-  if (!ebookFacet || !audiobookFacet) return null;
+
+  if (!ebookFacet || !audiobookFacet) {
+    // in order to display the format selector, you must have an audiobook and ebook filter set
+    // up in the CM
+    return null;
+  }
+  const handleChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
+    // value will always be defined, but it could be an empty string.
+    const collectionLink = buildCollectionLink(e.target.value);
+    // check if value is defined?
+    // if all facet isn't defined, go to the base url.
+    Router.push(collectionLink);
+  };
+
+  const value = [allFacet, ebookFacet, audiobookFacet].find(
+    facet => facet?.active
+  )?.href;
   return (
-    <Route
-      path={[
-        "/",
-        "/collection/:collectionUrl",
-        "/:library/",
-        "/:library/collection/:collectionUrl"
-      ]}
-      exact
+    <div
+      sx={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        width: "initial"
+      }}
+      role="group"
     >
-      <Group role="tablist" sx={{ display: "flex", py: 0 }}>
-        {allFacet && (
-          <FilterButton
-            collectionUrl={allFacet.href}
-            selected={allFacet.active}
-          >
-            ALL
-          </FilterButton>
-        )}
-        <FilterButton
-          collectionUrl={ebookFacet.href}
-          selected={!!ebookFacet.active}
-          aria-label="Books"
-        >
-          <Book sx={{ fontSize: 4 }} />
-        </FilterButton>
-        <FilterButton
-          aria-label="Audiobooks"
-          collectionUrl={audiobookFacet.href}
-          selected={!!audiobookFacet.active}
-        >
-          <Headset sx={{ fontSize: 4, m: 0, p: 0 }} />
-        </FilterButton>
-      </Group>
-    </Route>
+      <FormLabel htmlFor="formatSelect">Format</FormLabel>
+      <Select id="formatSelect" onChange={handleChange} value={value}>
+        {allFacet && <option value={allFacet?.href}>All</option>}
+        <option value={ebookFacet.href}>eBooks</option>
+        <option value={audiobookFacet.href}>Audiobooks</option>
+      </Select>
+    </div>
   );
 };
 export default FormatFilter;

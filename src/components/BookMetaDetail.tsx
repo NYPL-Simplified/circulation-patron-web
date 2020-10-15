@@ -2,12 +2,13 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 
-const DetailField: React.FC<{ heading: string; details?: string }> = ({
-  heading,
-  details
-}) =>
+const DetailField: React.FC<{
+  heading: string;
+  details?: string;
+  className?: string;
+}> = ({ heading, details, className }) =>
   details ? (
-    <div sx={{ fontSize: [1, 2] }}>
+    <div className={className}>
       <b>{heading}: </b>
       <span>{details}</span>
     </div>

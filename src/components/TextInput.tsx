@@ -8,12 +8,18 @@ import * as React from "react";
  */
 
 const styles = {
-  borderRadius: 2,
-  border: "1px solid",
-  borderColor: "primary",
-  borderWidth: 2,
-  p: 1,
-  fontSize: 2
+  borderRadius: 1,
+  border: "solid",
+  px: 2,
+  py: 1,
+  fontSize: "0",
+  variant: "text.body.regular",
+  width: "100%",
+  "&::placeholder": {
+    fontStyle: "italic",
+    color: "ui.gray.dark",
+    fontSize: "-1"
+  }
 };
 
 const TextInput = React.forwardRef<

@@ -1,13 +1,14 @@
 /** @jsx jsx */
-import { jsx, Styled, useThemeUI } from "theme-ui";
+import { jsx } from "theme-ui";
 import * as React from "react";
-import FadeLoader from "react-spinners/FadeLoader";
+import { Spinner } from "theme-ui";
+import { H2 } from "./Text";
 
-const LoadingIndicator: React.FC = props => {
-  const { theme } = useThemeUI();
-  const darkBlue = theme.colors?.primaries?.[3];
-
-  return <FadeLoader color={darkBlue} {...props} />;
+const LoadingIndicator: React.FC<React.ComponentProps<typeof Spinner>> = ({
+  color = "ui.black",
+  ...props
+}) => {
+  return <Spinner color={color} {...props} />;
 };
 
 export const PageLoader: React.FC = () => {
@@ -22,7 +23,7 @@ export const PageLoader: React.FC = () => {
       }}
     >
       <LoadingIndicator />
-      <Styled.h2 sx={{ fontSize: 2 }}>Loading...</Styled.h2>
+      <H2 sx={{ fontSize: 2 }}>Loading...</H2>
     </div>
   );
 };

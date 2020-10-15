@@ -1,5 +1,60 @@
 ## CHANGELOG
 
+### v3.0.0
+
+- BREAKING CHANGE: Config file is now a yml file and can configure media support and other env vars. See readme for more info.
+- BREAKING CHANGE: Remove `SHORTEN_URLS` env var. Url parameters will no longer be shortened. We will look for a server solution to pretty urls in the future.
+- Feature: App now chooses the first borrow link with supported child formats, instead of just the first borrow link to display to user.
+- Feature: Add support for Clever auth providers.
+- Feature: Add Webpub Viewer for AxisNow formats.
+- Redesign: in Auth Modal display AuthProvider logos as selectable buttons when there are 2-4 AuthProviders instead of Combobox
+- Feature: Add support for tracking app events via Google Tag Manager.
+- Fix: Update CleverAuth button to use AnchorButton for a11y and semantic reasons
+- Fix: Removed site-wide navigation from webpub-viewer pages, as it overlapped with the reader. Created a LayoutPage component to wrap pages that require site-wide navigation and update the Page to be used directly for pages that do not require site-wide navigation.
+- Fix: Environment variables can now be passed into the docker container, because the container is now building and running the app instead of just running it.  
+- Add: Remove books from local storage when a user logs out.
+- Add: Optional error reporting via [Bugsnag](https://www.bugsnag.com/).
+- Refactor: Complete rewrite of the data layer, removing opds-web-client and adding [swr](https://swr.vercel.app/) for data fetching. Includes many UX improvments.
+
+# 2.3.0
+
+- Feature: Add support for SAML auth providers.
+- Feature: Add confirmation modal to the sign out button.
+- Feature: Add `NEXT_PUBLIC_COMPANION_APP` env var (in PR #97) to toggle the display of SimplyE branding. Value can be either `"simplye"` or `"openebooks"`.
+- Fix: Don't show search bar if collection does not include search data.
+- Fix: Fetch loans on page load when auth credentials are detected so that if you navigate directly to a book you have checked out, it will properly show checked out state.
+- Fix: Make BookCover show a better image fallback on image load failure. Also show medium icon on load, and fade image in once it is done loading.
+- Fix: Only fetch loans on app start, instead updating our internal store whenever we perform a successful mutation like borrowing a book.
+- Fix: Sort My Books by loan date. Open Access content is displayed at the end (bottom).
+- Fix: Prevent the current book from appearing in recommendations on book page
+
+## 2.2.1
+
+- Fix: Only show download options for open-access books once they have been borrowed and are present in a user's loans. Download options should still be shown for open-access books in libraries that do not have any auth enabled.
+- Fix: Don't perform state update on unmounted `BorrowCard`.
+- Refactor: Rename `node` in tests to `utils`, as it is more accurate.
+- Fix: Don't show download options for audiobooks since there is no way to play them on desktop. Only show SimplyE callout instead.
+- Fix: Update `opds-web-client` dependency to fix browser caching of unwanted Authorization headers.
+
+## 2.2.0
+
+- Redesign: the whole app received a new design based on NYPL Design System.
+- Import and use the Card component from NYPL/design-system-react-components.
+- Removed the grid view as it seemed redundant with the list view (for now).
+- Refactor Buttton to not be polymorphic (ie NavButton and Button and AnchorButton are now completely separate components).
+
+### 2.1.0
+
+- Refactor: Update build configuration and server code to use [Next.js](https://nextjs.org/).
+- Refactor: Replace react-router with file-system Next.js routing.
+- Add: `.env` file support
+- Fix: Correctly send 404s when using one library or multiple.
+- Add: Support absolute imports from `src` directory so `../../../components/xxx` becomes `components/xxx`.
+- Add: Add next/bundle-analyzer to review bundle sizes.
+- Fix: Stop rendering Modal (React Portal) on server
+- Update: Update prettier to 2.0
+- Removed travis CI as it has been replaced by Github Actions
+
 ### 2.0.1
 
 #### Added

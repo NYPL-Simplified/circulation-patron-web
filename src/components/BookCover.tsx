@@ -1,90 +1,70 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BookData, BookMedium } from "opds-web-client/lib/interfaces";
-import { AspectImage } from "@theme-ui/components";
-import { getMedium } from "opds-web-client/lib/utils/book";
-import { Book, Headset } from "../icons";
-
+import { AspectRatio } from "@theme-ui/components";
+import { MediumIcon } from "./MediumIndicator";
+import { AnyBook } from "interfaces";
 /**
  * This is meant to be a book cover. Primarily the image and styling,
  * along with possibly extending it to lazy load the images in the future.
  */
 
-export const bookMediumSvgMap: {
-  [key in BookMedium]: React.ReactNode;
-} = {
-  "http://bib.schema.org/Audiobook": <Headset aria-hidden />,
-  "http://schema.org/EBook": <Book aria-hidden />,
-  "http://schema.org/Book": <Book aria-hidden />
-};
+type ImageLoadState = "loading" | "error" | "success";
 
-const BookCover: React.FC<{ book: BookData; className?: string }> = ({
+const BookCover: React.FC<{ book: AnyBook; className?: string }> = ({
   book,
   className
 }) => {
+  const [state, setState] = React.useState<ImageLoadState>("loading");
   const { imageUrl } = book;
-  const medium = getMedium(book);
-  const mediumSVG =
-    Object.keys(bookMediumSvgMap).indexOf(medium) !== -1
-      ? bookMediumSvgMap[medium]
-      : null;
+
+  const handleError = () => setState("error");
+  const handleLoad = () => setState("success");
 
   return (
     <div
       className={className}
       sx={{
-        border: "1px solid",
-        borderColor: "primary",
-        borderRadius: 3,
-        backgroundColor: "primaries.light",
         overflow: "hidden",
-        position: "relative"
+        position: "relative",
+        "&>div": {
+          height: "100%"
+        }
       }}
       aria-label={`Cover of book: ${book.title}`}
       role="img"
     >
-      <div
+      <AspectRatio
+        ratio={2 / 3}
         sx={{
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-          height: 36,
-          width: 36,
-          zIndex: 1000,
-          backgroundColor: "primaries.dark",
-          fill: "white",
-          "&>svg": {
-            height: "100%",
-            width: "100%",
-            p: 1
-          }
+          width: "100%",
+          height: "100%",
+          p: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "ui.gray.lightWarm"
         }}
       >
-        {mediumSVG}
-      </div>
-      <AspectImage
-        ratio={2 / 3}
+        <MediumIcon book={book} sx={{ height: "30%", fill: "ui.gray.dark" }} />
+      </AspectRatio>
+      <img
         alt={`Cover of book: ${book.title}`}
         src={imageUrl}
+        onError={handleError}
+        onLoad={handleLoad}
         sx={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
           position: "absolute",
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
-          "::before": {
-            backgroundColor: "primaries.light",
-            content: '"Book cover image failed to load."',
-            position: "absolute",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            top: 0,
-            left: 0,
-            height: "100%",
-            width: "100%"
-          }
+          right: 0,
+          bottom: 0,
+          opacity: state === "success" ? 1 : 0,
+          transition: "all 0.1s ease-in"
         }}
       />
     </div>
