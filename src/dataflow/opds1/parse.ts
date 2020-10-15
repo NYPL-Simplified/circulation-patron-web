@@ -25,7 +25,7 @@ import {
   FulfillmentLink,
   AnyBook
 } from "interfaces";
-import { IncorrectAdeptMediaType } from "types/opds1";
+import { IncorrectAdobeDrmMediaType } from "types/opds1";
 import { getAppSupportLevel } from "utils/fulfill";
 import { TrackOpenBookRel } from "types/opds1";
 
@@ -76,9 +76,13 @@ const resolve = (base: string, relative: string) =>
  * Adobe media types.
  */
 export function fixMimeType(
-  mimeType: OPDS1.IndirectAcquisitionType | typeof OPDS1.IncorrectAdeptMediaType
+  mimeType:
+    | OPDS1.IndirectAcquisitionType
+    | typeof OPDS1.IncorrectAdobeDrmMediaType
 ): OPDS1.IndirectAcquisitionType {
-  return mimeType === IncorrectAdeptMediaType ? OPDS1.AdeptMediaType : mimeType;
+  return mimeType === IncorrectAdobeDrmMediaType
+    ? OPDS1.AdobeDrmMediaType
+    : mimeType;
 }
 
 function parseFormat(format: OPDSAcquisitionLink | OPDSIndirectAcquisition) {
@@ -113,10 +117,32 @@ function buildFulfillmentLink(feedUrl: string) {
       indirectionType: fixMimeType(
         indirectionType as
           | OPDS1.IndirectAcquisitionType
-          | typeof OPDS1.IncorrectAdeptMediaType
+          | typeof OPDS1.IncorrectAdobeDrmMediaType
       )
     };
   };
+}
+
+/**
+ * If the book is an Adobe ACSM or an AxisNow format,
+ * we don't show the revoke links
+ */
+function getRevokeUrl(links: OPDSAcquisitionLink[]): string | null {
+  const shouldShow = links.map(parseFormat).reduce(
+    (prev, { contentType, indirectionType }) => {
+      // Adobe
+      if (indirectionType === OPDS1.AdobeDrmMediaType) return false;
+      // axisnow
+      if (contentType === OPDS1.AxisNowWebpubMediaType) return false;
+      return prev;
+    },
+    // default is true
+    true
+  );
+
+  if (!shouldShow) return null;
+
+  return links.find(link => link.rel === OPDS1.RevokeLinkRel)?.href ?? null;
 }
 
 /**
@@ -211,8 +237,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
     link => link.supportLevel !== "unsupported"
   );
 
-  const revokeUrl =
-    entry.links.find(link => link.rel === OPDS1.RevokeLinkRel)?.href ?? null;
+  const revokeUrl = getRevokeUrl(acquisitionLinks);
 
   const trackOpenBookLink = entry.links.find(isTrackOpenBookLink);
 
