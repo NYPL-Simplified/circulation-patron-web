@@ -4,6 +4,7 @@ import * as React from "react";
 import { Text } from "./Text";
 import { bookMediumMap, getMedium } from "utils/book";
 import { AnyBook } from "interfaces";
+import { APP_CONFIG } from "config";
 
 const MediumIndicator: React.FC<{ book: AnyBook; className?: string }> = ({
   book,
