@@ -29,6 +29,7 @@ async function fetchConfigFile(configFileUrl) {
     const parsed = parseConfigText(text);
     return parsed;
   } catch (e) {
+    console.error(e);
     throw new Error("Could not fetch config file at: " + configFileUrl);
   }
 }

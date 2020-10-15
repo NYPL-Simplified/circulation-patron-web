@@ -1,4 +1,4 @@
-declare module "AxisNowDecryptor" {
+declare module "@nypl/axisnow-access-control-web" {
   import IDecryptor from "library-simplified-webpub-viewer/dist/Decryptor";
 
   class Decryptor implements IDecryptor {
