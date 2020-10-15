@@ -7,6 +7,7 @@ import BookCover from "./BookCover";
 import { truncateString } from "../utils/string";
 import { Text, H3 } from "./Text";
 import { AnyBook } from "interfaces";
+import { APP_CONFIG } from "config";
 
 export const BOOK_WIDTH = 187;
 export const BOOK_HEIGHT = 365;
@@ -39,7 +40,7 @@ const BookCard = React.forwardRef<
         aria-label={`View ${book.title}`}
         sx={{ "&:hover": { textDecoration: "none" } }}
       >
-        <BookCover book={book} showMedium />
+        <BookCover book={book} showMedium={APP_CONFIG.showMedium} />
         <div sx={{ flex: "1 1 auto" }} />
         <H3 sx={{ m: 0, mt: 1, fontSize: -1 }}>
           {truncateString(book.title, twoLines, false)}
