@@ -45,7 +45,6 @@ export const Collection: React.FC<{
   return (
     <div
       sx={{
-        bg: "ui.gray.lightWarm",
         flex: "1 1 auto",
         display: "flex",
         flexDirection: "column"
