@@ -39,6 +39,7 @@ import useReadOnlineButton from "hooks/useReadOnlineButton";
 import { APP_CONFIG } from "config";
 import track from "analytics/track";
 import { useRouter } from "next/router";
+import CancelOrReturn from "components/CancelOrReturn";
 import useLinkUtils from "hooks/useLinkUtils";
 
 const FulfillmentCard: React.FC<{ book: AnyBook }> = ({ book }) => {
@@ -155,9 +156,10 @@ const BorrowOrReserveBlock: React.FC<{
 
 const Reserved: React.FC<{ book: ReservedBook }> = ({ book }) => {
   const position = book.holds?.position;
+
   return (
-    <>
-      <Text variant="text.callouts.bold">You have this book on hold.</Text>
+    <Stack direction="column" spacing={0} sx={{ my: 3 }}>
+      <Text variant="text.callouts.bold">Reserved</Text>
       {!!position && (
         <Text
           variant="text.body.italic"
@@ -167,10 +169,13 @@ const Reserved: React.FC<{ book: ReservedBook }> = ({ book }) => {
           Your hold position is: {position}.
         </Text>
       )}
-      <Button size="lg" disabled aria-label="Reserved" role="button">
-        <Text variant="text.body.bold">Reserved</Text>
-      </Button>
-    </>
+      <CancelOrReturn
+        url={book.revokeUrl}
+        text="Cancel Reservation"
+        loadingText="Cancelling..."
+        id={book.id}
+      />
+    </Stack>
   );
 };
 
@@ -205,11 +210,25 @@ const AccessCard: React.FC<{
   const isAudiobook = bookIsAudiobook(book);
   const redirectUser = shouldRedirectToCompanionApp(links);
 
+  const companionApp =
+    APP_CONFIG.companionApp === "openebooks" ? "Open eBooks" : "SimplyE";
+
   return (
-    <Stack direction="column" sx={{ my: 3 }}>
-      <AccessHeading
-        redirectToCompanionApp={redirectUser}
-        subtitle={subtitle}
+    <Stack direction="column" sx={{ my: 3, alignItems: "flex-start" }}>
+      <Stack spacing={0} direction="column">
+        <Stack>
+          {redirectUser && <SvgPhone sx={{ fontSize: 24 }} />}
+          <Text variant="text.body.bold">
+            Ready to read{redirectUser ? ` in ${companionApp}` : ""}!
+          </Text>
+        </Stack>
+        <Text>{subtitle}</Text>
+      </Stack>
+      <CancelOrReturn
+        url={book.revokeUrl}
+        loadingText="Returning..."
+        id={book.id}
+        text="Return"
       />
       {!isAudiobook && isFulfillable && (
         <>
@@ -218,7 +237,7 @@ const AccessCard: React.FC<{
               If you would rather read on your computer, you can:
             </Text>
           )}
-          <Stack sx={{ flexWrap: "wrap" }}>
+          <Stack spacing={redirectUser ? 3 : 2} sx={{ flexWrap: "wrap" }}>
             {fulfillments.map(details => {
               switch (details.type) {
                 case "download":
@@ -257,34 +276,6 @@ const AccessCard: React.FC<{
   );
 };
 
-const AccessHeading: React.FC<{
-  subtitle: string;
-  redirectToCompanionApp: boolean;
-}> = ({ subtitle, redirectToCompanionApp }) => {
-  const companionApp =
-    APP_CONFIG.companionApp === "openebooks" ? "Open eBooks" : "SimplyE";
-
-  if (redirectToCompanionApp) {
-    return (
-      <Stack direction="column">
-        <Stack>
-          <SvgPhone sx={{ fontSize: 24 }} />
-          <Text variant="text.body.bold">
-            You&apos;re ready to read this book in {companionApp}!
-          </Text>
-        </Stack>
-        <Text>{subtitle}</Text>
-      </Stack>
-    );
-  }
-  return (
-    <Stack spacing={0} direction="column">
-      <Text variant="text.body.bold">Ready to read!</Text>
-      <Text>{subtitle}</Text>
-    </Stack>
-  );
-};
-
 function getButtonStyles(isPrimaryAction: boolean) {
   return isPrimaryAction
     ? ({
@@ -292,8 +283,8 @@ function getButtonStyles(isPrimaryAction: boolean) {
         color: "brand.primary"
       } as const)
     : ({
-        variant: "ghost",
-        color: "ui.gray.extraDark"
+        variant: "link",
+        color: "ui.black"
       } as const);
 }
 

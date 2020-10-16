@@ -47,19 +47,6 @@ export interface ComplaintData {
   detail?: string;
 }
 
-export type BookFulfillmentState =
-  | "AVAILABLE_OPEN_ACCESS"
-  | "AVAILABLE_TO_BORROW"
-  /**
-   *  READY_TO_BORROW indicates the book was on hold and now should
-   *  be borrowed before the hold expires, or else you lose your spot.
-   */
-  | "READY_TO_BORROW"
-  | "AVAILABLE_TO_RESERVE"
-  | "RESERVED"
-  | "AVAILABLE_TO_ACCESS"
-  | "FULFILLMENT_STATE_ERROR";
-
 export type LibraryLinks = {
   helpWebsite?: OPDS1.Link;
   helpEmail?: OPDS1.Link;

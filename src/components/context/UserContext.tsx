@@ -14,7 +14,7 @@ export type UserState = {
   refetchLoans: () => void;
   signIn: (token: string, method: AppAuthMethod) => void;
   signOut: () => void;
-  setBook: (book: AnyBook) => void;
+  setBook: (book: AnyBook, id?: string) => void;
   error: any;
   token: string | undefined;
   clearCredentials: () => void;
@@ -64,9 +64,12 @@ export const UserProvider: React.FC = ({ children }) => {
     mutate();
   }
 
-  function setBook(book: AnyBook) {
+  function setBook(book: AnyBook, id?: string) {
     const existing = data ?? [];
-    const newData: AnyBook[] = [...existing, book];
+
+    // if the id exists, remove that book and set the new one
+    const withoutOldBook = existing.filter(book => book.id !== id);
+    const newData: AnyBook[] = [...withoutOldBook, book];
     mutate(newData);
   }
 
