@@ -152,7 +152,7 @@ const Lane: React.FC<{
   };
 
   return (
-    <li sx={{ m: 0, p: 0, mb: 3, listStyle: "none" }} aria-label={title}>
+    <li sx={{ m: 0, p: 0, mb: 4, listStyle: "none" }} aria-label={title}>
       <Stack
         sx={{
           justifyContent: ["space-between", "initial"],
@@ -214,8 +214,8 @@ const PrevNextButton: React.FC<{
     <Tabbable
       as="div"
       sx={{
-        flex: "0 0 64px",
-        fontSize: 4,
+        flex: ["0 0 38px", "0 0 64px"],
+        fontSize: [2, 4],
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

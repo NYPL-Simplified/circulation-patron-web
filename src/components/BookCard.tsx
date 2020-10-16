@@ -6,11 +6,13 @@ import Link from "./Link";
 import BookCover from "./BookCover";
 import { truncateString } from "../utils/string";
 import { Text, H3 } from "./Text";
-import BookMediumIndicator from "./MediumIndicator";
 import { AnyBook } from "interfaces";
+import { APP_CONFIG } from "config";
 
-export const BOOK_WIDTH = 215;
-export const BOOK_HEIGHT = 330;
+export const BOOK_WIDTH = 187;
+export const BOOK_HEIGHT = 365;
+
+const twoLines = 42;
 
 const BookCard = React.forwardRef<
   HTMLLIElement,
@@ -28,9 +30,6 @@ const BookCard = React.forwardRef<
         listStyle: "none",
         display: "flex",
         flexDirection: "column",
-        border: "solid",
-        bg: "ui.white",
-        borderRadius: "card",
         flex: `0 0 ${BOOK_WIDTH}px`,
         height: BOOK_HEIGHT,
         mx: 2
@@ -39,15 +38,16 @@ const BookCard = React.forwardRef<
       <Link
         bookUrl={book.url}
         aria-label={`View ${book.title}`}
-        sx={{ p: 3, "&:hover": { textDecoration: "none" } }}
+        sx={{ "&:hover": { textDecoration: "none" } }}
       >
-        <BookCover book={book} sx={{ mx: 40 - 16 }} />
+        <BookCover book={book} showMedium={APP_CONFIG.showMedium} />
         <div sx={{ flex: "1 1 auto" }} />
-        <H3 sx={{ m: 0, mt: 2, fontSize: 0 }}>
-          {truncateString(book.title, 39, true)}
+        <H3 sx={{ m: 0, mt: 1, fontSize: -1 }}>
+          {truncateString(book.title, twoLines, false)}
         </H3>
-        <Text>{authors.join(", ")}</Text>
-        <BookMediumIndicator book={book} sx={{ color: "ui.gray.dark" }} />
+        <Text sx={{ fontSize: -1 }}>
+          {truncateString(authors.join(", "), twoLines, false)}
+        </Text>
       </Link>
     </li>
   );
