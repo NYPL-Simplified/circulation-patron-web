@@ -29,11 +29,38 @@ export function getAuthors(book: AnyBook, lim?: number): string[] {
 }
 
 export function availabilityString(book: AnyBook) {
-  const availableCopies = book.copies?.available;
-  const totalCopies = book.copies?.total;
-  return typeof availableCopies === "number" && typeof totalCopies === "number"
-    ? `${availableCopies} out of ${totalCopies} copies available.`
-    : "Number of books available is unknown.";
+  const status = book.status;
+
+  switch (status) {
+    case "borrowable":
+    case "reservable":
+      const availableCopies = book.copies?.available;
+      const totalCopies = book.copies?.total;
+      return typeof availableCopies === "number" &&
+        typeof totalCopies === "number"
+        ? `${availableCopies} out of ${totalCopies} copies available.`
+        : null;
+
+    case "reserved":
+      const position = book.holds?.position;
+      if (!position || isNaN(position)) return null;
+      return `${position} patrons ahead of you in the queue.`;
+
+    case "on-hold":
+      return "You have this book on hold.";
+
+    case "fulfillable":
+      const availableUntil = book.availability?.until
+        ? new Date(book.availability.until).toDateString()
+        : "NaN";
+
+      return availableUntil !== "NaN"
+        ? `You have this book on loan until ${availableUntil}.`
+        : null;
+
+    case "unsupported":
+      return null;
+  }
 }
 
 export function queueString(book: AnyBook) {

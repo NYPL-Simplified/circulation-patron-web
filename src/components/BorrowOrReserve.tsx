@@ -8,7 +8,8 @@ import { Text } from "./Text";
 const BorrowOrReserve: React.FC<{
   isBorrow: boolean;
   url: string;
-}> = ({ isBorrow, url }) => {
+  className?: string;
+}> = ({ isBorrow, url, className }) => {
   const {
     isLoading,
     loadingText,
@@ -17,14 +18,13 @@ const BorrowOrReserve: React.FC<{
     error
   } = useBorrow(isBorrow);
   return (
-    <div sx={{ my: 3 }}>
+    <div className={className}>
       <Button
-        size="lg"
         onClick={() => borrowOrReserve(url)}
         loading={isLoading}
         loadingText={loadingText}
       >
-        <Text variant="text.body.bold">{buttonLabel}</Text>
+        {buttonLabel}
       </Button>
       {error && <Text sx={{ color: "ui.error" }}>Error: {error}</Text>}
     </div>
