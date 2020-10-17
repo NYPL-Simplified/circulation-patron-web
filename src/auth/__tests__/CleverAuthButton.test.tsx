@@ -19,7 +19,7 @@ describe("CleverButton", () => {
     const utils = render(<CleverButton method={fixtures.cleverAuthMethod} />);
     const button = utils.getByLabelText("Log In with Clever");
     expect(button).toBeInTheDocument();
-    expect(button).toBeEmptyDOMElement();
+    expect(utils.getByRole("img", { name: "Clever Logo" })).toBeInTheDocument();
   });
 
   test("has text content when no image url supplied", () => {
