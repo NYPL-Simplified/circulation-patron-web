@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import BaseLink from "next/link";
-import useLinkUtils, { LinkUtils } from "./context/LinkUtilsContext";
+import useLinkUtils from "hooks/useLinkUtils";
 
 type CollectionLinkProps = {
   collectionUrl: string;
@@ -30,7 +30,10 @@ export type LinkProps = BaseLinkProps &
  * prepends with multi library path if needed
  * removes consumed props and returns normalized props
  */
-const buildLinkFromProps = (props: LinkProps, linkUtils: LinkUtils) => {
+const buildLinkFromProps = (
+  props: LinkProps,
+  linkUtils: ReturnType<typeof useLinkUtils>
+) => {
   if ("bookUrl" in props) {
     const { bookUrl, ...rest } = props;
     return { href: linkUtils.buildBookLink(bookUrl), ...rest };
@@ -40,10 +43,7 @@ const buildLinkFromProps = (props: LinkProps, linkUtils: LinkUtils) => {
     return { href: linkUtils.buildCollectionLink(collectionUrl), ...rest };
   }
   const { href, ...rest } = props;
-  return {
-    href: linkUtils.buildMultiLibraryLink(props.href),
-    ...rest
-  };
+  return { href: linkUtils.buildMultiLibraryLink(href), ...rest };
 };
 /**
  * Extends next/Link to:

@@ -1,17 +1,10 @@
 import * as React from "react";
-import Collection from "components/Collection";
-import { NextPage, GetServerSideProps } from "next";
-import LayoutPage from "components/LayoutPage";
-import withAppProps, { AppProps } from "dataflow/withAppProps";
+import { NextPage } from "next";
+import { AppProps } from "dataflow/withAppProps";
+import ErrorComponent from "components/Error";
 
-const CollectionPage: NextPage<AppProps> = ({ library, error }) => {
-  return (
-    <LayoutPage library={library} error={error}>
-      <Collection title={`${library?.catalogName} Home`} />
-    </LayoutPage>
-  );
+const CollectionPage: NextPage<AppProps> = () => {
+  return <ErrorComponent />;
 };
-
-export const getServerSideProps: GetServerSideProps = withAppProps();
 
 export default CollectionPage;

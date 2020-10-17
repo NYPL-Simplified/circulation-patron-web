@@ -1,5 +1,5 @@
 import { LibraryData } from "../interfaces";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import {
   getCatalogRootUrl,
   fetchCatalog,
@@ -22,8 +22,8 @@ export type AppProps = {
 };
 
 export default function withAppProps(
-  pageGetServerSideProps?: GetServerSideProps
-): GetServerSideProps<AppProps> {
+  pageGetServerSideProps?: GetStaticProps
+): GetStaticProps<AppProps> {
   return async ctx => {
     /**
      * Determine the catalog url
@@ -68,7 +68,9 @@ export default function withAppProps(
               name: e.name,
               statusCode: e.statusCode
             }
-          }
+          },
+          // library data will be revalidated once per hour.
+          revalidate: 60 * 60
         };
       }
       // otherwise we probably can't recover at all,

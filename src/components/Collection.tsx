@@ -13,6 +13,7 @@ import { fetchCollection } from "dataflow/opds1/fetch";
 import extractParam from "dataflow/utils";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { cacheCollectionBooks } from "utils/cache";
 
 export const Collection: React.FC<{
   title?: string;
@@ -27,6 +28,12 @@ export const Collection: React.FC<{
     collectionUrl,
     fetchCollection
   );
+
+  // extract the books from the collection and set them in the SWR cache
+  // so we don't have to refetch them when you click a book.
+  React.useEffect(() => {
+    cacheCollectionBooks(collection);
+  }, [collection]);
 
   const isLoading = !collection && isValidating;
 

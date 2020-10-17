@@ -29,6 +29,9 @@ import {
   ReservedBook
 } from "interfaces";
 import { APP_CONFIG } from "config";
+import track from "analytics/track";
+import { useRouter } from "next/router";
+import useLinkUtils from "hooks/useLinkUtils";
 
 const FulfillmentCard: React.FC<{ book: AnyBook }> = ({ book }) => {
   return (

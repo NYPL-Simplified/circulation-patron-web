@@ -3,8 +3,8 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import Select, { Label } from "./Select";
 import Router from "next/router";
-import useLinkUtils from "./context/LinkUtilsContext";
 import { CollectionData } from "interfaces";
+import useLinkUtils from "hooks/useLinkUtils";
 
 /**
  * This filter depends on the "Sort by" and "Availability" facet groups.
