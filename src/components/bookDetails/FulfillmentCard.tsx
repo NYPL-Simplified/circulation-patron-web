@@ -29,6 +29,7 @@ import {
 } from "interfaces";
 import { APP_CONFIG } from "config";
 import CancelOrReturn from "components/CancelOrReturn";
+import BookStatus from "components/BookStatus";
 
 const FulfillmentCard: React.FC<{ book: AnyBook }> = ({ book }) => {
   return (
