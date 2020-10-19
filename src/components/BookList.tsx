@@ -12,10 +12,10 @@ import {
   bookIsOnHold
 } from "../utils/book";
 import Lane from "./Lane";
-import Button from "./Button";
+import Button, { NavButton } from "./Button";
 import LoadingIndicator from "./LoadingIndicator";
 import { H2, Text } from "./Text";
-import MediumIndicator, { MediumIcon } from "components/MediumIndicator";
+import { MediumIcon } from "components/MediumIndicator";
 import BookCover from "./BookCover";
 import BorrowOrReserve from "./BorrowOrReserve";
 import { AnyBook, CollectionData, FulfillableBook, LaneData } from "interfaces";
@@ -27,7 +27,9 @@ import Stack from "components/Stack";
 import { book as bookFix, mergeBook } from "test-utils/fixtures/book";
 import CancelOrReturn from "components/CancelOrReturn";
 import FulfillmentButton from "components/FulfillmentButton";
-import { getFulfillmentsFromBook } from "utils/fulfill";
+import { getFulfillmentFromLink, getFulfillmentsFromBook } from "utils/fulfill";
+import { ArrowForward } from "icons";
+import BookStatus from "components/BookStatus";
 
 const ListLoadingIndicator = () => (
   <div
@@ -118,8 +120,8 @@ export const BookListItem: React.FC<{
 }> = ({ book: collectionBook }) => {
   const { loans } = useUser();
   // if the book exists in loans, use that version
-  // const loanedBook = loans?.find(loan => loan.id === collectionBook.id);
-  // const book = loanedBook ?? collectionBook;
+  const loanedBook = loans?.find(loan => loan.id === collectionBook.id);
+  const book = loanedBook ?? collectionBook;
   return (
     <li
       sx={{
@@ -136,25 +138,27 @@ export const BookListItem: React.FC<{
         }}
         spacing={3}
       >
-        <BookCover book={book} sx={{ flex: "0 0 148px", height: 219 }} />
+        <BookCover
+          book={book}
+          sx={{ flex: "0 0 148px", height: 219 }}
+          showMedium={APP_CONFIG.showMedium}
+        />
         <Stack direction="column" sx={{ alignItems: "flex-start" }}>
           <H2 sx={{ mb: 0, variant: "text.body.bold" }}>
-            {truncateString(book.title, 50)}
+            {truncateString(book.title, 50)},
+            {book.subtitle && (
+              <Text variant="callouts.italic" aria-label="Subtitle">
+                {truncateString(book.subtitle, 50)}
+              </Text>
+            )}
           </H2>
-          {book.subtitle && (
-            <Text variant="callouts.italic" aria-label="Subtitle">
-              {truncateString(book.subtitle, 50)}
-            </Text>
-          )}
+
           <Text aria-label="Authors">
             {getAuthors(book, 2).join(", ")}
             {book.authors?.length &&
               book.authors.length > 2 &&
               ` & ${book.authors?.length - 2} more`}
           </Text>
-          {APP_CONFIG.showMedium && (
-            <MediumIndicator book={book} sx={{ color: "ui.gray.dark" }} />
-          )}
           <BookStatus book={book} />
           <BookListCTA book={book} />
           <Text
@@ -163,54 +167,9 @@ export const BookListItem: React.FC<{
               __html: truncateString(stripHTML(book.summary ?? ""), 280)
             }}
           ></Text>
-          {/* <NavButton
-              variant="link"
-              bookUrl={book.url}
-              iconRight={ArrowForward}
-            >
-              View Book Details
-            </NavButton> */}
         </Stack>
       </Stack>
     </li>
-  );
-};
-
-const BookStatus: React.FC<{ book: AnyBook }> = ({ book }) => {
-  const { status } = book;
-  const str =
-    status === "borrowable"
-      ? "Available to borrow"
-      : status === "reservable"
-      ? "Unavailable"
-      : status === "reserved"
-      ? "Reserved"
-      : status === "on-hold"
-      ? "Ready to Borrow"
-      : status === "fulfillable"
-      ? "Ready to Read!"
-      : "Unsupported";
-  return (
-    <div>
-      <div sx={{ display: "flex", alignItems: "center" }}>
-        <MediumIcon book={book} sx={{ mr: 1 }} />
-        <Text variant="text.body.bold">{str}</Text>
-      </div>
-      <AvailabilityString book={book} />
-    </div>
-  );
-};
-
-const AvailabilityString: React.FC<{ book: AnyBook }> = ({ book }) => {
-  const str = availabilityString(book);
-  if (!str) return null;
-  return (
-    <Text
-      variant="text.body.italic"
-      sx={{ fontSize: "-1", color: "ui.gray.dark", my: 1 }}
-    >
-      {str}
-    </Text>
   );
 };
 
@@ -220,12 +179,7 @@ const BookListCTA: React.FC<{ book: AnyBook }> = ({ book }) => {
   }
 
   if (bookIsReservable(book)) {
-    return (
-      <>
-        <BookStatus book={book} />
-        <BorrowOrReserve url={book.reserveUrl} isBorrow={false} />
-      </>
-    );
+    return <BorrowOrReserve url={book.reserveUrl} isBorrow={false} />;
   }
 
   if (bookIsOnHold(book)) {
@@ -245,9 +199,12 @@ const BookListCTA: React.FC<{ book: AnyBook }> = ({ book }) => {
 
   if (bookIsFulfillable(book)) {
     // we will show a fulfillment button if there is only one option
-    const fulfillments = getFulfillmentsFromBook(book);
+    const showableLinks = book.fulfillmentLinks.filter(
+      link => link.supportLevel === "show"
+    );
+    const showableFulfillments = showableLinks.map(getFulfillmentFromLink);
     const singleFulfillment =
-      fulfillments.length === 1 ? fulfillments[0] : undefined;
+      showableFulfillments.length === 1 ? showableFulfillments[0] : undefined;
 
     if (singleFulfillment) {
       return (
@@ -258,7 +215,11 @@ const BookListCTA: React.FC<{ book: AnyBook }> = ({ book }) => {
         />
       );
     }
-    return <div>hi</div>;
+    return (
+      <NavButton variant="link" bookUrl={book.url} iconRight={ArrowForward}>
+        View Book Details
+      </NavButton>
+    );
   }
 
   return null;
