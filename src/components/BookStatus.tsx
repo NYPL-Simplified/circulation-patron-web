@@ -24,7 +24,9 @@ const BookStatus: React.FC<{ book: AnyBook }> = ({ book }) => {
     <div>
       <div sx={{ display: "flex", alignItems: "center" }}>
         <MediumIcon book={book} sx={{ mr: 1 }} />
-        <Text variant="text.body.bold">{str}</Text>
+        <Text variant="text.body.bold" sx={{ fontWeight: 600 }}>
+          {str}
+        </Text>
       </div>
       <AvailabilityString book={book} />
     </div>
