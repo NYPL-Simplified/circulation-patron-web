@@ -71,7 +71,7 @@ test("doesn't show recommendations if there are none", () => {
   expect(utils.container).toBeEmptyDOMElement();
 });
 
-test("doesn't show recommendations if the lanes don't have enough books", () => {
+test("doesn't show recommendations if the lanes don't have > 1 book", () => {
   const emptyLanes: CollectionData = {
     id: "related-id",
     title: "related title",
