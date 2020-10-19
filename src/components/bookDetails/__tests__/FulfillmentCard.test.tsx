@@ -58,9 +58,7 @@ describe("BorrowableBook", () => {
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
     // there is an error because we didn't mock fetch to return something
-    expect(
-      utils.getByText("Error: An error occurred while borrowing this book.")
-    );
+    expect(utils.getByText("Error: An unknown error occurred."));
   });
 });
 
@@ -93,9 +91,7 @@ describe("OnHoldBook", () => {
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
     // there is an error because we didn't mock fetch to return something
-    expect(
-      utils.getByText("Error: An error occurred while borrowing this book.")
-    );
+    expect(utils.getByText("Error: An unknown error occurred."));
   });
 
   test("handles lack of availability.until info", () => {
@@ -185,9 +181,7 @@ describe("ReservableBook", () => {
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Reserving..."));
     // there is an error because we didn't mock fetch to return something
-    expect(
-      utils.getByText("Error: An error occurred while borrowing this book.")
-    );
+    expect(utils.getByText("Error: An unknown error occurred."));
   });
 });
 
