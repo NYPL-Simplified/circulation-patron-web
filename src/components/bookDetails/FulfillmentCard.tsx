@@ -52,30 +52,14 @@ const FulfillmentContent: React.FC<{
 }> = ({ book }) => {
   if (bookIsBorrowable(book)) {
     return (
-      <BorrowOrReserveBlock
-        title="Available to borrow"
-        subtitle={
-          <>
-            <MediumIcon book={book} sx={{ mr: 1 }} /> {availabilityString(book)}
-          </>
-        }
-        url={book.borrowUrl}
-        isBorrow={true}
-      />
+      <BorrowOrReserveBlock book={book} url={book.borrowUrl} isBorrow={true} />
     );
   }
 
   if (bookIsReservable(book)) {
     return (
       <BorrowOrReserveBlock
-        title="Unavailable"
-        subtitle={
-          <>
-            <MediumIcon book={book} sx={{ mr: 1 }} /> {availabilityString(book)}
-            {typeof book.holds?.total === "number" &&
-              ` ${book.holds.total} patrons in the queue.`}
-          </>
-        }
+        book={book}
         url={book.reserveUrl}
         isBorrow={false}
       />
@@ -98,12 +82,7 @@ const FulfillmentContent: React.FC<{
         : "You must borrow this book before your loan expires.";
 
     return (
-      <BorrowOrReserveBlock
-        title={title}
-        subtitle={subtitle}
-        url={book.borrowUrl}
-        isBorrow={true}
-      />
+      <BorrowOrReserveBlock book={book} url={book.borrowUrl} isBorrow={true} />
     );
   }
 
@@ -129,15 +108,13 @@ const FulfillmentContent: React.FC<{
 };
 
 const BorrowOrReserveBlock: React.FC<{
-  title: string;
-  subtitle: React.ReactNode;
+  book: AnyBook;
   isBorrow: boolean;
   url: string;
-}> = ({ title, subtitle, isBorrow, url }) => {
+}> = ({ book, isBorrow, url }) => {
   return (
     <Stack direction="column" spacing={0} sx={{ my: 3 }}>
-      <Text variant="text.body.bold">{title}</Text>
-      <Text>{subtitle}</Text>
+      <BookStatus book={book} />
       <BorrowOrReserve url={url} isBorrow={isBorrow} />
     </Stack>
   );
