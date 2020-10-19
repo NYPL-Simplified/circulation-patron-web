@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   availabilityString,
   queueString,
-  bookIsAudiobook,
   bookIsBorrowable,
   bookIsReservable,
   bookIsReserved,
@@ -16,30 +15,20 @@ import withErrorBoundary from "../ErrorBoundary";
 import Stack from "components/Stack";
 import { Text } from "components/Text";
 import { MediumIcon } from "components/MediumIndicator";
-import SvgExternalLink from "icons/ExternalOpen";
-import SvgDownload from "icons/Download";
 import SvgPhone from "icons/Phone";
 import BorrowOrReserve from "components/BorrowOrReserve";
+import FulfillmentButton from "components/FulfillmentButton";
+import {
+  getFulfillmentsFromBook,
+  shouldRedirectToCompanionApp
+} from "utils/fulfill";
 import {
   AnyBook,
   FulfillableBook,
   FulfillmentLink,
   ReservedBook
 } from "interfaces";
-import {
-  dedupeLinks,
-  DownloadDetails,
-  getFulfillmentDetails,
-  ReadExternalDetails,
-  ReadInternalDetails,
-  shouldRedirectToCompanionApp
-} from "utils/fulfill";
-import useDownloadButton from "hooks/useDownloadButton";
-import useReadOnlineButton from "hooks/useReadOnlineButton";
 import { APP_CONFIG } from "config";
-import track from "analytics/track";
-import { useRouter } from "next/router";
-import useLinkUtils from "components/context/LinkUtilsContext";
 
 const FulfillmentCard: React.FC<{ book: AnyBook }> = ({ book }) => {
   return (
@@ -194,15 +183,9 @@ const AccessCard: React.FC<{
   links: FulfillmentLink[];
   subtitle: string;
 }> = ({ book, links, subtitle }) => {
-  const { title } = book;
-  const dedupedLinks = dedupeLinks(links);
-  const fulfillments = dedupedLinks
-    .map(getFulfillmentDetails)
-    .filter(details => details.type !== "unsupported");
+  const fulfillments = getFulfillmentsFromBook(book);
 
   const isFulfillable = fulfillments.length > 0;
-
-  const isAudiobook = bookIsAudiobook(book);
   const redirectUser = shouldRedirectToCompanionApp(links);
 
   return (
@@ -211,7 +194,7 @@ const AccessCard: React.FC<{
         redirectToCompanionApp={redirectUser}
         subtitle={subtitle}
       />
-      {!isAudiobook && isFulfillable && (
+      {isFulfillable && (
         <>
           {redirectUser && (
             <Text variant="text.body.italic">
@@ -219,37 +202,14 @@ const AccessCard: React.FC<{
             </Text>
           )}
           <Stack sx={{ flexWrap: "wrap" }}>
-            {fulfillments.map(details => {
-              switch (details.type) {
-                case "download":
-                  return (
-                    <DownloadButton
-                      details={details}
-                      title={title}
-                      key={details.id}
-                      isPrimaryAction={!redirectUser}
-                    />
-                  );
-                case "read-online-internal":
-                  return (
-                    <ReadOnlineInternal
-                      details={details}
-                      key={details.url}
-                      isPrimaryAction={!redirectUser}
-                      trackOpenBookUrl={book.trackOpenBookUrl}
-                    />
-                  );
-                case "read-online-external":
-                  return (
-                    <ReadOnlineExternal
-                      details={details}
-                      key={details.id}
-                      isPrimaryAction={!redirectUser}
-                      trackOpenBookUrl={book.trackOpenBookUrl}
-                    />
-                  );
-              }
-            })}
+            {fulfillments.map(details => (
+              <FulfillmentButton
+                key={details.id}
+                details={details}
+                book={book}
+                isPrimaryAction={!redirectUser}
+              />
+            ))}
           </Stack>
         </>
       )}
@@ -282,87 +242,6 @@ const AccessHeading: React.FC<{
       <Text variant="text.body.bold">Ready to read!</Text>
       <Text>{subtitle}</Text>
     </Stack>
-  );
-};
-
-function getButtonStyles(isPrimaryAction: boolean) {
-  return isPrimaryAction
-    ? ({
-        variant: "filled",
-        color: "brand.primary"
-      } as const)
-    : ({
-        variant: "ghost",
-        color: "ui.gray.extraDark"
-      } as const);
-}
-
-const ReadOnlineExternal: React.FC<{
-  details: ReadExternalDetails;
-  isPrimaryAction: boolean;
-  trackOpenBookUrl: string | null;
-}> = ({ details, isPrimaryAction, trackOpenBookUrl }) => {
-  const { open, loading, error } = useReadOnlineButton(
-    details,
-    trackOpenBookUrl
-  );
-
-  return (
-    <>
-      <Button
-        {...getButtonStyles(isPrimaryAction)}
-        iconLeft={SvgExternalLink}
-        onClick={open}
-        loading={loading}
-        loadingText="Opening..."
-      >
-        {details.buttonLabel}
-      </Button>
-      {error && <Text sx={{ color: "ui.error" }}>{error}</Text>}
-    </>
-  );
-};
-
-const ReadOnlineInternal: React.FC<{
-  details: ReadInternalDetails;
-  trackOpenBookUrl: string | null;
-  isPrimaryAction: boolean;
-}> = ({ details, isPrimaryAction, trackOpenBookUrl }) => {
-  const router = useRouter();
-  const { buildMultiLibraryLink } = useLinkUtils();
-
-  const internalLink = buildMultiLibraryLink(details.url);
-  function open() {
-    track.openBook(trackOpenBookUrl);
-    router.push(internalLink);
-  }
-  return (
-    <Button {...getButtonStyles(isPrimaryAction)} onClick={open}>
-      Read
-    </Button>
-  );
-};
-
-const DownloadButton: React.FC<{
-  details: DownloadDetails;
-  title: string;
-  isPrimaryAction: boolean;
-}> = ({ details, title, isPrimaryAction }) => {
-  const { buttonLabel } = details;
-  const { download, error, loading } = useDownloadButton(details, title);
-  return (
-    <>
-      <Button
-        onClick={download}
-        {...getButtonStyles(isPrimaryAction)}
-        iconLeft={SvgDownload}
-        loading={loading}
-        loadingText="Downloading..."
-      >
-        {buttonLabel}
-      </Button>
-      {error && <Text sx={{ color: "ui.error" }}>{error}</Text>}
-    </>
   );
 };
 

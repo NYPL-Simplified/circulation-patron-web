@@ -4,9 +4,9 @@ import * as React from "react";
 import TextInput from "./TextInput";
 import Button from "./Button";
 import Router from "next/router";
-import useLinkUtils from "./context/LinkUtilsContext";
 import SvgSearch from "icons/Search";
 import useLibraryContext from "components/context/LibraryContext";
+import useLinkUtils from "hooks/useLinkUtils";
 
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { AnchorButton } from "components/Button";
-
 import { modalButtonStyles } from "components/Modal";
 import { OPDS1 } from "interfaces";
 
@@ -27,12 +26,15 @@ const CleverButton: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
       sx={{
         ...modalButtonStyles,
         color: "#ffffff",
-        backgroundColor: "#2f67aa",
-        backgroundImage: `url(${imageUrl})`
+        backgroundColor: "#2f67aa"
       }}
       aria-label="Log In with Clever"
     >
-      {!imageUrl ? "Log In With Clever" : ""}
+      {!imageUrl ? (
+        "Log In With Clever"
+      ) : (
+        <img alt="Clever Logo" src={imageUrl} />
+      )}
     </AnchorButton>
   ) : null;
 };

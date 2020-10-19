@@ -3,9 +3,9 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import Select from "./Select";
 import Router from "next/router";
-import useLinkUtils from "./context/LinkUtilsContext";
 import { CollectionData, FacetGroupData } from "interfaces";
 import FormLabel from "components/form/FormLabel";
+import useLinkUtils from "hooks/useLinkUtils";
 
 const ListFilters: React.FC<{ collection: CollectionData }> = ({
   collection
