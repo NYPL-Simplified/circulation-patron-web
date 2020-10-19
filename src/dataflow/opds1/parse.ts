@@ -124,27 +124,24 @@ function buildFulfillmentLink(feedUrl: string) {
 }
 
 /**
- * If the book is an Adobe ACSM or an AxisNow format,
- * we don't show the revoke links
+ * A book cannot be returned (even with a revoke url) if:
+ *  - It is locked in to Adobe ACS
+ *  - It is an axisnow book
+ *  - It comes from certain vendors
  */
-function getRevokeUrl(links: OPDSAcquisitionLink[]): string | null {
-  const shouldShow = links.map(parseFormat).reduce(
-    (prev, { contentType, indirectionType }) => {
-      // Adobe
-      if (indirectionType === OPDS1.AdobeDrmMediaType) return false;
-      // axisnow
-      if (contentType === OPDS1.AxisNowWebpubMediaType) return false;
-      return prev;
-    },
-    // default is true
-    true
-  );
-
-  if (!shouldShow) return null;
-
-  return links.find(link => link.rel === OPDS1.RevokeLinkRel)?.href ?? null;
+function canReturnFulfillableBook(links: OPDSAcquisitionLink[]): boolean {
+  return !!links.map(parseFormat).find(link => {
+    // match if there is a link without indirection.
+    if (!link.indirectionType) return true;
+    // match if it has a link to read online externally.
+    if (link.contentType === OPDS1.ExternalReaderMediaType) return true;
+    return false;
+  });
 }
 
+function findRevokeUrl(links: OPDSLink[]) {
+  return links.find(link => link.rel === OPDS1.RevokeLinkRel)?.href ?? null;
+}
 /**
  * HTML Sanitizer
  */
@@ -237,7 +234,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
     link => link.supportLevel !== "unsupported"
   );
 
-  const revokeUrl = getRevokeUrl(acquisitionLinks);
+  const revokeUrl = findRevokeUrl(entry.links);
 
   const trackOpenBookLink = entry.links.find(isTrackOpenBookLink);
 
@@ -282,9 +279,10 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
       ...book,
       status: "fulfillable",
       fulfillmentLinks: allFulfillmentLinks,
-      revokeUrl
+      revokeUrl: canReturnFulfillableBook(acquisitionLinks) ? revokeUrl : null
     };
   }
+
   // it's a reserved book
   if (availability?.status === "reserved") {
     return {
@@ -293,6 +291,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
       revokeUrl
     };
   }
+
   // it's a reservable book
   if (borrowLink && borrowLink.availability.status === "unavailable") {
     return {
