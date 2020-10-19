@@ -9,7 +9,6 @@ import {
 } from "utils/fulfill";
 import { FulfillableBook } from "interfaces";
 import track from "analytics/track";
-import useLinkUtils from "components/context/LinkUtilsContext";
 import SvgDownload from "icons/Download";
 import SvgExternalLink from "icons/ExternalOpen";
 import { useRouter } from "next/router";
@@ -19,6 +18,7 @@ import useLibraryContext from "components/context/LibraryContext";
 import useUser from "components/context/UserContext";
 import downloadFile from "dataflow/download";
 import useError from "hooks/useError";
+import useLinkUtils from "hooks/useLinkUtils";
 
 const FulfillmentButton: React.FC<{
   details: AnyFullfillment;
