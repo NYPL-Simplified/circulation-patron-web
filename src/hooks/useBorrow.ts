@@ -2,8 +2,8 @@ import * as React from "react";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
 import useLibraryContext from "components/context/LibraryContext";
-import { ServerError } from "errors";
 import useAuthModalContext from "auth/AuthModalContext";
+import useError from "hooks/useError";
 
 export default function useBorrow(isBorrow: boolean) {
   const { catalogUrl } = useLibraryContext();
@@ -11,18 +11,18 @@ export default function useBorrow(isBorrow: boolean) {
   const { showModal } = useAuthModalContext();
   const isUnmounted = React.useRef(false);
   const [isLoading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | undefined>();
+  const { error, handleError, setErrorString, clearError } = useError();
 
   const loadingText = isBorrow ? "Borrowing..." : "Reserving...";
   const buttonLabel = isBorrow ? "Borrow" : "Reserve";
 
   const borrowOrReserve = async (url: string) => {
     setLoading(true);
-    setError(undefined);
+    clearError();
     if (!token) {
       // TODO: register a callback to call if the sign in works
       showModal();
-      setError("You must be signed in to borrow this book.");
+      setErrorString("You must be signed in to borrow this book.");
       setLoading(false);
       return;
     }
@@ -30,13 +30,7 @@ export default function useBorrow(isBorrow: boolean) {
       const book = await fetchBook(url, catalogUrl, token);
       setBook(book);
     } catch (e) {
-      // TODO: Report error to bug catcher here.
-      if (e instanceof ServerError) {
-        console.log("ERR", e.info);
-        setError(e.info.detail);
-      } else {
-        setError("An error occurred while borrowing this book.");
-      }
+      handleError(e);
     }
 
     if (!isUnmounted.current) setLoading(false);
