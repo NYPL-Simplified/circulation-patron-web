@@ -3,11 +3,22 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import { MediumIcon } from "components/MediumIndicator";
 import { AnyBook } from "interfaces";
-import { availabilityString } from "utils/book";
+import { availabilityString, bookIsFulfillable } from "utils/book";
 import { Text } from "components/Text";
+import { shouldRedirectToCompanionApp } from "utils/fulfill";
+import { APP_CONFIG } from "config";
+import SvgPhone from "icons/Phone";
 
 const BookStatus: React.FC<{ book: AnyBook }> = ({ book }) => {
   const { status } = book;
+
+  const redirectUser = bookIsFulfillable(book)
+    ? shouldRedirectToCompanionApp(book.fulfillmentLinks)
+    : false;
+
+  const companionApp =
+    APP_CONFIG.companionApp === "openebooks" ? "Open eBooks" : "SimplyE";
+
   const str =
     status === "borrowable"
       ? "Available to borrow"
@@ -18,12 +29,20 @@ const BookStatus: React.FC<{ book: AnyBook }> = ({ book }) => {
       : status === "on-hold"
       ? "Ready to Borrow"
       : status === "fulfillable"
-      ? "Ready to Read!"
+      ? `Ready to Read${redirectUser ? ` in ${companionApp}` : ""}!`
       : "Unsupported";
+
+  if (book.title === "Green Rider") {
+    console.log(book, redirectUser);
+  }
   return (
     <div>
       <div sx={{ display: "flex", alignItems: "center" }}>
-        <MediumIcon book={book} sx={{ mr: 1 }} />
+        {redirectUser ? (
+          <SvgPhone sx={{ fontSize: 24 }} />
+        ) : (
+          <MediumIcon book={book} sx={{ mr: 1 }} />
+        )}
         <Text variant="text.body.bold" sx={{ fontWeight: 600 }}>
           {str}
         </Text>
