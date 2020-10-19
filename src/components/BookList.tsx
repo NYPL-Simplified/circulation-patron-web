@@ -97,7 +97,7 @@ export const BookList: React.FC<{
   books: AnyBook[];
 }> = ({ books }) => {
   return (
-    <ul sx={{ px: 5 }} data-testid="listview-list">
+    <ul sx={{ px: [3, 5] }} data-testid="listview-list">
       {books.map(book => (
         <BookListItem key={book.id} book={book} />
       ))}
@@ -115,22 +115,25 @@ export const BookListItem: React.FC<{
   return (
     <li
       sx={{
-        listStyle: "none"
+        listStyle: "none",
+        borderBottom: "1px solid",
+        borderColor: "ui.gray.light",
+        py: 3
       }}
       aria-label={`Book: ${book.title}`}
     >
       <Stack
         sx={{
-          alignItems: "flex-start",
-          borderBottom: "1px solid",
-          borderColor: "ui.gray.light",
-          py: 3
+          alignItems: "flex-start"
         }}
         spacing={3}
       >
         <BookCover
           book={book}
-          sx={{ flex: "0 0 148px", height: 219 }}
+          sx={{
+            flex: ["0 0 100px", "0 0 100px", "0 0 148px"],
+            height: [141, 141, 219]
+          }}
           showMedium={APP_CONFIG.showMedium}
         />
         <Stack direction="column" sx={{ alignItems: "flex-start" }}>
@@ -153,24 +156,40 @@ export const BookListItem: React.FC<{
 
           <BookStatus book={book} />
           <BookListCTA book={book} />
-          <div>
-            <Text
-              variant="text.body.italic"
-              dangerouslySetInnerHTML={{
-                __html: truncateString(stripHTML(book.summary ?? ""), 280)
-              }}
-            ></Text>
-            <NavButton
-              bookUrl={book.url}
-              variant="link"
-              sx={{ verticalAlign: "baseline", ml: 1 }}
-            >
-              Read more
-            </NavButton>
-          </div>
+          <Description
+            book={book}
+            sx={{ display: ["none", "none", "block"] }}
+          />
         </Stack>
       </Stack>
+      <Description
+        book={book}
+        sx={{ display: ["block", "block", "none"], mt: 2 }}
+      />
     </li>
+  );
+};
+
+const Description: React.FC<{ book: AnyBook; className?: string }> = ({
+  book,
+  className
+}) => {
+  return (
+    <div className={className}>
+      <Text
+        variant="text.body.italic"
+        dangerouslySetInnerHTML={{
+          __html: truncateString(stripHTML(book.summary ?? ""), 280)
+        }}
+      ></Text>
+      <NavButton
+        bookUrl={book.url}
+        variant="link"
+        sx={{ verticalAlign: "baseline", ml: 1 }}
+      >
+        Read more
+      </NavButton>
+    </div>
   );
 };
 
