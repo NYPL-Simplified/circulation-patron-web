@@ -1,36 +1,35 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import Select, { Label } from "./Select";
+import Select from "./Select";
 import Router from "next/router";
-import { CollectionData } from "interfaces";
+import { CollectionData, FacetGroupData } from "interfaces";
+import FormLabel from "components/form/FormLabel";
 import useLinkUtils from "hooks/useLinkUtils";
 
-/**
- * This filter depends on the "Sort by" and "Availability" facet groups.
- * They must be named exactly that in the CM in order to show up here.
- */
 const ListFilters: React.FC<{ collection: CollectionData }> = ({
   collection
 }) => {
+  const { facetGroups } = collection;
   return (
-    <div sx={{ display: "flex", alignItems: "center" }}>
-      <FacetSelector collection={collection} facetLabel="Sort by" />
-      <FacetSelector collection={collection} facetLabel="Availability" />
+    <div
+      sx={{
+        display: "flex",
+        flexDirection: ["column", "row"],
+        flexWrap: "wrap"
+      }}
+    >
+      {facetGroups?.map(facetGroup => (
+        <FacetSelector facetGroup={facetGroup} key={facetGroup.label} />
+      ))}
     </div>
   );
 };
 
 const FacetSelector: React.FC<{
-  facetLabel: string;
-  collection: CollectionData;
-}> = ({ facetLabel, collection }) => {
-  const facetGroup = collection?.facetGroups?.find(
-    facetGroup => facetGroup.label === facetLabel
-  );
-
+  facetGroup: FacetGroupData;
+}> = ({ facetGroup }) => {
   const linkUtils = useLinkUtils();
-  if (!facetGroup) return null;
 
   const { label, facets } = facetGroup;
 
@@ -46,10 +45,10 @@ const FacetSelector: React.FC<{
     Router.push(url);
   };
   return (
-    <React.Fragment>
-      <Label htmlFor={`facet-selector-${label}`} sx={{ ml: 3, mr: 2 }}>
+    <div sx={{ m: 1 }}>
+      <FormLabel sx={{ mb: 0 }} htmlFor={`facet-selector-${label}`}>
         {label}
-      </Label>
+      </FormLabel>
       <Select
         id={`facet-selector-${label}`}
         value={activeFacet?.label}
@@ -62,7 +61,7 @@ const FacetSelector: React.FC<{
           </option>
         ))}
       </Select>
-    </React.Fragment>
+    </div>
   );
 };
 export default ListFilters;
