@@ -195,7 +195,7 @@ const Description: React.FC<{ book: AnyBook; className?: string }> = ({
 
 const BookListCTA: React.FC<{ book: AnyBook }> = ({ book }) => {
   if (bookIsBorrowable(book)) {
-    return <BorrowOrReserve url={book.borrowUrl} isBorrow sx={{ my: 2 }} />;
+    return <BorrowOrReserve url={book.borrowUrl} isBorrow />;
   }
 
   if (bookIsReservable(book)) {

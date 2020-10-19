@@ -4,6 +4,7 @@ import * as React from "react";
 import useBorrow from "hooks/useBorrow";
 import Button from "./Button";
 import { Text } from "./Text";
+import Stack from "components/Stack";
 
 const BorrowOrReserve: React.FC<{
   isBorrow: boolean;
@@ -18,7 +19,11 @@ const BorrowOrReserve: React.FC<{
     error
   } = useBorrow(isBorrow);
   return (
-    <div className={className}>
+    <Stack
+      direction="column"
+      sx={{ alignItems: "flex-start" }}
+      className={className}
+    >
       <Button
         onClick={() => borrowOrReserve(url)}
         loading={isLoading}
@@ -27,7 +32,7 @@ const BorrowOrReserve: React.FC<{
         {buttonLabel}
       </Button>
       {error && <Text sx={{ color: "ui.error" }}>{error}</Text>}
-    </div>
+    </Stack>
   );
 };
 
