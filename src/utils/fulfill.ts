@@ -7,6 +7,7 @@ import {
   MediaSupportLevel,
   OPDS1
 } from "interfaces";
+import { bookIsAudiobook } from "utils/book";
 import { AXISNOW_DECRYPT } from "utils/env";
 import { typeMap } from "utils/file";
 
@@ -25,38 +26,37 @@ import { typeMap } from "utils/file";
  * https://docs.google.com/document/d/1dli5mgTbVaURN_B2AtUmPhgpaFUVqOqrzsaoFvCXnkA/edit?pli=1#
  */
 
-export type DownloadDetails = {
+export type DownloadFulfillment = {
   type: "download";
   id: string;
   contentType: OPDS1.AnyBookMediaType;
   getUrl: GetUrlWithIndirection;
   buttonLabel: string;
 };
-export type ReadInternalDetails = {
+export type ReadInternalFulfillment = {
   type: "read-online-internal";
   id: string;
   url: string;
   buttonLabel: string;
 };
-export type ReadExternalDetails = {
+export type ReadExternalFulfillment = {
   type: "read-online-external";
   id: string;
   getUrl: GetUrlWithIndirection;
   buttonLabel: string;
 };
-export type UnsupportedDetails = {
+export type UnsupportedFulfillment = {
   type: "unsupported";
 };
 
-export type FulfillmentDetails =
-  | DownloadDetails
-  | ReadExternalDetails
-  | ReadInternalDetails
-  | UnsupportedDetails;
+export type SupportedFulfillment =
+  | DownloadFulfillment
+  | ReadExternalFulfillment
+  | ReadInternalFulfillment;
 
-export function getFulfillmentDetails(
-  link: FulfillmentLink
-): FulfillmentDetails {
+export type AnyFullfillment = SupportedFulfillment | UnsupportedFulfillment;
+
+export function getFulfillmentFromLink(link: FulfillmentLink): AnyFullfillment {
   const { contentType, indirectionType, supportLevel } = link;
 
   // don't show fulfillment option if it is unsupported or only allows
@@ -109,6 +109,25 @@ export function getFulfillmentDetails(
   return {
     type: "unsupported"
   };
+}
+
+export function getFulfillmentsFromBook(
+  book: FulfillableBook
+): SupportedFulfillment[] {
+  // we don't support any audiobooks whatsoever right now
+  if (bookIsAudiobook(book)) return [];
+  const links = book.fulfillmentLinks;
+  const dedupedLinks = dedupeLinks(links);
+  const supported = dedupedLinks
+    .map(getFulfillmentFromLink)
+    .filter(isSupported);
+  return supported;
+}
+
+function isSupported(
+  fulfillment: AnyFullfillment
+): fulfillment is SupportedFulfillment {
+  return fulfillment.type !== "unsupported";
 }
 
 /**
