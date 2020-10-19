@@ -9,34 +9,25 @@ import {
   bookIsFulfillable,
   bookIsReservable,
   bookIsReserved,
-  bookIsOnHold,
-  bookIsUnsupported
+  bookIsOnHold
 } from "../utils/book";
 import Lane from "./Lane";
-import Button, { NavButton } from "./Button";
+import Button from "./Button";
 import LoadingIndicator from "./LoadingIndicator";
 import { H2, Text } from "./Text";
 import MediumIndicator, { MediumIcon } from "components/MediumIndicator";
-import { ArrowForward } from "icons";
 import BookCover from "./BookCover";
 import BorrowOrReserve from "./BorrowOrReserve";
-import {
-  AnyBook,
-  CollectionData,
-  FulfillableBook,
-  LaneData,
-  OnHoldBook,
-  ReservableBook,
-  ReservedBook
-} from "interfaces";
+import { AnyBook, CollectionData, FulfillableBook, LaneData } from "interfaces";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import { useSWRInfinite } from "swr";
-import ApplicationError from "errors";
 import useUser from "components/context/UserContext";
 import { APP_CONFIG } from "config";
 import Stack from "components/Stack";
 import { book as bookFix, mergeBook } from "test-utils/fixtures/book";
 import CancelOrReturn from "components/CancelOrReturn";
+import FulfillmentButton from "components/FulfillmentButton";
+import { getFulfillmentsFromBook } from "utils/fulfill";
 
 const ListLoadingIndicator = () => (
   <div
@@ -253,6 +244,20 @@ const BookListCTA: React.FC<{ book: AnyBook }> = ({ book }) => {
   }
 
   if (bookIsFulfillable(book)) {
+    // we will show a fulfillment button if there is only one option
+    const fulfillments = getFulfillmentsFromBook(book);
+    const singleFulfillment =
+      fulfillments.length === 1 ? fulfillments[0] : undefined;
+
+    if (singleFulfillment) {
+      return (
+        <FulfillmentButton
+          details={singleFulfillment}
+          book={book}
+          isPrimaryAction
+        />
+      );
+    }
     return <div>hi</div>;
   }
 
