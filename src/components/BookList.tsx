@@ -4,7 +4,6 @@ import * as React from "react";
 import { truncateString, stripHTML } from "../utils/string";
 import {
   getAuthors,
-  availabilityString,
   bookIsBorrowable,
   bookIsFulfillable,
   bookIsReservable,
@@ -15,19 +14,17 @@ import Lane from "./Lane";
 import Button, { NavButton } from "./Button";
 import LoadingIndicator from "./LoadingIndicator";
 import { H2, Text } from "./Text";
-import { MediumIcon } from "components/MediumIndicator";
 import BookCover from "./BookCover";
 import BorrowOrReserve from "./BorrowOrReserve";
-import { AnyBook, CollectionData, FulfillableBook, LaneData } from "interfaces";
+import { AnyBook, CollectionData, LaneData } from "interfaces";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import { useSWRInfinite } from "swr";
 import useUser from "components/context/UserContext";
 import { APP_CONFIG } from "config";
 import Stack from "components/Stack";
-import { book as bookFix, mergeBook } from "test-utils/fixtures/book";
 import CancelOrReturn from "components/CancelOrReturn";
 import FulfillmentButton from "components/FulfillmentButton";
-import { getFulfillmentFromLink, getFulfillmentsFromBook } from "utils/fulfill";
+import { getFulfillmentFromLink } from "utils/fulfill";
 import { ArrowForward } from "icons";
 import BookStatus from "components/BookStatus";
 
@@ -108,13 +105,6 @@ export const BookList: React.FC<{
   );
 };
 
-const book = mergeBook<FulfillableBook>({
-  ...bookFix,
-  status: "fulfillable",
-  revokeUrl: "/borrow",
-  fulfillmentLinks: []
-});
-
 export const BookListItem: React.FC<{
   book: AnyBook;
 }> = ({ book: collectionBook }) => {
@@ -144,29 +134,40 @@ export const BookListItem: React.FC<{
           showMedium={APP_CONFIG.showMedium}
         />
         <Stack direction="column" sx={{ alignItems: "flex-start" }}>
-          <H2 sx={{ mb: 0, variant: "text.body.bold" }}>
-            {truncateString(book.title, 50)},
+          <div>
+            <H2 sx={{ mb: 0, variant: "text.body.bold", display: "inline" }}>
+              {truncateString(book.title, 50)}
+            </H2>
             {book.subtitle && (
               <Text variant="callouts.italic" aria-label="Subtitle">
-                {truncateString(book.subtitle, 50)}
+                , {truncateString(book.subtitle, 50)}
               </Text>
             )}
-          </H2>
+            <Text aria-label="Authors" sx={{ display: "block" }}>
+              {getAuthors(book, 2).join(", ")}
+              {book.authors?.length &&
+                book.authors.length > 2 &&
+                ` & ${book.authors?.length - 2} more`}
+            </Text>
+          </div>
 
-          <Text aria-label="Authors">
-            {getAuthors(book, 2).join(", ")}
-            {book.authors?.length &&
-              book.authors.length > 2 &&
-              ` & ${book.authors?.length - 2} more`}
-          </Text>
           <BookStatus book={book} />
           <BookListCTA book={book} />
-          <Text
-            variant="text.body.italic"
-            dangerouslySetInnerHTML={{
-              __html: truncateString(stripHTML(book.summary ?? ""), 280)
-            }}
-          ></Text>
+          <div>
+            <Text
+              variant="text.body.italic"
+              dangerouslySetInnerHTML={{
+                __html: truncateString(stripHTML(book.summary ?? ""), 280)
+              }}
+            ></Text>
+            <NavButton
+              bookUrl={book.url}
+              variant="link"
+              sx={{ verticalAlign: "baseline", ml: 1 }}
+            >
+              Read more
+            </NavButton>
+          </div>
         </Stack>
       </Stack>
     </li>
