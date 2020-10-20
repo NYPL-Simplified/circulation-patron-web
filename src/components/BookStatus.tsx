@@ -32,9 +32,6 @@ const BookStatus: React.FC<{ book: AnyBook }> = ({ book }) => {
       ? `Ready to Read${redirectUser ? ` in ${companionApp}` : ""}!`
       : "Unsupported";
 
-  if (book.title === "Green Rider") {
-    console.log(book, redirectUser);
-  }
   return (
     <div>
       <div sx={{ display: "flex", alignItems: "center" }}>
