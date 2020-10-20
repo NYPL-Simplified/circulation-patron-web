@@ -1,4 +1,6 @@
 ## CHANGELOG
+### UNRELEASED
+- Calls reader 0.2.4 with dyslexia friendly font
 
 ### v3.0.1
 - hotfix: Checkout the master branch with submodules when building production docker container
