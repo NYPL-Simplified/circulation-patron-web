@@ -42,7 +42,9 @@ const FacetSelector: React.FC<{
 
     if (!facet?.href) return;
     const url = linkUtils.buildCollectionLink(facet.href);
-    Router.push(url);
+    // shallow route because we don't need to rerun getStaticProps for the new page,
+    // just fetch the new collection client-side
+    Router.push(url, undefined, { shallow: true });
   };
   return (
     <div sx={{ m: 1 }}>
