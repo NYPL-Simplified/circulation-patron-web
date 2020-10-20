@@ -36,9 +36,14 @@ export function availabilityString(book: AnyBook) {
     case "reservable":
       const availableCopies = book.copies?.available;
       const totalCopies = book.copies?.total;
+      const queue =
+        typeof book.holds?.total === "number" ? book.holds.total : null;
+
       return typeof availableCopies === "number" &&
         typeof totalCopies === "number"
-        ? `${availableCopies} out of ${totalCopies} copies available.`
+        ? `${availableCopies} out of ${totalCopies} copies available.${
+            queue ? ` ${queue} patrons in the queue.` : ""
+          }`
         : null;
 
     case "reserved":
@@ -47,7 +52,14 @@ export function availabilityString(book: AnyBook) {
       return `${position} patrons ahead of you in the queue.`;
 
     case "on-hold":
-      return "You have this book on hold.";
+      const until = book.availability?.until
+        ? new Date(book.availability.until).toDateString()
+        : "NaN";
+      const untilStr = until === "NaN" ? undefined : until;
+
+      return `You have this book on hold${
+        untilStr ? ` until ${untilStr}` : ""
+      }.`;
 
     case "fulfillable":
       const availableUntil = book.availability?.until

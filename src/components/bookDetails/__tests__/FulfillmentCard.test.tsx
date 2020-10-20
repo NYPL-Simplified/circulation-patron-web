@@ -63,7 +63,9 @@ describe("BorrowableBook", () => {
     const utils = render(<FulfillmentCard book={borrowableBook} />, {
       user: { isAuthenticated: true }
     });
-    const borrowButton = utils.getByRole("button", { name: "Borrow" });
+    const borrowButton = utils.getByRole("button", {
+      name: "Borrow this book"
+    });
     expect(borrowButton).toBeInTheDocument();
 
     // click borrow
@@ -72,7 +74,7 @@ describe("BorrowableBook", () => {
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
     // there is an error because we didn't mock fetch to return something
-    expect(utils.getByText("Error: An unknown error occurred."));
+    expect(utils.getByText("Error: Can't do that"));
   });
 });
 
@@ -88,8 +90,10 @@ describe("OnHoldBook", () => {
 
   test("correct title and subtitle", () => {
     const utils = render(<FulfillmentCard book={onHoldBook} />);
-    expect(utils.getByText("On Hold")).toBeInTheDocument();
-    expect(utils.getByText("Your hold will expire on Tue Jun 16 2020."));
+    expect(utils.getByText("Ready to Borrow")).toBeInTheDocument();
+    expect(
+      utils.getByText("You have this book on hold until Tue Jun 16 2020.")
+    );
   });
 
   test("borrow button fetches url and shows error", async () => {
@@ -102,7 +106,7 @@ describe("OnHoldBook", () => {
     const utils = render(<FulfillmentCard book={onHoldBook} />, {
       user: { isAuthenticated: true }
     });
-    const borrowButton = utils.getByText("Borrow");
+    const borrowButton = utils.getByText("Borrow this book");
     expect(borrowButton).toBeInTheDocument();
 
     // click borrow
@@ -111,7 +115,7 @@ describe("OnHoldBook", () => {
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
     // there is an error because we didn't mock fetch to return something
-    expect(utils.getByText("Error: An unknown error occurred."));
+    expect(utils.getByText("Error: Can't do that"));
   });
 
   test("handles lack of availability.until info", () => {
@@ -120,9 +124,7 @@ describe("OnHoldBook", () => {
       availability: { status: "ready" }
     });
     const utils = render(<FulfillmentCard book={withoutCopies} />);
-    expect(
-      utils.getByText("You must borrow this book before your loan expires.")
-    );
+    expect(utils.getByText("You have this book on hold."));
   });
 });
 
@@ -181,11 +183,11 @@ describe("ReservableBook", () => {
       reserveUrl: "/reserve",
       copies: undefined
     });
-    // this is currently failing because the getFulfillmentState is returning error
-    // since we expect to always have the availability numbers otherwise we don't know
-    // if the book is available or not, unless there is some other way to tell that state.
     const utils = render(<FulfillmentCard book={bookWithQueue} />);
-    expect(utils.getByText("Number of books available is unknown."));
+    expect(
+      utils.getByRole("button", { name: "Reserve this book" })
+    ).toBeInTheDocument();
+    expect(utils.getByText("Unavailable")).toBeInTheDocument();
   });
 
   test("shows reserve button which fetches book", async () => {
@@ -198,16 +200,16 @@ describe("ReservableBook", () => {
     const utils = render(<FulfillmentCard book={reservableBook} />, {
       user: { isAuthenticated: true }
     });
-    const reserveButton = utils.getByText("Reserve");
+    const reserveButton = utils.getByText("Reserve this book");
     expect(reserveButton).toBeInTheDocument();
 
     // click borrow
-    userEvent.click(utils.getByText("Reserve"));
+    userEvent.click(reserveButton);
 
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Reserving..."));
     // there is an error because we didn't mock fetch to return something
-    expect(utils.getByText("Error: An unknown error occurred."));
+    expect(utils.getByText("Error: Can't do that"));
   });
 });
 
@@ -299,7 +301,8 @@ describe("reserved", () => {
       }
     });
     const utils = render(<FulfillmentCard book={reservedBookWithQueue} />);
-    expect(utils.getByText("Your hold position is: 5.")).toBeInTheDocument;
+    expect(utils.getByText("5 patrons ahead of you in the queue."))
+      .toBeInTheDocument;
   });
 });
 
@@ -458,7 +461,7 @@ describe("FulfillableBook", () => {
 
   test("correct title and subtitle without redirect", () => {
     const utils = render(<FulfillmentCard book={downloadableBook} />);
-    expect(utils.getByText("Ready to read!")).toBeInTheDocument();
+    expect(utils.getByText("Ready to Read!")).toBeInTheDocument();
     expect(
       utils.getByText("You have this book on loan until Thu Jun 18 2020.")
     ).toBeInTheDocument();
@@ -478,11 +481,12 @@ describe("FulfillableBook", () => {
     ]
   });
   test("correct title and subtitle with companion app redirect", () => {
+    mockConfig({
+      companionApp: "simplye"
+    });
     const utils = render(<FulfillmentCard book={bookWithRedirect} />);
-
     expect(utils.queryByText("Ready to Read!")).not.toBeInTheDocument();
-    expect(utils.getByText("Ready to read in SimplyE!")).toBeInTheDocument();
-    expect(utils.getByText("You have this book on loan.")).toBeInTheDocument();
+    expect(utils.getByText("Ready to Read in SimplyE!")).toBeInTheDocument();
     expect(
       utils.getByText("If you would rather read on your computer, you can:")
     ).toBeInTheDocument();
@@ -493,9 +497,8 @@ describe("FulfillableBook", () => {
     mockConfig({ companionApp: "openebooks" });
     const utils = render(<FulfillmentCard book={bookWithRedirect} />);
     expect(
-      utils.getByText("Ready to read in Open eBooks!")
+      utils.getByText("Ready to Read in Open eBooks!")
     ).toBeInTheDocument();
-    expect(utils.getByText("You have this book on loan.")).toBeInTheDocument();
   });
 
   test("handles lack of availability info", () => {
@@ -504,7 +507,7 @@ describe("FulfillableBook", () => {
       availability: undefined
     });
     const utils = render(<FulfillmentCard book={withoutAvailability} />);
-    expect(utils.getByText("You have this book on loan.")).toBeInTheDocument();
+    expect(utils.getByText("Ready to Read!")).toBeInTheDocument();
   });
 
   test("shows download options", () => {
