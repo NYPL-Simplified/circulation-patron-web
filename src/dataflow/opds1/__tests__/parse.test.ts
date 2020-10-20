@@ -285,7 +285,7 @@ test("includes open access links with fulfillable book", () => {
   });
 });
 
-test.only("extracts reserved book", () => {
+test("extracts reserved book", () => {
   mockConfig();
   const borrowLink = factory.acquisitionLink({
     href: "http://example.com/borrow",

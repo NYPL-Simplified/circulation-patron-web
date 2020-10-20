@@ -108,14 +108,16 @@ test("catches and displays server errors", async () => {
       utils.getByText("Error: Something happened on the server")
     ).toBeInTheDocument();
     expect(utils.queryByText("Borrowing...")).not.toBeInTheDocument();
-    expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+    expect(
+      utils.getByRole("button", { name: "Borrow this book" })
+    ).toBeInTheDocument();
   });
 });
 
 test("catches unrecognized fetch errors", async () => {
   const utils = render(<BorrowOrReserve isBorrow url="/url" />);
   const button = utils.getByRole("button", {
-    name: "Borrow"
+    name: "Borrow this book"
   });
 
   mockedFetchBook.mockRejectedValueOnce(new Error("You messed up!"));
