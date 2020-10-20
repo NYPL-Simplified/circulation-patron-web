@@ -98,7 +98,10 @@ describe("OnHoldBook", () => {
   test("shows correct string and link to book details", () => {
     const utils = render(<BookListItem book={onHoldBook} />);
     expectReadMore(utils);
-    expect(utils.getByText("You have this book on hold.")).toBeInTheDocument();
+    expect(utils.getByText("Ready to Borrow")).toBeInTheDocument();
+    expect(
+      utils.getByText("You have this book on hold until Tue Jun 16 2020.")
+    ).toBeInTheDocument();
   });
 
   test("shows loading state when borrowing, borrows, and revalidates loans", async () => {
