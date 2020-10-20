@@ -153,6 +153,8 @@ const Lane: React.FC<{
     setCurrentBook({ index: currentIndex, snap: false });
   };
 
+  if (filteredBooks.length === 0) return null;
+
   return (
     <li sx={{ m: 0, p: 0, mb: 3, listStyle: "none" }} aria-label={title}>
       <Stack

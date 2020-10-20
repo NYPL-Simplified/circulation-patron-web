@@ -38,19 +38,14 @@ test("Renders", () => {
   expect(book1).toBeInTheDocument();
 });
 
-test("renders breadcrumbs with 0 books", () => {
+test("Renders no lane if the lane has 0 books", () => {
   const withNoBooks = {
     ...laneData,
     books: []
   };
   const utils = render(<Lane lane={withNoBooks} />);
 
-  // it should just show the breadcrumb
-  const breadcrumb = utils.getByLabelText("Lane Title");
-  expect(breadcrumb).toBeInTheDocument();
-
-  // there should be only one See More element
-  expect(utils.getByTestId("lane-list").childNodes).toHaveLength(1);
+  expect(utils.container).toBeEmptyDOMElement();
 });
 
 test("filters books", () => {
