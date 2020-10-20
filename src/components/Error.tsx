@@ -64,7 +64,9 @@ const buttonBase: SystemStyleObject = {
   bg: "transparent"
 };
 
-const LibraryList: React.FC<{ libraries: string[] }> = ({ libraries }) => {
+export const LibraryList: React.FC<{ libraries: string[] }> = ({
+  libraries
+}) => {
   return (
     <div>
       <h3>Did you mean to visit one of these?</h3>
