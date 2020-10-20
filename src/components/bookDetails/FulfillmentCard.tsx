@@ -17,9 +17,9 @@ import {
   getFulfillmentsFromBook,
   shouldRedirectToCompanionApp
 } from "utils/fulfill";
+import BookStatus from "components/BookStatus";
 import { AnyBook, FulfillableBook, FulfillmentLink } from "interfaces";
 import CancelOrReturn from "components/CancelOrReturn";
-import BookStatus from "components/BookStatus";
 
 const FulfillmentCard: React.FC<{ book: AnyBook }> = ({ book }) => {
   return (

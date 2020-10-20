@@ -73,7 +73,6 @@ describe("BorrowableBook", () => {
 
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
-    // there is an error because we didn't mock fetch to return something
     expect(utils.getByText("Error: Can't do that"));
   });
 });
@@ -114,7 +113,6 @@ describe("OnHoldBook", () => {
 
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
-    // there is an error because we didn't mock fetch to return something
     expect(utils.getByText("Error: Can't do that"));
   });
 
@@ -208,7 +206,6 @@ describe("ReservableBook", () => {
 
     // the borrow button should be gone now
     await waitForElementToBeRemoved(() => utils.getByText("Reserving..."));
-    // there is an error because we didn't mock fetch to return something
     expect(utils.getByText("Error: Can't do that"));
   });
 });
