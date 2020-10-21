@@ -5,7 +5,7 @@ import { LibraryProvider } from "../src/components/context/LibraryContext";
 import { UserContext, UserState } from "../src/components/context/UserContext";
 import { AuthModalProvider } from "../src/auth/AuthModalContext";
 import makeTheme from "../src/theme";
-import {libraryData} from "../src/test-utils/fixtures/library"
+import { libraryData } from "../src/test-utils/fixtures/library"
 import { configDecorator } from "./config-mock";
 import { swrDecorator } from "./swr-mock";
 import { nextRouterDecorator } from "./next-router-mock";
@@ -13,6 +13,32 @@ import { nextRouterDecorator } from "./next-router-mock";
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
 }
+
+export const globalTypes = {
+  showMedium: {
+    name: "Medium",
+    description: "Should the app show medium indicators?",
+    defaultValue: true,
+    toolbar: {
+      // icon: "book",
+      items: [
+        { value: true, title: "Show" },
+        { value: false, title: "Hide" }
+      ]
+    }
+  },
+  companionApp: {
+    name: "Companion App",
+    description: "Companion App",
+    defaultValue: "simplye",
+    toolbar: {
+      items: [
+        { value: "simplye", title: "SimplyE" },
+        { value: "openebooks", title: "Open eBooks" }
+      ]
+    }
+  }
+};
 
 export const user: UserState = {
   error: undefined,
