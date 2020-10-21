@@ -11,10 +11,11 @@ import { AnyBook } from "interfaces";
 
 type ImageLoadState = "loading" | "error" | "success";
 
-const BookCover: React.FC<{ book: AnyBook; className?: string }> = ({
-  book,
-  className
-}) => {
+const BookCover: React.FC<{
+  book: AnyBook;
+  className?: string;
+  showMedium?: boolean;
+}> = ({ book, className, showMedium = false }) => {
   const [state, setState] = React.useState<ImageLoadState>("loading");
   const { imageUrl } = book;
 
@@ -67,6 +68,21 @@ const BookCover: React.FC<{ book: AnyBook; className?: string }> = ({
           transition: "all 0.1s ease-in"
         }}
       />
+      {showMedium && (
+        <MediumIcon
+          book={book}
+          sx={{
+            position: "absolute",
+            zIndex: 200,
+            bottom: 0,
+            left: 0,
+            borderTopRightRadius: 1,
+            p: 1,
+            height: "32px",
+            bg: "rgba(255,255,255,0.9)"
+          }}
+        />
+      )}
     </div>
   );
 };
