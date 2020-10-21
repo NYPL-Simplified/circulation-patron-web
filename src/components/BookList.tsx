@@ -26,6 +26,7 @@ import { fetchCollection } from "dataflow/opds1/fetch";
 import { useSWRInfinite } from "swr";
 import ApplicationError from "errors";
 import useUser from "components/context/UserContext";
+import { APP_CONFIG } from "config";
 import FulfillmentButton from "components/FulfillmentButton";
 import { getFulfillmentsFromBook } from "utils/fulfill";
 
@@ -160,7 +161,9 @@ export const BookListItem: React.FC<{
             book.authors.length > 2 &&
             ` & ${book.authors?.length - 2} more`}
         </Text>
-        <MediumIndicator book={book} sx={{ color: "ui.gray.dark" }} />
+        {APP_CONFIG.showMedium && (
+          <MediumIndicator book={book} sx={{ color: "ui.gray.dark" }} />
+        )}
         <div sx={{ mt: 3 }}>
           <Text
             variant="text.body.italic"
