@@ -1,3 +1,5 @@
+import path from "path"
+
 module.exports = {
   "stories": [
     "../src/**/*.stories.mdx",
@@ -10,6 +12,12 @@ module.exports = {
   webpackFinal: async config => {
     config.resolve.alias['core-js/modules'] = '@storybook/core/node_modules/core-js/modules';
     config.resolve.alias['core-js/features'] = '@storybook/core/node_modules/core-js/features';
+    config.resolve.alias['config'] = require.resolve('./config-mock.js');
+
+    config.resolve.modules = [
+      path.resolve(__dirname, "../src"),
+      "node_modules"
+    ]
 
     return config
   }

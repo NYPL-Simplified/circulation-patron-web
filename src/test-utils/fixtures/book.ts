@@ -3,7 +3,10 @@ import {
   Book,
   BorrowableBook,
   FulfillableBook,
-  FulfillmentLink
+  FulfillmentLink,
+  OnHoldBook,
+  ReservableBook,
+  ReservedBook
 } from "interfaces";
 import merge from "deepmerge";
 
@@ -157,10 +160,41 @@ export const borrowableBook: BorrowableBook = {
   status: "borrowable"
 };
 
-export const fulfillmentLink: FulfillmentLink = {
+export const reservableBook: ReservableBook = {
+  ...book,
+  status: "reservable",
+  reserveUrl: "/reserve"
+};
+
+export const reservedBook: ReservedBook = {
+  ...book,
+  status: "reserved",
+  revokeUrl: "/revoke"
+};
+
+export const onHoldBook: OnHoldBook = {
+  ...book,
+  status: "on-hold",
+  borrowUrl: "/borrow"
+};
+
+export const epubFulfillmentLink: FulfillmentLink = {
   contentType: "application/epub+zip",
   url: "/epub",
   supportLevel: "show"
+};
+
+export const adobeEpubFulfillmentLink: FulfillmentLink = {
+  contentType: "application/epub+zip",
+  indirectionType: "application/vnd.adobe.adept+xml",
+  supportLevel: "redirect-and-show",
+  url: "/adobe-epub"
+};
+
+export const axisnowFulfillmentLink: FulfillmentLink = {
+  contentType: "application/vnd.librarysimplified.axisnow+json",
+  supportLevel: "show",
+  url: "/axisnow"
 };
 
 export const fulfillableBook: FulfillableBook = {
