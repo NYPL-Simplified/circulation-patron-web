@@ -27,8 +27,9 @@ function sortBooksByLoanExpirationDate(books: AnyBook[]) {
     if (typeof aDate === "string") return 1;
     if (typeof bDate === "string") return -1;
     // if both have defined availabilities, sort by date
-    if (aDate <= bDate) return -1;
-    return 1;
+    if (aDate < bDate) return -1;
+    if (aDate > bDate) return 1;
+    return compareTitles(a, b);
   });
 }
 
