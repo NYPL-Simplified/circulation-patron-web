@@ -58,7 +58,7 @@ test("shows recommendation lanes", () => {
     utils.getByRole("heading", { name: "Recommendations" })
   ).toBeInTheDocument();
   expect(
-    utils.getByRole("heading", { name: "Jane Austen" })
+    utils.getByRole("heading", { name: "Lane Title" })
   ).toBeInTheDocument();
 });
 
@@ -66,6 +66,34 @@ test("doesn't show recommendations if there are none", () => {
   mockSwr({
     isValidating: false,
     data: undefined
+  });
+  const utils = render(<Recommendations book={fixtures.borrowableBook} />);
+  expect(utils.container).toBeEmptyDOMElement();
+});
+
+test("doesn't show recommendations if the lanes don't have > 1 book", () => {
+  const emptyLanes: CollectionData = {
+    id: "related-id",
+    title: "related title",
+    url: "data-related-url",
+    books: [],
+    navigationLinks: [],
+    lanes: [
+      {
+        title: "lane 1",
+        url: "/lane-1",
+        books: fixtures.makeBorrowableBooks(1)
+      },
+      {
+        title: "lane 2",
+        url: "/lane-2",
+        books: fixtures.makeBorrowableBooks(1)
+      }
+    ]
+  };
+  mockSwr({
+    isValidating: false,
+    data: emptyLanes
   });
   const utils = render(<Recommendations book={fixtures.borrowableBook} />);
   expect(utils.container).toBeEmptyDOMElement();
@@ -120,8 +148,7 @@ test("shows multiple lanes if existing", () => {
   });
   const utils = render(<Recommendations book={fixtures.borrowableBook} />);
 
-  expect(utils.getByText("lane 1")).toBeInTheDocument();
-  expect(utils.getByText("lane 2")).toBeInTheDocument();
+  expect(utils.getAllByRole("heading", { name: "Lane Title" })).toHaveLength(2);
 
   expect(utils.getAllByText("See More")).toHaveLength(2);
 });
