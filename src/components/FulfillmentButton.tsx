@@ -123,7 +123,7 @@ const ReadOnlineInternal: React.FC<{
   const internalLink = buildMultiLibraryLink(details.url);
   function open() {
     track.openBook(trackOpenBookUrl);
-    router.push(internalLink);
+    router.push(internalLink, undefined, { shallow: true });
   }
   return (
     <Button {...getButtonStyles(isPrimaryAction)} onClick={open}>

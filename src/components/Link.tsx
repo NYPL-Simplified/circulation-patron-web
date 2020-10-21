@@ -62,7 +62,10 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       prefetch,
       replace,
       scroll,
-      shallow,
+      // default to shallow routing because we don't fetch any
+      // page-specific data in getStaticProps. See more:
+      // https://nextjs.org/docs/routing/shallow-routing
+      shallow = true,
       ...rest
     } = buildLinkFromProps(props, linkUtils);
     return (
