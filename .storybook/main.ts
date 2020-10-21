@@ -23,5 +23,11 @@ module.exports = {
     ]
 
     return config
+  },
+  refs: {
+    'nypl-design-system': {
+      title: "NYPL Design System",
+      url: "https://nypl.github.io/nypl-design-system/storybook-static/"
+    }
   }
 }
