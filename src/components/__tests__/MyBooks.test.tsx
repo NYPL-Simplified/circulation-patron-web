@@ -56,7 +56,7 @@ const books: FulfillableBook[] = [
   ...fixtures.makeFulfillableBooks(10),
   fixtures.mergeBook<FulfillableBook>({
     status: "fulfillable",
-    fulfillmentLinks: [fixtures.fulfillmentLink],
+    fulfillmentLinks: [fixtures.epubFulfillmentLink],
     revokeUrl: "/revoke-10",
     id: "book 10",
     title: "Book Title 10",
@@ -67,7 +67,7 @@ const books: FulfillableBook[] = [
   }),
   fixtures.mergeBook<FulfillableBook>({
     status: "fulfillable",
-    fulfillmentLinks: [fixtures.fulfillmentLink],
+    fulfillmentLinks: [fixtures.epubFulfillmentLink],
     revokeUrl: "/revoke-11",
     id: "book 11",
     title: "Book Title 11",
