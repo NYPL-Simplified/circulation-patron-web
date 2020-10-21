@@ -38,19 +38,14 @@ test("Renders", () => {
   expect(book1).toBeInTheDocument();
 });
 
-test("renders breadcrumbs with 0 books", () => {
+test("Renders no lane if the lane has 0 books", () => {
   const withNoBooks = {
     ...laneData,
     books: []
   };
   const utils = render(<Lane lane={withNoBooks} />);
 
-  // it should just show the breadcrumb
-  const breadcrumb = utils.getByText("my lane");
-  expect(breadcrumb).toBeInTheDocument();
-
-  // there should be no li elements
-  expect(utils.getByTestId("lane-list")).toBeEmptyDOMElement();
+  expect(utils.container).toBeEmptyDOMElement();
 });
 
 test("filters books", () => {
@@ -74,4 +69,11 @@ test("more button navigates to the right link", () => {
     "href",
     "/testlib/collection/http%3A%2F%2Flink-to-lane"
   );
+});
+
+test("renders a see more card", () => {
+  const utils = render(<Lane lane={laneData} />);
+
+  const seeMoreCard = utils.getByRole("link", { name: "See All my lane" });
+  expect(seeMoreCard).toBeInTheDocument();
 });

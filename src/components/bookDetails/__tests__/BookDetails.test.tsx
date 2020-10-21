@@ -164,7 +164,7 @@ describe("book details page", () => {
     });
     expect(utils.getByText("Recommendations")).toBeInTheDocument();
     expect(
-      utils.getByRole("heading", { name: "Jane Austen" })
+      utils.getByRole("heading", { name: "Lane Title" })
     ).toBeInTheDocument();
   });
 });
