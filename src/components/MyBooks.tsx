@@ -29,6 +29,7 @@ function sortBooksByLoanExpirationDate(books: AnyBook[]) {
     // if both have defined availabilities, sort by date
     if (aDate < bDate) return -1;
     if (aDate > bDate) return 1;
+    // if both dates are the same, sort by title
     return compareTitles(a, b);
   });
 }
