@@ -6,7 +6,8 @@ import {
   FulfillmentLink,
   OnHoldBook,
   ReservableBook,
-  ReservedBook
+  ReservedBook,
+  UnsupportedBook
 } from "interfaces";
 import merge from "deepmerge";
 
@@ -184,6 +185,12 @@ export const epubFulfillmentLink: FulfillmentLink = {
   supportLevel: "show"
 };
 
+export const pdfFulfillmentLink: FulfillmentLink = {
+  contentType: "application/pdf",
+  url: "/pdf",
+  supportLevel: "show"
+};
+
 export const adobeEpubFulfillmentLink: FulfillmentLink = {
   contentType: "application/epub+zip",
   indirectionType: "application/vnd.adobe.adept+xml",
@@ -197,11 +204,23 @@ export const axisnowFulfillmentLink: FulfillmentLink = {
   url: "/axisnow"
 };
 
+export const externalReadFulfillmentLink: FulfillmentLink = {
+  contentType:
+    'text/html;profile="http://librarysimplified.org/terms/profiles/streaming-media"',
+  supportLevel: "show",
+  url: "/read-online"
+};
+
 export const fulfillableBook: FulfillableBook = {
   ...book,
   status: "fulfillable",
   revokeUrl: "/revoke",
-  fulfillmentLinks: [fulfillmentLink]
+  fulfillmentLinks: [epubFulfillmentLink]
+};
+
+export const unsupportedBook: UnsupportedBook = {
+  ...book,
+  status: "unsupported"
 };
 
 export default book;

@@ -7,6 +7,8 @@ import { AuthModalProvider } from "../src/auth/AuthModalContext";
 import makeTheme from "../src/theme";
 import {libraryData} from "../src/test-utils/fixtures/library"
 import { configDecorator } from "./config-mock";
+import { swrDecorator } from "./swr-mock";
+import { nextRouterDecorator } from "./next-router-mock";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -27,12 +29,12 @@ export const user: UserState = {
 };
 
 export const decorators = [
+  nextRouterDecorator,
+  swrDecorator,
   configDecorator,
-  (Story, ctx) => {
-    console.log(ctx)
+  (Story: any, ctx: any) => {
     const theme = makeTheme(libraryData.colors);
     const library = libraryData;
-    // const user = fixtures.user;
     const showModal = () => console.log("show")
     return (
       <ThemeProvider theme={theme}>

@@ -9,8 +9,8 @@ export let APP_CONFIG = defaultMock;
 export function configDecorator(story, { parameters }) {
   if (parameters && parameters.config) {
     APP_CONFIG = {
+      ...defaultMock,
       ...parameters.config,
-      ...defaultMock
     }
   }
   return story();  
