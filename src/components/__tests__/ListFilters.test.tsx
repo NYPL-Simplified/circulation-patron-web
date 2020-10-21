@@ -116,7 +116,11 @@ test("does redirect when selected", () => {
 
   expect(mockedRouter.push).toHaveBeenCalledTimes(1);
   expect(mockedRouter.push).toHaveBeenCalledWith(
-    "/testlib/collection/http%3A%2F%2Ftitle"
+    "/testlib/collection/http%3A%2F%2Ftitle",
+    undefined,
+    {
+      shallow: true
+    }
   );
 });
 
@@ -186,7 +190,11 @@ describe("Format filters", () => {
     userEvent.selectOptions(select, "All");
     expect(mockPush).toHaveBeenCalledTimes(1);
     expect(mockPush).toHaveBeenCalledWith(
-      "/testlib/collection/http%3A%2F%2Fall"
+      "/testlib/collection/http%3A%2F%2Fall",
+      undefined,
+      {
+        shallow: true
+      }
     );
   });
 });
