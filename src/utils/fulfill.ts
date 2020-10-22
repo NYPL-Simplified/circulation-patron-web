@@ -7,7 +7,6 @@ import {
   MediaSupportLevel,
   OPDS1
 } from "interfaces";
-import { AXISNOW_DECRYPT } from "utils/env";
 import { typeMap } from "utils/file";
 
 /**
@@ -93,10 +92,6 @@ export function getFulfillmentDetails(
       };
 
     case OPDS1.AxisNowWebpubMediaType:
-      // you can only read these if you can decrypt them.
-      if (!AXISNOW_DECRYPT) {
-        return { type: "unsupported" };
-      }
       return {
         type: "read-online-internal",
         id: link.url,

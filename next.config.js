@@ -5,7 +5,6 @@ const {
   BugsnagBuildReporterPlugin,
   BugsnagSourceMapUploaderPlugin
 } = require("webpack-bugsnag-plugins");
-const path = require("path");
 
 const APP_VERSION = require("./package.json").version;
 
