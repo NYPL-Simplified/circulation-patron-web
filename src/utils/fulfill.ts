@@ -93,8 +93,8 @@ export function getFulfillmentFromLink(link: FulfillmentLink): AnyFullfillment {
       };
 
     case OPDS1.AxisNowWebpubMediaType:
-      if (!AXISNOW_DECRYPT){
-        return { type: "unsupported" }
+      if (!AXISNOW_DECRYPT) {
+        return { type: "unsupported" };
       }
       return {
         type: "read-online-internal",
