@@ -18,6 +18,75 @@ jobs:
       CI: true
     steps:
       - uses: actions/checkout@v2
+      - id: nvmrc
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+      - name: Use Node Version from nvmrc
+        uses: actions/setup-node@v1
+        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
+      - id: nvmrc
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+      - name: Use Node Version from nvmrc
+        uses: actions/setup-node@v1
+        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      
+      - name: Install Dependencies
+        run: npm install1
+
+      - name: Typecheck
+        run: node_modules/typescript/bin/tsc --noEmit
+
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@v2
         with:
           submodules: true
           token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
@@ -44,48 +113,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
         
-      - name: Lint
-        run: npm run lint
-
-  typecheck:
-    name: Typecheck
-    runs-on: ubuntu-latest
-    env:
-      CI: true
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
-      - id: nvmrc
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-
-      - name: Use Node Version from nvmrc
-        uses: actions/setup-node@v1
-        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
-      - name: Cache and install node modules
-        uses: bahmutov/npm-install@v1
-      - name: Typecheck
-        run: node_modules/typescript/bin/tsc --noEmit
-
-  test:
-    name: Test & Coverage
-    runs-on: ubuntu-latest
-    env:
-      CI: true
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
-      - id: nvmrc
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-
-      - name: Use Node Version from nvmrc
-        uses: actions/setup-node@v1
-        with: { node-version: "${{ steps.nvmrc.outputs.NODE_VERSION }}" }
-      - name: Cache and install node modules
-        uses: bahmutov/npm-install@v1
       - name: Test
         run: npm run test:ci -- --coverage
       - name: Coveralls Report
