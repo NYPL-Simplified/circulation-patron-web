@@ -75,9 +75,8 @@ The application will start at the base URL of `localhost:3000`.
 This app supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/NYPL-Simplified/axisnow-access-control-web)
 
 To run with decryption:  
-- Set `axisnow_decrypt=true` in your app's `config.yml` file.
-- Run `git submodule update`
-- Verify that `axisnow-access-control-web` folder exists.  
+- Set `NEXT_PUBLIC_AXISNOW_DECRYPT=true` in your env.
+- Run `npm login --registry=https://npm.pkg.github.com`. You will need a Github Personal Access Token to use as your password.
 - Run `npm install` as normal.
 
 ### ENV Vars and Building
@@ -190,6 +189,16 @@ When you have code changes you wish to review locally, you will need to build a 
    ```
 
 If you wanted to customize the image, you could create an additional Dockerfile (e.g., Dockerfile.second) and simply specify its name in the docker build commands. The Docker file you specify will guide the image build. For this image, the build takes about 4-6 minutes, depending on your Internet speed and load on the Node package servers, to complete the final image. Eg: `docker build -f Dockerfile.second -t patronweb .`
+
+### Building With AxisNow Decryptor
+
+To build the docker image with the AxisNow Decryptor included, you must provide a `github_token` build arg to the docker build command:
+
+```
+docker build --build-arg github_token=xxx .
+```
+
+This will set the correct permissions for when the app runs `npm install` while building the image.
 
 ### Running the docker container
 
