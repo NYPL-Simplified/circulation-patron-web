@@ -48,3 +48,6 @@ jobs:
           repository: nypl/patron-web
           tags: ${{steps.autotagger.outputs.version}}, latest
           add_git_labels: true
+          # allows us to install the private axisnow package
+          build-args: |
+            github_token=${{ secrets.GH_PACKAGES_TOKEN }}
