@@ -75,7 +75,7 @@ jobs:
             ${{ runner.os }}-
       
       - name: Install Dependencies
-        run: npm install1
+        run: npm install
 
       - name: Typecheck
         run: node_modules/typescript/bin/tsc --noEmit
@@ -112,7 +112,7 @@ jobs:
       
       - name: Install Dependencies
         run: npm install
-        
+
       - name: Test
         run: npm run test:ci -- --coverage
       - name: Coveralls Report
