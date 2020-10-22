@@ -8,11 +8,24 @@ const {
 
 const APP_VERSION = require("./package.json").version;
 
+/**
+ * Set the AXISNOW_DECRYPT variable based on whether the package is available.
+ */
+let AXISNOW_DECRYPT = false;
+try {
+  const Decryptor = require("@nypl-simplified-packages/axisnow-access-control-web");
+  if (Decryptor) AXISNOW_DECRYPT = true;
+  console.log("AxisNow Decryptor is available.");
+} catch (e) {
+  console.log("AxisNow Decryptor is not available.");
+}
+
 const config = {
   env: {
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
-    APP_VERSION
+    APP_VERSION,
+    AXISNOW_DECRYPT
   },
   webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
@@ -47,7 +60,7 @@ const config = {
     });
 
     // ignore the axisnow decryptor if we don't have access
-    if (process.env.NEXT_PUBLIC_AXISNOW_DECRYPT !== "true") {
+    if (!AXISNOW_DECRYPT) {
       console.log("Building without AxisNow Decryption");
       config.plugins.push(
         new webpack.IgnorePlugin(
