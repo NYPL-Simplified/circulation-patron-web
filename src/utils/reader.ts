@@ -15,7 +15,7 @@ import {
 } from "library-simplified-webpub-viewer";
 import fetchWithHeaders from "dataflow/fetch";
 import ApplicationError from "errors";
-import Decryptor from "@nypl/axisnow-access-control-web";
+import Decryptor from "@nypl-simplified-packages/axisnow-access-control-web";
 
 export default async function reader(
   bookUrl: string,

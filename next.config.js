@@ -31,25 +31,6 @@ const config = {
       };
     }
 
-    // stub out the axisnow decryptor if we don't have access to it
-    if (process.env.NEXT_PUBLIC_AXISNOW_DECRYPT === "true") {
-      console.log("Running with AxisNow Decryption");
-      // make sure it works so we fail at build time if it's not there
-      try {
-        const _Decryptor = require("@nypl/axisnow-access-control-web");
-      } catch (e) {
-        throw new Error(
-          "Failed to require @nypl/axisnow-access-control-web. Make sure you have access, or run the app without the NEXT_PUBLIC_AXISNOW_ACCESS_CONTROL_WEB environment variable.",
-          e
-        );
-      }
-    } else {
-      config.resolve.alias["@nypl/axisnow-access-control-web"] = path.resolve(
-        __dirname,
-        "src/utils/stub-decryptor"
-      );
-    }
-
     // add bugsnag if we are not in dev
     if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
       const config = {
