@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import { H1 } from "./Text";
@@ -5,6 +6,7 @@ import { SystemStyleObject } from "@styled-system/css";
 import Link from "next/link";
 import { getLibrarySlugs } from "dataflow/getLibraryData";
 import { useRouter } from "next/router";
+import extractParam from "dataflow/utils";
 
 const statusCodes: { [code: number]: string } = {
   400: "Bad Request",
@@ -29,23 +31,28 @@ const ErrorComponent = ({
     : "An unexpected error has occurred";
 
   const router = useRouter();
-  const isRoot = router.asPath === "/";
+  const library = extractParam(router.query, "library");
 
   return (
-    <>
-      <H1 sx={{ fontSize: 3, textAlign: `center` }}>
-        Error{`: ${errorTitle}`}
+    <div
+      sx={{
+        p: [3, 4]
+      }}
+    >
+      <H1>
+        {statusCode} Error: {errorTitle}
       </H1>
-      <p sx={{ textAlign: `center` }}>
-        {statusCode
-          ? `A ${statusCode} error occurred on server`
-          : "An error occurred"}
-      </p>
-      <p sx={{ textAlign: `center` }}>
+      <p>
         {detail && `${detail}`} <br />
       </p>
-      {isRoot && <LibraryList />}
-    </>
+      {library ? (
+        <Link href={`/${library}`}>
+          <a>Return Home</a>
+        </Link>
+      ) : (
+        <LibraryList />
+      )}
+    </div>
   );
 };
 
@@ -87,8 +94,6 @@ const LibraryList: React.FC = () => {
               }}
               href={`/${lib}`}
             >
-              {/* nextjs passes the href when cloning the element */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a>/{lib}</a>
             </Link>
           </li>
