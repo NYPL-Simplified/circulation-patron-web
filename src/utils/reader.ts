@@ -15,7 +15,6 @@ import {
 } from "library-simplified-webpub-viewer";
 import fetchWithHeaders from "dataflow/fetch";
 import ApplicationError from "errors";
-import Decryptor from "@nypl-simplified-packages/axisnow-access-control-web";
 
 export default async function reader(
   bookUrl: string,
@@ -82,7 +81,10 @@ async function initBookSettings(
   const paginator = new ColumnsPaginatedBookView();
   const scroller = new ScrollingBookView();
 
-  if (!Decryptor) {
+  let Decryptor: any = null;
+  try {
+    Decryptor = require("@nypl-simplified-packages/axisnow-access-control-web");
+  } catch (e) {
     throw new ApplicationError(
       "The required decryptor for this resource could not be loaded."
     );

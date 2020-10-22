@@ -12,7 +12,7 @@ declare module "@nypl-simplified-packages/axisnow-access-control-web" {
     decryptUrl(resourceUrl: string): Promise<Uint8Array>;
   }
 
-  declare const defaultExport: undefined | typeof Decryptor;
+  declare const defaultExport: typeof Decryptor;
 
   export default defaultExport;
 }
