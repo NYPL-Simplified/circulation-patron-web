@@ -47,7 +47,7 @@ const config = {
     });
 
     // ignore the axisnow decryptor if we don't have access
-    if (!process.env.NEXT_PUBLIC_AXISNOW_DECRYPT) {
+    if (process.env.NEXT_PUBLIC_AXISNOW_DECRYPT !== "true") {
       console.log("Building without AxisNow Decryption");
       config.plugins.push(
         new webpack.IgnorePlugin(

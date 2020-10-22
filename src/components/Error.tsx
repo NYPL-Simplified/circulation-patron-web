@@ -4,6 +4,7 @@ import { H1 } from "./Text";
 import { SystemStyleObject } from "@styled-system/css";
 import Link from "next/link";
 import { getLibrarySlugs } from "dataflow/getLibraryData";
+import { useRouter } from "next/router";
 
 const statusCodes: { [code: number]: string } = {
   400: "Bad Request",
@@ -27,7 +28,8 @@ const ErrorComponent = ({
     ? statusCodes[statusCode]
     : "An unexpected error has occurred";
 
-  const libraries = getLibrarySlugs();
+  const router = useRouter();
+  const isRoot = router.asPath === "/";
 
   return (
     <>
@@ -42,7 +44,7 @@ const ErrorComponent = ({
       <p sx={{ textAlign: `center` }}>
         {detail && `${detail}`} <br />
       </p>
-      {libraries && <LibraryList libraries={libraries} />}
+      {isRoot && <LibraryList />}
     </>
   );
 };
@@ -64,7 +66,11 @@ const buttonBase: SystemStyleObject = {
   bg: "transparent"
 };
 
-const LibraryList: React.FC<{ libraries: string[] }> = ({ libraries }) => {
+const LibraryList: React.FC = () => {
+  const libraries = getLibrarySlugs();
+
+  if (!libraries || libraries.length === 0) return null;
+
   return (
     <div>
       <h3>Did you mean to visit one of these?</h3>
