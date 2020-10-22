@@ -236,7 +236,7 @@ describe("ReservedBook", () => {
   });
 });
 
-describe("available to access book", () => {
+describe("FulfillableBook", () => {
   const downloadableBook = fixtures.mergeBook<FulfillableBook>({
     status: "fulfillable",
     revokeUrl: "/revoke",
@@ -256,6 +256,38 @@ describe("available to access book", () => {
       status: "available",
       until: "2020-06-18"
     }
+  });
+
+  test("displays FulfillmentButton if only one possibility", () => {
+    const book = fixtures.mergeBook<FulfillableBook>({
+      status: "fulfillable",
+      revokeUrl: "/revoke",
+      fulfillmentLinks: [
+        {
+          url: "/pdf-link",
+          supportLevel: "show",
+          contentType: "application/pdf"
+        },
+        {
+          url: "/pdf-link",
+          supportLevel: "unsupported",
+          contentType: "application/pdf"
+        }
+      ],
+      availability: {
+        status: "available",
+        until: "2020-06-18"
+      }
+    });
+    const utils = render(<BookListItem book={book} />);
+    expect(
+      utils.getByRole("button", { name: "Download PDF" })
+    ).toBeInTheDocument();
+  });
+
+  test("doesn't show FulfillmentButton if multiple options", () => {
+    const utils = render(<BookListItem book={downloadableBook} />);
+    expect(utils.queryByText("Download PDF")).not.toBeInTheDocument();
   });
 
   test("displays correct title and subtitle and view details", () => {

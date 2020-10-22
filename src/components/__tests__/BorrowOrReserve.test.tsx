@@ -121,7 +121,7 @@ test("catches unrecognized fetch errors", async () => {
   // shows the error, button resets.
   await waitFor(() => {
     expect(
-      utils.getByText("Error: An error occurred while borrowing this book.")
+      utils.getByText("Error: An unknown error occurred.")
     ).toBeInTheDocument();
     expect(utils.queryByText("Borrowing...")).not.toBeInTheDocument();
     expect(utils.getByRole("button", { name: "Borrow" })).toBeInTheDocument();

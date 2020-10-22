@@ -78,6 +78,7 @@ export const book: Book = {
   published: "February 29, 2016",
   categories: ["Children", "10-12", "Fiction", "Adventure", "Fantasy"],
   raw: {
+    $: { "schema:additionalType": { value: "http://schema.org/EBook" } },
     category: [
       {
         $: {

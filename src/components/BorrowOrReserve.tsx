@@ -26,7 +26,7 @@ const BorrowOrReserve: React.FC<{
       >
         <Text variant="text.body.bold">{buttonLabel}</Text>
       </Button>
-      {error && <Text sx={{ color: "ui.error" }}>Error: {error}</Text>}
+      {error && <Text sx={{ color: "ui.error" }}>{error}</Text>}
     </div>
   );
 };

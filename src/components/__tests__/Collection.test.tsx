@@ -66,7 +66,7 @@ test("displays lanes when present", () => {
   const utils = render(<Collection />);
 
   // expect there to be a lane with books
-  const laneTitle = utils.getByText("my lane");
+  const laneTitle = utils.getByRole("heading", { name: "Lane Title" });
   expect(laneTitle).toBeInTheDocument();
   expect(utils.getByText(fixtures.makeBook(0).title)).toBeInTheDocument();
   expect(utils.getByText("Book 0 author")).toBeInTheDocument();
@@ -92,7 +92,7 @@ test("prefers lanes over books", () => {
 
   // expect the lane title to be rendered, indicating it chose
   // lanes over books
-  const laneTitle = utils.getByText("my lane");
+  const laneTitle = utils.getByRole("heading", { name: "Lane Title" });
   expect(laneTitle).toBeInTheDocument();
 });
 

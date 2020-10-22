@@ -20,7 +20,16 @@ const Recommendations: React.FC<{ book: AnyBook }> = ({ book }) => {
 
   // get the lanes data from state
   const lanes = recommendations?.lanes ?? [];
+
+  // don't show if there are no lanes
   if (!isLoading && lanes.length === 0) return null;
+  // also don't show if the lanes are empty or only contain 1
+  // book. That 1 book is usually the book we are looking at.
+  const hasBooks = lanes.reduce(
+    (prev, lane) => (lane.books.length > 1 ? true : prev),
+    false
+  );
+  if (!isLoading && !hasBooks) return null;
 
   return (
     <section

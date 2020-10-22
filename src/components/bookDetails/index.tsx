@@ -82,7 +82,7 @@ export const BookDetails: React.FC = () => {
               by&nbsp;
               {book.authors?.join(", ") ?? "Unknown"}
             </Text>
-            <MediumIndicator book={book} />
+            {APP_CONFIG.showMedium && <MediumIndicator book={book} />}
             <FulfillmentCard book={book} sx={{ mt: 3 }} />
             <Summary book={book} />
             <div sx={{ mt: 2 }}>

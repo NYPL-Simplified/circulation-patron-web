@@ -1,11 +1,17 @@
 ## CHANGELOG
+### UNRELEASED
+- Calls reader 0.2.4 with dyslexia friendly font
 
-### Unreleased Changes
+### v3.0.1
+- hotfix: Checkout the master branch with submodules when building production docker container
+
+### v3.0.0
 
 - BREAKING CHANGE: Config file is now a yml file and can configure media support and other env vars. See readme for more info.
 - BREAKING CHANGE: Remove `SHORTEN_URLS` env var. Url parameters will no longer be shortened. We will look for a server solution to pretty urls in the future.
 - Feature: App now chooses the first borrow link with supported child formats, instead of just the first borrow link to display to user.
 - Feature: Add support for Clever auth providers.
+- Feature: Add Webpub Viewer for AxisNow formats.
 - Redesign: in Auth Modal display AuthProvider logos as selectable buttons when there are 2-4 AuthProviders instead of Combobox
 - Feature: Add support for tracking app events via Google Tag Manager.
 - Fix: Update CleverAuth button to use AnchorButton for a11y and semantic reasons
