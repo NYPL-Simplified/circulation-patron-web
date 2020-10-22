@@ -82,12 +82,14 @@ async function initBookSettings(
   const scroller = new ScrollingBookView();
 
   let Decryptor: any = null;
-  try {
-    Decryptor = require("@nypl-simplified-packages/axisnow-access-control-web");
-  } catch (e) {
-    throw new ApplicationError(
-      "The required decryptor for this resource could not be loaded."
-    );
+  if (process.env.NEXT_PUBLIC_AXISNOW_DECRYPT) {
+    try {
+      Decryptor = require("@nypl-simplified-packages/axisnow-access-control-web");
+    } catch (e) {
+      throw new ApplicationError(
+        "The required decryptor for this resource could not be loaded."
+      );
+    }
   }
   const decryptor = await Decryptor.createDecryptor(decryptorParams);
 

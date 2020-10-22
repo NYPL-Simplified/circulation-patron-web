@@ -46,6 +46,18 @@ const config = {
       use: [{ loader: "val-loader" }]
     });
 
+    // ignore the axisnow decryptor if we don't have access
+    if (!process.env.NEXT_PUBLIC_AXISNOW_DECRYPT) {
+      console.log("Building without AxisNow Decryption");
+      config.plugins.push(
+        new webpack.IgnorePlugin(
+          /@nypl-simplified-packages\/axisnow-access-control-web/
+        )
+      );
+    } else {
+      console.log("Building with AxisNow Decryption");
+    }
+
     return config;
   }
 };
