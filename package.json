@@ -27,6 +27,7 @@
     "@csstools/normalize.css": "^10.1.0",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.1",
     "@nypl/design-system-react-components": "^0.7.2",
     "@nypl/dgx-svg-icons": "^0.3.12",
     "@theme-ui/color": "^0.4.0-rc.3",
