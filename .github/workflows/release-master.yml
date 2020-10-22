@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          submodules: true
+          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
+          
         # the tag will match the package.json version (eg. v1.0.0)
       - name: Tag
         id: autotagger
