@@ -2,6 +2,9 @@
 ### UNRELEASED
 - Calls reader 0.2.4 with dyslexia friendly font
 
+### v3.0.1
+- hotfix: Checkout the master branch with submodules when building production docker container
+
 ### v3.0.0
 
 - BREAKING CHANGE: Config file is now a yml file and can configure media support and other env vars. See readme for more info.
