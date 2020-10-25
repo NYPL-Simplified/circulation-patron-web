@@ -58,7 +58,7 @@
     "theme-ui": "^0.3.1"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.1"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^9.5.3",
