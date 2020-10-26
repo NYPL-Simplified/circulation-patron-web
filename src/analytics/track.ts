@@ -1,3 +1,5 @@
+import Bugsnag from "@bugsnag/js";
+import { APP_CONFIG } from "config";
 /* eslint-disable camelcase */
 import { NextWebVitalsMetric } from "next/app";
 
@@ -53,7 +55,14 @@ function webVitals({ id, name, value, label }: NextWebVitalsMetric) {
   });
 }
 
+function error(e: Error) {
+  if (APP_CONFIG.bugsnagApiKey) {
+    Bugsnag.notify(e);
+  }
+}
+
 export default {
+  error,
   webVitals,
   pageview,
   openBook

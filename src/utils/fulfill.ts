@@ -75,7 +75,8 @@ export function getFulfillmentFromLink(link: FulfillmentLink): AnyFullfillment {
     case OPDS1.MobiPocketMediaType:
     case OPDS1.EpubMediaType:
       const typeName = typeMap[contentType].name;
-      const modifier = indirectionType === OPDS1.AdeptMediaType ? "Adobe " : "";
+      const modifier =
+        indirectionType === OPDS1.AdobeDrmMediaType ? "Adobe " : "";
       return {
         id: link.url,
         getUrl: constructGetUrl(indirectionType, contentType, link.url),
