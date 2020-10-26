@@ -9,23 +9,13 @@ import { useRouter } from "next/router";
 import extractParam from "dataflow/utils";
 import { OPDS1 } from "interfaces";
 
-const statusCodes: { [code: number]: string } = {
-  400: "Bad Request",
-  404: "Page Not Found",
-  405: "Method Not Allowed",
-  500: "Internal Server Error"
-};
-
-const ErrorComponent: React.FC<{ info: OPDS1.ProblemDocument }> = ({
-  info: { title, status, detail }
+const ErrorComponent: React.FC<{ error?: OPDS1.ProblemDocument }> = ({
+  error = {}
 }) => {
-  const errorTitle = title
-    ? title
-    : status
-    ? statusCodes[status]
-    : "An unexpected error has occurred";
+  const { title, status, detail } = error;
 
   const router = useRouter();
+  const isRoot = router.asPath === "/";
   const library = extractParam(router.query, "library");
 
   return (
@@ -35,18 +25,18 @@ const ErrorComponent: React.FC<{ info: OPDS1.ProblemDocument }> = ({
       }}
     >
       <H1>
-        {status} Error: {errorTitle}
+        {status} Error: {title}
       </H1>
       <p>
         {detail && `${detail}`} <br />
       </p>
-      {library ? (
+      {isRoot ? (
+        <LibraryList />
+      ) : library ? (
         <Link href={`/${library}`}>
           <a>Return Home</a>
         </Link>
-      ) : (
-        <LibraryList />
-      )}
+      ) : null}
     </div>
   );
 };
