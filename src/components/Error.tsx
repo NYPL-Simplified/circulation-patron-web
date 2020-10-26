@@ -10,9 +10,9 @@ import extractParam from "dataflow/utils";
 import { OPDS1 } from "interfaces";
 
 const ErrorComponent: React.FC<{ error?: OPDS1.ProblemDocument }> = ({
-  error = {}
+  error
 }) => {
-  const { title, status, detail } = error;
+  const { title = "Something went wrong", status, detail } = error ?? {};
 
   const router = useRouter();
   const isRoot = router.asPath === "/";
