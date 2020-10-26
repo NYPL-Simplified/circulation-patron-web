@@ -10,7 +10,6 @@ import {
   bookIsOnHold,
   bookIsFulfillable
 } from "utils/book";
-import Button from "../Button";
 import withErrorBoundary from "../ErrorBoundary";
 import Stack from "components/Stack";
 import { Text } from "components/Text";
@@ -29,6 +28,7 @@ import {
   ReservedBook
 } from "interfaces";
 import { APP_CONFIG } from "config";
+import CancelOrReturn from "components/CancelOrReturn";
 
 const FulfillmentCard: React.FC<{ book: AnyBook }> = ({ book }) => {
   return (
@@ -144,9 +144,10 @@ const BorrowOrReserveBlock: React.FC<{
 
 const Reserved: React.FC<{ book: ReservedBook }> = ({ book }) => {
   const position = book.holds?.position;
+
   return (
-    <>
-      <Text variant="text.callouts.bold">You have this book on hold.</Text>
+    <Stack direction="column" spacing={0} sx={{ my: 3 }}>
+      <Text variant="text.callouts.bold">Reserved</Text>
       {!!position && (
         <Text
           variant="text.body.italic"
@@ -156,10 +157,13 @@ const Reserved: React.FC<{ book: ReservedBook }> = ({ book }) => {
           Your hold position is: {position}.
         </Text>
       )}
-      <Button size="lg" disabled aria-label="Reserved" role="button">
-        <Text variant="text.body.bold">Reserved</Text>
-      </Button>
-    </>
+      <CancelOrReturn
+        url={book.revokeUrl}
+        text="Cancel Reservation"
+        loadingText="Cancelling..."
+        id={book.id}
+      />
+    </Stack>
   );
 };
 
@@ -188,11 +192,25 @@ const AccessCard: React.FC<{
   const isFulfillable = fulfillments.length > 0;
   const redirectUser = shouldRedirectToCompanionApp(links);
 
+  const companionApp =
+    APP_CONFIG.companionApp === "openebooks" ? "Open eBooks" : "SimplyE";
+
   return (
-    <Stack direction="column" sx={{ my: 3 }}>
-      <AccessHeading
-        redirectToCompanionApp={redirectUser}
-        subtitle={subtitle}
+    <Stack direction="column" sx={{ my: 3, alignItems: "flex-start" }}>
+      <Stack spacing={0} direction="column">
+        <Stack>
+          {redirectUser && <SvgPhone sx={{ fontSize: 24 }} />}
+          <Text variant="text.body.bold">
+            Ready to read{redirectUser ? ` in ${companionApp}` : ""}!
+          </Text>
+        </Stack>
+        <Text>{subtitle}</Text>
+      </Stack>
+      <CancelOrReturn
+        url={book.revokeUrl}
+        loadingText="Returning..."
+        id={book.id}
+        text="Return"
       />
       {isFulfillable && (
         <>
@@ -213,34 +231,6 @@ const AccessCard: React.FC<{
           </Stack>
         </>
       )}
-    </Stack>
-  );
-};
-
-const AccessHeading: React.FC<{
-  subtitle: string;
-  redirectToCompanionApp: boolean;
-}> = ({ subtitle, redirectToCompanionApp }) => {
-  const companionApp =
-    APP_CONFIG.companionApp === "openebooks" ? "Open eBooks" : "SimplyE";
-
-  if (redirectToCompanionApp) {
-    return (
-      <Stack direction="column">
-        <Stack>
-          <SvgPhone sx={{ fontSize: 24 }} />
-          <Text variant="text.body.bold">
-            You&apos;re ready to read this book in {companionApp}!
-          </Text>
-        </Stack>
-        <Text>{subtitle}</Text>
-      </Stack>
-    );
-  }
-  return (
-    <Stack spacing={0} direction="column">
-      <Text variant="text.body.bold">Ready to read!</Text>
-      <Text>{subtitle}</Text>
     </Stack>
   );
 };

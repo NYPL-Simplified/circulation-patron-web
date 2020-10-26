@@ -20,6 +20,7 @@
 - Add: Remove books from local storage when a user logs out.
 - Add: Optional error reporting via [Bugsnag](https://www.bugsnag.com/).
 - Refactor: Complete rewrite of the data layer, removing opds-web-client and adding [swr](https://swr.vercel.app/) for data fetching. Includes many UX improvments.
+- Feature: Add the ability to return books and cancel holds
 
 # 2.3.0
 
