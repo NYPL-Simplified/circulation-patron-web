@@ -15,10 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          submodules: true
-          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
           
         # the tag will match the package.json version (eg. v1.0.0)
       - name: Tag
@@ -52,3 +48,6 @@ jobs:
           repository: nypl/patron-web
           tags: ${{steps.autotagger.outputs.version}}, latest
           add_git_labels: true
+          # allows us to install the private axisnow package
+          build-args: |
+            github_token=${{ secrets.GH_PACKAGES_TOKEN }}
