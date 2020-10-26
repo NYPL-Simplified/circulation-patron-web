@@ -7,27 +7,22 @@ import Link from "next/link";
 import { getLibrarySlugs } from "dataflow/getLibraryData";
 import { useRouter } from "next/router";
 import extractParam from "dataflow/utils";
+import { OPDS1 } from "interfaces";
 
 const statusCodes: { [code: number]: string } = {
   400: "Bad Request",
-  404: "This page could not be found",
+  404: "Page Not Found",
   405: "Method Not Allowed",
   500: "Internal Server Error"
 };
 
-const ErrorComponent = ({
-  statusCode = 404,
-  title,
-  detail
-}: {
-  statusCode?: number | null;
-  title?: string;
-  detail?: string;
+const ErrorComponent: React.FC<{ info: OPDS1.ProblemDocument }> = ({
+  info: { title, status, detail }
 }) => {
   const errorTitle = title
     ? title
-    : statusCode
-    ? statusCodes[statusCode]
+    : status
+    ? statusCodes[status]
     : "An unexpected error has occurred";
 
   const router = useRouter();
@@ -40,7 +35,7 @@ const ErrorComponent = ({
       }}
     >
       <H1>
-        {statusCode} Error: {errorTitle}
+        {status} Error: {errorTitle}
       </H1>
       <p>
         {detail && `${detail}`} <br />
