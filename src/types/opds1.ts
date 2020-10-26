@@ -233,5 +233,5 @@ export type ProblemDocument = {
   detail: string;
   title: string;
   type?: string;
-  status: number;
+  status?: number;
 };

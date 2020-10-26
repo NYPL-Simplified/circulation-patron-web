@@ -5,26 +5,10 @@ import {
   OPDS1,
   SearchData
 } from "interfaces";
-import OPDSParser, { OPDSFeed, OPDSShelfLink } from "opds-feed-parser";
-import ApplicationError, { PageNotFoundError } from "errors";
+import { OPDSFeed, OPDSShelfLink } from "opds-feed-parser";
+import ApplicationError, { PageNotFoundError, ServerError } from "errors";
 import { flattenSamlMethod } from "utils/auth";
 import { APP_CONFIG } from "config";
-
-/**
- * Fetches an OPDSFeed with a given catalogUrl. Parses it into an OPDSFeed and
- * returns it.
- */
-export async function fetchCatalog(catalogUrl: string): Promise<OPDSFeed> {
-  try {
-    const catalogResponse = await fetch(catalogUrl);
-    const rawCatalog = await catalogResponse.text();
-    const parser = new OPDSParser();
-    const parsedCatalog = await parser.parse(rawCatalog);
-    return parsedCatalog as OPDSFeed;
-  } catch (e) {
-    throw new ApplicationError("Could not fetch catalog at: " + catalogUrl, e);
-  }
-}
 
 /**
  * Returns a function to construct a registry catalog link, which leads to a
@@ -121,16 +105,13 @@ export async function getCatalogRootUrl(librarySlug: string): Promise<string> {
 export async function fetchAuthDocument(
   url: string
 ): Promise<OPDS1.AuthDocument> {
-  try {
-    const response = await fetch(url);
-    const json = await response.json();
-    return json;
-  } catch (e) {
-    throw new ApplicationError(
-      "Could not fetch auth document at url: " + url,
-      e
-    );
+  const response = await fetch(url);
+  if (!response.ok) {
+    const details = await response.json();
+    throw new ServerError(url, response.status, details);
   }
+  const json = await response.json();
+  return json;
 }
 
 /**
