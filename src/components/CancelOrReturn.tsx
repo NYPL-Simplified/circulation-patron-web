@@ -47,7 +47,6 @@ const CancelOrReturn: React.FC<{
         onClick={() => cancelReservation(url)}
         loading={loading}
         loadingText={loadingText}
-        // size="lg"
         variant="ghost"
         color="ui.gray.light"
         sx={{
@@ -56,7 +55,7 @@ const CancelOrReturn: React.FC<{
           "&:hover,&:focus": { color: "ui.gray.dark" }
         }}
       >
-        <Text variant="text.body.bold">{text}</Text>
+        {text}
       </Button>
       {error && <Text>Error: {error}</Text>}
     </>

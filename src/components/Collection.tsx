@@ -47,8 +47,7 @@ export const Collection: React.FC<{
       sx={{
         flex: "1 1 auto",
         display: "flex",
-        flexDirection: "column",
-        bg: hasBooks ? "ui.gray.lightWarm" : "ui.white"
+        flexDirection: "column"
       }}
     >
       <Head>
