@@ -42,7 +42,7 @@ test("renders viewer div", () => {
   expect(document.getElementById("viewer")).toBeInTheDocument();
 });
 
-test("fetches params with token if run with NEXT_PUBLIC_AXIS_NOW_DECRYPT", async () => {
+test("fetches params with token if run with AXISNOW_DECRYPT", async () => {
   (env as any).AXISNOW_DECRYPT = "true";
   render(<WebpubViewer />, {
     router: { query: { bookUrl: "http://some-book.com" } }

@@ -46,11 +46,9 @@ const FulfillmentContent: React.FC<{
   if (bookIsBorrowable(book)) {
     return <BorrowOrReserve url={book.borrowUrl} isBorrow />;
   }
-
   if (bookIsReservable(book)) {
     return <BorrowOrReserve url={book.reserveUrl} isBorrow={false} />;
   }
-
   if (bookIsReserved(book)) {
     return (
       <CancelOrReturn
@@ -61,19 +59,12 @@ const FulfillmentContent: React.FC<{
       />
     );
   }
-
   if (bookIsOnHold(book)) {
     return <BorrowOrReserve url={book.borrowUrl} isBorrow />;
   }
-
   if (bookIsFulfillable(book)) {
     return <AccessCard links={book.fulfillmentLinks} book={book} />;
   }
-
-  return <Unsupported />;
-};
-
-const Unsupported: React.FC = () => {
   return (
     <Text>
       This title is not supported in this application, please try another.

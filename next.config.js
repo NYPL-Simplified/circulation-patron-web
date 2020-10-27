@@ -5,15 +5,27 @@ const {
   BugsnagBuildReporterPlugin,
   BugsnagSourceMapUploaderPlugin
 } = require("webpack-bugsnag-plugins");
-const path = require("path");
 
 const APP_VERSION = require("./package.json").version;
+
+/**
+ * Set the AXISNOW_DECRYPT variable based on whether the package is available.
+ */
+let AXISNOW_DECRYPT = false;
+try {
+  const Decryptor = require("@nypl-simplified-packages/axisnow-access-control-web");
+  if (Decryptor) AXISNOW_DECRYPT = true;
+  console.log("AxisNow Decryptor is available.");
+} catch (e) {
+  console.log("AxisNow Decryptor is not available.");
+}
 
 const config = {
   env: {
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
-    APP_VERSION
+    APP_VERSION,
+    AXISNOW_DECRYPT
   },
   webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
@@ -31,20 +43,6 @@ const config = {
       };
     }
 
-    // stub out the axisnow decryptor if we don't have access to it
-    if (process.env.NEXT_PUBLIC_AXISNOW_DECRYPT) {
-      console.log("Running with AxisNow Decryption");
-      config.resolve.alias.AxisNowDecryptor = path.resolve(
-        __dirname,
-        "axisnow-access-control-web/src/decryptor"
-      );
-    } else {
-      config.resolve.alias.AxisNowDecryptor = path.resolve(
-        __dirname,
-        "src/utils/stub-decryptor"
-      );
-    }
-
     // add bugsnag if we are not in dev
     if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
       const config = {
@@ -60,6 +58,18 @@ const config = {
       test: require.resolve("./src/config/load-config.js"),
       use: [{ loader: "val-loader" }]
     });
+
+    // ignore the axisnow decryptor if we don't have access
+    if (!AXISNOW_DECRYPT) {
+      console.log("Building without AxisNow Decryption");
+      config.plugins.push(
+        new webpack.IgnorePlugin(
+          /@nypl-simplified-packages\/axisnow-access-control-web/
+        )
+      );
+    } else {
+      console.log("Building with AxisNow Decryption");
+    }
 
     return config;
   }

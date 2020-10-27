@@ -94,7 +94,6 @@ export function getFulfillmentFromLink(link: FulfillmentLink): AnyFullfillment {
       };
 
     case OPDS1.AxisNowWebpubMediaType:
-      // you can only read these if you can decrypt them.
       if (!AXISNOW_DECRYPT) {
         return { type: "unsupported" };
       }

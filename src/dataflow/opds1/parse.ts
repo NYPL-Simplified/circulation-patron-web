@@ -128,10 +128,16 @@ function buildFulfillmentLink(feedUrl: string) {
  *  - It is locked in to Adobe ACS
  *  - It is an axisnow book
  *  - It comes from certain vendors
+ *
+ * We use a heuristic to determine when books can be returned. This may
+ * need to be updated in the future.
  */
 function canReturnFulfillableBook(links: OPDSAcquisitionLink[]): boolean {
   return !!links.map(parseFormat).find(link => {
-    // match if there is a link without indirection.
+    // no AxisNow
+    if (link.contentType === OPDS1.AxisNowWebpubMediaType) return false;
+    // match if there is otherwise a direct link. These won't be present
+    // if the book has been locked in to Adobe ACS
     if (!link.indirectionType) return true;
     // match if it has a link to read online externally.
     if (link.contentType === OPDS1.ExternalReaderMediaType) return true;
@@ -275,6 +281,9 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
       ...supportedFulfillmentLinks,
       ...openAccessLinks
     ];
+    if (book.title === "Apollo and the Battle of the Birds") {
+      console.log(acquisitionLinks);
+    }
     return {
       ...book,
       status: "fulfillable",
