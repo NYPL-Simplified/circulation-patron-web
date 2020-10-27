@@ -179,12 +179,9 @@ const Description: React.FC<{ book: AnyBook; className?: string }> = ({
 }) => {
   return (
     <div className={className}>
-      <Text
-        variant="text.body.italic"
-        dangerouslySetInnerHTML={{
-          __html: truncateString(stripHTML(book.summary ?? ""), 280)
-        }}
-      ></Text>
+      <Text variant="text.body.italic">
+        {truncateString(stripHTML(book.summary ?? ""), 280)}
+      </Text>
       <NavButton
         bookUrl={book.url}
         variant="link"
