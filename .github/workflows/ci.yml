@@ -11,6 +11,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  # changelog must be edited for every PR
   changelog:
     name: Has Changelog
     runs-on: ubuntu-latest
@@ -19,6 +20,7 @@ jobs:
         with:
           changeLogPath: 'CHANGELOG.md'
           skipLabel: 'no-changelog'
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
