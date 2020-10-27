@@ -78,7 +78,7 @@ const books: FulfillableBook[] = [
   }),
   fixtures.mergeBook<FulfillableBook>({
     status: "fulfillable",
-    fulfillmentLinks: [fixtures.fulfillmentLink],
+    fulfillmentLinks: [fixtures.epubFulfillmentLink],
     revokeUrl: "/revoke-12",
     id: "book 12",
     title: "Book Title 12",
