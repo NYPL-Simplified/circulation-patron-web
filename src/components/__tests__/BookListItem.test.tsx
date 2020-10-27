@@ -13,9 +13,9 @@ import {
 import { mergeBook, mockSetBook } from "test-utils/fixtures";
 
 function expectReadMore(utils: ReturnType<typeof render>) {
-  const button = utils.getByRole("link", { name: "Read more" });
-  expect(button).toBeInTheDocument();
-  expect(button).toHaveAttribute(
+  const link = utils.getByRole("link", { name: "Read more" });
+  expect(link).toBeInTheDocument();
+  expect(link).toHaveAttribute(
     "href",
     "/testlib/book/http%3A%2F%2Ftest-book-url"
   );

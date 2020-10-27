@@ -75,6 +75,17 @@ const books: FulfillableBook[] = [
       until: "Jan 1 2020",
       status: "available"
     }
+  }),
+  fixtures.mergeBook<FulfillableBook>({
+    status: "fulfillable",
+    fulfillmentLinks: [fixtures.fulfillmentLink],
+    revokeUrl: "/revoke-12",
+    id: "book 12",
+    title: "Book Title 12",
+    availability: {
+      until: "Jan 1 2020",
+      status: "available"
+    }
   })
 ];
 
@@ -113,5 +124,8 @@ test("sorts books", () => {
   });
   const bookNames = utils.queryAllByText(/Book Title/);
   expect(bookNames[0]).toHaveTextContent("Book Title 11");
-  expect(bookNames[1]).toHaveTextContent("Book Title 10");
+  expect(bookNames[1]).toHaveTextContent("Book Title 12");
+  expect(bookNames[2]).toHaveTextContent("Book Title 10");
+  expect(bookNames[3]).toHaveTextContent("Book Title 0");
+  expect(bookNames[4]).toHaveTextContent("Book Title 1");
 });

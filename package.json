@@ -1,6 +1,6 @@
 {
   "name": "simplified-circulation-patron-web",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "patron UI for Circulation Manager",
   "repository": {
     "type": "git",
@@ -58,6 +58,9 @@
     "swr": "^0.3.2",
     "system-font-css": "^2.0.2",
     "theme-ui": "^0.3.1"
+  },
+  "optionalDependencies": {
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

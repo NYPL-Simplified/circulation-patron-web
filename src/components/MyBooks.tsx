@@ -19,11 +19,24 @@ function sortBooksByLoanExpirationDate(books: AnyBook[]) {
   return books.sort((a, b) => {
     const aDate = availableUntil(a);
     const bDate = availableUntil(b);
+    // if there is no availability info for either, compare their titles
+    if (typeof aDate === "string" && typeof bDate === "string") {
+      return compareTitles(a, b);
+    }
+    // if only one has a defined availability, it goes on top
     if (typeof aDate === "string") return 1;
     if (typeof bDate === "string") return -1;
-    if (aDate <= bDate) return -1;
-    return 1;
+    // if both have defined availabilities, sort by date
+    if (aDate < bDate) return -1;
+    if (aDate > bDate) return 1;
+    // if both dates are the same, sort by title
+    return compareTitles(a, b);
   });
+}
+
+function compareTitles(a: AnyBook, b: AnyBook): 0 | -1 | 1 {
+  if (a.title > b.title) return 1;
+  return -1;
 }
 
 export const MyBooks: React.FC = () => {

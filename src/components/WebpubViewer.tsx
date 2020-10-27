@@ -7,7 +7,6 @@ import fetchWithHeaders from "dataflow/fetch";
 import extractParam from "dataflow/utils";
 import { PageNotFoundError, ServerError } from "errors";
 import useAuthModalContext from "auth/AuthModalContext";
-import { AXISNOW_DECRYPT } from "utils/env";
 
 const initializeReader = async (
   entryUrl: string,
@@ -15,7 +14,6 @@ const initializeReader = async (
   token: string
 ) => {
   const loadDecryptorParams = async (webpubManifestUrl: any) => {
-    if (!AXISNOW_DECRYPT) return;
     const response = await fetchWithHeaders(webpubManifestUrl, token);
     const data = await response.json();
     // there should never be a status code in the json

@@ -16,10 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          submodules: true
-          token: ${{ secrets.AXIS_NOW_ACCESS_TOKEN }}
 
       - id: nvmrc
         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
@@ -52,3 +48,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: nypl/patron-web:beta, nypl/patron-web:beta.${{ steps.get_sha.outputs.short_sha }}
+          # allows us to install the private axisnow package
+          build-args: |
+            github_token=${{ secrets.GH_PACKAGES_TOKEN }}

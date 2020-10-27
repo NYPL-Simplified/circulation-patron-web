@@ -4,7 +4,14 @@ FROM node:12.2.0-alpine as builder
 # to take advantage of layer caching
 ENV NPM_CONFIG_LOGLEVEL=warn
 COPY package*.json ./
-RUN npm ci
+COPY .npmrc ./
+COPY install-deps.sh ./
+# conditionally login to github package registry
+# and install dependencies
+ARG github_token=""
+RUN chmod +x ./install-deps.sh
+RUN sh ./install-deps.sh
+
 # then copy the rest of the files
 COPY . ./
 

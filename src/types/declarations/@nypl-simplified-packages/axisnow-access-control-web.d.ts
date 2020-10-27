@@ -1,4 +1,4 @@
-declare module "AxisNowDecryptor" {
+declare module "@nypl-simplified-packages/axisnow-access-control-web" {
   import IDecryptor from "library-simplified-webpub-viewer/dist/Decryptor";
 
   class Decryptor implements IDecryptor {
@@ -12,7 +12,7 @@ declare module "AxisNowDecryptor" {
     decryptUrl(resourceUrl: string): Promise<Uint8Array>;
   }
 
-  declare const defaultExport: false | typeof Decryptor;
+  declare const defaultExport: typeof Decryptor;
 
   export default defaultExport;
 }
