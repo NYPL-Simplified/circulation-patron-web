@@ -11,6 +11,14 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  changelog:
+    name: Has Changelog
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: dangoslen/changelog-enforcer@v1.4.0
+        with:
+          changeLogPath: 'CHANGELOG.md'
+          skipLabel: 'no-changelog'
   lint:
     name: Lint
     runs-on: ubuntu-latest
