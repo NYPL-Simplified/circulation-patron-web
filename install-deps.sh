@@ -5,6 +5,8 @@ if [ "$github_token" = "" ]; then
   npm i --no-optional
 else 
   echo "Building with AxisNow using Github Packages Token"
-  echo "\n//npm.pkg.github.com/:_authToken=${github_token}" >> ./.npmrc
+  echo "@nypl-simplified-packages:registry=https://npm.pkg.github.com/nypl-simplified-packages" > ./.npmrc
+  echo "//npm.pkg.github.com/:_authToken=${github_token}" >> ./.npmrc
+  echo "//registry.npmjs.org/" >> ./.npmrc
   npm i
 fi
