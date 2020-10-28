@@ -1,6 +1,8 @@
 ## CHANGELOG
+
 ### UNRELEASED
 - Feature: Calls reader 0.2.4 with dyslexia friendly font
+- Add: Enforce changelog updates on PRs
 - Feature: Update list design
 
 ### v3.0.1
