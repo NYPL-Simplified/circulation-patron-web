@@ -6,7 +6,7 @@ if [ "$github_token" = "" ]; then
 else 
   echo "Building with AxisNow using Github Packages Token"
   echo "@nypl-simplified-packages:registry=https://npm.pkg.github.com/nypl-simplified-packages" > ./.npmrc
-  echo "//registry.npmjs.org/\n//npm.pkg.github.com/:_authToken=${github_token}" >> ./.npmrc 
+  echo "//npm.pkg.github.com/:_authToken=${github_token}" >> ./.npmrc
   echo "//registry.npmjs.org/" >> ./.npmrc
   npm i
 fi
