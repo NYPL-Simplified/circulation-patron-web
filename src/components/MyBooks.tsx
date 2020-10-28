@@ -52,7 +52,7 @@ export const MyBooks: React.FC = () => {
   const noBooks = sortedBooks.length === 0;
 
   return (
-    <div sx={{ bg: "ui.gray.lightWarm", flex: 1, pb: 4 }}>
+    <div sx={{ flex: 1, pb: 4 }}>
       <Head>
         <title>My Books</title>
       </Head>

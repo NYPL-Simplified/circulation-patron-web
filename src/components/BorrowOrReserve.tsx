@@ -4,11 +4,13 @@ import * as React from "react";
 import useBorrow from "hooks/useBorrow";
 import Button from "./Button";
 import { Text } from "./Text";
+import Stack from "components/Stack";
 
 const BorrowOrReserve: React.FC<{
   isBorrow: boolean;
   url: string;
-}> = ({ isBorrow, url }) => {
+  className?: string;
+}> = ({ isBorrow, url, className }) => {
   const {
     isLoading,
     loadingText,
@@ -17,17 +19,20 @@ const BorrowOrReserve: React.FC<{
     error
   } = useBorrow(isBorrow);
   return (
-    <div sx={{ my: 3 }}>
+    <Stack
+      direction="column"
+      sx={{ alignItems: "flex-start" }}
+      className={className}
+    >
       <Button
-        size="lg"
         onClick={() => borrowOrReserve(url)}
         loading={isLoading}
         loadingText={loadingText}
       >
-        <Text variant="text.body.bold">{buttonLabel}</Text>
+        {buttonLabel}
       </Button>
       {error && <Text sx={{ color: "ui.error" }}>{error}</Text>}
-    </div>
+    </Stack>
   );
 };
 
