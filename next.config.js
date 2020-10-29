@@ -5,7 +5,7 @@ const {
   BugsnagBuildReporterPlugin,
   BugsnagSourceMapUploaderPlugin
 } = require("webpack-bugsnag-plugins");
-
+const Git = require("nodegit");
 const APP_VERSION = require("./package.json").version;
 
 /**
@@ -26,6 +26,15 @@ const config = {
     REACT_AXE: process.env.REACT_AXE,
     APP_VERSION,
     AXISNOW_DECRYPT
+  },
+  generateBuildId: async () => {
+    return await Git.Repository.open(".")
+      .then(repo => {
+        return repo.getHeadCommit();
+      })
+      .then(commit => {
+        return commit.sha();
+      });
   },
   webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
