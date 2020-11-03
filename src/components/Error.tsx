@@ -7,30 +7,15 @@ import Link from "next/link";
 import { getLibrarySlugs } from "dataflow/getLibraryData";
 import { useRouter } from "next/router";
 import extractParam from "dataflow/utils";
+import { OPDS1 } from "interfaces";
 
-const statusCodes: { [code: number]: string } = {
-  400: "Bad Request",
-  404: "This page could not be found",
-  405: "Method Not Allowed",
-  500: "Internal Server Error"
-};
-
-const ErrorComponent = ({
-  statusCode = 404,
-  title,
-  detail
-}: {
-  statusCode?: number | null;
-  title?: string;
-  detail?: string;
+const ErrorComponent: React.FC<{ error?: OPDS1.ProblemDocument }> = ({
+  error
 }) => {
-  const errorTitle = title
-    ? title
-    : statusCode
-    ? statusCodes[statusCode]
-    : "An unexpected error has occurred";
+  const { title = "Something went wrong", status, detail } = error ?? {};
 
   const router = useRouter();
+  const isRoot = router.asPath === "/";
   const library = extractParam(router.query, "library");
 
   return (
@@ -40,18 +25,18 @@ const ErrorComponent = ({
       }}
     >
       <H1>
-        {statusCode} Error: {errorTitle}
+        {status} Error: {title}
       </H1>
       <p>
         {detail && `${detail}`} <br />
       </p>
-      {library ? (
+      {isRoot ? (
+        <LibraryList />
+      ) : library ? (
         <Link href={`/${library}`}>
           <a>Return Home</a>
         </Link>
-      ) : (
-        <LibraryList />
-      )}
+      ) : null}
     </div>
   );
 };

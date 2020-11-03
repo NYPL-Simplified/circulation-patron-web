@@ -6,6 +6,7 @@
 - Add: Enforce changelog updates on PRs.
 - Feature: Update list design.
 - Feature: Add storybook to aid in developing and designing complicated states.
+- Fix: Properly parse server errors into `ServerError` for use throughout the application to show the user better error messages.
 
 ### v3.0.1
 - hotfix: Checkout the master branch with submodules when building production docker container

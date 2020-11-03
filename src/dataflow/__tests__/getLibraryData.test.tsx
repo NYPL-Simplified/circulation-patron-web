@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import {
-  fetchCatalog,
   getCatalogRootUrl,
   fetchAuthDocument,
   buildLibraryData,
@@ -13,35 +12,38 @@ import { fixtures } from "test-utils";
 import { OPDS1, OPDS2 } from "interfaces";
 import { getAuthDocHref } from "utils/auth";
 import mockConfig from "test-utils/mockConfig";
+import { fetchFeed } from "dataflow/opds1/fetch";
 
-describe("fetchCatalog", () => {
+describe("fetching catalog", () => {
   test("calls fetch with catalog url", async () => {
     fetchMock.mockResponseOnce(rawCatalog);
-    await fetchCatalog("some-url");
-    expect(fetchMock).toHaveBeenCalledWith("some-url");
+    await fetchFeed("some-url");
+    expect(fetchMock).toHaveBeenCalledWith("some-url", {
+      headers: { "X-Requested-With": "XMLHttpRequest" }
+    });
   });
 
   test("properly parses fetched catalog", async () => {
     fetchMock.mockResponseOnce(rawCatalog);
-    const catalog = await fetchCatalog("some-url");
+    const catalog = await fetchFeed("some-url");
     expect(catalog).toMatchSnapshot();
   });
 
   test("Throws error if catalog is not correct format", async () => {
     fetchMock.mockResponseOnce("something invalid");
-    const promise = fetchCatalog("a url somewhere");
+    const promise = fetchFeed("a url somewhere");
     await expect(promise).rejects.toThrowError(ApplicationError);
     await expect(promise).rejects.toThrow(
-      "Could not fetch catalog at: a url somewhere"
+      "Could not parse fetch response into an OPDS Feed or Entry"
     );
   });
 
   test("Throws error if fetch fails", async () => {
-    fetchMock.mockRejectOnce();
-    const promise = fetchCatalog("not a valid url");
-    await expect(promise).rejects.toThrowError(ApplicationError);
+    fetchMock.mockRejectOnce(new Error("Something wrong"));
+    const promise = fetchFeed("not a valid url");
+    await expect(promise).rejects.toThrowError(Error);
     await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Could not fetch catalog at: not a valid url"`
+      `"Something wrong"`
     );
   });
 });
@@ -153,12 +155,12 @@ describe("fetchAuthDocument", () => {
     });
   });
 
-  test("throws ApplicationError if test fails", async () => {
-    fetchMock.mockRejectOnce();
+  test("passes fetch errors through", async () => {
+    fetchMock.mockRejectOnce(new Error("Something not right"));
     const promise = fetchAuthDocument("/some-url");
-    await expect(promise).rejects.toThrowError(ApplicationError);
+    await expect(promise).rejects.toThrowError(Error);
     await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Could not fetch auth document at url: /some-url"`
+      `"Something not right"`
     );
   });
 });

@@ -35,12 +35,7 @@ const Page: React.FC<AppProps> = props => {
    */
 
   if (props.error || !props.library) {
-    return (
-      <Error
-        statusCode={props.error?.statusCode}
-        detail={props.error?.message}
-      />
-    );
+    return <Error error={props.error} />;
   }
 
   const { library, children } = props;
