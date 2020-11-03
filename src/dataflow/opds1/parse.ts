@@ -28,6 +28,7 @@ import {
 import { IncorrectAdobeDrmMediaType } from "types/opds1";
 import { getAppSupportLevel } from "utils/fulfill";
 import { TrackOpenBookRel } from "types/opds1";
+import DOMPurify from "dompurify";
 
 /**
  * Parses OPDS 1.x Feed or Entry into a Collection or Book
@@ -148,27 +149,6 @@ function canReturnFulfillableBook(links: OPDSAcquisitionLink[]): boolean {
 function findRevokeUrl(links: OPDSLink[]) {
   return links.find(link => link.rel === OPDS1.RevokeLinkRel)?.href ?? null;
 }
-/**
- * HTML Sanitizer
- */
-let sanitizeHtml: any;
-const createDOMPurify = require("dompurify");
-if (typeof window === "undefined") {
-  // sanitization needs to work server-side,
-  // so we use jsdom to build it a window object
-  const { JSDOM } = require("jsdom");
-  const jsdom = new JSDOM("<!doctype html><html><body></body></html>", {
-    url: "http://localhost",
-    FetchExternalResources: false,
-    ProcessExternalResources: false
-  });
-  const { window } = jsdom;
-  const { defaultView } = window;
-
-  sanitizeHtml = createDOMPurify(defaultView).sanitize;
-} else {
-  sanitizeHtml = createDOMPurify(window).sanitize;
-}
 
 /**
  * Converters
@@ -251,7 +231,7 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
     authors: authors,
     contributors: contributors,
     subtitle: entry.subtitle,
-    summary: entry.summary.content && sanitizeHtml?.(entry.summary.content),
+    summary: entry.summary.content && DOMPurify.sanitize(entry.summary.content),
     imageUrl: imageUrl,
     availability: {
       ...availability,

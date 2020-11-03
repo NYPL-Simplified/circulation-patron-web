@@ -8,7 +8,7 @@ export default function mockConfig(custom?: Partial<AppConfig>) {
   };
 }
 
-const defaultMock: AppConfig = {
+export const defaultMock: AppConfig = {
   bugsnagApiKey: null,
   gtmId: null,
   companionApp: "simplye",
