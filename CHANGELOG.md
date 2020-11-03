@@ -7,6 +7,7 @@
 - Feature: Update list design.
 - Feature: Add storybook to aid in developing and designing complicated states.
 - Fix: Properly parse server errors into `ServerError` for use throughout the application to show the user better error messages.
+- Fix: Deterministic `buildId` based on git commit SHA in order to allow running multiple instances of the application behind a load balancer.
 
 ### v3.0.1
 - hotfix: Checkout the master branch with submodules when building production docker container
