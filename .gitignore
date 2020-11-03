@@ -33,3 +33,6 @@ wallaby.js
 .vscode/
 
 .vercel
+
+# storybook
+storybook-static
