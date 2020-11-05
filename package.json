@@ -8,6 +8,9 @@
   },
   "author": "NYPL",
   "license": "Apache-2.0",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "next dev",
     "dev:https": "node dev-server.js",
