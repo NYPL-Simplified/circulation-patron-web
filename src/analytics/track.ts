@@ -2,6 +2,7 @@ import Bugsnag from "@bugsnag/js";
 import { APP_CONFIG } from "config";
 /* eslint-disable camelcase */
 import { NextWebVitalsMetric } from "next/app";
+import { BUGSNAG_API_KEY } from "utils/env";
 
 type PageData = {
   path: string;
@@ -56,7 +57,7 @@ function webVitals({ id, name, value, label }: NextWebVitalsMetric) {
 }
 
 function error(e: Error) {
-  if (APP_CONFIG.bugsnagApiKey) {
+  if (BUGSNAG_API_KEY) {
     Bugsnag.notify(e);
   }
 }

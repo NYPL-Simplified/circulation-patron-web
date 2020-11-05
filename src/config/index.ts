@@ -11,7 +11,6 @@ function parseConfig(unparsed: any): AppConfig {
   return {
     libraries: unparsed.libraries,
     mediaSupport: unparsed.media_support ?? {},
-    bugsnagApiKey: unparsed.bugsnagApiKey ?? null,
     gtmId: unparsed.gtmId ?? null,
     companionApp,
     showMedium

@@ -21,7 +21,6 @@ export type AppConfig = {
   libraries: LibraryRegistryBase | LibrariesConfig;
   companionApp: "simplye" | "openebooks";
   showMedium: boolean;
-  bugsnagApiKey: string | null;
   gtmId: string | null;
 };
 

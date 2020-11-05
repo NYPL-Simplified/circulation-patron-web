@@ -1,18 +1,17 @@
 import * as React from "react";
 import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
-import { APP_VERSION } from "utils/env";
-import { APP_CONFIG } from "config";
+import { APP_VERSION, BUGSNAG_API_KEY } from "utils/env";
 
-if (APP_CONFIG.bugsnagApiKey) {
+if (BUGSNAG_API_KEY) {
   Bugsnag.start({
-    apiKey: APP_CONFIG.bugsnagApiKey,
+    apiKey: BUGSNAG_API_KEY,
     appVersion: APP_VERSION,
     plugins: [new BugsnagPluginReact()]
   });
 }
 
-export const BugsnagErrorBoundary = APP_CONFIG.bugsnagApiKey
+export const BugsnagErrorBoundary = BUGSNAG_API_KEY
   ? Bugsnag.getPlugin("react")?.createErrorBoundary(React)
   : undefined;
 

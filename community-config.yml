@@ -39,9 +39,6 @@ media_support:
 # default is "simplye"
 companion_app: simplye
 
-# defines the bugsnag api key to integrate error tracking
-# bugsnag_api_key: xxx
-
 # defines the google tag manager id to integrate web analytics
 # gtm_id: xxx
 

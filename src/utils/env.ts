@@ -10,3 +10,4 @@ export const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 export const IS_SERVER = typeof window === "undefined";
 export const APP_VERSION = process.env.APP_VERSION;
 export const AXISNOW_DECRYPT = process.env.AXISNOW_DECRYPT;
+export const BUGSNAG_API_KEY = process.env.NEXT_PUBLIC_BUGSNAG_API_KEY;
