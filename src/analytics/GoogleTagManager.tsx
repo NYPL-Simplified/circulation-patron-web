@@ -1,4 +1,3 @@
-import { APP_CONFIG } from "config";
 import * as React from "react";
 
 const GTM_ID = APP_CONFIG.gtmId;

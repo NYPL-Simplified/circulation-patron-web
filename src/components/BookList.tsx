@@ -20,7 +20,6 @@ import { AnyBook, CollectionData, LaneData } from "interfaces";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import { useSWRInfinite } from "swr";
 import useUser from "components/context/UserContext";
-import { APP_CONFIG } from "config";
 import Stack from "components/Stack";
 import CancelOrReturn from "components/CancelOrReturn";
 import FulfillmentButton from "components/FulfillmentButton";

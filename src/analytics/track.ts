@@ -1,6 +1,5 @@
-import Bugsnag from "@bugsnag/js";
-import { APP_CONFIG } from "config";
 /* eslint-disable camelcase */
+import Bugsnag from "@bugsnag/js";
 import { NextWebVitalsMetric } from "next/app";
 
 type PageData = {

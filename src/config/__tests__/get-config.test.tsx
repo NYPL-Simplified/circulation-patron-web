@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import fetchMock from "jest-fetch-mock";
-import getAppConfig from "../fetch-config";
+import getConfig from "../get-config";
 const fs = require("fs");
 
 process.cwd = jest.fn(() => "/");
@@ -20,7 +20,7 @@ afterAll(() => {
 test("Throws Error when no config file found on root", async () => {
   fs.existsSync.mockReturnValue(false);
   await expect(
-    getAppConfig("./doesnt exist")
+    getConfig("./doesnt exist")
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"Config file not found at: /doesnt exist"`
   );
@@ -54,20 +54,20 @@ test("returns parsed config file", async () => {
   fs.existsSync.mockReturnValue(true);
   fs.readFileSync.mockReturnValue(mockFile);
 
-  const conf = await getAppConfig("anywhere");
+  const conf = await getConfig("anywhere");
   expect(conf).toEqual(mockResult);
 });
 
 test("attempts to fetch config file when it starts with http", async () => {
   fetchMock.mockResponseOnce(mockFile);
-  await expect(getAppConfig("http://internet")).resolves.toEqual(mockResult);
+  await expect(getConfig("http://internet")).resolves.toEqual(mockResult);
 
   expect(fetchMock).toHaveBeenCalledWith("http://internet");
 });
 
 test("Throws error when fetch fails for http config file", async () => {
   fetchMock.mockRejectOnce();
-  await expect(getAppConfig("http://internet")).rejects.toThrow(
+  await expect(getConfig("http://internet")).rejects.toThrow(
     "Could not fetch config file at: http://internet"
   );
 

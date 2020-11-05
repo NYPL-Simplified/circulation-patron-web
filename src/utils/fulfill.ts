@@ -1,4 +1,3 @@
-import { APP_CONFIG } from "config";
 import { fetchBook } from "dataflow/opds1/fetch";
 import ApplicationError from "errors";
 import {

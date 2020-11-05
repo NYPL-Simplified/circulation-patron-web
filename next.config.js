@@ -7,6 +7,10 @@ const {
 } = require("webpack-bugsnag-plugins");
 const Git = require("nodegit");
 const APP_VERSION = require("./package.json").version;
+const generateConfig = require("./src/config/generate-config.js");
+
+// get the app config
+const APP_CONFIG = generateConfig(process.env.CONFIG_FILE);
 
 /**
  * Set the AXISNOW_DECRYPT variable based on whether the package is available.
@@ -40,7 +44,14 @@ const config = {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
     // Important: return the modified config
-    !isServer && config.plugins.push(new webpack.IgnorePlugin(/jsdom$/));
+
+    // provide the app config as a global
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        APP_CONFIG: JSON.stringify(APP_CONFIG)
+      })
+    );
+
     // react-axe should only be bundled when REACT_AXE=true
     !process.env.REACT_AXE &&
       config.plugins.push(new webpack.IgnorePlugin(/react-axe$/));
@@ -53,9 +64,9 @@ const config = {
     }
 
     // add bugsnag if we are not in dev
-    if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
+    if (!dev && APP_CONFIG.bugsnagApiKey) {
       const config = {
-        apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
+        apiKey: APP_CONFIG.bugsnagApiKey,
         appVersion: APP_VERSION
       };
       config.plugins.push(new BugsnagBuildReporterPlugin(config));
@@ -63,10 +74,10 @@ const config = {
     }
 
     // source the app config file and provide it using val-loader
-    config.module.rules.push({
-      test: require.resolve("./src/config/load-config.js"),
-      use: [{ loader: "val-loader" }]
-    });
+    // config.module.rules.push({
+    //   test: require.resolve("./src/config/load-config.js"),
+    //   use: [{ loader: "val-loader" }]
+    // });
 
     // ignore the axisnow decryptor if we don't have access
     if (!AXISNOW_DECRYPT) {

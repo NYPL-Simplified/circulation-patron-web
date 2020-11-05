@@ -24,7 +24,6 @@ import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
 import { ServerError } from "errors";
 import { ProblemDocument } from "types/opds1";
-import { APP_CONFIG } from "config";
 
 export const BookDetails: React.FC = () => {
   const { query } = useRouter();

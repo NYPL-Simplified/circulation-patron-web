@@ -57,6 +57,8 @@ export default function withAppProps(
         revalidate: 60 * 60
       };
     } catch (e) {
+      // todo: TRACK ERROR
+      console.error(e);
       if (e instanceof ApplicationError) {
         return {
           props: {
