@@ -7,7 +7,7 @@ const {
 } = require("webpack-bugsnag-plugins");
 const Git = require("nodegit");
 const APP_VERSION = require("./package.json").version;
-const generateConfig = require("./src/config/generate-config.js");
+const generateConfig = require("./src/config/get-config.js");
 
 // get the app config
 const APP_CONFIG = generateConfig(process.env.CONFIG_FILE);
