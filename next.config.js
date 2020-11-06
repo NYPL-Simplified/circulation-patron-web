@@ -13,7 +13,7 @@ const execSync = require("child_process").execSync;
 const lastCommitCommand = "git rev-parse HEAD";
 const COMMIT_SHA = execSync(lastCommitCommand).toString().trim();
 
-const VERSION_AND_SHA = `${APP_VERSION}-${COMMIT_SHA}`;
+const BUILD_ID = `${APP_VERSION}-${COMMIT_SHA}`;
 
 console.log(`Building app version: ${VERSION_AND_SHA}`);
 
@@ -34,10 +34,10 @@ const config = {
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
     APP_VERSION,
-    VERSION_AND_SHA,
+    BUILD_ID,
     AXISNOW_DECRYPT
   },
-  generateBuildId: async () => COMMIT_SHA,
+  generateBuildId: async () => BUILD_ID,
   webpack: (config, { _buildId, _dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
@@ -52,22 +52,6 @@ const config = {
       config.node = {
         fs: "empty"
       };
-    }
-
-    // add bugsnag if we are not in dev
-    if (process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
-      const bugsnagConfig = {
-        apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
-        appVersion: VERSION_AND_SHA
-      };
-      config.plugins.push(new BugsnagBuildReporterPlugin(bugsnagConfig));
-      config.plugins.push(
-        new BugsnagSourceMapUploaderPlugin({
-          ...bugsnagConfig,
-          publicPath: isServer ? "" : "*/_next",
-          overwrite: true
-        })
-      );
     }
 
     // source the app config file and provide it using val-loader
@@ -86,6 +70,22 @@ const config = {
       );
     } else {
       console.log("Building with AxisNow Decryption");
+    }
+
+    // upload sourcemaps to bugsnag if we are not in dev
+    if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
+      const bugsnagConfig = {
+        apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
+        appVersion: BUILD_ID
+      };
+      config.plugins.push(new BugsnagBuildReporterPlugin(bugsnagConfig));
+      config.plugins.push(
+        new BugsnagSourceMapUploaderPlugin({
+          ...bugsnagConfig,
+          publicPath: isServer ? "" : "*/_next",
+          overwrite: true
+        })
+      );
     }
 
     return config;
