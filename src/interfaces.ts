@@ -23,7 +23,7 @@ export type AppConfig = {
   companionApp: "simplye" | "openebooks";
   showMedium: boolean;
   gtmId: string | null;
-  bugsnagApiKey: string;
+  bugsnagApiKey: string | null;
 };
 
 export type MediaSupportConfig = DirectMediaSupport & IndirectMediaSupport;

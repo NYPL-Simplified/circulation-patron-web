@@ -9,7 +9,9 @@ export default function mockConfig(custom?: Partial<AppConfig>) {
 }
 
 export const defaultMock: AppConfig = {
+  instanceName: "Test Instance",
   gtmId: null,
+  bugsnagApiKey: null,
   companionApp: "simplye",
   showMedium: true,
   libraries: {
