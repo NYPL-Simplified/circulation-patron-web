@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BugsnagErrorBoundary } from "utils/bugsnag";
+import { BugsnagErrorBoundary } from "analytics/bugsnag";
 import ErrorComponent from "components/Error";
 
 export type FallbackProps = {
