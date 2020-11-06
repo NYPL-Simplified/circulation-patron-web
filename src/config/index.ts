@@ -9,9 +9,11 @@ function parseConfig(unparsed: any): AppConfig {
   const showMedium = unparsed.show_medium !== false;
   // otherwise assume the file is properly structured.
   return {
+    instanceName: unparsed.instanceName ?? "Patron Web Catalog",
     libraries: unparsed.libraries,
     mediaSupport: unparsed.media_support ?? {},
     gtmId: unparsed.gtmId ?? null,
+    bugsnagApiKey: unparsed.bugsnagApiKey ?? null,
     companionApp,
     showMedium
   };

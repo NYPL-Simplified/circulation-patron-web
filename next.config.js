@@ -6,16 +6,15 @@ const {
   BugsnagSourceMapUploaderPlugin
 } = require("webpack-bugsnag-plugins");
 const withSourceMaps = require("@zeit/next-source-maps");
-const APP_VERSION = require("./package.json").version;
+const package = require("./package.json");
+const APP_VERSION = package.version;
 
 // get the latest Git commit sha
 const execSync = require("child_process").execSync;
-const lastCommitCommand = "git rev-parse HEAD";
-const COMMIT_SHA = execSync(lastCommitCommand).toString().trim();
+const GIT_COMMIT_SHA = execSync("git rev-parse HEAD").toString().trim();
+const GIT_BRANCH = execSync("git branch --show-current").toString().trim();
 
-const BUILD_ID = `${APP_VERSION}-${COMMIT_SHA}`;
-
-console.log(`Building app version: ${VERSION_AND_SHA}`);
+const BUILD_ID = `${APP_VERSION}-${GIT_BRANCH}.${GIT_COMMIT_SHA}`;
 
 /**
  * Set the AXISNOW_DECRYPT variable based on whether the package is available.
@@ -35,10 +34,15 @@ const config = {
     REACT_AXE: process.env.REACT_AXE,
     APP_VERSION,
     BUILD_ID,
+    GIT_BRANCH,
+    GIT_COMMIT_SHA,
     AXISNOW_DECRYPT
   },
   generateBuildId: async () => BUILD_ID,
-  webpack: (config, { _buildId, _dev, isServer, _defaultLoaders, webpack }) => {
+  webpack: (config, { buildId, dev, isServer, _defaultLoaders, webpack }) => {
+    console.log(
+      `Building ${isServer ? "server" : "client"} files for version: ${buildId}`
+    );
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
     // Important: return the modified config

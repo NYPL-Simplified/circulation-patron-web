@@ -1,3 +1,7 @@
+# Set an instance name to be used in bug tracking and for other debugging purposes. 
+# This is not patron-facing.
+instance_name: Patron Web Catalog
+
 # APP MEDIA SUPPORT
 # Each entry has a setting of "show", "redirect" or "show-and-redirect".
 # 
