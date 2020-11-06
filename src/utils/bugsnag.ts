@@ -7,7 +7,8 @@ import {
   IS_SERVER,
   CONFIG_FILE,
   GIT_BRANCH,
-  GIT_COMMIT_SHA
+  GIT_COMMIT_SHA,
+  NODE_ENV
 } from "utils/env";
 import { APP_CONFIG } from "config";
 
@@ -16,7 +17,7 @@ if (BUGSNAG_API_KEY) {
     apiKey: BUGSNAG_API_KEY,
     appVersion: BUILD_ID,
     plugins: [new BugsnagPluginReact()],
-    appType: IS_SERVER ? "web-server" : "client",
+    appType: IS_SERVER ? "node" : "browser",
     // the release stage is based on the github branch it is deployed from.
     releaseStage:
       GIT_BRANCH === "production"
@@ -26,9 +27,10 @@ if (BUGSNAG_API_KEY) {
         : "development",
     metadata: {
       App: {
-        "Instance Name": APP_CONFIG.instanceName,
+        "Node Env": NODE_ENV,
         "Git Branch": GIT_BRANCH,
-        "Git Commit SHA": GIT_COMMIT_SHA
+        "Git Commit SHA": GIT_COMMIT_SHA,
+        "Instance Name": APP_CONFIG.instanceName
       },
       "App Config": {
         "Config File": APP_CONFIG,
