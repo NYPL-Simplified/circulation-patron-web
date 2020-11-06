@@ -52,6 +52,22 @@ export class AppSetupError extends ApplicationError {
   }
 }
 
+export class FetchError extends ApplicationError {
+  url: string;
+
+  constructor(url: string, baseError?: Error) {
+    super(`${baseError ? baseError.message : ""}`);
+    Object.setPrototypeOf(this, AppSetupError.prototype);
+    this.name = "Fetch Error";
+    this.url = url;
+    this.info = {
+      title: "Fetch Error",
+      detail:
+        "The fetch promise for the requested resource was rejected. This is probably an offline, CORS, or other network error."
+    };
+  }
+}
+
 function isProblemDocument(
   details: OPDS1.ProblemDocument | OPDS1.AuthDocument
 ): details is OPDS1.ProblemDocument {
@@ -63,7 +79,7 @@ export class ServerError extends ApplicationError {
   info: OPDS1.ProblemDocument = {
     detail: "An unknown error server occurred.",
     title: "Server Error",
-    status: 418
+    status: 500
   };
   authDocument?: OPDS1.AuthDocument;
 
@@ -73,13 +89,14 @@ export class ServerError extends ApplicationError {
     details: OPDS1.ProblemDocument | OPDS1.AuthDocument
   ) {
     super("Server Error");
+    this.name = "Server Error";
     this.url = url;
     Object.setPrototypeOf(this, ServerError.prototype);
     if (status === 401 && !isProblemDocument(details)) {
       // 401 errors return auth document instead of problem document
       // we will construct our own problem document.
       this.info = {
-        title: "No Authorized",
+        title: "Not Authorized",
         detail: "You are not authorized for the requested resource.",
         status: 401
       };

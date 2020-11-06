@@ -7,6 +7,7 @@ import makeTheme from "../../theme";
 import { UserProvider } from "components/context/UserContext";
 import AuthModal from "auth/AuthModal";
 import { ConfigInterface, SWRConfig } from "swr";
+import track from "analytics/track";
 
 type ProviderProps = {
   library: LibraryData;
@@ -16,7 +17,17 @@ const swrOptions: ConfigInterface = {
   // we don't generally need to revalidate our data very often
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
-  dedupingInterval: 2000
+  dedupingInterval: 2000,
+  onError: (err, key, config) => {
+    track.error(err, {
+      metadata: {
+        "Fetch Info": {
+          key,
+          config
+        }
+      }
+    });
+  }
 };
 /**
  * Combines all of the apps context provider into a single component for simplicity

@@ -22,7 +22,6 @@ import extractParam from "dataflow/utils";
 import useSWR from "swr";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
-import { ServerError } from "errors";
 import { ProblemDocument } from "types/opds1";
 import { APP_CONFIG } from "config";
 
@@ -35,10 +34,8 @@ export const BookDetails: React.FC = () => {
   const book = loans?.find(loanedBook => data?.id === loanedBook.id) ?? data;
 
   if (error) {
-    if (error instanceof ServerError) {
-      return <Error info={error.info} />;
-    }
-    return <Error />;
+    // just throw the error and let it be handled by an error boundary
+    throw error;
   }
 
   if (!book) return <PageLoader />;

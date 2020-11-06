@@ -1,13 +1,20 @@
 import * as React from "react";
 import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
-import { APP_VERSION, BUGSNAG_API_KEY } from "utils/env";
+import {
+  VERSION_AND_SHA,
+  BUGSNAG_API_KEY,
+  IS_DEVELOPMENT,
+  IS_SERVER
+} from "utils/env";
 
 if (BUGSNAG_API_KEY) {
   Bugsnag.start({
     apiKey: BUGSNAG_API_KEY,
-    appVersion: APP_VERSION,
-    plugins: [new BugsnagPluginReact()]
+    appVersion: VERSION_AND_SHA,
+    plugins: [new BugsnagPluginReact()],
+    appType: IS_SERVER ? "web-server" : "client",
+    releaseStage: IS_DEVELOPMENT ? "developmet" : "production"
   });
 }
 

@@ -5,8 +5,17 @@ const {
   BugsnagBuildReporterPlugin,
   BugsnagSourceMapUploaderPlugin
 } = require("webpack-bugsnag-plugins");
-const Git = require("nodegit");
+const withSourceMaps = require("@zeit/next-source-maps");
 const APP_VERSION = require("./package.json").version;
+
+// get the latest Git commit sha
+const execSync = require("child_process").execSync;
+const lastCommitCommand = "git rev-parse HEAD";
+const COMMIT_SHA = execSync(lastCommitCommand).toString().trim();
+
+const VERSION_AND_SHA = `${APP_VERSION}-${COMMIT_SHA}`;
+
+console.log(`Building app version: ${VERSION_AND_SHA}`);
 
 /**
  * Set the AXISNOW_DECRYPT variable based on whether the package is available.
@@ -25,18 +34,11 @@ const config = {
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
     APP_VERSION,
+    VERSION_AND_SHA,
     AXISNOW_DECRYPT
   },
-  generateBuildId: async () => {
-    return await Git.Repository.open(".")
-      .then(repo => {
-        return repo.getHeadCommit();
-      })
-      .then(commit => {
-        return commit.sha();
-      });
-  },
-  webpack: (config, { _buildId, dev, isServer, _defaultLoaders, webpack }) => {
+  generateBuildId: async () => COMMIT_SHA,
+  webpack: (config, { _buildId, _dev, isServer, _defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
     // Important: return the modified config
@@ -53,13 +55,19 @@ const config = {
     }
 
     // add bugsnag if we are not in dev
-    if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
-      const config = {
+    if (process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
+      const bugsnagConfig = {
         apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
-        appVersion: APP_VERSION
+        appVersion: VERSION_AND_SHA
       };
-      config.plugins.push(new BugsnagBuildReporterPlugin(config));
-      config.plugins.push(new BugsnagSourceMapUploaderPlugin(config));
+      config.plugins.push(new BugsnagBuildReporterPlugin(bugsnagConfig));
+      config.plugins.push(
+        new BugsnagSourceMapUploaderPlugin({
+          ...bugsnagConfig,
+          publicPath: isServer ? "" : "*/_next",
+          overwrite: true
+        })
+      );
     }
 
     // source the app config file and provide it using val-loader
@@ -87,4 +95,4 @@ const config = {
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true"
 });
-module.exports = withTM(withBundleAnalyzer(config));
+module.exports = withSourceMaps(withTM(withBundleAnalyzer(config)));
