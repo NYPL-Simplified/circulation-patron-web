@@ -89,7 +89,6 @@ export class ServerError extends ApplicationError {
     details: OPDS1.ProblemDocument | OPDS1.AuthDocument
   ) {
     super("Server Error");
-    this.name = "Server Error";
     this.url = url;
     Object.setPrototypeOf(this, ServerError.prototype);
     if (status === 401 && !isProblemDocument(details)) {
@@ -104,5 +103,6 @@ export class ServerError extends ApplicationError {
     } else if (isProblemDocument(details)) {
       this.info = details;
     }
+    this.name = `Server Error: ${this.info.title}`;
   }
 }

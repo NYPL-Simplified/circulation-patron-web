@@ -32,7 +32,6 @@ const config = {
   env: {
     CONFIG_FILE: process.env.CONFIG_FILE,
     REACT_AXE: process.env.REACT_AXE,
-    NODE_ENV: process.env.NODE_ENV,
     APP_VERSION,
     BUILD_ID,
     GIT_BRANCH,
