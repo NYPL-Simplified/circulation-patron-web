@@ -40,7 +40,7 @@ describe("book details page", () => {
     ).toBeInTheDocument();
   });
 
-  test("handles error state", async () => {
+  test("rethrows SWR errors to be caught by error boundary", async () => {
     mockSwr({
       error: new ServerError("url", 418, {
         detail: "Something",
@@ -49,15 +49,11 @@ describe("book details page", () => {
       })
     });
 
-    const utils = render(<BookDetails />, {
-      router: { query: { bookUrl: "/book-url" } }
-    });
-
-    expect(
-      await utils.findByText(
-        "There was a problem fetching this book. Please refresh the page or return home."
-      )
-    ).toBeInTheDocument();
+    expect(() =>
+      render(<BookDetails />, {
+        router: { query: { bookUrl: "/book-url" } }
+      })
+    ).toThrowError(ServerError);
   });
 
   test("shows categories", () => {

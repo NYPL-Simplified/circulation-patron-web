@@ -51,7 +51,7 @@ const CancelOrReturn: React.FC<{
       >
         {text}
       </Button>
-      {error && <Text>Error: {error}</Text>}
+      {error && <Text>{error}</Text>}
     </>
   );
 };

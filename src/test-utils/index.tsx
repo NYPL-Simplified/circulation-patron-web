@@ -16,9 +16,15 @@ import { UserContext, UserState } from "components/context/UserContext";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "theme";
 import { AuthModalProvider } from "auth/AuthModalContext";
+import mockConfig from "test-utils/mockConfig";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);
+
+// standard config mock
+beforeEach(() => {
+  mockConfig();
+});
 
 export { fixtures };
 

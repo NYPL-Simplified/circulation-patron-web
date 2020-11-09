@@ -60,7 +60,7 @@ export class FetchError extends ApplicationError {
 
   constructor(url: string, baseError?: Error) {
     super(`${baseError ? baseError.message : ""}`);
-    Object.setPrototypeOf(this, AppSetupError.prototype);
+    Object.setPrototypeOf(this, FetchError.prototype);
     this.name = "Fetch Error";
     this.url = url;
     this.info = {
@@ -106,6 +106,6 @@ export class ServerError extends ApplicationError {
     } else if (isProblemDocument(details)) {
       this.info = details;
     }
-    this.name = `Server Error: ${this.info.title}`;
+    this.name = `Server Error`;
   }
 }
