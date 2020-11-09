@@ -8,7 +8,8 @@ import {
   CONFIG_FILE,
   GIT_BRANCH,
   GIT_COMMIT_SHA,
-  NODE_ENV
+  NODE_ENV,
+  RELEASE_STAGE
 } from "utils/env";
 
 if (BUGSNAG_API_KEY) {
@@ -18,12 +19,7 @@ if (BUGSNAG_API_KEY) {
     plugins: [new BugsnagPluginReact()],
     appType: IS_SERVER ? "node" : "browser",
     // the release stage is based on the github branch it is deployed from.
-    releaseStage:
-      NODE_ENV === "production" && GIT_BRANCH === "production"
-        ? "production"
-        : NODE_ENV === "production" && GIT_BRANCH === "qa"
-        ? "qa"
-        : "development",
+    releaseStage: RELEASE_STAGE,
     metadata: {
       App: {
         "Node Env": NODE_ENV,

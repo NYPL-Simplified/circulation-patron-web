@@ -8,18 +8,31 @@ const {
 const withSourceMaps = require("@zeit/next-source-maps");
 const package = require("./package.json");
 const APP_VERSION = package.version;
+const { NODE_ENV } = process.env;
 
 // get the latest Git commit sha
 const execSync = require("child_process").execSync;
 const GIT_COMMIT_SHA = execSync("git rev-parse HEAD").toString().trim();
 const GIT_BRANCH = execSync("git branch --show-current").toString().trim();
 
+// compute the release stage of the app
+const RELEASE_STAGE =
+  NODE_ENV === "production" && GIT_BRANCH === "production"
+    ? "production"
+    : NODE_ENV === "production" && GIT_BRANCH === "qa"
+    ? "qa"
+    : "development";
+
+const BUILD_ID = `${APP_VERSION}-${GIT_BRANCH}.${GIT_COMMIT_SHA}`;
+
 // fetch the config file
 const APP_CONFIG = execSync("node src/config/fetch-config.js", {
   encoding: "utf-8"
 });
 
-const BUILD_ID = `${APP_VERSION}-${GIT_BRANCH}.${GIT_COMMIT_SHA}`;
+if (APP_CONFIG.bugsnagApiKey) {
+  console.log("Running with Bugsnag Enabled in release stage: ", RELEASE_STAGE);
+}
 
 /**
  * Set the AXISNOW_DECRYPT variable based on whether the package is available.
@@ -41,6 +54,7 @@ const config = {
     BUILD_ID,
     GIT_BRANCH,
     GIT_COMMIT_SHA,
+    RELEASE_STAGE,
     AXISNOW_DECRYPT
   },
   generateBuildId: async () => BUILD_ID,
