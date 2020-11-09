@@ -1,5 +1,6 @@
 # Set an instance name to be used in bug tracking and for other debugging purposes. 
-# This is not patron-facing.
+# This is not patron-facing, so call it something that will be meaningful to you when
+# reviewing bugs, especially if you operate multiple instances.
 instance_name: Patron Web Catalog
 
 # APP MEDIA SUPPORT

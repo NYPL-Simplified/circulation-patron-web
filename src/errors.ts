@@ -52,6 +52,9 @@ export class AppSetupError extends ApplicationError {
   }
 }
 
+/**
+ * Specifically for when fetch rejects, not for when you get an invalid response.
+ */
 export class FetchError extends ApplicationError {
   url: string;
 
