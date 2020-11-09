@@ -7,7 +7,6 @@ import BookCover from "./BookCover";
 import { truncateString } from "../utils/string";
 import { Text, H3 } from "./Text";
 import { AnyBook } from "interfaces";
-import { APP_CONFIG } from "config";
 
 export const BOOK_WIDTH = 187;
 export const BOOK_HEIGHT = 365;

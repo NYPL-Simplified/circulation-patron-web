@@ -14,6 +14,11 @@ const execSync = require("child_process").execSync;
 const GIT_COMMIT_SHA = execSync("git rev-parse HEAD").toString().trim();
 const GIT_BRANCH = execSync("git branch --show-current").toString().trim();
 
+// fetch the config file
+const APP_CONFIG = execSync("node src/config/fetch-config.js", {
+  encoding: "utf-8"
+});
+
 const BUILD_ID = `${APP_VERSION}-${GIT_BRANCH}.${GIT_COMMIT_SHA}`;
 
 /**
@@ -58,11 +63,12 @@ const config = {
       };
     }
 
-    // source the app config file and provide it using val-loader
-    config.module.rules.push({
-      test: require.resolve("./src/config/load-config.js"),
-      use: [{ loader: "val-loader" }]
-    });
+    // pass the APP_CONFIG as a global
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        APP_CONFIG
+      })
+    );
 
     // ignore the axisnow decryptor if we don't have access
     if (!AXISNOW_DECRYPT) {
@@ -77,9 +83,9 @@ const config = {
     }
 
     // upload sourcemaps to bugsnag if we are not in dev
-    if (!dev && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
+    if (!dev && APP_CONFIG.bugsnagApiKey) {
       const bugsnagConfig = {
-        apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
+        apiKey: APP_CONFIG.bugsnagApiKey,
         appVersion: BUILD_ID
       };
       config.plugins.push(new BugsnagBuildReporterPlugin(bugsnagConfig));

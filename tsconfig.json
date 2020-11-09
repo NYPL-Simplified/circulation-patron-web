@@ -18,14 +18,13 @@
     "importHelpers": true,
     "baseUrl": "src",
   },
-  "exclude": ["node_modules", "config/srv", "jest.config.js"],
+  "exclude": ["node_modules", "jest.config.js"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     ".eslintrc.js",
     "**/*.tsx",
     "next.config.js",
-    "src/config/load-config.js",
     "src/config/fetch-config.js"
   ]
 }

@@ -1,6 +1,6 @@
-const YAML = require("yaml");
-const fs = require("fs");
 const path = require("path");
+const fs = require("fs");
+const YAML = require("yaml");
 
 /**
  * Reads a config file either from local path or
@@ -15,7 +15,7 @@ async function getAppConfig(configFileSetting) {
     throw new Error("Config file not found at: " + configFilePath);
   }
   const text = fs.readFileSync(configFilePath, "utf8");
-  return parseConfigText(text);
+  return parseConfig(text);
 }
 
 /**
@@ -35,10 +35,28 @@ async function fetchConfigFile(configFileUrl) {
 }
 
 /**
- * Parses the raw text of a config file into an object.
+ * Parses a YAML string into JSON and then into the format expected by
+ * the app.
  */
-function parseConfigText(raw) {
-  return YAML.parse(raw);
+function parseConfig(raw) {
+  const unparsed = YAML.parse(raw);
+  // specifically set defaults for a couple values.
+  const companionApp =
+    unparsed.companion_app === "openebooks" ? "openebooks" : "simplye";
+
+  const showMedium = unparsed.show_medium !== false;
+  // otherwise assume the file is properly structured.
+  return {
+    libraries: unparsed.libraries,
+    mediaSupport: unparsed.media_support || {},
+    bugsnagApiKey: unparsed.bugsnagApiKey || null,
+    gtmId: unparsed.gtmId || null,
+    companionApp,
+    showMedium
+  };
 }
 
-module.exports = getAppConfig;
+// get the config and print it to stdout so next.config.js can use it
+getAppConfig(process.env.CONFIG_FILE).then(val => {
+  console.log(val);
+});

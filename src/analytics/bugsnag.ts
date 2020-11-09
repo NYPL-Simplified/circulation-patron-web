@@ -10,7 +10,6 @@ import {
   GIT_COMMIT_SHA,
   NODE_ENV
 } from "utils/env";
-import { APP_CONFIG } from "config";
 
 if (BUGSNAG_API_KEY) {
   Bugsnag.start({
