@@ -19,9 +19,9 @@ if (BUGSNAG_API_KEY) {
     appType: IS_SERVER ? "node" : "browser",
     // the release stage is based on the github branch it is deployed from.
     releaseStage:
-      GIT_BRANCH === "production"
+      NODE_ENV === "production" && GIT_BRANCH === "production"
         ? "production"
-        : GIT_BRANCH === "qa"
+        : NODE_ENV === "production" && GIT_BRANCH === "qa"
         ? "qa"
         : "development",
     metadata: {
