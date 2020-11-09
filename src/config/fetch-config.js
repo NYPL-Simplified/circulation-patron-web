@@ -33,7 +33,7 @@ async function fetchConfigFile(configFileUrl) {
   try {
     const response = await fetch(configFileUrl);
     const text = await response.text();
-    const parsed = parseConfigText(text);
+    const parsed = parseConfig(text);
     return parsed;
   } catch (e) {
     console.error(e);
