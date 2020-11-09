@@ -1,3 +1,4 @@
+require("@next/polyfill-nomodule");
 const path = require("path");
 const fs = require("fs");
 const YAML = require("yaml");
