@@ -3,10 +3,16 @@ const fs = require("fs");
 const YAML = require("yaml");
 
 /**
+ * This file will print the config file to stdout and then exit, so
+ * it can be synchronously executed in next.config.js when starting the
+ * application.
+ */
+
+/**
  * Reads a config file either from local path or
  * http request, parses it, and returns it as an object
  */
-async function getAppConfig(configFileSetting) {
+export default async function getAppConfig(configFileSetting) {
   if (configFileSetting.startsWith("http")) {
     return await fetchConfigFile(configFileSetting);
   }
