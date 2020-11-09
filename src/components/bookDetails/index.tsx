@@ -10,7 +10,6 @@ import BreadcrumbBar from "../BreadcrumbBar";
 import { truncateString } from "../../utils/string";
 import DetailField from "../BookMetaDetail";
 import ReportProblem from "./ReportProblem";
-import { NavButton } from "../Button";
 import Head from "next/head";
 import { H1, H2, H3, Text } from "components/Text";
 import MediumIndicator from "components/MediumIndicator";
@@ -22,7 +21,6 @@ import extractParam from "dataflow/utils";
 import useSWR from "swr";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
-import { ProblemDocument } from "types/opds1";
 
 export const BookDetails: React.FC = () => {
   const { query } = useRouter();
