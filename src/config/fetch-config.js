@@ -1,7 +1,7 @@
-require("@next/polyfill-nomodule");
 const path = require("path");
 const fs = require("fs");
 const YAML = require("yaml");
+const fetch = require("node-fetch");
 
 /**
  * This file will print the config file to stdout and then exit, so
