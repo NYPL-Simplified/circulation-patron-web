@@ -23,7 +23,6 @@ import useSWR from "swr";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
 import { ProblemDocument } from "types/opds1";
-import { APP_CONFIG } from "config";
 
 export const BookDetails: React.FC = () => {
   const { query } = useRouter();
@@ -136,42 +135,6 @@ const SimplyECallout: React.FC<{ className?: "string" }> = ({ className }) => {
       <div sx={{ maxWidth: 140, mx: "auto", mt: 3 }}>
         <IosBadge sx={{ m: "6%" }} />
         <GooglePlayBadge />
-      </div>
-    </section>
-  );
-};
-
-const Error: React.FC<{ info?: ProblemDocument }> = ({ info }) => {
-  return (
-    <section
-      aria-label="Book details"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <Head>
-        <title>Book error</title>
-      </Head>
-      <div sx={{ maxWidth: "70%" }}>
-        <p>
-          There was a problem fetching this book. Please refresh the page or
-          return home.
-        </p>
-        <div>
-          <span sx={{ fontWeight: "bold" }}>Error Code: </span>
-          {info?.status ?? "unknown"}
-        </div>
-        <div>
-          <span sx={{ fontWeight: "bold" }}>Error Message: </span>
-          {info?.detail ?? "An Unknown fetch error occurred."}
-        </div>
-        <NavButton sx={{ mt: 3 }} href="/">
-          Return Home
-        </NavButton>
       </div>
     </section>
   );
