@@ -12,7 +12,7 @@ const YAML = require("yaml");
  * Reads a config file either from local path or
  * http request, parses it, and returns it as an object
  */
-export default async function getAppConfig(configFileSetting) {
+async function getAppConfig(configFileSetting) {
   if (configFileSetting.startsWith("http")) {
     return await fetchConfigFile(configFileSetting);
   }
@@ -66,3 +66,5 @@ function parseConfig(raw) {
 getAppConfig(process.env.CONFIG_FILE).then(val => {
   console.log(val);
 });
+
+module.exports = getAppConfig;
