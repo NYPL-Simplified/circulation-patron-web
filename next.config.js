@@ -13,7 +13,9 @@ const { NODE_ENV } = process.env;
 // get the latest Git commit sha
 const execSync = require("child_process").execSync;
 const GIT_COMMIT_SHA = execSync("git rev-parse HEAD").toString().trim();
-const GIT_BRANCH = execSync("git branch --show-current").toString().trim();
+const GIT_BRANCH = execSync("git rev-parse --abbrev-ref HEAD")
+  .toString()
+  .trim();
 
 // compute the release stage of the app
 const RELEASE_STAGE =
