@@ -1,7 +1,8 @@
 import { AppConfig } from "interfaces";
+import * as env from "utils/env";
 
 export default function mockConfig(custom?: Partial<AppConfig>) {
-  ((global as any).APP_CONFIG as any) = {
+  (env.APP_CONFIG as any) = {
     ...defaultMock,
     ...custom
   };
