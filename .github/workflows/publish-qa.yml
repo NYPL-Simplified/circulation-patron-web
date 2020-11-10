@@ -47,7 +47,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nypl/patron-web:beta, nypl/patron-web:beta.${{ steps.get_sha.outputs.short_sha }} nypl/patron-web:qa, nypl/patron-web:qa.${{ steps.get_sha.outputs.short_sha }}
+          tags: nypl/patron-web:beta, nypl/patron-web:beta.${{ steps.get_sha.outputs.short_sha }}, nypl/patron-web:qa, nypl/patron-web:qa.${{ steps.get_sha.outputs.short_sha }}
           # allows us to install the private axisnow package
           build-args: |
             github_token=${{ secrets.GH_PACKAGES_TOKEN }}
