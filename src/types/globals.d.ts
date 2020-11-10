@@ -1,5 +1,3 @@
-declare global {
-  interface Window {
-    dataLayer: Array<any> | undefined;
-  }
+interface Window {
+  dataLayer: Array<any> | undefined;
 }
