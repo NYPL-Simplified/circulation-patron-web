@@ -57,7 +57,7 @@ function parseConfig(raw) {
     instanceName: unparsed.instance_name || "Patron Web Catalog",
     libraries: unparsed.libraries,
     mediaSupport: unparsed.media_support || {},
-    bugsnagApiKey: unparsed.bugsnagApiKey || null,
+    bugsnagApiKey: unparsed.bugsnag_api_key || null,
     gtmId: unparsed.gtmId || null,
     companionApp,
     showMedium
