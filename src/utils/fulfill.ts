@@ -7,7 +7,7 @@ import {
   OPDS1
 } from "interfaces";
 import { bookIsAudiobook } from "utils/book";
-import { AXISNOW_DECRYPT } from "utils/env";
+import { APP_CONFIG, AXISNOW_DECRYPT } from "utils/env";
 import { typeMap } from "utils/file";
 
 /**

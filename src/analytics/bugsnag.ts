@@ -9,7 +9,8 @@ import {
   GIT_BRANCH,
   GIT_COMMIT_SHA,
   NODE_ENV,
-  RELEASE_STAGE
+  RELEASE_STAGE,
+  APP_CONFIG
 } from "utils/env";
 
 if (BUGSNAG_API_KEY) {

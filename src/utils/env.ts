@@ -1,10 +1,19 @@
+import { AppSetupError } from "errors";
 /* eslint-disable no-underscore-dangle */
+
+import { AppConfig } from "interfaces";
 
 /**
  * Simply exporting processed env vars
  */
 
 export const CONFIG_FILE = process.env.CONFIG_FILE;
+
+const appConfigString = process.env.APP_CONFIG;
+if (!appConfigString)
+  throw new AppSetupError("process.env.APP_CONFIG is undefined.");
+export const APP_CONFIG: AppConfig = JSON.parse(appConfigString);
+
 export const REACT_AXE = process.env.REACT_AXE;
 export const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 export const NODE_ENV = process.env.NODE_ENV;

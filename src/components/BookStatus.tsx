@@ -7,6 +7,7 @@ import { availabilityString, bookIsFulfillable } from "utils/book";
 import { Text } from "components/Text";
 import { shouldRedirectToCompanionApp } from "utils/fulfill";
 import SvgPhone from "icons/Phone";
+import { APP_CONFIG } from "utils/env";
 
 const BookStatus: React.FC<{ book: AnyBook }> = ({ book }) => {
   const { status } = book;

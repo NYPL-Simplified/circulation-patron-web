@@ -54,6 +54,7 @@ function parseConfig(raw) {
   const showMedium = unparsed.show_medium !== false;
   // otherwise assume the file is properly structured.
   return {
+    instanceName: unparsed.instance_name || "Patron Web Catalog",
     libraries: unparsed.libraries,
     mediaSupport: unparsed.media_support || {},
     bugsnagApiKey: unparsed.bugsnagApiKey || null,
@@ -65,7 +66,7 @@ function parseConfig(raw) {
 
 // get the config and print it to stdout so next.config.js can use it
 getAppConfig(process.env.CONFIG_FILE).then(val => {
-  console.log(val);
+  console.log(JSON.stringify(val));
 });
 
 module.exports = getAppConfig;

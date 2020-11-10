@@ -1,5 +1,9 @@
 # build environment
 FROM node:12.2.0-alpine as builder	
+
+RUN apk update
+RUN apk add git
+
 # we first copy just the package.json and run npm ci
 # to take advantage of layer caching
 ENV NPM_CONFIG_LOGLEVEL=warn

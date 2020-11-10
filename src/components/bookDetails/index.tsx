@@ -21,6 +21,7 @@ import extractParam from "dataflow/utils";
 import useSWR from "swr";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
+import { APP_CONFIG } from "utils/env";
 
 export const BookDetails: React.FC = () => {
   const { query } = useRouter();
