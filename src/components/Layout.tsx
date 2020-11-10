@@ -5,6 +5,7 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import Footer from "./Footer";
 import SkipNavigation from "./SkipNavigation";
+import { ErrorBoundary } from "components/ErrorBoundary";
 
 export const CONTENT_ID = "cpw-content";
 
@@ -26,7 +27,7 @@ const Layout: React.FC<{ bg?: string }> = ({ children, bg }) => {
           bg
         }}
       >
-        {children}
+        <ErrorBoundary>{children}</ErrorBoundary>
       </main>
       <Footer sx={{ width: "100%" }} />
     </Styled.root>

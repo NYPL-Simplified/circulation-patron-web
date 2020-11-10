@@ -1,5 +1,5 @@
-import { APP_CONFIG } from "config";
 import * as React from "react";
+import { APP_CONFIG } from "utils/env";
 
 const GTM_ID = APP_CONFIG.gtmId;
 

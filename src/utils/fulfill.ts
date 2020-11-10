@@ -1,4 +1,3 @@
-import { APP_CONFIG } from "config";
 import { fetchBook } from "dataflow/opds1/fetch";
 import ApplicationError from "errors";
 import {
@@ -8,7 +7,7 @@ import {
   OPDS1
 } from "interfaces";
 import { bookIsAudiobook } from "utils/book";
-import { AXISNOW_DECRYPT } from "utils/env";
+import { APP_CONFIG, AXISNOW_DECRYPT } from "utils/env";
 import { typeMap } from "utils/file";
 
 /**

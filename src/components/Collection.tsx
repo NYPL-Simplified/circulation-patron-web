@@ -24,10 +24,11 @@ export const Collection: React.FC<{
   // use catalog url if you're at home
   const collectionUrl = decodeURIComponent(collectionUrlParam ?? catalogUrl);
 
-  const { data: collection, isValidating } = useSWR(
+  const { data: collection, isValidating, error } = useSWR(
     collectionUrl,
     fetchCollection
   );
+  if (error) throw error;
 
   // extract the books from the collection and set them in the SWR cache
   // so we don't have to refetch them when you click a book.

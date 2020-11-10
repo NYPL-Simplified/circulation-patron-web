@@ -1,6 +1,8 @@
 ## CHANGELOG
 
-### UNRELEASED
+### UNRELEASED CHANGES
+
+### v3.1.0
 
 - Feature: Calls reader 0.2.4 with dyslexia friendly font.
 - Add: Enforce changelog updates on PRs.
@@ -8,8 +10,11 @@
 - Feature: Add storybook to aid in developing and designing complicated states.
 - Fix: Properly parse server errors into `ServerError` for use throughout the application to show the user better error messages.
 - Fix: Deterministic `buildId` based on git commit SHA in order to allow running multiple instances of the application behind a load balancer.
+- Fix: Fetch the config file synchronously at startup so that the bugsnag api key can be used during the webpack setup.
+- Improvement: Application now tracks errors better by parsing them more precisely, and then recording them to bugsnag and console.
 
 ### v3.0.1
+
 - hotfix: Checkout the master branch with submodules when building production docker container
 
 ### v3.0.0

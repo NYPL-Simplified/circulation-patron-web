@@ -1,7 +1,8 @@
 import Bugsnag from "@bugsnag/js";
-import { APP_CONFIG } from "config";
+import ApplicationError, { ServerError } from "errors";
 /* eslint-disable camelcase */
 import { NextWebVitalsMetric } from "next/app";
+import { APP_CONFIG } from "utils/env";
 
 type PageData = {
   path: string;
@@ -55,9 +56,40 @@ function webVitals({ id, name, value, label }: NextWebVitalsMetric) {
   });
 }
 
-function error(e: Error) {
+function error(
+  e: Error,
+  {
+    severity,
+    metadata
+  }: {
+    severity?: "info" | "warning" | "error";
+    metadata?: Record<string, Record<any, unknown>>;
+  } = {}
+) {
+  // report it to the console
+  console.error(e);
+  // track to bugsnag
   if (APP_CONFIG.bugsnagApiKey) {
-    Bugsnag.notify(e);
+    Bugsnag.notify(e, event => {
+      // set severity
+      if (severity) event.severity = severity;
+
+      // add custom metadata
+      if (metadata) {
+        const keys = Object.keys(metadata);
+        keys.forEach(key => event.addMetadata(key, metadata[key]));
+      }
+      // add error info if there is any
+      if (e instanceof ApplicationError) {
+        event.addMetadata("Error Info", e.info);
+        if (e instanceof ServerError) {
+          event.addMetadata("Error Info", {
+            url: e.url,
+            authDocument: e.authDocument
+          });
+        }
+      }
+    });
   }
 }
 
