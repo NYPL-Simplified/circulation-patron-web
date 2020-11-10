@@ -113,13 +113,6 @@ const config = {
       };
     }
 
-    // pass the APP_CONFIG as a global
-    // config.plugins.push(
-    //   new webpack.DefinePlugin({
-    //     APP_CONFIG: JSON.stringify(APP_CONFIG)
-    //   })
-    // );
-
     // ignore the axisnow decryptor if we don't have access
     if (!AXISNOW_DECRYPT) {
       config.plugins.push(
