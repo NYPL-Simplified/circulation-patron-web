@@ -3,7 +3,6 @@ import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
 import {
   BUILD_ID,
-  BUGSNAG_API_KEY,
   IS_SERVER,
   CONFIG_FILE,
   GIT_BRANCH,
@@ -13,9 +12,9 @@ import {
   APP_CONFIG
 } from "utils/env";
 
-if (BUGSNAG_API_KEY) {
+if (APP_CONFIG.bugsnagApiKey) {
   Bugsnag.start({
-    apiKey: BUGSNAG_API_KEY,
+    apiKey: APP_CONFIG.bugsnagApiKey,
     appVersion: BUILD_ID,
     plugins: [new BugsnagPluginReact()],
     appType: IS_SERVER ? "node" : "browser",
@@ -36,7 +35,7 @@ if (BUGSNAG_API_KEY) {
   });
 }
 
-export const BugsnagErrorBoundary = BUGSNAG_API_KEY
+export const BugsnagErrorBoundary = APP_CONFIG.bugsnagApiKey
   ? Bugsnag.getPlugin("react")?.createErrorBoundary(React)
   : undefined;
 

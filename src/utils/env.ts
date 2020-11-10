@@ -23,5 +23,4 @@ export const BUILD_ID = process.env.BUILD_ID;
 export const GIT_COMMIT_SHA = process.env.GIT_COMMIT_SHA;
 export const GIT_BRANCH = process.env.GIT_BRANCH;
 export const AXISNOW_DECRYPT = process.env.AXISNOW_DECRYPT;
-export const BUGSNAG_API_KEY = process.env.NEXT_PUBLIC_BUGSNAG_API_KEY;
 export const RELEASE_STAGE = process.env.RELEASE_STAGE;
