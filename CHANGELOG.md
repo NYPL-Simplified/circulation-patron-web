@@ -1,6 +1,7 @@
 ## CHANGELOG
 
-### UNRELEASED CHANGES
+### v3.1.1
+- Fix: Update github workflow files to properly publish new branches (production, qa, dev).
 
 ### v3.1.0
 

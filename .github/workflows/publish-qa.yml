@@ -1,16 +1,16 @@
-# # This workflow will publish the beta image to docker hub
-# name: Publish beta
+# # This workflow will publish the qa image to docker hub
+name: Publish qa
 
 # # action will only run when a pull request to the beta branch is closed.
 on:
   pull_request:
-    branches: [beta]
+    branches: [qa]
     types: [closed]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   publish_beta:
-    name: Publish beta image to Docker Hub
+    name: Publish qa image to Docker Hub
     # only run if the PR is merged.
     if: github.event.pull_request.merged
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nypl/patron-web:beta, nypl/patron-web:beta.${{ steps.get_sha.outputs.short_sha }}
+          tags: nypl/patron-web:qa, nypl/patron-web:qa.${{ steps.get_sha.outputs.short_sha }}
           # allows us to install the private axisnow package
           build-args: |
             github_token=${{ secrets.GH_PACKAGES_TOKEN }}

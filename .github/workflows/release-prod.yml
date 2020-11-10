@@ -1,15 +1,15 @@
-# This workflow will tag and release the master branch
+# This workflow will tag and release the production branch
 name: Production Release
 
-# workflow will only run when a pull request to the master branch is closed.
+# workflow will only run when a pull request to the production branch is closed.
 on:
   pull_request:
-    branches: [master]
+    branches: [production]
     types: [closed]
 
 jobs:
   release_master:
-    name: Tag, Release and Publish master
+    name: Tag, Release and Publish 
     # only run if PR is merged (not just closed)
     if: github.event.pull_request.merged
     runs-on: ubuntu-latest
@@ -26,6 +26,7 @@ jobs:
           prefix: v
           # use the body of the PR commit as the tag message
           tag_message: ${{ github.event.pull_request.body }}
+
       - name: Release
         id: create_release
         if: steps.autotagger.outputs.tagname != ''
