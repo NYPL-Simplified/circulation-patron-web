@@ -20,7 +20,6 @@ import { AnyBook, CollectionData, LaneData } from "interfaces";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import { useSWRInfinite } from "swr";
 import useUser from "components/context/UserContext";
-import { APP_CONFIG } from "config";
 import Stack from "components/Stack";
 import CancelOrReturn from "components/CancelOrReturn";
 import FulfillmentButton from "components/FulfillmentButton";
@@ -30,6 +29,7 @@ import {
 } from "utils/fulfill";
 import { ArrowForward } from "icons";
 import BookStatus from "components/BookStatus";
+import { APP_CONFIG } from "utils/env";
 
 const ListLoadingIndicator = () => (
   <div

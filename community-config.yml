@@ -1,3 +1,8 @@
+# Set an instance name to be used in bug tracking and for other debugging purposes. 
+# This is not patron-facing, so call it something that will be meaningful to you when
+# reviewing bugs, especially if you operate multiple instances.
+instance_name: Patron Web Catalog
+
 # APP MEDIA SUPPORT
 # Each entry has a setting of "show", "redirect" or "show-and-redirect".
 # 
@@ -38,9 +43,6 @@ media_support:
 # defines the companion app for the instance. Can be "simplye" or "openebooks"
 # default is "simplye"
 companion_app: simplye
-
-# defines the bugsnag api key to integrate error tracking
-# bugsnag_api_key: xxx
 
 # defines the google tag manager id to integrate web analytics
 # gtm_id: xxx

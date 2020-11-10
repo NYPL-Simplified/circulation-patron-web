@@ -17,15 +17,14 @@ export default function useBorrow(isBorrow: boolean) {
   const buttonLabel = isBorrow ? "Borrow this book" : "Reserve this book";
 
   const borrowOrReserve = async (url: string) => {
-    setLoading(true);
     clearError();
     if (!token) {
       // TODO: register a callback to call if the sign in works
       showModal();
       setErrorString("You must be signed in to borrow this book.");
-      setLoading(false);
       return;
     }
+    setLoading(true);
     try {
       const book = await fetchBook(url, catalogUrl, token);
       setBook(book);

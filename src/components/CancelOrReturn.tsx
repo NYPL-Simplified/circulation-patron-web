@@ -4,10 +4,9 @@ import * as React from "react";
 import useLibraryContext from "components/context/LibraryContext";
 import useUser from "components/context/UserContext";
 import { fetchBook } from "dataflow/opds1/fetch";
-import { ServerError } from "errors";
 import Button from "components/Button";
 import { Text } from "components/Text";
-import track from "analytics/track";
+import useError from "hooks/useError";
 
 const CancelOrReturn: React.FC<{
   text: string;
@@ -18,27 +17,22 @@ const CancelOrReturn: React.FC<{
   const { token, setBook } = useUser();
   const { catalogUrl } = useLibraryContext();
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const { error, handleError, setErrorString, clearError } = useError();
 
   async function cancelReservation(revokeUrl: string) {
+    clearError();
     if (!token) {
-      setError("You must be signed in.");
+      setErrorString("You must be signed in.");
       return;
     }
     setLoading(true);
     try {
       const newBook = await fetchBook(revokeUrl, catalogUrl, token);
       setBook(newBook, id);
-      setLoading(false);
     } catch (e) {
-      setLoading(false);
-      track.error(e);
-      if (e instanceof ServerError) {
-        setError(e.info.detail);
-        return;
-      }
-      setError("An unknown error occurred");
+      handleError(e);
     }
+    setLoading(false);
   }
   if (!url) return null;
   return (
@@ -57,7 +51,7 @@ const CancelOrReturn: React.FC<{
       >
         {text}
       </Button>
-      {error && <Text>Error: {error}</Text>}
+      {error && <Text>{error}</Text>}
     </>
   );
 };

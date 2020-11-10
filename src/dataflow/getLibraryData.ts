@@ -8,7 +8,7 @@ import {
 import { OPDSFeed, OPDSShelfLink } from "opds-feed-parser";
 import ApplicationError, { PageNotFoundError, ServerError } from "errors";
 import { flattenSamlMethod } from "utils/auth";
-import { APP_CONFIG } from "config";
+import { APP_CONFIG } from "utils/env";
 
 /**
  * Returns a function to construct a registry catalog link, which leads to a

@@ -1,14 +1,14 @@
-import { defaultMock } from "../src/test-utils/mockConfig"
+import { config } from "../src/test-utils/fixtures/config"
 
 
-export let APP_CONFIG = defaultMock;
+export let APP_CONFIG = config;
 
 // the decorator to be used in ./storybook/preview to apply the mock to all stories
 
 export function configDecorator(story: any, { parameters, globals }) {
   if (parameters && parameters.config) {
     APP_CONFIG = {
-      ...defaultMock,
+      ...config,
       ...parameters.config,
     }
   }

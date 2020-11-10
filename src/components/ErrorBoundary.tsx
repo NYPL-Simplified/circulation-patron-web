@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { BugsnagErrorBoundary } from "utils/bugsnag";
+import { BugsnagErrorBoundary } from "analytics/bugsnag";
+import ErrorComponent from "components/Error";
 
 export type FallbackProps = {
   error: Error;
@@ -9,25 +10,15 @@ export type FallbackProps = {
   clearError: () => void;
 };
 
-const DEFAULT_MESSAGE =
-  "Something went wrong. Please refresh and try again. If the issue persists, contact your library support staff.";
-
 export const DefaultFallback: React.FC<FallbackProps> = ({ error }) => {
   return (
-    <div
-      sx={{
-        maxHeight: "100vh",
-        maxWidth: "100vw",
-        textAlign: "center",
-        backgroundColor: "warn",
-        color: "ui.white",
-        cursor: "help",
-        borderRadius: "card"
+    <ErrorComponent
+      error={{
+        title: `${error.name}`,
+        detail:
+          "Something went wrong. Please refresh and try again. If the issue persists, contact your library support staff."
       }}
-      title={error?.toString()}
-    >
-      <p>{DEFAULT_MESSAGE}</p>
-    </div>
+    />
   );
 };
 
@@ -73,6 +64,23 @@ class DefaultErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
+
+export const ErrorBoundary: React.FC<{
+  fallback?: React.ComponentType<FallbackProps>;
+}> = ({ children, fallback: Fallback = DefaultFallback }) => {
+  if (!BugsnagErrorBoundary) {
+    return (
+      <DefaultErrorBoundary FallbackComponent={Fallback}>
+        {children}
+      </DefaultErrorBoundary>
+    );
+  }
+  return (
+    <BugsnagErrorBoundary FallbackComponent={Fallback}>
+      {children}
+    </BugsnagErrorBoundary>
+  );
+};
 
 export default function withErrorBoundary<T>(
   Component: React.ComponentType<T>,

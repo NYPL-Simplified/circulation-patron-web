@@ -10,6 +10,7 @@ import { getAuthDocHref } from "utils/auth";
 import { findSearchLink } from "dataflow/opds1/parse";
 import { fetchFeed, fetchSearchData } from "dataflow/opds1/fetch";
 import extractParam from "dataflow/utils";
+import track from "analytics/track";
 
 export type AppProps = {
   library?: LibraryData;
@@ -57,7 +58,9 @@ export default function withAppProps(
         revalidate: 60 * 60
       };
     } catch (e) {
+      // show the error page if there was an ApplicationError
       if (e instanceof ApplicationError) {
+        track.error(e, { severity: "error" });
         return {
           props: {
             error: e.info

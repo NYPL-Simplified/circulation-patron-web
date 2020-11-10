@@ -10,7 +10,6 @@ import BreadcrumbBar from "../BreadcrumbBar";
 import { truncateString } from "../../utils/string";
 import DetailField from "../BookMetaDetail";
 import ReportProblem from "./ReportProblem";
-import { NavButton } from "../Button";
 import Head from "next/head";
 import { H1, H2, H3, Text } from "components/Text";
 import MediumIndicator from "components/MediumIndicator";
@@ -22,9 +21,7 @@ import extractParam from "dataflow/utils";
 import useSWR from "swr";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
-import { ServerError } from "errors";
-import { ProblemDocument } from "types/opds1";
-import { APP_CONFIG } from "config";
+import { APP_CONFIG } from "utils/env";
 
 export const BookDetails: React.FC = () => {
   const { query } = useRouter();
@@ -35,10 +32,8 @@ export const BookDetails: React.FC = () => {
   const book = loans?.find(loanedBook => data?.id === loanedBook.id) ?? data;
 
   if (error) {
-    if (error instanceof ServerError) {
-      return <Error info={error.info} />;
-    }
-    return <Error />;
+    // just throw the error and let it be handled by an error boundary
+    throw error;
   }
 
   if (!book) return <PageLoader />;
@@ -139,42 +134,6 @@ const SimplyECallout: React.FC<{ className?: "string" }> = ({ className }) => {
       <div sx={{ maxWidth: 140, mx: "auto", mt: 3 }}>
         <IosBadge sx={{ m: "6%" }} />
         <GooglePlayBadge />
-      </div>
-    </section>
-  );
-};
-
-const Error: React.FC<{ info?: ProblemDocument }> = ({ info }) => {
-  return (
-    <section
-      aria-label="Book details"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <Head>
-        <title>Book error</title>
-      </Head>
-      <div sx={{ maxWidth: "70%" }}>
-        <p>
-          There was a problem fetching this book. Please refresh the page or
-          return home.
-        </p>
-        <div>
-          <span sx={{ fontWeight: "bold" }}>Error Code: </span>
-          {info?.status ?? "unknown"}
-        </div>
-        <div>
-          <span sx={{ fontWeight: "bold" }}>Error Message: </span>
-          {info?.detail ?? "An Unknown fetch error occurred."}
-        </div>
-        <NavButton sx={{ mt: 3 }} href="/">
-          Return Home
-        </NavButton>
       </div>
     </section>
   );

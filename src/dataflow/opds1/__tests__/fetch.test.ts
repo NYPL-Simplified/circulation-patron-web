@@ -6,7 +6,7 @@ import {
   fetchOPDS,
   fetchSearchData
 } from "dataflow/opds1/fetch";
-import ApplicationError, { ServerError } from "errors";
+import ApplicationError, { FetchError, ServerError } from "errors";
 import fetchMock from "jest-fetch-mock";
 import { OPDSEntry, OPDSFeed } from "opds-feed-parser";
 import rawOpdsFeed from "test-utils/fixtures/raw-opds-feed";
@@ -34,13 +34,25 @@ describe("fetchOPDS", () => {
     });
   });
 
-  test("throws server error if response not okay", async () => {
+  test("throws FetchError if fetch rejects", async () => {
     fetchMock.mockReject(
       new ServerError("/some-url", 418, {
         detail: "you screwed it up",
         title: "wrong",
         status: 418
       })
+    );
+    await expect(fetchOPDS("/some-url")).rejects.toThrowError(FetchError);
+  });
+
+  test("throws server error if response not okay", async () => {
+    fetchMock.once(
+      JSON.stringify({
+        detail: "you screwed it up",
+        title: "wrong",
+        status: 418
+      }),
+      { status: 418 }
     );
     await expect(fetchOPDS("/some-url")).rejects.toThrowError(ServerError);
   });

@@ -17,12 +17,13 @@ export { OPDS1 };
  */
 
 export type AppConfig = {
+  instanceName: string;
   mediaSupport: MediaSupportConfig;
   libraries: LibraryRegistryBase | LibrariesConfig;
   companionApp: "simplye" | "openebooks";
   showMedium: boolean;
-  bugsnagApiKey: string | null;
   gtmId: string | null;
+  bugsnagApiKey: string | null;
 };
 
 export type MediaSupportConfig = DirectMediaSupport & IndirectMediaSupport;

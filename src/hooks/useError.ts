@@ -1,3 +1,4 @@
+import track from "analytics/track";
 import { ServerError } from "errors";
 import * as React from "react";
 
@@ -9,12 +10,11 @@ export default function useError() {
 
   // for network errors
   function handleError(e: any) {
-    // TODO: track error to bugsnag
+    track.error(e);
     if (e instanceof ServerError) {
       setError(`Error: ${e.info.detail}`);
       return;
     }
-    console.error(e);
     setError("Error: An unknown error occurred.");
   }
 
