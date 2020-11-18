@@ -45,7 +45,5 @@ export default function useCollection() {
     cacheCollectionBooks(collection);
   }, [collection]);
 
-  console.log(applicationError, error instanceof ApplicationError);
-
   return { collection, collectionUrl, isValidating, error: applicationError };
 }
