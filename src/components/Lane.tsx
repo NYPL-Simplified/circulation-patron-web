@@ -19,7 +19,9 @@ type BookRefs = {
 type CurrentBook = {
   index: number;
   /**
-   * The following dictates whether we snap to a book
+   * The following dictates whether we snap to a book. 
+   * "Snapping" to a book means we scroll the currentBook's
+   * left edge so that it is up against leftmost edge of the lane
    */
   snap: boolean;
 };
