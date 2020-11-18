@@ -23,18 +23,20 @@ export default function useCollection() {
     Error | ApplicationError
   >(collectionUrl ? [collectionUrl, token] : null, fetchCollection);
 
-  // wrap unidentified errors in an ApplicationError
+  // make sure unidentified errors are wrapped in an ApplicationError
   let applicationError: ApplicationError | undefined = undefined;
-  // if there is an error, but it is not an ApplicationError, wrap it in one
-  // before passing it along
-  if (error instanceof Error && !(error instanceof ApplicationError)) {
-    applicationError = new ApplicationError(
-      {
-        title: "Fetch Collection Error",
-        detail: "An unknown error ocurred while fetching the collection"
-      },
-      error
-    );
+  if (error) {
+    if (error instanceof ApplicationError) {
+      applicationError = error;
+    } else {
+      applicationError = new ApplicationError(
+        {
+          title: "Fetch Collection Error",
+          detail: "An unknown error ocurred while fetching the collection"
+        },
+        error
+      );
+    }
   }
 
   // extract the books from the collection and set them in the SWR cache
@@ -42,6 +44,8 @@ export default function useCollection() {
   React.useEffect(() => {
     cacheCollectionBooks(collection);
   }, [collection]);
+
+  console.log(applicationError, error instanceof ApplicationError);
 
   return { collection, collectionUrl, isValidating, error: applicationError };
 }
