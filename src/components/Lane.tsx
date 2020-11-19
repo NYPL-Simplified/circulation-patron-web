@@ -12,6 +12,7 @@ import Stack from "./Stack";
 import { AnyBook, LaneData } from "interfaces";
 import Link from "components/Link";
 import { Text } from "components/Text";
+import { useInView } from 'react-intersection-observer';
 
 type BookRefs = {
   [id: string]: React.RefObject<HTMLLIElement>;
@@ -66,18 +67,24 @@ const Lane: React.FC<{
   const [isBrowserScrolling, setIsBrowserScrolling] = React.useState<boolean>(
     false
   );
+  const [isAtEnd, setisAtEnd] = React.useState<boolean>(
+    false
+  );
   // we need a ref to the UL element so we can scroll it
   const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
   // vars for when we are at beginning or end of lane
+  
   const isAtIndexEnd = currentBook.index === filteredBooks.length - 1;
   const isAtScrollEnd = !!(
     scrollContainer.current &&
     scrollContainer.current.scrollLeft ===
       scrollContainer.current.scrollWidth - scrollContainer.current.offsetWidth
   );
-  const isAtEnd = !!(isAtIndexEnd || isAtScrollEnd);
-  const isAtStart = currentBook.index === 0;
+  //const isAtEnd = !!(isAtIndexEnd || isAtScrollEnd);
+  //const isAtEnd = !!(currentBook.index + 1 > filteredBooks.length);
+  //const isAtStart = currentBook.index === 0;
+  const isAtStart = !!(currentBook.index - 1 < 0);
 
   /** Handlers for button clicks */
   const handleRightClick = () => {
@@ -97,7 +104,7 @@ const Lane: React.FC<{
 
   // will be used to set a timeout when the browser is auto scrolling
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const browserScrollTime = 1000; // guess how long the browser takes to scroll
+  const browserScrollTime = 3000; // guess how long the browser takes to scroll
 
   /**
    * This effect is used to snap us to a particular book when the
@@ -159,6 +166,10 @@ const Lane: React.FC<{
 
   return (
     <li sx={{ m: 0, p: 0, mb: 4, listStyle: "none" }} aria-label={title}>
+      <p>{`start ${isAtStart}`}</p>
+      <p>{`end ${isAtEnd}`}</p>
+      <p>{`currentBook.index ${currentBook.index - 1}`}</p>
+      <p>{filteredBooks.length}</p>
       <Stack
         sx={{
           justifyContent: ["space-between", "initial"],
@@ -205,7 +216,7 @@ const Lane: React.FC<{
           {filteredBooks.map(book => (
             <Book key={book.id} book={book} ref={bookRefs[book.id]} />
           ))}
-          <SeeMoreBlock url={url} title={title} />
+          <SeeMoreBlock url={url} title={title} setIsAtEnd={setisAtEnd}/>
         </ul>
 
         <PrevNextButton onClick={handleRightClick} disabled={isAtEnd} />
@@ -214,10 +225,15 @@ const Lane: React.FC<{
   );
 };
 
-const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
+const SeeMoreBlock: React.FC<{ url: string; title: string, setIsAtEnd: (arg: boolean)=>void }> = ({
   url,
-  title
+  title,
+  setIsAtEnd
 }) => {
+  const { ref, inView, entry } = useInView({
+    threshold: 1
+  });
+  inView ? setIsAtEnd(true) : setIsAtEnd(false)
   return (
     <li
       sx={{
@@ -229,6 +245,7 @@ const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
         mx: 2,
         color: "ui.white"
       }}
+      ref={ref}
     >
       <Link
         collectionUrl={url}
@@ -244,6 +261,7 @@ const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
         }}
       >
         <Stack direction="column">
+          <Text>{inView.toString()}</Text>
           <Text>See All</Text>
           <Text variant="text.headers.tertiary">{title}</Text>
         </Stack>
