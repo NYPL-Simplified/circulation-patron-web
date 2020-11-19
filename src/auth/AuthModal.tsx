@@ -19,12 +19,30 @@ import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
 import BasicAuthButton from "auth/BasicAuthButton";
 import LoadingIndicator from "components/LoadingIndicator";
+import { useRouter } from "next/router";
+import extractParam from "dataflow/utils";
+import useLinkUtils from "hooks/useLinkUtils";
 
 const AuthModal: React.FC = ({ children }) => {
+  const router = useRouter();
+  const loginParam = extractParam(router.query, "login");
+  const linkUtils = useLinkUtils();
+  const isOpen = typeof loginParam === "string";
   const dialog = useDialogState();
   const { hide } = dialog;
-  const { catalogName, authMethods } = useLibraryContext();
-  const { isAuthenticated, clearCredentials, isLoading } = useUser();
+  const { isAuthenticated, clearCredentials } = useUser();
+
+  function close() {
+    const { login, ...rest } = router.query;
+    router.push(
+      {
+        // pathname: router.pathname,
+        query: rest
+      },
+      undefined,
+      { shallow: true }
+    );
+  }
   /**
    * If the user becomes authenticated, we can hide the form
    */
@@ -32,14 +50,49 @@ const AuthModal: React.FC = ({ children }) => {
     if (isAuthenticated) hide();
   }, [isAuthenticated, hide]);
 
-  const show = dialog.show;
+  const show = () => {
+    const login = linkUtils.buildMultiLibraryLink("/login");
+    console.log("pushing", login);
+    router.push(login, undefined, { shallow: true });
+  };
   /**
    * When you show the login modal, clear any old credentials from the state
    */
-  const showModalAndReset = React.useCallback(() => {
+  const showModalAndReset = () => {
     clearCredentials();
     show();
-  }, [show, clearCredentials]);
+  };
+
+  return (
+    <React.Fragment>
+      <ClientOnly>
+        <Modal
+          isVisible={isOpen}
+          hide={close}
+          label="Sign In Form"
+          dialog={dialog}
+          sx={{ p: 5 }}
+        >
+          <Login />
+        </Modal>
+      </ClientOnly>
+      {/* We render this to provide the dialog a focus target after it closes
+          even though we don't open the dialog with a button
+      */}
+      {/* <DialogDisclosure sx={{ display: "none" }} {...dialog} /> */}
+      <AuthModalProvider
+        showModal={dialog.show}
+        showModalAndReset={showModalAndReset}
+      >
+        {children}
+      </AuthModalProvider>
+    </React.Fragment>
+  );
+};
+
+export const Login: React.FC = () => {
+  const { isLoading } = useUser();
+  const { catalogName, authMethods } = useLibraryContext();
 
   /**
    * The options:
@@ -59,46 +112,35 @@ const AuthModal: React.FC = ({ children }) => {
     : "combobox";
 
   return (
-    <React.Fragment>
-      <ClientOnly>
-        <Modal
-          isVisible={dialog.visible}
-          hide={dialog.hide}
-          label="Sign In Form"
-          dialog={dialog}
-          sx={{ p: 5 }}
-        >
-          <div sx={{ textAlign: "center", p: 0 }}>
-            <H2>{catalogName}</H2>
-            {formStatus !== "loading" && <h4>Login</h4>}
-          </div>
-          {formStatus === "loading" ? (
-            <Stack direction="column" sx={{ alignItems: "center" }}>
-              <LoadingIndicator />
-              Logging in...
-            </Stack>
-          ) : formStatus === "no-auth" ? (
-            <NoAuth />
-          ) : formStatus === "single-auth" ? (
-            <SignInForm method={authMethods[0]} />
-          ) : formStatus === "combobox" ? (
-            <Combobox authMethods={authMethods} />
-          ) : (
-            <Buttons authMethods={authMethods} />
-          )}
-        </Modal>
-      </ClientOnly>
-      {/* We render this to provide the dialog a focus target after it closes
-          even though we don't open the dialog with a button
-      */}
-      {/* <DialogDisclosure sx={{ display: "none" }} {...dialog} /> */}
-      <AuthModalProvider
-        showModal={dialog.show}
-        showModalAndReset={showModalAndReset}
-      >
-        {children}
-      </AuthModalProvider>
-    </React.Fragment>
+    <div
+      sx={{
+        flex: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
+    >
+      <div sx={{ p: 4, border: "solid", borderRadius: "card" }}>
+        <div sx={{ textAlign: "center", p: 0 }}>
+          <H2>{catalogName}</H2>
+          {formStatus !== "loading" && <h4>Login</h4>}
+        </div>
+        {formStatus === "loading" ? (
+          <Stack direction="column" sx={{ alignItems: "center" }}>
+            <LoadingIndicator />
+            Logging in...
+          </Stack>
+        ) : formStatus === "no-auth" ? (
+          <NoAuth />
+        ) : formStatus === "single-auth" ? (
+          <SignInForm method={authMethods[0]} />
+        ) : formStatus === "combobox" ? (
+          <Combobox authMethods={authMethods} />
+        ) : (
+          <Buttons authMethods={authMethods} />
+        )}
+      </div>
+    </div>
   );
 };
 
