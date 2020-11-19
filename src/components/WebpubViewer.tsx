@@ -6,7 +6,6 @@ import useUser from "components/context/UserContext";
 import fetchWithHeaders from "dataflow/fetch";
 import extractParam from "dataflow/utils";
 import { PageNotFoundError, ServerError } from "errors";
-import useAuthModalContext from "auth/AuthModalContext";
 
 const initializeReader = async (
   entryUrl: string,
@@ -31,8 +30,7 @@ const WebpubViewer = () => {
   const library = useLibraryContext();
   const router = useRouter();
   const bookUrl = extractParam(router.query, "bookUrl");
-  const { token, status } = useUser();
-  const { showModal } = useAuthModalContext();
+  const { token, status, initLogin } = useUser();
 
   const { catalogName } = library;
 
@@ -44,8 +42,8 @@ const WebpubViewer = () => {
    * Show the auth modal if the user is not logged in
    */
   React.useEffect(() => {
-    if (status === "unauthenticated") showModal();
-  }, [status, showModal]);
+    if (status === "unauthenticated") initLogin();
+  }, [status, initLogin]);
 
   // this will be caught by an error boundary and display a 404
   if (!bookUrl)

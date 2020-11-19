@@ -15,7 +15,6 @@ import { LibraryProvider } from "components/context/LibraryContext";
 import { UserContext, UserState } from "components/context/UserContext";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "theme";
-import { AuthModalProvider } from "auth/AuthModalContext";
 import mockConfig from "test-utils/mockConfig";
 
 enableFetchMocks();
@@ -30,9 +29,6 @@ export { fixtures };
 
 // configure the enzyme adapter
 configure({ adapter: new Adapter() });
-
-export const mockShowAuthModal = jest.fn();
-export const mockShowModalAndReset = jest.fn();
 
 /**
  * mock out the window.URL.createObjectURL since it isn't
@@ -69,12 +65,7 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
           <ReakitProvider>
             <LibraryProvider library={library}>
               <UserContext.Provider value={user}>
-                <AuthModalProvider
-                  showModal={mockShowAuthModal}
-                  showModalAndReset={mockShowModalAndReset}
-                >
-                  {children}
-                </AuthModalProvider>
+                {children}
               </UserContext.Provider>
             </LibraryProvider>
           </ReakitProvider>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { mockShowAuthModal, render } from "test-utils";
+import { render } from "test-utils";
 import WebpubViewer from "components/WebpubViewer";
 import { PageNotFoundError } from "errors";
 import * as env from "utils/env";
@@ -22,7 +22,6 @@ test("throws error when url does not include bookUrl", () => {
 });
 
 test("shows fallback and auth modal if user is not logged in", () => {
-  expect(mockShowAuthModal).toHaveBeenCalledTimes(0);
   const utils = render(<WebpubViewer />, {
     router: { query: { bookUrl: "http://some-book.com" } },
     user: { isAuthenticated: false, token: undefined }

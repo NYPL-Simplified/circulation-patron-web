@@ -1,10 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { useDialogState } from "reakit/Dialog";
 import useLibraryContext from "../components/context/LibraryContext";
-import Modal from "../components/Modal";
-import ClientOnly from "../components/ClientOnly";
 import { H2, Text } from "../components/Text";
 import FormLabel from "../components/form/FormLabel";
 import Select from "../components/Select";
@@ -13,86 +10,34 @@ import { AppAuthMethod, OPDS1 } from "interfaces";
 import BasicAuthForm from "auth/BasicAuthForm";
 import SamlAuthButton from "auth/SamlAuthButton";
 import CleverButton from "auth/CleverAuthButton";
-import { AuthModalProvider } from "auth/AuthModalContext";
 import useUser from "components/context/UserContext";
 import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
 import BasicAuthButton from "auth/BasicAuthButton";
 import LoadingIndicator from "components/LoadingIndicator";
-import { useRouter } from "next/router";
 import extractParam from "dataflow/utils";
 import useLinkUtils from "hooks/useLinkUtils";
+import { useRouter } from "next/router";
+import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 
-const AuthModal: React.FC = ({ children }) => {
-  const router = useRouter();
-  const loginParam = extractParam(router.query, "login");
-  const linkUtils = useLinkUtils();
-  const isOpen = typeof loginParam === "string";
-  const dialog = useDialogState();
-  const { hide } = dialog;
-  const { isAuthenticated, clearCredentials } = useUser();
+const Login = () => {
+  const { isLoading, isAuthenticated } = useUser();
+  const { catalogName, authMethods } = useLibraryContext();
+  const { buildMultiLibraryLink } = useLinkUtils();
+  const { push, query } = useRouter();
+  const redirectUrl = extractParam(query, LOGIN_REDIRECT_QUERY_PARAM);
 
-  function close() {
-    const { login, ...rest } = router.query;
-    router.push(
-      {
-        // pathname: router.pathname,
-        query: rest
-      },
-      undefined,
-      { shallow: true }
-    );
-  }
+  const successUrl = redirectUrl || buildMultiLibraryLink("/");
+  const success = React.useCallback(() => {
+    push(successUrl, undefined, { shallow: true });
+  }, [push, successUrl]);
+
   /**
    * If the user becomes authenticated, we can hide the form
    */
   React.useEffect(() => {
-    if (isAuthenticated) hide();
-  }, [isAuthenticated, hide]);
-
-  const show = () => {
-    const login = linkUtils.buildMultiLibraryLink("/login");
-    console.log("pushing", login);
-    router.push(login, undefined, { shallow: true });
-  };
-  /**
-   * When you show the login modal, clear any old credentials from the state
-   */
-  const showModalAndReset = () => {
-    clearCredentials();
-    show();
-  };
-
-  return (
-    <React.Fragment>
-      <ClientOnly>
-        <Modal
-          isVisible={isOpen}
-          hide={close}
-          label="Sign In Form"
-          dialog={dialog}
-          sx={{ p: 5 }}
-        >
-          <Login />
-        </Modal>
-      </ClientOnly>
-      {/* We render this to provide the dialog a focus target after it closes
-          even though we don't open the dialog with a button
-      */}
-      {/* <DialogDisclosure sx={{ display: "none" }} {...dialog} /> */}
-      <AuthModalProvider
-        showModal={dialog.show}
-        showModalAndReset={showModalAndReset}
-      >
-        {children}
-      </AuthModalProvider>
-    </React.Fragment>
-  );
-};
-
-export const Login: React.FC = () => {
-  const { isLoading } = useUser();
-  const { catalogName, authMethods } = useLibraryContext();
+    if (isAuthenticated) success();
+  }, [isAuthenticated, success]);
 
   /**
    * The options:
@@ -302,4 +247,4 @@ function getMethodForId(
   );
 }
 
-export default AuthModal;
+export default Login;

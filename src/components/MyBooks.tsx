@@ -10,7 +10,6 @@ import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
 import { PageLoader } from "components/LoadingIndicator";
-import useAuthModalContext from "auth/AuthModalContext";
 
 const availableUntil = (book: AnyBook) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -40,13 +39,12 @@ function compareTitles(a: AnyBook, b: AnyBook): 0 | -1 | 1 {
 }
 
 export const MyBooks: React.FC = () => {
-  const { isAuthenticated, loans, isLoading } = useUser();
-  const { showModal } = useAuthModalContext();
+  const { isAuthenticated, loans, isLoading, initLogin } = useUser();
 
   // show the auth form if we are unauthenticated
   React.useEffect(() => {
-    if (!isAuthenticated) showModal();
-  }, [isAuthenticated, showModal]);
+    if (!isAuthenticated) initLogin();
+  }, [isAuthenticated, initLogin]);
 
   const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
   const noBooks = sortedBooks.length === 0;

@@ -3,13 +3,13 @@ import {
   render,
   fixtures,
   waitFor,
-  waitForElementToBeRemoved,
-  mockShowAuthModal
+  waitForElementToBeRemoved
 } from "test-utils";
 import BorrowOrReserve from "components/BorrowOrReserve";
 import userEvent from "@testing-library/user-event";
 import * as fetch from "dataflow/opds1/fetch";
 import { ServerError } from "errors";
+import { mockPush } from "test-utils/mockNextRouter";
 
 test("shows correct button for borrowable book", () => {
   const utils = render(<BorrowOrReserve isBorrow url="/url" />);
@@ -67,7 +67,7 @@ test("shows auth form and error when not logged in", () => {
   const button = utils.getByRole("button", {
     name: "Borrow this book"
   });
-  expect(mockShowAuthModal).toHaveBeenCalledTimes(0);
+  expect(mockPush).toHaveBeenCalledTimes(0);
 
   userEvent.click(button);
 
@@ -83,7 +83,7 @@ test("shows auth form and error when not logged in", () => {
   expect(mockedFetchBook).not.toHaveBeenCalled();
 
   // shows auth modal
-  expect(mockShowAuthModal).toHaveBeenCalledTimes(1);
+  expect(mockPush).toHaveBeenCalledWith("/test-lib/login");
 });
 
 test("catches and displays server errors", async () => {
