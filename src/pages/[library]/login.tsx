@@ -6,7 +6,8 @@ import { Login } from "auth/AuthModal";
 import { useRouter } from "next/router";
 import useLinkUtils from "hooks/useLinkUtils";
 import useUser from "components/context/UserContext";
-import extractParam from 'dataflow/utils';
+import extractParam from "dataflow/utils";
+import { LOGIN_REDIRECT_QUERY_PARAM } from 'utils/constants';
 
 const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   return (
@@ -16,11 +17,12 @@ const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   );
 };
 
+
 const LoginComponent = () => {
   const { buildMultiLibraryLink } = useLinkUtils();
   const { push, query } = useRouter();
   const { isAuthenticated } = useUser();
-  const redirectUrl = extractParam(query, "loginRedirect");
+  const redirectUrl = extractParam(query, LOGIN_REDIRECT_QUERY_PARAM);
 
   const successUrl = redirectUrl || buildMultiLibraryLink("/");
   const success = React.useCallback(() => {

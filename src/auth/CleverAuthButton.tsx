@@ -5,11 +5,11 @@ import { AnchorButton } from "components/Button";
 import { OPDS1 } from "interfaces";
 import { authButtonstyles } from "./AuthButton";
 
-const CleverButton: React.FC<{
-  className?: string;
-  method: OPDS1.CleverAuthMethod;
-}> = ({ className, method }) => {
+const CleverButton: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
+  method
+}) => {
   if (typeof window === "undefined") return null;
+
   const currentUrl = window.location.origin + window.location.pathname;
 
   const imageUrl = method.links?.find(link => link.rel === "logo")?.href;

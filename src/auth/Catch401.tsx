@@ -1,17 +1,25 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useAuthModalContext from "auth/AuthModalContext";
 import { keyInterface, SWRConfig } from "swr";
 import swrConfig from "utils/swrConfig";
 import { ServerError } from "errors";
 import track from "analytics/track";
+import { useRouter } from "next/router";
+import useLinkUtils from "hooks/useLinkUtils";
+import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
-  const { showModal } = useAuthModalContext();
+  const router = useRouter();
+  const { buildMultiLibraryLink } = useLinkUtils();
 
   function handle401() {
-    showModal();
+    const currentUrl = router.asPath;
+    const loginUrl = buildMultiLibraryLink("/login");
+    router.push({
+      pathname: loginUrl,
+      query: { [LOGIN_REDIRECT_QUERY_PARAM]: currentUrl }
+    });
   }
 
   const config = {
