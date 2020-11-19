@@ -95,7 +95,7 @@ const Lane: React.FC<{
 
   // will be used to set a timeout when the browser is auto scrolling
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const browserScrollTime = 3000; // guess how long the browser takes to scroll
+  const browserScrollTime = 1000; // guess how long the browser takes to scroll
 
   /**
    * This effect is used to snap us to a particular book when the
