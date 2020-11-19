@@ -73,18 +73,9 @@ const Lane: React.FC<{
   // we need a ref to the UL element so we can scroll it
   const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
-  // vars for when we are at beginning or end of lane
-  
-  const isAtIndexEnd = currentBook.index === filteredBooks.length - 1;
-  const isAtScrollEnd = !!(
-    scrollContainer.current &&
-    scrollContainer.current.scrollLeft ===
-      scrollContainer.current.scrollWidth - scrollContainer.current.offsetWidth
-  );
-  //const isAtEnd = !!(isAtIndexEnd || isAtScrollEnd);
-  //const isAtEnd = !!(currentBook.index + 1 > filteredBooks.length);
-  //const isAtStart = currentBook.index === 0;
-  const isAtStart = !!(currentBook.index - 1 < 0);
+  // vars for when we are at beginning of a lane
+
+  const isAtStart = currentBook.index === 0;
 
   /** Handlers for button clicks */
   const handleRightClick = () => {
@@ -166,10 +157,6 @@ const Lane: React.FC<{
 
   return (
     <li sx={{ m: 0, p: 0, mb: 4, listStyle: "none" }} aria-label={title}>
-      <p>{`start ${isAtStart}`}</p>
-      <p>{`end ${isAtEnd}`}</p>
-      <p>{`currentBook.index ${currentBook.index - 1}`}</p>
-      <p>{filteredBooks.length}</p>
       <Stack
         sx={{
           justifyContent: ["space-between", "initial"],
@@ -261,7 +248,6 @@ const SeeMoreBlock: React.FC<{ url: string; title: string, setIsAtEnd: (arg: boo
         }}
       >
         <Stack direction="column">
-          <Text>{inView.toString()}</Text>
           <Text>See All</Text>
           <Text variant="text.headers.tertiary">{title}</Text>
         </Stack>

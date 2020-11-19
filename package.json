@@ -54,6 +54,7 @@
     "react-dom": "16.13.1",
     "react-hook-form": "^4.9.2",
     "react-hot-loader": "^4.12.20",
+    "react-intersection-observer": "^8.30.3",
     "react-redux": "^7.1.0",
     "reakit": "^1.2.4",
     "request": "^2.88.2",
