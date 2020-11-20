@@ -17,8 +17,12 @@
     "build-and-start": "npm run build && npm run start",
     "test": "TZ=UTC jest --watch",
     "test:ci": "jest --ci",
-    "lint": "eslint '*/**/*.{ts,tsx}'",
-    "lint:fix": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint": "run-script-os",
+    "lint:default": "eslint '*/**/*.{ts,tsx}'",
+    "lint:win32": "eslint **/*.{ts,tsx}",
+    "lint:fix": "run-script-os",    
+    "lint:fix:default": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint:fix:win32": "eslint **/*.{js,ts,tsx} --quiet --fix",  
     "generate-icons": "npx @svgr/cli --template src/icons/_template.js --typescript --icon --ext tsx --svg-props 'fill=currentColor' -d src/icons src/icons",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -112,6 +116,7 @@
     "react-axe": "^3.4.1",
     "react-is": "^16.13.1",
     "react-test-renderer": "^16.13.1",
+    "run-script-os": "^1.1.3",
     "typescript": "^4.0.2",
     "val-loader": "^2.1.1",
     "webpack-bugsnag-plugins": "^1.4.3"
