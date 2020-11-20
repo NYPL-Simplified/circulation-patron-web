@@ -35,7 +35,7 @@ const CleverAuthHandler: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
   // redirect to the auth url
   React.useEffect(() => {
     if (!token && authUrl) {
-      push(authUrl);
+      window.location.href = authUrl;
     }
   }, [token, authUrl, push]);
 
