@@ -26,6 +26,10 @@ type CurrentBook = {
    */
   snap: boolean;
 };
+type SeeMoreBlockProps = {
+  url: string;
+  title: string;
+};
 
 const getfilteredBooksAndRefs = (books: AnyBook[], omitIds?: string[]) => {
   const filteredBooks = books.filter(book => {
@@ -67,7 +71,13 @@ const Lane: React.FC<{
   const [isBrowserScrolling, setIsBrowserScrolling] = React.useState<boolean>(
     false
   );
-  const [isAtEnd, setisAtEnd] = React.useState<boolean>(false);
+
+  //Set up an intersection observable for the "See More" card at the end of the lane.
+  //If the card isn't 100% visible in the viewport, "inView" (and therefore "isAtEnd") will be false.
+  const { ref, inView: isAtEnd } = useInView({
+    threshold: 1
+  });
+
   // we need a ref to the UL element so we can scroll it
   const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
@@ -201,7 +211,7 @@ const Lane: React.FC<{
           {filteredBooks.map(book => (
             <Book key={book.id} book={book} ref={bookRefs[book.id]} />
           ))}
-          <SeeMoreBlock url={url} title={title} setIsAtEnd={setisAtEnd} />
+          <SeeMoreBlock url={url} title={title} ref={ref} />
         </ul>
 
         <PrevNextButton onClick={handleRightClick} disabled={isAtEnd} />
@@ -210,15 +220,7 @@ const Lane: React.FC<{
   );
 };
 
-const SeeMoreBlock: React.FC<{
-  url: string;
-  title: string;
-  setIsAtEnd: (arg: boolean) => void;
-}> = ({ url, title, setIsAtEnd }) => {
-  const { ref, inView } = useInView({
-    threshold: 1
-  });
-  inView ? setIsAtEnd(true) : setIsAtEnd(false);
+const SeeMoreBlock = React.forwardRef<any, SeeMoreBlockProps>((props, ref) => {
   return (
     <li
       sx={{
@@ -231,9 +233,10 @@ const SeeMoreBlock: React.FC<{
         color: "ui.white"
       }}
       ref={ref}
+      {...props}
     >
       <Link
-        collectionUrl={url}
+        collectionUrl={props.url}
         sx={{
           bg: "brand.primary",
           display: "flex",
@@ -247,12 +250,12 @@ const SeeMoreBlock: React.FC<{
       >
         <Stack direction="column">
           <Text>See All</Text>
-          <Text variant="text.headers.tertiary">{title}</Text>
+          <Text variant="text.headers.tertiary">{props.title}</Text>
         </Stack>
       </Link>
     </li>
   );
-};
+});
 
 const PrevNextButton: React.FC<{
   onClick: () => void;
