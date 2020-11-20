@@ -163,19 +163,15 @@ const Buttons: React.FC<{
             case OPDS1.BasicAuthType:
               return (
                 <BasicAuthButton
-                  key={getIdForMethod(method)}
+                  key={method.id}
                   method={method}
                   onClick={() => handleChangeMethod(OPDS1.BasicAuthType)}
                 />
               );
             case OPDS1.SamlAuthType:
-              return (
-                <SamlAuthButton method={method} key={getIdForMethod(method)} />
-              );
+              return <SamlAuthButton method={method} key={method.id} />;
             case OPDS1.CleverAuthType:
-              return (
-                <CleverButton method={method} key={getIdForMethod(method)} />
-              );
+              return <CleverButton method={method} key={method.id} />;
             default:
               return null;
           }
@@ -208,7 +204,7 @@ const Combobox: React.FC<{
   );
 
   const handleChangeMethod = (id: string) => {
-    const method = getMethodForId(authMethods, id);
+    const method = authMethods.find(m => m.id === id);
     if (method) setSelectedMethod(method);
   };
 
@@ -221,7 +217,7 @@ const Combobox: React.FC<{
         onChange={e => handleChangeMethod(e.target.value)}
       >
         {authMethods?.map(method => (
-          <option key={getIdForMethod(method)} value={getIdForMethod(method)}>
+          <option key={method.id} value={method.id}>
             {method.description}
           </option>
         ))}
@@ -230,21 +226,5 @@ const Combobox: React.FC<{
     </div>
   );
 };
-
-// there is no id on auth methods, so we have to use the type
-// or the href if it's saml
-function getIdForMethod(method: AppAuthMethod) {
-  return method.type === OPDS1.SamlAuthType ? method.href : method.type;
-}
-function getMethodForId(
-  authMethods: AppAuthMethod[],
-  id: string
-): AppAuthMethod | undefined {
-  return authMethods.find(
-    method =>
-      method.type === id ||
-      (method.type === OPDS1.SamlAuthType && method.href === id)
-  );
-}
 
 export default Login;
