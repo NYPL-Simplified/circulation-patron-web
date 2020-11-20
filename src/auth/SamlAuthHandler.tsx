@@ -9,16 +9,16 @@ import { authButtonstyles } from "./AuthButton";
  * The SAML Auth button sends you off to an external website to complete
  * auth.
  */
-const SamlAuthButton: React.FC<{
-  className?: string;
-  method: ClientSamlMethod;
-}> = ({ className, method }) => {
+const SamlAuthHandler: React.FC<{ method: ClientSamlMethod }> = ({
+  method
+}) => {
   const handleClick = async () => {
     // get the current location to be redirected back to
     const referrer = encodeURIComponent(window.location.href);
     const urlWithReferrer = `${method.href}&redirect_uri=${referrer}`;
     window.open(urlWithReferrer, "_self");
   };
+  return <div>Logging in with Saml</div>;
   return (
     <Button
       className={className}
@@ -30,4 +30,4 @@ const SamlAuthButton: React.FC<{
   );
 };
 
-export default SamlAuthButton;
+export default SamlAuthHandler;

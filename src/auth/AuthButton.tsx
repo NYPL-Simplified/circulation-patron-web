@@ -1,3 +1,9 @@
+/** @jsx jsx */
+import { jsx } from "theme-ui";
+import { NavButton } from "components/Button";
+import { AppAuthMethod } from "interfaces";
+import { useRouter } from "next/router";
+
 export const authButtonstyles = {
   display: "flex",
   flex: "1 0 auto",
@@ -9,3 +15,34 @@ export const authButtonstyles = {
   cursor: "pointer",
   border: "none"
 };
+
+const AuthButton: React.FC<{
+  method: AppAuthMethod;
+}> = ({ method }) => {
+  const router = useRouter();
+  const { description, links } = method;
+  const imageUrl = links?.find(link => link.rel === "logo")?.href;
+  const name = description ?? "Basic Auth";
+
+  return (
+    <NavButton
+      aria-label={`Login with ${name}`}
+      type="submit"
+      sx={{
+        ...authButtonstyles,
+        backgroundImage: `url(${imageUrl})`
+      }}
+      href={{
+        pathname: `/login/${encodeURIComponent(method.id)}`,
+        // preserve the existing url query parameters
+        query: {
+          ...router.query
+        }
+      }}
+    >
+      {imageUrl ? "" : `Login with ${name}`}
+    </NavButton>
+  );
+};
+
+export default AuthButton;

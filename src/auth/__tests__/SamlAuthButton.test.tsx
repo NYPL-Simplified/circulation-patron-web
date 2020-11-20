@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render, fixtures, waitFor } from "test-utils";
 import userEvent from "@testing-library/user-event";
-import SamlAuthButton from "auth/SamlAuthButton";
+import SamlAuthButton from "auth/SamlAuthHandler";
 
 test("displays button", () => {
   const utils = render(

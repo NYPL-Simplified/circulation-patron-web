@@ -3,6 +3,9 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import BaseLink from "next/link";
 import useLinkUtils from "hooks/useLinkUtils";
+import { UrlObject } from "url";
+
+export type Url = UrlObject | string;
 
 type CollectionLinkProps = {
   collectionUrl: string;
@@ -11,7 +14,7 @@ type BookLinkProps = {
   bookUrl: string;
 };
 type OtherLinkProps = {
-  href: string;
+  href: Url;
 };
 
 type BaseLinkProps = Omit<

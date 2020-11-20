@@ -7,33 +7,42 @@ import FormLabel from "../components/form/FormLabel";
 import Select from "../components/Select";
 import Stack from "../components/Stack";
 import { AppAuthMethod, OPDS1 } from "interfaces";
-import BasicAuthForm from "auth/BasicAuthForm";
-import SamlAuthButton from "auth/SamlAuthButton";
-import CleverButton from "auth/CleverAuthButton";
+import BasicAuthHandler from "auth/BasicAuthHandler";
+import SamlAuthButton from "auth/SamlAuthHandler";
+import CleverButton from "auth/CleverAuthHandler";
 import useUser from "components/context/UserContext";
-import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
-import BasicAuthButton from "auth/BasicAuthButton";
+import AuthButton from "auth/AuthButton";
 import LoadingIndicator from "components/LoadingIndicator";
 import extractParam from "dataflow/utils";
 import useLinkUtils from "hooks/useLinkUtils";
 import { useRouter } from "next/router";
 import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 
+/**
+ * TODO:
+ *  - Handle single method auto-select
+ *  - Handle success redirect
+ */
+
 const Login = () => {
   const { isLoading, isAuthenticated } = useUser();
   const { catalogName, authMethods } = useLibraryContext();
   const { buildMultiLibraryLink } = useLinkUtils();
   const { push, query } = useRouter();
+  const methodId = query?.methodId?.[0];
+  const selectedMethod = authMethods.find(m => m.id === methodId);
   const redirectUrl = extractParam(query, LOGIN_REDIRECT_QUERY_PARAM);
 
+  // the success url is the catalog root if none is set in the url param.
   const successUrl = redirectUrl || buildMultiLibraryLink("/");
   const success = React.useCallback(() => {
     push(successUrl, undefined, { shallow: true });
   }, [push, successUrl]);
 
   /**
-   * If the user becomes authenticated, we can hide the form
+   * If the user becomes authenticated, we can redirect
+   * to the successUrl
    */
   React.useEffect(() => {
     if (isAuthenticated) success();
@@ -41,20 +50,30 @@ const Login = () => {
 
   /**
    * The options:
+   *  - Loading the user state. Show a spinner.
    *  - No auth methods available. Tell the user.
-   *  - There is only one method. Show the form for that one.
-   *  - There are 1-5 methods. Show a button for each.
-   *  - There are >5 methods. Show a combobox selector.
+   *  - There is only one method. (TODO: automatically select it)
+   *  - There are 1-5 methods. Show the buttons-based flow.
+   *  - There are >5 methods. Show the combobox flow.
+   *  - An auth method is selected. Render the handler.
    */
   const formStatus = isLoading
     ? "loading"
+    : selectedMethod
+    ? "method-selected"
     : authMethods.length === 0
     ? "no-auth"
-    : authMethods.length === 1
-    ? "single-auth"
     : authMethods.length < 5
     ? "buttons"
     : "combobox";
+
+  // TODO: redirect user automatically to apropriate method if there is
+  // only one auth method
+  React.useEffect(() => {
+    if (authMethods.length === 1) {
+      console.error("ONLY ONE, SET AUTO SELECT");
+    }
+  });
 
   return (
     <div
@@ -65,7 +84,10 @@ const Login = () => {
         alignItems: "center"
       }}
     >
-      <div sx={{ p: 4, border: "solid", borderRadius: "card" }}>
+      <Stack
+        direction="column"
+        sx={{ p: 4, border: "solid", borderRadius: "card" }}
+      >
         <div sx={{ textAlign: "center", p: 0 }}>
           <H2>{catalogName}</H2>
           {formStatus !== "loading" && <h4>Login</h4>}
@@ -75,30 +97,31 @@ const Login = () => {
             <LoadingIndicator />
             Logging in...
           </Stack>
+        ) : formStatus === "method-selected" ? (
+          <AuthHandler method={selectedMethod!} />
         ) : formStatus === "no-auth" ? (
           <NoAuth />
-        ) : formStatus === "single-auth" ? (
-          <SignInForm method={authMethods[0]} />
         ) : formStatus === "combobox" ? (
           <Combobox authMethods={authMethods} />
         ) : (
           <Buttons authMethods={authMethods} />
         )}
-      </div>
+      </Stack>
     </div>
   );
 };
 
 /**
- * Renders a form if there is one, or a button, or tells
- * the user that the auth method is not supported.
+ * Renders the apropriate handler for the selected method. for basic auth
+ * this means showing a form. For clever/oauth this means redirecting
+ * externally.
  */
-const SignInForm: React.FC<{
+export const AuthHandler: React.FC<{
   method: AppAuthMethod;
 }> = ({ method }) => {
   switch (method.type) {
     case OPDS1.BasicAuthType:
-      return <BasicAuthForm method={method} />;
+      return <BasicAuthHandler method={method} />;
     case OPDS1.SamlAuthType:
       return <SamlAuthButton method={method} />;
     case OPDS1.CleverAuthType:
@@ -137,58 +160,15 @@ const NoAuth: React.FC = () => {
 
 /**
  * Renders buttons that allow selecting between auth providers.
- * If you click a button that leads to a form, it will show the form.
- * If you click one that leads to external site, it will take you there
- * instead.
  */
 const Buttons: React.FC<{
   authMethods: AppAuthMethod[];
 }> = ({ authMethods }) => {
-  const [selectedMethod, setSelectedMethod] = React.useState<
-    AppAuthMethod | undefined
-  >(undefined);
-
-  const handleChangeMethod = (type: string) => {
-    const method = authMethods.find(method => method.type === type);
-    if (method) setSelectedMethod(method);
-  };
-
-  const cancelSelection = () => setSelectedMethod(undefined);
-
   return (
     <Stack direction="column" aria-label="Available authentication methods">
-      {!selectedMethod &&
-        authMethods.map(method => {
-          switch (method.type) {
-            case OPDS1.BasicAuthType:
-              return (
-                <BasicAuthButton
-                  key={method.id}
-                  method={method}
-                  onClick={() => handleChangeMethod(OPDS1.BasicAuthType)}
-                />
-              );
-            case OPDS1.SamlAuthType:
-              return <SamlAuthButton method={method} key={method.id} />;
-            case OPDS1.CleverAuthType:
-              return <CleverButton method={method} key={method.id} />;
-            default:
-              return null;
-          }
-        })}
-      {selectedMethod && (
-        <Stack direction="column">
-          <SignInForm method={selectedMethod} />
-          <Button
-            onClick={cancelSelection}
-            variant="ghost"
-            color="ui.gray.dark"
-            sx={{ alignSelf: "center" }}
-          >
-            Back to selection
-          </Button>
-        </Stack>
-      )}
+      {authMethods.map(method => (
+        <AuthButton key={method.id} method={method} />
+      ))}
     </Stack>
   );
 };
@@ -222,7 +202,7 @@ const Combobox: React.FC<{
           </option>
         ))}
       </Select>
-      <SignInForm method={selectedMethod} />
+      <AuthButton method={selectedMethod} />
     </div>
   );
 };
