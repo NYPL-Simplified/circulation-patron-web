@@ -12,7 +12,7 @@ import Stack from "./Stack";
 import { AnyBook, LaneData } from "interfaces";
 import Link from "components/Link";
 import { Text } from "components/Text";
-import { useInView } from 'react-intersection-observer';
+import { useInView } from "react-intersection-observer";
 
 type BookRefs = {
   [id: string]: React.RefObject<HTMLLIElement>;
@@ -20,7 +20,7 @@ type BookRefs = {
 type CurrentBook = {
   index: number;
   /**
-   * The following dictates whether we snap to a book. 
+   * The following dictates whether we snap to a book.
    * "Snapping" to a book means we scroll the currentBook's
    * left edge so that it is up against leftmost edge of the lane
    */
@@ -67,9 +67,7 @@ const Lane: React.FC<{
   const [isBrowserScrolling, setIsBrowserScrolling] = React.useState<boolean>(
     false
   );
-  const [isAtEnd, setisAtEnd] = React.useState<boolean>(
-    false
-  );
+  const [isAtEnd, setisAtEnd] = React.useState<boolean>(false);
   // we need a ref to the UL element so we can scroll it
   const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
@@ -203,7 +201,7 @@ const Lane: React.FC<{
           {filteredBooks.map(book => (
             <Book key={book.id} book={book} ref={bookRefs[book.id]} />
           ))}
-          <SeeMoreBlock url={url} title={title} setIsAtEnd={setisAtEnd}/>
+          <SeeMoreBlock url={url} title={title} setIsAtEnd={setisAtEnd} />
         </ul>
 
         <PrevNextButton onClick={handleRightClick} disabled={isAtEnd} />
@@ -212,15 +210,15 @@ const Lane: React.FC<{
   );
 };
 
-const SeeMoreBlock: React.FC<{ url: string; title: string, setIsAtEnd: (arg: boolean)=>void }> = ({
-  url,
-  title,
-  setIsAtEnd
-}) => {
-  const { ref, inView, entry } = useInView({
+const SeeMoreBlock: React.FC<{
+  url: string;
+  title: string;
+  setIsAtEnd: (arg: boolean) => void;
+}> = ({ url, title, setIsAtEnd }) => {
+  const { ref, inView } = useInView({
     threshold: 1
   });
-  inView ? setIsAtEnd(true) : setIsAtEnd(false)
+  inView ? setIsAtEnd(true) : setIsAtEnd(false);
   return (
     <li
       sx={{
