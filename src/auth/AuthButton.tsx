@@ -33,7 +33,7 @@ const AuthButton: React.FC<{
         backgroundImage: `url(${imageUrl})`
       }}
       href={{
-        pathname: "/[library]/login/[[...methodId]]",
+        pathname: "/[library]/login/[methodId]",
         // preserve the existing url query parameters
         query: {
           ...router.query,

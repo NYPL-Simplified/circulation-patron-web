@@ -1,12 +1,9 @@
 import useCredentials from "auth/useCredentials";
 import useLibraryContext from "components/context/LibraryContext";
 import { fetchCollection } from "dataflow/opds1/fetch";
-import useLinkUtils from "hooks/useLinkUtils";
 import { AppAuthMethod, AnyBook } from "interfaces";
-import { useRouter } from "next/router";
 import * as React from "react";
 import useSWR from "swr";
-import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 
 type Status = "authenticated" | "loading" | "unauthenticated";
 export type UserState = {
@@ -21,7 +18,6 @@ export type UserState = {
   error: any;
   token: string | undefined;
   clearCredentials: () => void;
-  initLogin: () => void;
 };
 
 export const UserContext = React.createContext<UserState | undefined>(
@@ -40,8 +36,6 @@ export const UserProvider: React.FC = ({ children }) => {
   const { credentials, setCredentials, clearCredentials } = useCredentials(
     slug
   );
-  const { push, asPath } = useRouter();
-  const { buildMultiLibraryLink } = useLinkUtils();
   const { data, mutate, isValidating, error } = useSWR(
     // pass null if there are no credentials or shelfUrl to tell SWR not to fetch at all.
     credentials && shelfUrl
@@ -60,19 +54,6 @@ export const UserProvider: React.FC = ({ children }) => {
       // }
     }
   );
-
-  function initLogin() {
-    const redirectUrl = asPath;
-    const loginUrl = buildMultiLibraryLink("/login");
-    push(
-      {
-        pathname: loginUrl,
-        query: { [LOGIN_REDIRECT_QUERY_PARAM]: redirectUrl }
-      },
-      undefined,
-      { shallow: true }
-    );
-  }
 
   function signIn(token: string, method: AppAuthMethod) {
     setCredentials({ token, methodType: method.type });
@@ -115,8 +96,7 @@ export const UserProvider: React.FC = ({ children }) => {
     setBook,
     error,
     token: credentials?.token,
-    clearCredentials,
-    initLogin
+    clearCredentials
   };
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };

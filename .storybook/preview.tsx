@@ -51,7 +51,6 @@ export const user: UserState = {
   status: "unauthenticated",
   clearCredentials: () => console.log("clearCredentials"),
   token: "user-token",
-  initLogin: () => console.log("initLogin")
 };
 
 export const decorators = [
@@ -61,7 +60,6 @@ export const decorators = [
   (Story: any, ctx: any) => {
     const theme = makeTheme(libraryData.colors);
     const library = libraryData;
-    const showModal = () => console.log("show")
     return (
       <ThemeProvider theme={theme}>
         <ReakitProvider>

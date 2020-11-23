@@ -11,6 +11,7 @@ import { Text } from "./Text";
 import Stack from "./Stack";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
+import useLogin from "hooks/useLogin";
 
 const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
   const library = useLibraryContext();
@@ -66,7 +67,8 @@ const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
 const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
   const { helpWebsite, libraryWebsite } = library.libraryLinks;
   const libraryName = library.catalogName;
-  const { isAuthenticated, isLoading, initLogin } = useUser();
+  const { isAuthenticated, isLoading } = useUser();
+  const { baseLoginUrl } = useLogin();
 
   return (
     <div
@@ -119,10 +121,10 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
       </NavButton>
       {isAuthenticated ? (
         <SignOut />
+      ) : isLoading ? (
+        <Button loading />
       ) : (
-        <Button onClick={initLogin} loading={isLoading}>
-          Sign In
-        </Button>
+        <NavButton href={baseLoginUrl}>Sign In</NavButton>
       )}
     </div>
   );

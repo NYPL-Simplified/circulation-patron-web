@@ -10,6 +10,7 @@ import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
 import { PageLoader } from "components/LoadingIndicator";
+import useLogin from "hooks/useLogin";
 
 const availableUntil = (book: AnyBook) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -38,35 +39,50 @@ function compareTitles(a: AnyBook, b: AnyBook): 0 | -1 | 1 {
   return -1;
 }
 
-export const MyBooks: React.FC = () => {
-  const { isAuthenticated, loans, isLoading, initLogin } = useUser();
+const AuthProtected: React.FC = ({ children }) => {
+  const { isLoading, isAuthenticated } = useUser();
+  const { initLogin } = useLogin();
 
-  // show the auth form if we are unauthenticated
   React.useEffect(() => {
-    if (!isAuthenticated) initLogin();
-  }, [isAuthenticated, initLogin]);
+    if (!isLoading && !isAuthenticated) {
+      initLogin();
+    }
+  }, [initLogin, isLoading, isAuthenticated]);
 
+  if (isAuthenticated) {
+    return children;
+  }
+  if (isLoading) {
+    return <PageLoader />;
+  }
+  return <Unauthorized />;
+};
+
+export const MyBooks: React.FC = () => {
+  const { isAuthenticated, loans, isLoading } = useUser();
   const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
   const noBooks = sortedBooks.length === 0;
 
   return (
-    <div sx={{ flex: 1, pb: 4 }}>
-      <Head>
-        <title>My Books</title>
-      </Head>
+    <AuthProtected>
+      <div sx={{ flex: 1, pb: 4 }}>
+        <Head>
+          <title>My Books</title>
+        </Head>
 
-      <BreadcrumbBar currentLocation="My Books" />
-      <PageTitle>My Books</PageTitle>
-      {noBooks && isLoading ? (
-        <PageLoader />
-      ) : isAuthenticated && noBooks ? (
-        <Empty />
-      ) : isAuthenticated ? (
-        <LoansContent books={sortedBooks} />
-      ) : (
-        <Unauthorized />
-      )}
-    </div>
+        <BreadcrumbBar currentLocation="My Books" />
+        <PageTitle>My Books</PageTitle>
+        {noBooks && isLoading ? (
+          <PageLoader />
+        ) : isAuthenticated && noBooks ? (
+          <Empty />
+        ) : isAuthenticated ? (
+          <LoansContent books={sortedBooks} />
+        ) : (
+          <Unauthorized />
+        )}
+      </div>
+    </AuthProtected>
   );
 };
 

@@ -4,8 +4,6 @@ import LayoutPage from "components/LayoutPage";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
 import LoginWrapper from "auth/LoginWrapper";
 import useLibraryContext from "components/context/LibraryContext";
-import useLinkUtils from "hooks/useLinkUtils";
-import { useRouter } from "next/router";
 import AuthButton from "auth/AuthButton";
 import ExternalLink from "components/ExternalLink";
 import FormLabel from "components/form/FormLabel";
@@ -14,6 +12,7 @@ import { AppAuthMethod } from "interfaces";
 import { Select } from "theme-ui";
 import { Text } from "components/Text";
 import LoadingIndicator from "components/LoadingIndicator";
+import useLogin from "hooks/useLogin";
 
 const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   return (
@@ -27,8 +26,7 @@ const LoginPage: NextPage<AppProps> = ({ library, error }) => {
 
 const LoginSelector = () => {
   const { authMethods } = useLibraryContext();
-  const { buildMultiLibraryLink } = useLinkUtils();
-  const { push } = useRouter();
+  const { initLogin } = useLogin();
 
   /**
    * The options:
@@ -50,12 +48,9 @@ const LoginSelector = () => {
   // only one auth method
   React.useEffect(() => {
     if (authMethods.length === 1) {
-      const singleAuthUrl = buildMultiLibraryLink(
-        `/login/${encodeURIComponent(authMethods[0].id)}`
-      );
-      push(singleAuthUrl);
+      initLogin(authMethods[0].id);
     }
-  }, [push, authMethods, buildMultiLibraryLink]);
+  }, [authMethods, initLogin]);
 
   switch (formStatus) {
     case "no-auth":
