@@ -6,6 +6,7 @@ import useUser from "components/context/UserContext";
 import fetchWithHeaders from "dataflow/fetch";
 import extractParam from "dataflow/utils";
 import { PageNotFoundError, ServerError } from "errors";
+import AuthProtectedRoute from "auth/AuthProtectedRoute";
 
 const initializeReader = async (
   entryUrl: string,
@@ -30,7 +31,7 @@ const WebpubViewer = () => {
   const library = useLibraryContext();
   const router = useRouter();
   const bookUrl = extractParam(router.query, "bookUrl");
-  const { token, status, initLogin } = useUser();
+  const { token } = useUser();
 
   const { catalogName } = library;
 
@@ -38,25 +39,14 @@ const WebpubViewer = () => {
     if (token && bookUrl) initializeReader(bookUrl, catalogName, token);
   }, [token, bookUrl, catalogName]);
 
-  /**
-   * Show the auth modal if the user is not logged in
-   */
-  React.useEffect(() => {
-    if (status === "unauthenticated") initLogin();
-  }, [status, initLogin]);
-
   // this will be caught by an error boundary and display a 404
   if (!bookUrl)
     throw new PageNotFoundError(
       "The requested URL is missing a bookUrl parameter."
     );
 
-  if (!token) {
-    return <div>You need to be logged in to view this page.</div>;
-  }
-
   return (
-    <>
+    <AuthProtectedRoute>
       <div id="viewer" />
       <style test-id="viewer-styles" global jsx>{`
         :root {
@@ -1017,7 +1007,7 @@ const WebpubViewer = () => {
 
         /*# sourceMappingURL=main.css.map */
       `}</style>
-    </>
+    </AuthProtectedRoute>
   );
 };
 
