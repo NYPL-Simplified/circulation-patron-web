@@ -13,6 +13,7 @@ import Stack from "components/Stack";
 import { AppAuthMethod } from "interfaces";
 import { Select } from "theme-ui";
 import { Text } from "components/Text";
+import LoadingIndicator from 'components/LoadingIndicator';
 
 const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   return (
@@ -39,6 +40,8 @@ const LoginSelector = () => {
   const formStatus =
     authMethods.length === 0
       ? "no-auth"
+      : authMethods.length === 1
+      ? "single-auth"
       : authMethods.length < 5
       ? "buttons"
       : "combobox";
@@ -57,6 +60,9 @@ const LoginSelector = () => {
   switch (formStatus) {
     case "no-auth":
       return <NoAuth />;
+    case "single-auth":
+      // we are about to be redirected, show a temp loader
+      return <LoadingIndicator />;
     case "combobox":
       return <Combobox authMethods={authMethods} />;
     case "buttons":
