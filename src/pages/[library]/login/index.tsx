@@ -12,7 +12,7 @@ import { AppAuthMethod } from "interfaces";
 import { Select } from "theme-ui";
 import { Text } from "components/Text";
 import LoadingIndicator from "components/LoadingIndicator";
-import useLogin from "hooks/useLogin";
+import useLogin from "auth/useLogin";
 
 const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   return (

@@ -10,6 +10,9 @@ import BasicAuthHandler from "auth/BasicAuthHandler";
 import { OPDS1 } from "interfaces";
 import CleverAuthHandler from "auth/CleverAuthHandler";
 import SamlAuthHandler from "auth/SamlAuthHandler";
+import track from "analytics/track";
+import ApplicationError from "errors";
+import useLogin from "auth/useLogin";
 
 const LoginHandlerPage: NextPage<AppProps> = ({ library, error }) => {
   return (
@@ -26,12 +29,20 @@ const LoginComponent = () => {
   const { authMethods } = useLibraryContext();
   const methodId = extractParam(router.query, "methodId");
   const method = authMethods.find(m => m.id === methodId);
+  const { initLogin } = useLogin();
 
   if (!method) {
-    throw new Error("Redirect to /login");
+    track.error(
+      new ApplicationError({
+        title: "Login Method Not Available",
+        detail: `Attempted to access authentication method that was not found. Method ID: ${methodId}`
+      })
+    );
+    // go back to base login page
+    initLogin();
   }
 
-  switch (method.type) {
+  switch (method?.type) {
     case OPDS1.BasicAuthType:
       return <BasicAuthHandler method={method} />;
     case OPDS1.SamlAuthType:

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 import { UrlObject } from "url";
+import { IS_SERVER } from "utils/env";
 
 export default function useLogin() {
   const { query, push, asPath } = useRouter();
@@ -30,7 +31,7 @@ export default function useLogin() {
   const initLogin = React.useCallback(
     (methodId?: string) => {
       const urlObject = getLoginUrl(methodId);
-      push(urlObject, undefined, { shallow: true });
+      if (!IS_SERVER) push(urlObject, undefined, { shallow: true });
     },
     [push, getLoginUrl]
   );

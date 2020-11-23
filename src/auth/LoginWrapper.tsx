@@ -6,12 +6,10 @@ import { H2 } from "../components/Text";
 import Stack from "../components/Stack";
 import useUser from "components/context/UserContext";
 import LoadingIndicator from "components/LoadingIndicator";
-import extractParam from "dataflow/utils";
-import useLinkUtils from "hooks/useLinkUtils";
 import { useRouter } from "next/router";
-import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 import Head from "next/head";
 import BreadcrumbBar from "components/BreadcrumbBar";
+import useLoginRedirectUrl from "auth/useLoginRedirect";
 
 /**
  * Redirects on success
@@ -21,23 +19,18 @@ import BreadcrumbBar from "components/BreadcrumbBar";
 const LoginWrapper: React.FC = ({ children }) => {
   const { isAuthenticated, isLoading } = useUser();
   const { catalogName } = useLibraryContext();
-  const { buildMultiLibraryLink } = useLinkUtils();
-  const { push, query } = useRouter();
-  const redirectUrl = extractParam(query, LOGIN_REDIRECT_QUERY_PARAM);
-
-  // the success url is the catalog root if none is set in the url param.
-  const successUrl = redirectUrl || buildMultiLibraryLink("/");
-  const success = React.useCallback(() => {
-    push(successUrl, undefined, { shallow: true });
-  }, [push, successUrl]);
+  const { push } = useRouter();
+  const { successPath } = useLoginRedirectUrl();
 
   /**
    * If the user becomes authenticated, we can redirect
    * to the successUrl
    */
   React.useEffect(() => {
-    if (isAuthenticated) success();
-  }, [isAuthenticated, success]);
+    if (isAuthenticated) {
+      push(successPath, undefined, { shallow: true });
+    }
+  }, [isAuthenticated, push, successPath]);
 
   return (
     <div

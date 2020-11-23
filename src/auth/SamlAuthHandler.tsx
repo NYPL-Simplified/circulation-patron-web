@@ -16,10 +16,10 @@ const SamlAuthHandler: React.FC<{ method: ClientSamlMethod }> = ({
   method
 }) => {
   const { token } = useUser();
-  const redirectUrl = useLoginRedirectUrl();
+  const { fullSuccessUrl } = useLoginRedirectUrl();
 
   const urlWithRedirect = `${method.href}&redirect_uri=${encodeURIComponent(
-    redirectUrl
+    fullSuccessUrl
   )}`;
   React.useEffect(() => {
     if (!token && urlWithRedirect) {

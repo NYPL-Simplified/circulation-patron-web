@@ -5,19 +5,13 @@ import { keyInterface, SWRConfig } from "swr";
 import swrConfig from "utils/swrConfig";
 import { ServerError } from "errors";
 import track from "analytics/track";
-import { useRouter } from "next/router";
-import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
+import useLogin from "auth/useLogin";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
-  const router = useRouter();
+  const { initLogin } = useLogin();
 
   function handle401() {
-    const currentUrl = router.asPath;
-    const loginUrl = `${router.query.library}/login`;
-    router.push({
-      pathname: loginUrl,
-      query: { [LOGIN_REDIRECT_QUERY_PARAM]: currentUrl }
-    });
+    initLogin();
   }
 
   const config = {

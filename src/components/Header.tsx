@@ -11,7 +11,7 @@ import { Text } from "./Text";
 import Stack from "./Stack";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
-import useLogin from "hooks/useLogin";
+import useLogin from "auth/useLogin";
 
 const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
   const library = useLibraryContext();

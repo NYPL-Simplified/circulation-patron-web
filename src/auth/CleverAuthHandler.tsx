@@ -12,7 +12,7 @@ const CleverAuthHandler: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
   method
 }) => {
   const { token } = useUser();
-  const redirectUrl = useLoginRedirectUrl();
+  const { fullSuccessUrl } = useLoginRedirectUrl();
 
   const authenticateHref = method.links?.find(
     link => link.rel === "authenticate"
@@ -21,7 +21,7 @@ const CleverAuthHandler: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
   // double encoding is required for unshortened book urls to be redirected to properly
   const authUrl = authenticateHref
     ? `${authenticateHref}&redirect_uri=${encodeURIComponent(
-        encodeURIComponent(redirectUrl)
+        encodeURIComponent(fullSuccessUrl)
       )}`
     : undefined;
 
