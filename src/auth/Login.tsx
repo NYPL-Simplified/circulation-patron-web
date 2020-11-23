@@ -100,8 +100,8 @@ const Login = () => {
             <LoadingIndicator />
             Logging in...
           </Stack>
-        ) : formStatus === "method-selected" ? (
-          <AuthHandler method={selectedMethod!} />
+        ) : formStatus === "method-selected" && selectedMethod ? (
+          <AuthHandler method={selectedMethod} />
         ) : formStatus === "no-auth" ? (
           <NoAuth />
         ) : formStatus === "combobox" ? (
