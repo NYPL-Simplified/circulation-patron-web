@@ -20,9 +20,9 @@
     "lint": "run-script-os",
     "lint:default": "eslint '*/**/*.{ts,tsx}'",
     "lint:win32": "eslint **/*.{ts,tsx}",
-    "lint:fix": "run-script-os",    
+    "lint:fix": "run-script-os",
     "lint:fix:default": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "lint:fix:win32": "eslint **/*.{js,ts,tsx} --quiet --fix",  
+    "lint:fix:win32": "eslint **/*.{js,ts,tsx} --quiet --fix",
     "generate-icons": "npx @svgr/cli --template src/icons/_template.js --typescript --icon --ext tsx --svg-props 'fill=currentColor' -d src/icons src/icons",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
