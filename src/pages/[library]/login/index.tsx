@@ -13,7 +13,7 @@ import Stack from "components/Stack";
 import { AppAuthMethod } from "interfaces";
 import { Select } from "theme-ui";
 import { Text } from "components/Text";
-import LoadingIndicator from 'components/LoadingIndicator';
+import LoadingIndicator from "components/LoadingIndicator";
 
 const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   return (
