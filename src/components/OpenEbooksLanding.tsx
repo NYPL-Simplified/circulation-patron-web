@@ -4,9 +4,8 @@ import * as React from "react";
 import { H2, Text } from "./Text";
 import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
-import { OPDS1 } from "interfaces";
+import { ClientBasicMethod, ClientCleverMethod, OPDS1 } from "interfaces";
 import useLibraryContext from "./context/LibraryContext";
-import { BasicAuthMethod, CleverAuthMethod } from "types/opds1";
 import useUser from "./context/UserContext";
 import SignOut from "./SignOut";
 import SvgChevronRight from "icons/ExpandMore";
@@ -55,13 +54,13 @@ const LandingPage: NextPage<AppProps> = ({ library, error }) => {
 const OpenEbooksLandingComponent = () => {
   const { authMethods } = useLibraryContext();
 
-  const cleverMethod: CleverAuthMethod | undefined = authMethods.find(
+  const cleverMethod = authMethods.find(
     method => method.type === OPDS1.CleverAuthType
-  ) as CleverAuthMethod | undefined;
+  ) as ClientCleverMethod | undefined;
 
-  const basicMethod: BasicAuthMethod = authMethods.find(
+  const basicMethod = authMethods.find(
     method => method.type === OPDS1.BasicAuthType
-  ) as BasicAuthMethod;
+  ) as ClientBasicMethod | undefined;
 
   if (!cleverMethod || !basicMethod)
     throw new AppSetupError(
