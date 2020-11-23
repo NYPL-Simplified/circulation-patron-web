@@ -3,7 +3,7 @@ import * as React from "react";
 import { render, fixtures } from "test-utils";
 import * as dialog from "reakit/Dialog";
 import userEvent from "@testing-library/user-event";
-import Login from "auth/Login";
+import Login from "auth/LoginWrapper";
 
 const useDialogSpy = jest.spyOn(dialog, "useDialogState");
 const mockHide = jest.fn();

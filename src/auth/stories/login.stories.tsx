@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
-import Login from "auth/Login";
+import Login from "auth/LoginWrapper";
 
 /**
  * What are the stories we need?
