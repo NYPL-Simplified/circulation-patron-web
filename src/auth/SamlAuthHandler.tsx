@@ -6,6 +6,7 @@ import LoadingIndicator from "components/LoadingIndicator";
 import Stack from "components/Stack";
 import useUser from "components/context/UserContext";
 import useLoginRedirectUrl from "auth/useLoginRedirect";
+import { clientOnly } from "components/ClientOnly";
 
 /**
  * The SAML Auth button sends you off to an external website to complete
@@ -34,4 +35,4 @@ const SamlAuthHandler: React.FC<{ method: ClientSamlMethod }> = ({
   );
 };
 
-export default SamlAuthHandler;
+export default clientOnly(SamlAuthHandler);
