@@ -52,7 +52,7 @@ const Login = () => {
    * The options:
    *  - Loading the user state. Show a spinner.
    *  - No auth methods available. Tell the user.
-   *  - There is only one method. (TODO: automatically select it)
+   *  - There is only one method. (automatically redirect there)
    *  - There are 1-5 methods. Show the buttons-based flow.
    *  - There are >5 methods. Show the combobox flow.
    *  - An auth method is selected. Render the handler.

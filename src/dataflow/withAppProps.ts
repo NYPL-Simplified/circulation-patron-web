@@ -35,10 +35,12 @@ export default function withAppProps(
       const library = buildLibraryData(authDocument, librarySlug);
       // fetch the static props for the page
       const pageResult = (await pageGetStaticProps?.(ctx)) ?? { props: {} };
+      const pageProps = "props" in pageResult ? pageResult.props : {};
+
       return {
         ...pageResult,
         props: {
-          ...pageResult.props,
+          ...pageProps,
           library
         },
         // revalidate library-wide data once per hour per route
