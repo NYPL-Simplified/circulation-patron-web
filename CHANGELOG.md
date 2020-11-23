@@ -3,6 +3,7 @@
 ### UNRELEASED CHANGES
 - Add: Landing page for Open Ebooks
 - Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
+- Refactor: Made the login state a full page so that it can be navigated to directly. 
 
 ### 4.0.0
 - BREAKING CHANGE: Start app by fetching auth document first instead of catalog root. This means that the `libraries` key in the config file needs to be set with auth document urls instead of catalog root urls.
