@@ -112,7 +112,6 @@
     "react-is": "^16.13.1",
     "react-test-renderer": "^16.13.1",
     "typescript": "^4.0.2",
-    "val-loader": "^2.1.1",
     "webpack-bugsnag-plugins": "^1.4.3"
   },
   "prettier": {
