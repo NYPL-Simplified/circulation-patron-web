@@ -4,7 +4,7 @@ import { PageLoader } from "components/LoadingIndicator";
 import React from "react";
 
 /**
- * This with show a message and redirect the user to the login
+ * This will show a message and redirect the user to the login
  * page if they try to access a route they are not permitted to see.
  */
 const AuthProtectedRoute: React.FC = ({ children }) => {
