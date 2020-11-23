@@ -72,14 +72,15 @@ const Lane: React.FC<{
     false
   );
 
+  // we need a ref to the UL element so we can scroll it
+  const scrollContainer = React.useRef<HTMLUListElement | null>(null);
+
   //Set up an intersection observable for the "See More" card at the end of the lane.
   //If the card isn't 100% visible in the viewport, "inView" (and therefore "isAtEnd") will be false.
   const { ref, inView: isAtEnd } = useInView({
+    root: scrollContainer.current,
     threshold: 1
   });
-
-  // we need a ref to the UL element so we can scroll it
-  const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
   // vars for when we are at beginning of a lane
 
