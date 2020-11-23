@@ -76,7 +76,7 @@ const Lane: React.FC<{
   const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
   //Set up an intersection observable for the "See More" card at the end of the lane.
-  //If the card isn't 100% visible in the viewport, "inView" (and therefore "isAtEnd") will be false.
+  //If the card isn't 100% visible in the lane, "inView" (and therefore "isAtEnd") will be false.
   const { ref, inView: isAtEnd } = useInView({
     root: scrollContainer.current,
     threshold: 1
