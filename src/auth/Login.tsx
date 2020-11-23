@@ -22,7 +22,7 @@ import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 /**
  * TODO:
  *  - Handle single method auto-select
- *  - Handle success redirect
+ *  - Handle combobox
  */
 
 const Login = () => {
@@ -67,13 +67,16 @@ const Login = () => {
     ? "buttons"
     : "combobox";
 
-  // TODO: redirect user automatically to apropriate method if there is
+  // redirect user automatically to apropriate method if there is
   // only one auth method
   React.useEffect(() => {
-    if (authMethods.length === 1) {
-      console.error("ONLY ONE, SET AUTO SELECT");
+    if (authMethods.length === 1 && !selectedMethod) {
+      const singleAuthUrl = buildMultiLibraryLink(
+        `/login/${encodeURIComponent(authMethods[0].id)}`
+      );
+      push(singleAuthUrl);
     }
-  });
+  }, [push, authMethods, buildMultiLibraryLink, selectedMethod]);
 
   return (
     <div

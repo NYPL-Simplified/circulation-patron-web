@@ -6,19 +6,17 @@ import swrConfig from "utils/swrConfig";
 import { ServerError } from "errors";
 import track from "analytics/track";
 import { useRouter } from "next/router";
-import useLinkUtils from "hooks/useLinkUtils";
 import { LOGIN_REDIRECT_QUERY_PARAM } from "utils/constants";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
   const router = useRouter();
-  const { buildMultiLibraryLink } = useLinkUtils();
 
   function handle401() {
     const currentUrl = router.asPath;
-    const loginUrl = buildMultiLibraryLink("/login");
+    const loginUrl = "/[library]/login";
     router.push({
       pathname: loginUrl,
-      query: { [LOGIN_REDIRECT_QUERY_PARAM]: currentUrl }
+      query: { ...router.query, [LOGIN_REDIRECT_QUERY_PARAM]: currentUrl }
     });
   }
 
