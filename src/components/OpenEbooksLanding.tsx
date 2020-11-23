@@ -2,17 +2,14 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { H2, Text } from "./Text";
-import Button from "./Button";
+import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
-import CleverButton from "auth/CleverAuthButton";
 import { OPDS1 } from "interfaces";
 import useLibraryContext from "./context/LibraryContext";
 import { BasicAuthMethod, CleverAuthMethod } from "types/opds1";
 import useUser from "./context/UserContext";
 import SignOut from "./SignOut";
-import useAuthModalContext from "auth/AuthModalContext";
 import SvgChevronRight from "icons/ExpandMore";
-import BasicAuthButton from "auth/BasicAuthButton";
 import { GetStaticProps, NextPage } from "next";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
 import Page from "components/Page";
@@ -21,6 +18,7 @@ import GlobalStyles from "components/GlobalStyles";
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { APP_CONFIG } from "utils/env";
 import { AppSetupError } from "errors";
+import AuthButton from "auth/AuthButton";
 
 type PopularBook = { alt: string; imgHref: string };
 
@@ -139,7 +137,7 @@ const OpenEbooksLandingComponent = () => {
               the classroom.
             </Text>
             <div>
-              <CleverButton
+              <AuthButton
                 sx={{ mx: ["auto", "auto", 0] }}
                 method={cleverMethod}
               />
@@ -166,11 +164,9 @@ const OpenEbooksLandingComponent = () => {
               need.
             </Text>
             <div>
-              <BasicAuthButton
+              <AuthButton
                 sx={{ mx: ["auto", "auto", 0] }}
                 method={basicMethod}
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                onClick={() => {}}
               />
             </div>
           </Stack>
@@ -309,8 +305,8 @@ const OpenEbooksLandingComponent = () => {
  */
 
 const OpenEbooksHero: React.FC = () => {
-  const { isAuthenticated, isLoading } = useUser();
-  const { showModalAndReset } = useAuthModalContext();
+  const { isAuthenticated } = useUser();
+  const { slug } = useLibraryContext();
 
   return (
     <div
@@ -334,14 +330,15 @@ const OpenEbooksHero: React.FC = () => {
           {isAuthenticated ? (
             <SignOut />
           ) : (
-            <Button
+            <NavButton
               variant="filled"
               color="ui.white"
-              onClick={showModalAndReset}
-              loading={isLoading}
+              href={{
+                pathname: `/${slug}/login`
+              }}
             >
               <span sx={{ color: "ui.black" }}>Log In</span>
-            </Button>
+            </NavButton>
           )}
         </div>
         <div
