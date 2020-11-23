@@ -3,6 +3,7 @@ import { render } from "test-utils";
 import WebpubViewer from "components/WebpubViewer";
 import { PageNotFoundError } from "errors";
 import * as env from "utils/env";
+import { mockInitLogin } from "test-utils/fixtures";
 
 jest.mock("utils/reader", () => ({
   __esModule: true,
@@ -30,7 +31,7 @@ test("shows fallback and auth modal if user is not logged in", () => {
     utils.getByText("You need to be logged in to view this page.")
   ).toBeInTheDocument();
 
-  expect(mockShowAuthModal).toHaveBeenCalledTimes(1);
+  expect(mockInitLogin).toHaveBeenCalledTimes(1);
 });
 
 test("renders viewer div", () => {
