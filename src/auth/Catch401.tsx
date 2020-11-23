@@ -13,10 +13,10 @@ const CatchFetchErrors: React.FC = ({ children }) => {
 
   function handle401() {
     const currentUrl = router.asPath;
-    const loginUrl = "/[library]/login";
+    const loginUrl = `${router.query.library}/login`;
     router.push({
       pathname: loginUrl,
-      query: { ...router.query, [LOGIN_REDIRECT_QUERY_PARAM]: currentUrl }
+      query: { [LOGIN_REDIRECT_QUERY_PARAM]: currentUrl }
     });
   }
 
