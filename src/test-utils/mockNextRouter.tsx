@@ -2,6 +2,7 @@ import * as React from "react";
 import Router from "next/router";
 import { RouterContext } from "next/dist/next-server/lib/router-context";
 import { NextRouter } from "next/router";
+import { libraryData } from "test-utils/fixtures";
 
 /**
  * Mock for the next/Router import.
@@ -17,8 +18,12 @@ export const MockNextRouterContextProvider: React.FC<{
     basePath = "",
     route = "",
     pathname = "",
-    query = {},
-    asPath = "",
+    query = {
+      // add the default library slug to the default query params
+      library: libraryData.slug
+    },
+    // default as path is the home page
+    asPath = `/${libraryData.slug}`,
     push = mockPush,
     replace = jest.fn().mockImplementation(async () => true),
     reload = jest.fn().mockImplementation(() => null),

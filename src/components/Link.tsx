@@ -3,6 +3,9 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import BaseLink from "next/link";
 import useLinkUtils from "hooks/useLinkUtils";
+import { UrlObject } from "url";
+
+export type Url = UrlObject | string;
 
 type CollectionLinkProps = {
   collectionUrl: string;
@@ -11,7 +14,7 @@ type BookLinkProps = {
   bookUrl: string;
 };
 type OtherLinkProps = {
-  href: string;
+  href: Url;
 };
 
 type BaseLinkProps = Omit<
@@ -26,7 +29,7 @@ export type LinkProps = BaseLinkProps &
   (CollectionLinkProps | BookLinkProps | OtherLinkProps);
 
 /**
- * converts bookUrl and collectionUrl to as/href props
+ * converts bookUrl and collectionUrl to href props
  * prepends with multi library path if needed
  * removes consumed props and returns normalized props
  */
@@ -42,6 +45,14 @@ const buildLinkFromProps = (
     const { collectionUrl, ...rest } = props;
     return { href: linkUtils.buildCollectionLink(collectionUrl), ...rest };
   }
+  // if we are using a UrlObject, we assume the pathname is
+  // already fully formed and we return it as is. This means that
+  // when using a url object, you must pass /[library]/...yourpath
+  // as the pathname.
+  if (typeof props.href !== "string") {
+    return props;
+  }
+  // otherwise we prepend the library to it.
   const { href, ...rest } = props;
   return { href: linkUtils.buildMultiLibraryLink(href), ...rest };
 };

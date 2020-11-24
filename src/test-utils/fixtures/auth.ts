@@ -1,11 +1,17 @@
-import { ClientSamlMethod, CollectionData } from "interfaces";
+import {
+  ClientBasicMethod,
+  ClientCleverMethod,
+  ClientSamlMethod,
+  CollectionData
+} from "interfaces";
 import { OPDS1 } from "interfaces";
 import { makeFulfillableBooks } from "test-utils/fixtures/book";
 
 export const basicAuthId = "http://opds-spec.org/auth/basic";
 export const samlAuthId = "http://librarysimplified.org/authtype/SAML-2.0";
 
-export const basicAuthMethod: OPDS1.BasicAuthMethod = {
+export const basicAuthMethod: ClientBasicMethod = {
+  id: "client-basic",
   labels: {
     login: "Barcode",
     password: "Pin"
@@ -24,7 +30,8 @@ export const basicAuthMethod: OPDS1.BasicAuthMethod = {
   ]
 };
 
-export const cleverAuthMethod: OPDS1.CleverAuthMethod = {
+export const cleverAuthMethod: ClientCleverMethod = {
+  id: "client-clever",
   description: "Clever",
   links: [
     {
@@ -44,7 +51,8 @@ export const clientSamlMethod: ClientSamlMethod = createSamlMethod(0);
 
 export function createSamlMethod(num: number): ClientSamlMethod {
   return {
-    href: `/saml-auth-url/${num}`,
+    id: `id-${num}`,
+    href: `https://saml-auth.com/${num}`,
     type: OPDS1.SamlAuthType,
     description: `SAML IdP ${num}`,
     links: [

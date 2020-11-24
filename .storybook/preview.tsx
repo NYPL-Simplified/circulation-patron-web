@@ -3,7 +3,6 @@ import { ThemeProvider } from "theme-ui";
 import { Provider as ReakitProvider } from "reakit";
 import { LibraryProvider } from "../src/components/context/LibraryContext";
 import { UserContext, UserState } from "../src/components/context/UserContext";
-import { AuthModalProvider } from "../src/auth/AuthModalContext";
 import makeTheme from "../src/theme";
 import { libraryData } from "../src/test-utils/fixtures/library"
 import { envDecorator } from "./env-mock";
@@ -51,7 +50,7 @@ export const user: UserState = {
   setBook:() => console.log("setBook"),
   status: "unauthenticated",
   clearCredentials: () => console.log("clearCredentials"),
-  token: "user-token"
+  token: "user-token",
 };
 
 export const decorators = [
@@ -61,18 +60,12 @@ export const decorators = [
   (Story: any, ctx: any) => {
     const theme = makeTheme(libraryData.colors);
     const library = libraryData;
-    const showModal = () => console.log("show")
     return (
       <ThemeProvider theme={theme}>
         <ReakitProvider>
           <LibraryProvider library={library}>
             <UserContext.Provider value={user}>
-              <AuthModalProvider
-                showModal={showModal}
-                showModalAndReset={showModal}
-              >
                 <Story />
-              </AuthModalProvider>
             </UserContext.Provider>
           </LibraryProvider>
         </ReakitProvider>

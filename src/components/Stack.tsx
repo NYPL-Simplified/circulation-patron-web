@@ -2,6 +2,9 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 
+//Ensures grouped elements have internal margins, but not external margins
+// Does not work with flex-wrap
+
 type StackProps = {
   direction?: "row" | "column";
   spacing?: number | string;

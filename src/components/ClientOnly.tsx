@@ -13,3 +13,16 @@ export default function ClientOnly({
 
   return mounted ? <>{children}</> : null;
 }
+
+export function clientOnly<T>(Component: React.ComponentType<T>) {
+  const Wrapped = (props: T) => (
+    <ClientOnly>
+      <Component {...props} />
+    </ClientOnly>
+  );
+  // Format for display in DevTools
+  const name = Component.displayName || Component.name;
+  Wrapped.displayName = name ? `ClientOnly(${name})` : "ClientOnly";
+
+  return Wrapped;
+}
