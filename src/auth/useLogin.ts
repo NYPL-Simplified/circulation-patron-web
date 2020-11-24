@@ -30,7 +30,7 @@ export default function useLogin() {
         query: newQuery
       };
     },
-    [query, asPath]
+    [query, asPath, slug]
   );
 
   const initLogin = React.useCallback(
