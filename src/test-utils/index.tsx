@@ -16,6 +16,7 @@ import { UserContext, UserState } from "components/context/UserContext";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "theme";
 import mockConfig from "test-utils/mockConfig";
+import track from "analytics/track";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);
@@ -24,6 +25,10 @@ expect.addSnapshotSerializer(serializer);
 beforeEach(() => {
   mockConfig();
 });
+
+// mock the error tracker to prevent unnecessary console logs
+export const mockTrackError = jest.fn();
+track.error = mockTrackError;
 
 export { fixtures };
 
