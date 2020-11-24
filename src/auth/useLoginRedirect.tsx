@@ -19,8 +19,12 @@ export default function useLoginRedirectUrl() {
   // if the redirect url is the login url, we would end up in a loop.
   const isLoginPath = nextPath?.includes("/login");
 
-  // go to home if nothing is set, or something invalid is set.
-  const successPath = isLoginPath || !nextPath ? catalogRootPath : nextPath;
+  // if the redirect url is the home page, choose the catalog root instead
+  const isHomePage = nextPath === "/";
+
+  // go to catalog root if nextPath is invalid
+  const successPath =
+    !nextPath || isLoginPath || isHomePage ? catalogRootPath : nextPath;
 
   const fullSuccessUrl = IS_SERVER
     ? ""
