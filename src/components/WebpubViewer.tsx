@@ -47,8 +47,8 @@ const WebpubViewer = () => {
 
   return (
     <AuthProtectedRoute>
-      <div id="viewer" />
-      <style test-id="viewer-styles" global jsx>{`
+      <div id="viewer" data-testid="viewer" />
+      <style global jsx>{`
         :root {
           -webkit-text-size-adjust: 100%;
           zoom: reset;

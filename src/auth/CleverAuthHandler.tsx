@@ -7,6 +7,7 @@ import Stack from "components/Stack";
 import useUser from "components/context/UserContext";
 import { clientOnly } from "components/ClientOnly";
 import useLoginRedirectUrl from "auth/useLoginRedirect";
+import ApplicationError from "errors";
 
 const CleverAuthHandler: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
   method
@@ -27,7 +28,14 @@ const CleverAuthHandler: React.FC<{ method: OPDS1.CleverAuthMethod }> = ({
 
   // redirect to the auth url
   React.useEffect(() => {
-    if (!token && authUrl) {
+    if (!authUrl) {
+      throw new ApplicationError({
+        title: "Incomplete Library Data",
+        detail:
+          "The required link with rel 'authenticate' is missing from library data."
+      });
+    }
+    if (!token) {
       window.location.href = authUrl;
     }
   }, [token, authUrl]);

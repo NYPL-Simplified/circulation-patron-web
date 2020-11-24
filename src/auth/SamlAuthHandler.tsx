@@ -15,7 +15,7 @@ import { clientOnly } from "components/ClientOnly";
 const SamlAuthHandler: React.FC<{ method: ClientSamlMethod }> = ({
   method
 }) => {
-  const { token } = useUser();
+  const { token, signOut } = useUser();
   const { fullSuccessUrl } = useLoginRedirectUrl();
 
   const urlWithRedirect = `${method.href}&redirect_uri=${encodeURIComponent(
@@ -25,12 +25,12 @@ const SamlAuthHandler: React.FC<{ method: ClientSamlMethod }> = ({
     if (!token && urlWithRedirect) {
       window.location.href = urlWithRedirect;
     }
-  }, [token, urlWithRedirect]);
+  }, [token, signOut, urlWithRedirect]);
 
   return (
     <Stack direction="column" sx={{ alignItems: "center" }}>
       <LoadingIndicator />
-      Logging in with {method.description}
+      Logging in with {method.description}...
     </Stack>
   );
 };

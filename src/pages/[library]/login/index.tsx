@@ -24,7 +24,7 @@ const LoginPage: NextPage<AppProps> = ({ library, error }) => {
   );
 };
 
-const LoginSelector = () => {
+export const LoginSelector = () => {
   const { authMethods } = useLibraryContext();
   const { initLogin } = useLogin();
 

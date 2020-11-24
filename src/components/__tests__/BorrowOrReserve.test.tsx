@@ -59,7 +59,7 @@ test("borrowing calls correct url with token", async () => {
   await waitForElementToBeRemoved(() => utils.getByText("Borrowing..."));
 });
 
-test("shows auth form and error when not logged in", () => {
+test("redirects to login when not signed in", () => {
   const utils = render(<BorrowOrReserve isBorrow url="/url" />, {
     user: { isAuthenticated: false, token: undefined }
   });
@@ -82,8 +82,15 @@ test("shows auth form and error when not logged in", () => {
   // doesn't call the borrow book
   expect(mockedFetchBook).not.toHaveBeenCalled();
 
-  // shows auth modal
-  expect(mockPush).toHaveBeenCalledWith("/test-lib/login");
+  // redirects to login
+  expect(mockPush).toHaveBeenCalledWith(
+    {
+      pathname: "/[library]/login",
+      query: { library: "testlib", nextUrl: "/testlib" }
+    },
+    undefined,
+    { shallow: true }
+  );
 });
 
 test("catches and displays server errors", async () => {

@@ -5,7 +5,6 @@ export const mockSignIn = jest.fn();
 export const mockSignOut = jest.fn();
 export const mockSetBook = jest.fn();
 export const mockClearCredentials = jest.fn();
-export const mockInitLogin = jest.fn();
 
 export const user: UserState = {
   error: undefined,
@@ -18,6 +17,5 @@ export const user: UserState = {
   setBook: mockSetBook,
   status: "unauthenticated",
   clearCredentials: mockClearCredentials(),
-  token: "user-token",
-  initLogin: mockInitLogin
+  token: "user-token"
 };

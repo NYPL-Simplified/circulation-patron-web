@@ -52,7 +52,7 @@ export const clientSamlMethod: ClientSamlMethod = createSamlMethod(0);
 export function createSamlMethod(num: number): ClientSamlMethod {
   return {
     id: `id-${num}`,
-    href: `/saml-auth-url/${num}`,
+    href: `https://saml-auth.com/${num}`,
     type: OPDS1.SamlAuthType,
     description: `SAML IdP ${num}`,
     links: [
