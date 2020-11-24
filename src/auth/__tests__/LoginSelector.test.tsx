@@ -58,8 +58,7 @@ test("preserves nextUrl query param on redirection", () => {
     router: {
       query: {
         // we want to be sure it preserves this query param
-        nextUrl: "somewhere",
-        library: "test"
+        nextUrl: "somewhere"
       }
     }
   });
@@ -70,7 +69,7 @@ test("preserves nextUrl query param on redirection", () => {
       pathname: "/[library]/login/[methodId]",
       query: {
         methodId: "client-basic",
-        library: "test",
+        library: "testlib",
         nextUrl: "somewhere"
       }
     },
