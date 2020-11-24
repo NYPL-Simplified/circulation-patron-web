@@ -48,7 +48,10 @@ test("shows recommendations loading state", async () => {
 test("fetches the proper url for recommendation collection", () => {
   render(<Recommendations book={fixtures.borrowableBook} />);
   expect(mockedSWR).toHaveBeenCalledTimes(1);
-  expect(mockedSWR).toHaveBeenCalledWith("http://related-url", fetchCollection);
+  expect(mockedSWR).toHaveBeenCalledWith(
+    ["http://related-url", "user-token"],
+    fetchCollection
+  );
 });
 
 test("shows recommendation lanes", () => {
@@ -78,6 +81,7 @@ test("doesn't show recommendations if the lanes don't have > 1 book", () => {
     url: "data-related-url",
     books: [],
     navigationLinks: [],
+    searchDataUrl: "/search-data-url",
     lanes: [
       {
         title: "lane 1",
@@ -129,6 +133,7 @@ test("shows multiple lanes if existing", () => {
     url: "data-related-url",
     books: [],
     navigationLinks: [],
+    searchDataUrl: "/search-data-url",
     lanes: [
       {
         title: "lane 1",

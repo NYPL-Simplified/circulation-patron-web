@@ -50,13 +50,14 @@ const ListLoadingIndicator = () => (
 export const InfiniteBookList: React.FC<{ firstPageUrl: string }> = ({
   firstPageUrl
 }) => {
+  const { token } = useUser();
   function getKey(pageIndex: number, previousData: CollectionData) {
     // first page, no previous data
-    if (pageIndex === 0) return firstPageUrl;
+    if (pageIndex === 0) return [firstPageUrl, token];
     // reached the end
     if (!previousData.nextPageUrl) return null;
     // otherwise return the next page url
-    return previousData.nextPageUrl;
+    return [previousData.nextPageUrl, token];
   }
   const { data, size, error, setSize } = useSWRInfinite(
     getKey,

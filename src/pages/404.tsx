@@ -4,7 +4,7 @@ import ErrorComponent from "../components/Error";
 export default function NotFoundPage() {
   return (
     <ErrorComponent
-      error={{
+      info={{
         status: 404,
         title: "Page Not Found",
         detail: "The requested url is not available."

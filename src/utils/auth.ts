@@ -1,6 +1,4 @@
 import { OPDS1, AppAuthMethod, ClientSamlMethod } from "interfaces";
-import { OPDSFeed } from "opds-feed-parser";
-import ApplicationError from "errors";
 
 /**
  * Extracts an array of auth providers from the authentication document
@@ -34,21 +32,6 @@ function serverToClientSamlMethods(
 
 export const getEnglishValue = (arr: [{ language: string; value: string }]) =>
   arr.find(item => item.language === "en")?.value;
-
-/**
- * Extracts the href of an auth document from the links in an OPDSFeed.
- */
-export function getAuthDocHref(catalog: OPDSFeed) {
-  const link = catalog.links.find(
-    link => link.rel === OPDS1.AuthDocLinkRelation
-  );
-
-  if (!link)
-    throw new ApplicationError(
-      "OPDS Catalog did not contain an auth document link."
-    );
-  return link.href;
-}
 
 export function generateCredentials(username: string, password: string) {
   const btoaStr = btoa(`${username}:${password}`);

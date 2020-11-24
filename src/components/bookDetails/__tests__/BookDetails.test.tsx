@@ -149,10 +149,10 @@ describe("book details page", () => {
           }
         });
       }
-      if (key === "/related-url") {
-        return {
+      if (key?.[0] === "/related-url") {
+        return makeSwrResponse({
           data: fixtures.recommendations
-        };
+        });
       }
     }) as any);
     const utils = render(<BookDetails />, {

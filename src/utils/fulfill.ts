@@ -152,9 +152,11 @@ const constructGetUrl = (
       link => link.contentType === contentType
     )?.url;
     if (!resolvedUrl) {
-      throw new ApplicationError(
-        "Indirect OPDS Entry did not contain the correct acquisition link."
-      );
+      throw new ApplicationError({
+        title: "OPDS Error",
+        detail:
+          "Indirect OPDS Entry did not contain the correct acquisition link."
+      });
     }
     return resolvedUrl;
   }

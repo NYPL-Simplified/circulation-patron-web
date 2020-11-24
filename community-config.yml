@@ -59,7 +59,7 @@ companion_app: simplye
 # Or define the catalog root and shortname for each library on this instance.
 # the homepage of the library will then be at https://domain.com/:library/
 libraries:
-  brazoria: https://simplye.amigos.org/txbrazoria
-  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib
-  openqa: https://qa-circulation.openebooks.us/USOEI/groups
-  lyrasis: https://demo.lyrasistechnology.org/lyrasis
+  brazoria: https://simplye.amigos.org/txbrazoria/authentication_document
+  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib/authentication_document
+  openqa: https://qa-circulation.openebooks.us/USOEI/authentication_document
+  lyrasis: https://demo.lyrasistechnology.org/lyrasis/authentication_document

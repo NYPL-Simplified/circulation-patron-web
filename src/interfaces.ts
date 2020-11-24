@@ -91,7 +91,6 @@ export interface LibraryData {
   libraryLinks: LibraryLinks;
   authMethods: AppAuthMethod[];
   shelfUrl: string | null;
-  searchData: SearchData | null;
 }
 
 /**
@@ -224,6 +223,7 @@ export interface CollectionData {
   parentLink?: LinkData | null;
   shelfUrl?: string;
   links?: LinkData[] | null;
+  searchDataUrl: string | null;
   raw?: any;
 }
 

@@ -132,9 +132,6 @@ describe("fetchSearchData", () => {
     fetchSearchData("http://search");
     expect(fetchMock).toHaveBeenCalledWith("http://search");
   });
-  test("returns undefined when no url provided", async () => {
-    expect(await fetchSearchData()).toBeUndefined();
-  });
 
   test("throws error if fetch fails", async () => {
     fetchMock.mockRejectOnce(new Error("Something went wrong"));

@@ -18,8 +18,7 @@ export default function useCredentials(slug: string | null) {
   const router = useRouter();
   const [credentialsState, setCredentialsState] = React.useState<
     AuthCredentials | undefined
-  >(undefined);
-
+  >(getCredentialsCookie(slug));
   // sync up cookie state with react state
   React.useEffect(() => {
     const cookie = getCredentialsCookie(slug);

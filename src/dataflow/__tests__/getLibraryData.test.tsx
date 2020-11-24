@@ -1,16 +1,15 @@
 /* eslint-disable camelcase */
 import {
-  getCatalogRootUrl,
   fetchAuthDocument,
   buildLibraryData,
-  getLibrarySlugs
+  getLibrarySlugs,
+  getAuthDocUrl
 } from "../getLibraryData";
 import fetchMock from "jest-fetch-mock";
 import ApplicationError, { PageNotFoundError } from "errors";
 import rawCatalog from "test-utils/fixtures/raw-opds-feed";
 import { fixtures } from "test-utils";
 import { OPDS1, OPDS2 } from "interfaces";
-import { getAuthDocHref } from "utils/auth";
 import mockConfig from "test-utils/mockConfig";
 import { fetchFeed } from "dataflow/opds1/fetch";
 
@@ -43,25 +42,25 @@ describe("fetching catalog", () => {
     const promise = fetchFeed("not a valid url");
     await expect(promise).rejects.toThrowError(Error);
     await expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Something wrong"`
+      `"Fetch Error: The fetch promise for the requested resource was rejected. This is probably an offline, CORS, or other network error. Requested URL: not a valid url"`
     );
   });
 });
 
-describe("getCatalogRootUrl", () => {
+describe("getAuthDocUrl", () => {
   test("throws PageNotFoundError if no entry found in config file for library", async () => {
     mockConfig({ libraries: { hello: "what" } });
-    const promise = getCatalogRootUrl("not there slug");
+    const promise = getAuthDocUrl("not there slug");
     await expect(promise).rejects.toThrowError(PageNotFoundError);
     await expect(promise).rejects.toMatchInlineSnapshot(
-      `[Page Not Found Error: No catalog root url is configured for the library: not there slug.]`
+      `[Page Not Found Error: Page Not Found: No authentication document url is configured for the library: not there slug.]`
     );
   });
 
   test("returns url for existing library in config file", async () => {
     mockConfig({ libraries: { hello: "http://library.com" } });
 
-    const promise = getCatalogRootUrl("hello");
+    const promise = getAuthDocUrl("hello");
     await expect(promise).resolves.toBe("http://library.com");
   });
 
@@ -72,8 +71,8 @@ describe("getCatalogRootUrl", () => {
         JSON.stringify(fixtures.opds2.feedWithoutCatalog),
         JSON.stringify(fixtures.opds2.feedWithCatalog)
       );
-      const url = await getCatalogRootUrl("library-uuid");
-      expect(url).toBe("/catalog-root-feed");
+      const url = await getAuthDocUrl("library-uuid");
+      expect(url).toBe("/auth-doc");
     });
 
     test("Throws ApplicationError if it doesn't find a catalogRootUrl", async () => {
@@ -92,10 +91,10 @@ describe("getCatalogRootUrl", () => {
         JSON.stringify(fixtures.opds2.feedWithoutCatalog),
         JSON.stringify(missingCatalogRootUrl)
       );
-      const promise = getCatalogRootUrl("library-uuid");
+      const promise = getAuthDocUrl("library-uuid");
       expect(promise).rejects.toThrowError(ApplicationError);
       expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"CatalogEntry did not contain a Catalog Root Url. Library UUID: library-uuid"`
+        `"Application Error: CatalogEntry did not contain a Authentication Document Url. Library UUID: library-uuid"`
       );
     });
 
@@ -105,10 +104,10 @@ describe("getCatalogRootUrl", () => {
         JSON.stringify(fixtures.opds2.feedWithoutCatalog),
         JSON.stringify(fixtures.opds2.feedWithoutCatalog)
       );
-      const promise = getCatalogRootUrl("library-uuid");
+      const promise = getAuthDocUrl("library-uuid");
       expect(promise).rejects.toThrowError(ApplicationError);
       expect(promise).rejects.toThrow(
-        "Could not fetch catalog entry for library: library-uuid at reg-base\nBase Error:\nLibraryRegistryFeed returned by /catalog-template-url-library-uuid does not contain a CatalogEntry."
+        "Application Error: Could not fetch catalog entry for library: library-uuid at reg-base"
       );
     });
 
@@ -117,10 +116,10 @@ describe("getCatalogRootUrl", () => {
       fetchMock.mockResponseOnce(
         JSON.stringify(fixtures.opds2.feedWithoutCatalog)
       );
-      const promise = getCatalogRootUrl("library-uuid");
+      const promise = getAuthDocUrl("library-uuid");
       expect(promise).rejects.toThrowError(ApplicationError);
       expect(promise).rejects.toThrow(
-        "Could not fetch catalog entry for library: library-uuid at reg-base\nBase Error:\ninvalid json response body at  reason: Unexpected end of JSON input"
+        "Could not fetch catalog entry for library: library-uuid at reg-base"
       );
     });
 
@@ -131,10 +130,10 @@ describe("getCatalogRootUrl", () => {
         links: []
       };
       fetchMock.mockResponseOnce(JSON.stringify(missingTemplateLink));
-      const promise = getCatalogRootUrl("library-uuid");
+      const promise = getAuthDocUrl("library-uuid");
       expect(promise).rejects.toThrowError(ApplicationError);
       expect(promise).rejects.toThrow(
-        "Could not fetch the library template at: reg-base\nBase Error:\nTemplate not present in response from: reg-base"
+        "Could not fetch the library template at: reg-base"
       );
     });
   });
@@ -167,23 +166,17 @@ describe("fetchAuthDocument", () => {
 
 describe("buildLibraryData", () => {
   test("returns correct response", () => {
-    const library = buildLibraryData(
-      fixtures.authDoc,
-      "/catalog-url",
-      "librarySlug",
-      fixtures.opdsFeed
-    );
+    const library = buildLibraryData(fixtures.authDoc, "librarySlug");
     expect(library).toEqual({
       slug: "librarySlug",
-      catalogUrl: "/catalog-url",
+      catalogUrl: "/catalog-root",
       catalogName: "auth doc title",
       logoUrl: null,
       colors: null,
       headerLinks: [],
       shelfUrl: null,
       authMethods: [],
-      libraryLinks: {},
-      searchData: null
+      libraryLinks: {}
     });
   });
 
@@ -196,9 +189,7 @@ describe("buildLibraryData", () => {
           secondary: "red"
         }
       },
-      "/catalog-url",
-      "librarySlug",
-      fixtures.opdsFeed
+      "librarySlug"
     );
     expect(library.colors).toEqual({
       primary: "blue",
@@ -248,6 +239,10 @@ describe("buildLibraryData", () => {
       {
         rel: "navigation",
         href: "/navigation-two"
+      },
+      {
+        rel: "start",
+        href: "/catalog-root"
       }
     ];
 
@@ -256,9 +251,7 @@ describe("buildLibraryData", () => {
         ...fixtures.authDoc,
         links
       },
-      "/catalog-url",
-      "librarySlug",
-      fixtures.opdsFeed
+      "librarySlug"
     );
 
     expect(library.headerLinks).toEqual([
@@ -295,23 +288,6 @@ describe("buildLibraryData", () => {
     });
 
     expect(library.logoUrl).toBe("/logo");
-  });
-});
-
-describe("getAuthDocHref", () => {
-  test("correctly finds link to auth doc", () => {
-    const authDocLink = getAuthDocHref(fixtures.opdsFeed);
-    expect(authDocLink).toBe("/auth-doc");
-  });
-
-  test("throws ApplicationError if there is no Auth Document link", () => {
-    const func = () =>
-      getAuthDocHref({
-        ...fixtures.opdsFeed,
-        links: []
-      });
-    expect(func).toThrowError(ApplicationError);
-    expect(func).toThrow("OPDS Catalog did not contain an auth document link.");
   });
 });
 

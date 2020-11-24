@@ -111,7 +111,8 @@ describe("infinite loading book list", () => {
       navigationLinks: [],
       title: "last collection",
       url: "http://last.com",
-      nextPageUrl: "http://next-page.com"
+      nextPageUrl: "http://next-page.com",
+      searchDataUrl: "/search-data-url"
     };
     useSWRInfiniteMock.mockReturnValue({
       size: 2,
@@ -130,7 +131,8 @@ describe("infinite loading book list", () => {
       lanes: [],
       navigationLinks: [],
       title: "last collection",
-      url: "http://last.com"
+      url: "http://last.com",
+      searchDataUrl: "/search-data-url"
       // no nextPageUrl
     };
     useSWRInfiniteMock.mockReturnValue({
@@ -156,7 +158,8 @@ describe("infinite loading book list", () => {
       navigationLinks: [],
       title: "last collection",
       url: "http://last.com",
-      nextPageUrl: "http://next-page.com"
+      nextPageUrl: "http://next-page.com",
+      searchDataUrl: "/search-data-url"
     };
     const mockSetSize = jest.fn();
     useSWRInfiniteMock.mockReturnValue({

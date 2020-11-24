@@ -11,7 +11,7 @@ test("renders error info", () => {
     title: "Page Not Found",
     detail: "The requested url is not available"
   };
-  const utils = render(<Error error={error} />);
+  const utils = render(<Error info={error} />);
   expect(utils.getByText("404 Error: Page Not Found")).toBeInTheDocument();
   expect(
     utils.getByText("The requested url is not available")

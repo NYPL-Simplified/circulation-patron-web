@@ -7,7 +7,8 @@ describe("computeBreadcrumbs", () => {
     title: "title",
     lanes: [],
     books: [],
-    navigationLinks: []
+    navigationLinks: [],
+    searchDataUrl: "/search-data-url"
   };
 
   test("uses breadcrumbs if they're in the raw collection data", () => {

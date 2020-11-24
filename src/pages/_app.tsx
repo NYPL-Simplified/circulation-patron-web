@@ -10,7 +10,6 @@ import track from "analytics/track";
 
 const MyApp = (props: AppProps) => {
   const { Component, pageProps } = props;
-
   const Wrapped = withErrorBoundary(Component);
   return <Wrapped {...pageProps} />;
 };

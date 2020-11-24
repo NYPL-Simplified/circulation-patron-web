@@ -68,6 +68,9 @@ function error(
 ) {
   // report it to the console
   console.error(e);
+  if (e instanceof ApplicationError) {
+    if (e.baseError) console.error(`Base Error:\n${e.baseError}`);
+  }
   // track to bugsnag
   if (APP_CONFIG.bugsnagApiKey) {
     Bugsnag.notify(e, event => {
@@ -81,9 +84,11 @@ function error(
       }
       // add error info if there is any
       if (e instanceof ApplicationError) {
-        event.addMetadata("Error Info", e.info);
+        event.addMetadata("Error Info", { ...e.info, baseError: e.baseError });
         if (e instanceof ServerError) {
           event.addMetadata("Error Info", {
+            ...e.info,
+            baseError: e.baseError,
             url: e.url,
             authDocument: e.authDocument
           });

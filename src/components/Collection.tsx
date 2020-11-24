@@ -8,33 +8,16 @@ import PageTitle from "./PageTitle";
 import { Text } from "./Text";
 import BreadcrumbBar from "./BreadcrumbBar";
 import computeBreadcrumbs from "computeBreadcrumbs";
-import useLibraryContext from "components/context/LibraryContext";
-import { fetchCollection } from "dataflow/opds1/fetch";
-import extractParam from "dataflow/utils";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { cacheCollectionBooks } from "utils/cache";
+import useCollection from "hooks/useCollection";
+import ApplicationError from "errors";
+import ErrorComponent from "components/Error";
 
 export const Collection: React.FC<{
   title?: string;
 }> = ({ title }) => {
-  const { catalogUrl } = useLibraryContext();
-  const { query } = useRouter();
-  const collectionUrlParam = extractParam(query, "collectionUrl");
-  // use catalog url if you're at home
-  const collectionUrl = decodeURIComponent(collectionUrlParam ?? catalogUrl);
+  const { collection, collectionUrl, isValidating, error } = useCollection();
 
-  const { data: collection, isValidating, error } = useSWR(
-    collectionUrl,
-    fetchCollection
-  );
-  if (error) throw error;
-
-  // extract the books from the collection and set them in the SWR cache
-  // so we don't have to refetch them when you click a book.
-  React.useEffect(() => {
-    cacheCollectionBooks(collection);
-  }, [collection]);
+  if (error) return <ErrorComponent info={error?.info} />;
 
   const isLoading = !collection && isValidating;
 
@@ -43,6 +26,12 @@ export const Collection: React.FC<{
   const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
   const breadcrumbs = computeBreadcrumbs(collection);
+
+  if (!collectionUrl)
+    throw new ApplicationError({
+      detail: "Cannot render collection on page without collectionUrl"
+    });
+
   return (
     <div
       sx={{

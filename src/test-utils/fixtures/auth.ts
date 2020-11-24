@@ -62,5 +62,6 @@ export const loans: CollectionData = {
   title: "My Loans",
   lanes: [],
   books: makeFulfillableBooks(1),
-  navigationLinks: []
+  navigationLinks: [],
+  searchDataUrl: "/search-data-url"
 };

@@ -77,7 +77,8 @@ const collectionWithFacets = (facets: FacetGroupData[]): CollectionData => ({
   lanes: [],
   books: [],
   navigationLinks: [],
-  facetGroups: facets
+  facetGroups: facets,
+  searchDataUrl: "/search-data-url"
 });
 
 test("renders sort by select with correct options", () => {
@@ -149,6 +150,7 @@ const collectionWithFormats: CollectionData = {
   id: "collection-id",
   books: [],
   navigationLinks: [],
+  searchDataUrl: "/search-data-url",
   lanes: [
     {
       title: "my lane",

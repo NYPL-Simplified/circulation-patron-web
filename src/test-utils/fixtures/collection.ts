@@ -6,5 +6,6 @@ export const emptyCollection: CollectionData = {
   id: "collection-id",
   navigationLinks: [],
   title: "Some collection",
-  url: "/collection-url"
+  url: "/collection-url",
+  searchDataUrl: "/search-data-url"
 };

@@ -147,12 +147,6 @@ test("sign out clears cookies and data", async () => {
     </UserProvider>
   );
 
-  expect(mockSWR).toHaveBeenCalledWith(
-    null,
-    expect.anything(),
-    expect.anything()
-  );
-
   // make sure fetch was called and you have the right data
   expect(mockSWR).toHaveBeenCalledWith(
     ["/shelf-url", "some-token", "http://opds-spec.org/auth/basic"],

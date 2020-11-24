@@ -261,9 +261,6 @@ export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
       ...supportedFulfillmentLinks,
       ...openAccessLinks
     ];
-    if (book.title === "Apollo and the Battle of the Birds") {
-      console.log(acquisitionLinks);
-    }
     return {
       ...book,
       status: "fulfillable",
@@ -518,6 +515,8 @@ export function feedToCollection(
     // we have to filter out the null values in order for typescript to accept this
     .filter(notNull);
 
+  const searchDataUrl = findSearchLink(feed)?.href ?? null;
+
   return {
     ...collection,
     lanes,
@@ -528,7 +527,8 @@ export function feedToCollection(
     catalogRootLink: OPDSLinkToLinkData(feedUrl, catalogRootLink),
     parentLink: OPDSLinkToLinkData(feedUrl, parentLink),
     shelfUrl,
-    links: filteredLinks
+    links: filteredLinks,
+    searchDataUrl
   };
 }
 

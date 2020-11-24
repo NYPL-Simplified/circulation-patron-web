@@ -17,7 +17,7 @@ const ReaderPage: NextPage<AppProps> = ({ library, error }) => {
         <Viewer />
       ) : (
         <ErrorComponent
-          error={{
+          info={{
             title: "Cannot Decrypt Resource",
             detail:
               "This app does not have access to the AxisNow Decryptor required to view this content.",

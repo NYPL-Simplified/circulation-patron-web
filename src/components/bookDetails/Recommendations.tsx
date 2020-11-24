@@ -7,12 +7,14 @@ import Lane from "components/Lane";
 import { AnyBook } from "interfaces";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import useSWR from "swr";
+import useUser from "components/context/UserContext";
 
 const Recommendations: React.FC<{ book: AnyBook }> = ({ book }) => {
   const relatedUrl = book.relatedUrl;
+  const { token } = useUser();
 
   const { data: recommendations, isValidating } = useSWR(
-    relatedUrl,
+    relatedUrl ? [relatedUrl, token] : null,
     fetchCollection
   );
 

@@ -13,7 +13,7 @@ export type FallbackProps = {
 export const DefaultFallback: React.FC<FallbackProps> = ({ error }) => {
   return (
     <ErrorComponent
-      error={{
+      info={{
         title: `${error.name}`,
         detail:
           "Something went wrong. Please refresh and try again. If the issue persists, contact your library support staff."

@@ -1,14 +1,11 @@
 import { LibraryData, OPDS1 } from "../interfaces";
 import { GetStaticProps } from "next";
 import {
-  getCatalogRootUrl,
+  getAuthDocUrl,
   fetchAuthDocument,
   buildLibraryData
 } from "dataflow/getLibraryData";
 import ApplicationError, { PageNotFoundError } from "errors";
-import { getAuthDocHref } from "utils/auth";
-import { findSearchLink } from "dataflow/opds1/parse";
-import { fetchFeed, fetchSearchData } from "dataflow/opds1/fetch";
 import extractParam from "dataflow/utils";
 import track from "analytics/track";
 
@@ -18,14 +15,9 @@ export type AppProps = {
 };
 
 export default function withAppProps(
-  pageGetServerSideProps?: GetStaticProps
+  pageGetStaticProps?: GetStaticProps
 ): GetStaticProps<AppProps> {
   return async ctx => {
-    /**
-     * Determine the catalog url
-     * Get library catalog
-     * Fetch the auth document provided in it
-     */
     try {
       const librarySlug = extractParam(ctx.params, "library");
       if (!librarySlug)
@@ -33,21 +25,11 @@ export default function withAppProps(
           "A library slug is required to be provided in the URL. Eg: https://domain.com/:library"
         );
 
-      const catalogUrl = await getCatalogRootUrl(librarySlug);
-      const catalog = await fetchFeed(catalogUrl);
-      const authDocHref = getAuthDocHref(catalog);
-      const authDocument = await fetchAuthDocument(authDocHref);
-      const searchDataUrl = findSearchLink(catalog)?.href;
-      const searchData = await fetchSearchData(searchDataUrl);
-      const library = buildLibraryData(
-        authDocument,
-        catalogUrl,
-        librarySlug,
-        catalog,
-        searchData
-      );
+      const authDocUrl = await getAuthDocUrl(librarySlug);
+      const authDocument = await fetchAuthDocument(authDocUrl);
+      const library = buildLibraryData(authDocument, librarySlug);
       // fetch the static props for the page
-      const pageResult = (await pageGetServerSideProps?.(ctx)) ?? { props: {} };
+      const pageResult = (await pageGetStaticProps?.(ctx)) ?? { props: {} };
       return {
         ...pageResult,
         props: {
@@ -58,20 +40,26 @@ export default function withAppProps(
         revalidate: 60 * 60
       };
     } catch (e) {
-      // show the error page if there was an ApplicationError
-      if (e instanceof ApplicationError) {
-        track.error(e, { severity: "error" });
-        return {
-          props: {
-            error: e.info
-          },
-          // library data will be revalidated often for error pages.
-          revalidate: 1
-        };
-      }
-      // otherwise we probably can't recover at all,
-      // so rethrow.
-      throw e;
+      // if it is not already an application error, wrap it in one
+      const error =
+        e instanceof ApplicationError
+          ? e
+          : new ApplicationError(
+              {
+                title: "App Startup Failure",
+                detail: "Static props could not be fetched.",
+                status: 500
+              },
+              e
+            );
+      track.error(error, { severity: "error" });
+      return {
+        props: {
+          error: error.info
+        },
+        // library data will be revalidated often for error pages.
+        revalidate: 1
+      };
     }
   };
 }

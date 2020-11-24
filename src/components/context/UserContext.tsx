@@ -37,8 +37,8 @@ export const UserProvider: React.FC = ({ children }) => {
     slug
   );
   const { data, mutate, isValidating, error } = useSWR(
-    // pass null if there are no credentials to tell SWR not to fetch at all.
-    credentials
+    // pass null if there are no credentials or shelfUrl to tell SWR not to fetch at all.
+    credentials && shelfUrl
       ? [shelfUrl, credentials?.token, credentials?.methodType]
       : null,
     fetchLoans,

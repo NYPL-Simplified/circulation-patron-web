@@ -117,7 +117,8 @@ test("extracts basic book info", () => {
   const acquisitionFeed = factory.acquisitionFeed({
     id: "some id",
     entries: [entry],
-    unparsed: "unparsed data"
+    unparsed: "unparsed data",
+    links: []
   });
 
   const collection = feedToCollection(acquisitionFeed, "http://test-url.com");
@@ -447,7 +448,8 @@ test("extracts navigation link info", () => {
 
   const navigationFeed = factory.navigationFeed({
     id: "some id",
-    entries: [linkEntry]
+    entries: [linkEntry],
+    links: []
   });
 
   const collection = feedToCollection(navigationFeed, "http://test-url.com");

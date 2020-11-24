@@ -3,21 +3,27 @@ import ErrorComponent from "../components/Error";
 import { NextPage } from "next";
 import { OPDS1 } from "interfaces";
 import track from "analytics/track";
+import ApplicationError from "errors";
 
 const Error: NextPage<{
-  error?: OPDS1.ProblemDocument;
-}> = ({ error }) => {
-  return <ErrorComponent error={error} />;
+  errorInfo?: OPDS1.ProblemDocument;
+}> = ({ errorInfo }) => {
+  return <ErrorComponent info={errorInfo} />;
 };
 
 Error.getInitialProps = ({ res, err }) => {
   if (err) track.error(err);
-  const statusCode = res?.statusCode ?? err?.statusCode ?? 404;
+  if (err instanceof ApplicationError) {
+    return {
+      errorInfo: err.info
+    };
+  }
+  const statusCode = res?.statusCode ?? err?.statusCode ?? 500;
   return {
-    error: {
+    errorInfo: {
       status: statusCode,
-      title: "Server Error",
-      detail: "An unexpected error occurred on the server."
+      title: "Something went wrong",
+      detail: "An unexpected error occurred."
     }
   };
 };

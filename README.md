@@ -21,7 +21,7 @@ This app can support many libraries, each at their own url: `http://example.com/
 
 ## Configuration File
 
-To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the catalog root url, and each library the app runs has a unique catalog root url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured. 
+To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured. 
 
 The production configuration is defined in a YAML config file. You can find more details on the options in the `sample-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. See [environment variables](#environment-variables) below for more information.
 
@@ -81,7 +81,7 @@ To run with decryption:
 
 ### ENV Vars and Building
 
-When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.txt npm run start` will not work, you have to set them at build time.
+When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.yml npm run start` will not work, you have to set them at build time.
 
 ### Useful Scripts
 
@@ -129,42 +129,27 @@ import { render, fixtures, fireEvent, actions } from "../../test-utils";
 
 test("fetches search description", async () => {
   /**
-   * use merge to create an initial state specific for this test. Merge is useful
-   * not only because it will deep merge the objects, but it copies them to a new
-   * object, so if the app alters the passed in state object, it won't break other
-   * tests that rely on it. This is a common source of flakiness where one test fails
-   * only if another one runs. Merge should solve it.
+   * First mock the SWR data, which effectively mocks the network call to fetch
+   * the search description. You can see details of how this works in the
+   * mockSwr function. 
    */
-  const initialState: State = merge(fixtures.initialState, {
-    collection: {
-      data: {
-        search: {
-          url: "/search-url"
-        }
-      }
+  mockSwr({ data: fixtureData });
+
+  // then render the app. utils will contain the query functions provided by 
+  // react-testing-library 
+  const utils = render(<Search />, {
+    router: {
+      query: { collectionUrl: "/collection" }
     }
   });
-
-  // spy on a specific action in the ActionsCreator.
-  const mockedFetchSearchDescription = jest.spyOn(
-    actions,
-    "fetchSearchDescription"
+  // we can then make sure that the mocked `useSWR` function was called as
+  // expected. In this case once for the collection, then for it's search 
+  // description.
+  expect(mockedSWR).toHaveBeenCalledWith(
+    ["/collection", "user-token"],
+    expect.anything()
   );
-  /**
-   * utils will contain
-   *  - the result of render
-   *  - the redux store
-   *  - the history object
-   *  - the spied on dispatch function
-   */
-  const utils = render(<Search />, {
-    initialState
-  });
-
-  expect(mockedFetchSearchDescription).toHaveBeenCalledTimes(1);
-  expect(mockedFetchSearchDescription).toHaveBeenCalledWith("/search-url");
-  // we can assert on the app's dispatch like this
-  expect(utils.dispatch).toHaveBeenCalledTimes(1);
+  expect(mockedSWR).toHaveBeenCalledWith("/search-data-url", expect.anything());
 });
 ```
 

@@ -12,6 +12,7 @@ export const recommendations: CollectionData = {
     "http://test-cm.com/catalogUrl/works/URI/https://standardebooks.org/ebooks/jane-austen/emma/related_books?available=all&after=0&collection=main&entrypoint=Book&order=author&size=50",
   title: "Related Books",
   url: "http://data-related-url",
+  searchDataUrl: "/search-data-url",
   lanes: [
     {
       title: "Jane Austen",
