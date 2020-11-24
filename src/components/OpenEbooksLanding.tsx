@@ -51,7 +51,7 @@ const LandingPage: NextPage<AppProps> = ({ library, error }) => {
   );
 };
 
-const OpenEbooksLandingComponent = () => {
+export const OpenEbooksLandingComponent = () => {
   const { authMethods } = useLibraryContext();
 
   const cleverMethod = authMethods.find(
