@@ -9,7 +9,7 @@ import { ErrorBoundary } from "components/ErrorBoundary";
 
 export const CONTENT_ID = "cpw-content";
 
-const Layout: React.FC<{ bg?: string }> = ({ children, bg }) => {
+const Layout: React.FC = ({ children }) => {
   return (
     <Styled.root
       sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
@@ -23,8 +23,7 @@ const Layout: React.FC<{ bg?: string }> = ({ children, bg }) => {
           flex: "1 1 auto",
           width: "100%",
           display: "flex",
-          flexDirection: "column",
-          bg
+          flexDirection: "column"
         }}
       >
         <ErrorBoundary>{children}</ErrorBoundary>

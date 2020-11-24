@@ -77,6 +77,7 @@ log(
       : "disabled (no bugsnag_api_key in config file)"
   }`
 );
+log(`Open eBooks Config: `, APP_CONFIG.openebooks);
 log(`Media Support: `, APP_CONFIG.mediaSupport);
 log(`Libraries: `, APP_CONFIG.libraries);
 

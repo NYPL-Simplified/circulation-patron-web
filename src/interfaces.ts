@@ -24,6 +24,11 @@ export type AppConfig = {
   showMedium: boolean;
   gtmId: string | null;
   bugsnagApiKey: string | null;
+  openebooks: OpenEbooksConfig | null;
+};
+
+export type OpenEbooksConfig = {
+  defaultLibrary: string;
 };
 
 export type MediaSupportConfig = DirectMediaSupport & IndirectMediaSupport;
