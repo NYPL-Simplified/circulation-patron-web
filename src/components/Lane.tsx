@@ -252,7 +252,7 @@ const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
             width: "100%",
             "&:hover span": {
               textDecoration: "underline"
-            },
+            }
           }}
         >
           <Box
