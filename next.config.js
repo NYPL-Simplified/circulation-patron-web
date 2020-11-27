@@ -93,6 +93,13 @@ const config = {
     AXISNOW_DECRYPT,
     APP_CONFIG: JSON.stringify(APP_CONFIG)
   },
+  //Next.JS Image Optimization config
+  images: {
+    domains: [
+      'contentcafecloud.baker-taylor.com',
+      'covers.nypl.org'
+    ],
+  },
   generateBuildId: async () => BUILD_ID,
   webpack: (config, { dev, isServer, _defaultLoaders, webpack }) => {
     console.log(
