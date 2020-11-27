@@ -4,6 +4,8 @@ import * as React from "react";
 import { AspectRatio } from "@theme-ui/components";
 import { MediumIcon } from "./MediumIndicator";
 import { AnyBook } from "interfaces";
+import Image from 'next/dist/client/image';
+import { THUMBNAIL_CONTAINER_HEIGHT, CARD_WIDTH } from "./BookCard";
 
 /**
  * This is meant to be a book cover. Primarily the image and styling,
@@ -51,6 +53,28 @@ const BookCover: React.FC<{
       >
         <MediumIcon book={book} sx={{ height: "30%", fill: "ui.gray.dark" }} />
       </AspectRatio>
+      
+      <figure sx={{
+          m: 0,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          opacity: state === "success" ? 1 : 0,
+          transition: "all 0.1s ease-in"
+        }} >
+        <Image 
+          src={`${imageUrl}`}
+          alt={`Cover of book: ${book.title}`}
+          width={CARD_WIDTH}
+          height={THUMBNAIL_CONTAINER_HEIGHT}
+          onError={handleError}
+          onLoad={handleLoad}
+          quality={80}  
+          layout='fixed'
+        />
+      </figure>  
+      
+      {/*
       <img
         alt={`Cover of book: ${book.title}`}
         src={imageUrl}
@@ -68,7 +92,7 @@ const BookCover: React.FC<{
           opacity: state === "success" ? 1 : 0,
           transition: "all 0.1s ease-in"
         }}
-      />
+      /> */}
       {showMedium && (
         <MediumIcon
           book={book}
