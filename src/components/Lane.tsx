@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { Tabbable } from "reakit/Tabbable";
-import Book, { BOOK_HEIGHT, BOOK_WIDTH } from "./BookCard";
+import Book, { CARD_HEIGHT, CARD_WIDTH } from "./BookCard";
 import withErrorBoundary, { FallbackProps } from "./ErrorBoundary";
 import { lighten } from "@theme-ui/color";
 import { H2 } from "./Text";
@@ -222,8 +222,8 @@ const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
         listStyle: "none",
         border: "solid",
         borderRadius: "card",
-        flex: `0 0 ${BOOK_WIDTH}px`,
-        height: BOOK_HEIGHT,
+        flex: `0 0 ${CARD_WIDTH}px`,
+        height: CARD_HEIGHT,
         mx: 2,
         color: "ui.white"
       }}
@@ -292,7 +292,7 @@ const LaneErrorFallback: React.FC<FallbackProps> = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: BOOK_HEIGHT,
+        height: CARD_HEIGHT,
         py: 3,
         px: 2,
         backgroundColor: lighten("warn", 0.35),

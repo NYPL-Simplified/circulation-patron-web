@@ -9,8 +9,9 @@ import { Text, H3 } from "./Text";
 import { AnyBook } from "interfaces";
 import { APP_CONFIG } from "utils/env";
 
-export const BOOK_WIDTH = 187;
-export const BOOK_HEIGHT = 365;
+export const CARD_WIDTH = 187;
+export const CARD_HEIGHT = 365;
+export const THUMBNAIL_CONTAINER_HEIGHT = 280;
 
 const twoLines = 42;
 
@@ -30,8 +31,8 @@ const BookCard = React.forwardRef<
         listStyle: "none",
         display: "flex",
         flexDirection: "column",
-        flex: `0 0 ${BOOK_WIDTH}px`,
-        height: BOOK_HEIGHT,
+        flex: `0 0 ${CARD_WIDTH}px`,
+        height: CARD_HEIGHT,
         mx: 2
       }}
     >
