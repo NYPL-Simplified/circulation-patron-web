@@ -248,7 +248,7 @@ const SeeMoreBlock = React.forwardRef<any, SeeMoreBlockProps>((props, ref) => {
         }}
       >
         <Link
-          collectionUrl={url}
+          collectionUrl={props.url}
           sx={{
             bg: "brand.primary",
             height: "100%",
@@ -272,7 +272,7 @@ const SeeMoreBlock = React.forwardRef<any, SeeMoreBlockProps>((props, ref) => {
           >
             <Stack direction="column">
               <Text>See All</Text>
-              <Text variant="text.headers.tertiary">{title}</Text>
+              <Text variant="text.headers.tertiary">{props.title}</Text>
             </Stack>
           </Box>
         </Link>
