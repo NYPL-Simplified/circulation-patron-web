@@ -1,7 +1,7 @@
 import * as React from "react";
 import { fixtures, render, waitFor } from "test-utils";
-import BasicAuthForm from "auth/BasicAuthForm";
-import { OPDS1 } from "interfaces";
+import BasicAuthHandler from "auth/BasicAuthHandler";
+import { ClientBasicMethod, OPDS1 } from "interfaces";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "jest-fetch-mock";
 import Cookie from "js-cookie";
@@ -9,7 +9,8 @@ import { generateCredentials } from "utils/auth";
 import { UserProvider } from "components/context/UserContext";
 
 const mockCookie = Cookie as any;
-const method: OPDS1.BasicAuthMethod = {
+const method: ClientBasicMethod = {
+  id: "basic-id",
   labels: {
     login: "Barcode",
     password: "Pin"
@@ -21,7 +22,7 @@ const method: OPDS1.BasicAuthMethod = {
 beforeEach(() => fetchMock.resetMocks());
 
 test("displays form", () => {
-  const utils = render(<BasicAuthForm method={method} />);
+  const utils = render(<BasicAuthHandler method={method} />);
 
   const barcode = utils.getByLabelText("Barcode input");
   const pin = utils.getByLabelText("Pin input");
@@ -46,7 +47,7 @@ test("sumbits", async () => {
   );
   const utils = render(
     <UserProvider>
-      <BasicAuthForm method={method} />
+      <BasicAuthHandler method={method} />
     </UserProvider>
   );
 
@@ -88,7 +89,7 @@ test("sumbits", async () => {
 });
 
 test("displays client error when inputs are unfilled", async () => {
-  const utils = render(<BasicAuthForm method={method} />);
+  const utils = render(<BasicAuthHandler method={method} />);
 
   // don't fill form, but click login
   const loginButton = utils.getByRole("button", { name: "Login" });
@@ -116,7 +117,7 @@ test("displays server error", async () => {
   });
   const utils = render(
     <UserProvider>
-      <BasicAuthForm method={method} />
+      <BasicAuthHandler method={method} />
     </UserProvider>
   );
 
@@ -134,14 +135,15 @@ test("displays server error", async () => {
 
 test("accepts different input labels", async () => {
   fetchMock.mockResponseOnce(JSON.stringify(fixtures.loans));
-  const methodWithLabels: OPDS1.BasicAuthMethod = {
+  const methodWithLabels: ClientBasicMethod = {
     ...fixtures.basicAuthMethod,
+    id: "basic-id",
     labels: {
       login: "Username",
       password: "Password"
     }
   };
-  const utils = render(<BasicAuthForm method={methodWithLabels} />);
+  const utils = render(<BasicAuthHandler method={methodWithLabels} />);
 
   expect(utils.getByLabelText("Username input")).toBeInTheDocument();
   expect(utils.getByLabelText("Password input")).toBeInTheDocument();

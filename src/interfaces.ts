@@ -70,12 +70,19 @@ export type LibraryLinks = {
 export interface ClientSamlMethod
   extends OPDS1.AuthMethod<typeof OPDS1.SamlAuthType> {
   href: string;
+  id: string;
+}
+export interface ClientCleverMethod extends OPDS1.CleverAuthMethod {
+  id: string;
+}
+export interface ClientBasicMethod extends OPDS1.BasicAuthMethod {
+  id: string;
 }
 
 // auth methods once they have been processed for the app
 export type AppAuthMethod =
-  | OPDS1.CleverAuthMethod
-  | OPDS1.BasicAuthMethod
+  | ClientCleverMethod
+  | ClientBasicMethod
   | ClientSamlMethod;
 
 export interface AuthCredentials {

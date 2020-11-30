@@ -11,7 +11,7 @@ import { Text } from "./Text";
 import Stack from "./Stack";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
-import useAuthModalContext from "auth/AuthModalContext";
+import useLogin from "auth/useLogin";
 
 const HeaderFC: React.FC<{ className?: string }> = ({ className }) => {
   const library = useLibraryContext();
@@ -68,7 +68,8 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
   const { helpWebsite, libraryWebsite } = library.libraryLinks;
   const libraryName = library.catalogName;
   const { isAuthenticated, isLoading } = useUser();
-  const { showModalAndReset } = useAuthModalContext();
+  const { baseLoginUrl } = useLogin();
+
   return (
     <div
       sx={{
@@ -120,10 +121,10 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
       </NavButton>
       {isAuthenticated ? (
         <SignOut />
+      ) : isLoading ? (
+        <Button loading />
       ) : (
-        <Button onClick={showModalAndReset} loading={isLoading}>
-          Sign In
-        </Button>
+        <NavButton href={baseLoginUrl}>Sign In</NavButton>
       )}
     </div>
   );

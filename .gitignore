@@ -30,6 +30,7 @@ yarn-error.log*
 yalc.lock
 wallaby.js
 /config/
+/patron-web-configs/
 .vscode/
 
 .vercel

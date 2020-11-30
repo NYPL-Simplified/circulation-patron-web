@@ -1,8 +1,9 @@
 import * as React from "react";
-import { mockShowAuthModal, render } from "test-utils";
+import { render } from "test-utils";
 import WebpubViewer from "components/WebpubViewer";
 import { PageNotFoundError } from "errors";
 import * as env from "utils/env";
+import { mockPush } from "test-utils/mockNextRouter";
 
 jest.mock("utils/reader", () => ({
   __esModule: true,
@@ -21,25 +22,37 @@ test("throws error when url does not include bookUrl", () => {
   );
 });
 
-test("shows fallback and auth modal if user is not logged in", () => {
-  expect(mockShowAuthModal).toHaveBeenCalledTimes(0);
+test("shows fallback and redirects to login if user is not signed in", () => {
   const utils = render(<WebpubViewer />, {
-    router: { query: { bookUrl: "http://some-book.com" } },
+    router: { query: { bookUrl: "http://some-book.com", library: "testlib" } },
     user: { isAuthenticated: false, token: undefined }
   });
   expect(
-    utils.getByText("You need to be logged in to view this page.")
+    utils.getByText("You need to be signed in to view this page.")
   ).toBeInTheDocument();
 
-  expect(mockShowAuthModal).toHaveBeenCalledTimes(1);
+  expect(mockPush).toHaveBeenCalledTimes(1);
+  expect(mockPush).toHaveBeenCalledWith(
+    {
+      pathname: "/[library]/login",
+      query: {
+        library: "testlib",
+        bookUrl: "http://some-book.com",
+        nextUrl: "/testlib"
+      }
+    },
+    undefined,
+    { shallow: true }
+  );
 });
 
 test("renders viewer div", () => {
-  render(<WebpubViewer />, {
-    router: { query: { bookUrl: "http://some-book.com" } }
+  const utils = render(<WebpubViewer />, {
+    router: { query: { bookUrl: "http://some-book.com" } },
+    user: { isAuthenticated: true }
   });
 
-  expect(document.getElementById("viewer")).toBeInTheDocument();
+  expect(utils.getByTestId("viewer")).toBeInTheDocument();
 });
 
 test("fetches params with token if run with AXISNOW_DECRYPT", async () => {

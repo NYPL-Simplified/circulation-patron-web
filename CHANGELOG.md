@@ -1,9 +1,13 @@
 ## CHANGELOG
 
 ### UNRELEASED CHANGES
+- Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
+- Fix: Fix delay between when you reach the end of a lane and when the forward/back arrows turn gray (disabled).
+
+### 4.1.0
 - Add: Landing page for Open Ebooks
 - Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
-- Fix: Fix delay between when you reach the end of a lane and when the forward/back arrows turn gray (disabled).
+- Refactor: Made the login state a full page so that it can be navigated to directly. 
 
 ### 4.0.0
 - BREAKING CHANGE: Start app by fetching auth document first instead of catalog root. This means that the `libraries` key in the config file needs to be set with auth document urls instead of catalog root urls.
