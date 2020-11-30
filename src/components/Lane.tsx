@@ -232,9 +232,6 @@ const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
         ratio={2 / 3}
         sx={{
           alignItems: "center",
-          backgroundColor: "ui.gray.lightWarm",
-          border: "solid",
-          borderRadius: "card",
           display: "flex",
           flexDirection: "column",
           height: "100%",
