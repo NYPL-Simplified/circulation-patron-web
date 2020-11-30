@@ -17,7 +17,7 @@ export function nextRouterDecorator(Story: any, { parameters }){
     replace = (...args) => console.log("replace", ...args) as any,
     reload = (...args) => console.log("reload", ...args) as any,
     back = (...args) => console.log("back", ...args),
-    prefetch = (...args) => console.log("prefetch", ...args) as any,
+    prefetch = async (...args) => console.log("prefetch", ...args),
     beforePopState = (...args) => console.log("beforePopState", ...args),
     isFallback = false,
     events = {

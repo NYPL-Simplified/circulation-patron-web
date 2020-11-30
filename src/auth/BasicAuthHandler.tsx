@@ -6,7 +6,7 @@ import { Text } from "components/Text";
 import Button from "components/Button";
 import FormInput from "components/form/FormInput";
 import { modalButtonStyles } from "components/Modal";
-import { OPDS1 } from "interfaces";
+import { ClientBasicMethod } from "interfaces";
 import { generateToken } from "auth/useCredentials";
 import useUser from "components/context/UserContext";
 import { ServerError } from "errors";
@@ -16,9 +16,9 @@ type FormData = {
 };
 
 /**
- * Auth form
+ * Renders a form for completing basic auth.
  */
-const BasicAuthForm: React.FC<{ method: OPDS1.BasicAuthMethod }> = ({
+const BasicAuthHandler: React.FC<{ method: ClientBasicMethod }> = ({
   method
 }) => {
   const { signIn, error, isLoading } = useUser();
@@ -86,4 +86,4 @@ const BasicAuthForm: React.FC<{ method: OPDS1.BasicAuthMethod }> = ({
   );
 };
 
-export default BasicAuthForm;
+export default BasicAuthHandler;
