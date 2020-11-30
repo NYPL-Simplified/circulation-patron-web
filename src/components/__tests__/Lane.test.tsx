@@ -2,7 +2,6 @@ import * as React from "react";
 import { render, fixtures } from "../../test-utils";
 import Lane from "../Lane";
 import { LaneData } from "interfaces";
-import "react-intersection-observer/test-utils";
 /**
  * Lane
 
