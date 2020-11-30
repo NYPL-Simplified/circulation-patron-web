@@ -4,14 +4,12 @@
 - Add: Landing page for Open Ebooks
 - Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
 - Refactor: Made the login state a full page so that it can be navigated to directly. 
+- Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
 
 ### 4.0.0
 - BREAKING CHANGE: Start app by fetching auth document first instead of catalog root. This means that the `libraries` key in the config file needs to be set with auth document urls instead of catalog root urls.
 - Feature: Support auth-protected collections.
 - Fix: Update webpub viewer.
-
-### UNRELEASED CHANGES
-- Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
 
 ### 3.1.3
 - Fix: Update the production docker publish Github Action to v2, allowing for use of private Github package registry for AxisNow Decryptor.
