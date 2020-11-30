@@ -33,8 +33,11 @@ async function sendServerEvent(url: string | null) {
       await fetch(url);
       return true;
     } catch (e) {
-      console.warn("Error tracking server event");
-      console.warn(e);
+      error(e);
+      console.error(
+        "The previous error occurred while attempting to track a server event to: ",
+        url
+      );
     }
   }
   return true;
