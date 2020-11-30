@@ -1,9 +1,11 @@
 ## CHANGELOG
 
+### UNRELEASED CHANGES
+- Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
+
 ### 4.1.0
 - Add: Landing page for Open Ebooks
 - Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
-- Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
 - Refactor: Made the login state a full page so that it can be navigated to directly. 
 
 ### 4.0.0
