@@ -223,63 +223,64 @@ const Lane: React.FC<{
   );
 };
 
-const SeeMoreBlock = React.forwardRef<any, SeeMoreBlockProps>((props, ref) => {
-  return (
-    <li
-      sx={{
-        color: "ui.white",
-        flex: `0 0 ${BOOK_WIDTH}px`,
-        height: BOOK_HEIGHT,
-        listStyle: "none",
-        mx: 2
-      }}
-      ref={ref}
-      {...props}
-    >
-      <AspectRatio
-        ratio={2 / 3}
+const SeeMoreBlock = React.forwardRef<HTMLLIElement, SeeMoreBlockProps>(
+  (props, ref) => {
+    return (
+      <li
         sx={{
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          justifyContent: "center",
-          width: "100%"
+          color: "ui.white",
+          flex: `0 0 ${BOOK_WIDTH}px`,
+          height: BOOK_HEIGHT,
+          listStyle: "none",
+          mx: 2
         }}
+        ref={ref}
       >
-        <Link
-          collectionUrl={props.url}
+        <AspectRatio
+          ratio={2 / 3}
           sx={{
-            bg: "brand.primary",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
             height: "100%",
-            p: 2,
-            textAlign: "center",
-            width: "100%",
-            "&:hover span": {
-              textDecoration: "underline"
-            }
+            justifyContent: "center",
+            width: "100%"
           }}
         >
-          <Box
+          <Link
+            collectionUrl={props.url}
             sx={{
-              left: 0,
+              bg: "brand.primary",
+              height: "100%",
               p: 2,
-              position: "absolute",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: BOOK_WIDTH
+              textAlign: "center",
+              width: "100%",
+              "&:hover span": {
+                textDecoration: "underline"
+              }
             }}
           >
-            <Stack direction="column">
-              <Text>See All</Text>
-              <Text variant="text.headers.tertiary">{props.title}</Text>
-            </Stack>
-          </Box>
-        </Link>
-      </AspectRatio>
-    </li>
-  );
-});
+            <Box
+              sx={{
+                left: 0,
+                p: 2,
+                position: "absolute",
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: BOOK_WIDTH
+              }}
+            >
+              <Stack direction="column">
+                <Text>See All</Text>
+                <Text variant="text.headers.tertiary">{props.title}</Text>
+              </Stack>
+            </Box>
+          </Link>
+        </AspectRatio>
+      </li>
+    );
+  }
+);
 
 const PrevNextButton: React.FC<{
   onClick: () => void;
