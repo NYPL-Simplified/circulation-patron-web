@@ -11,9 +11,6 @@
 - Feature: Support auth-protected collections.
 - Fix: Update webpub viewer.
 
-### UNRELEASED CHANGES
-- Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
-
 ### 3.1.3
 - Fix: Update the production docker publish Github Action to v2, allowing for use of private Github package registry for AxisNow Decryptor.
 - Fix: Book covers and titles in BookList now link to the book page
