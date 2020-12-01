@@ -2,6 +2,7 @@
 
 ### UNRELEASED CHANGES
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
+- Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
 
 ### 4.1.0
 - Add: Landing page for Open Ebooks
