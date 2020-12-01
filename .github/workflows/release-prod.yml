@@ -59,7 +59,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nypl/patron-web:${{steps.autotagger.outputs.version}}, nypl/patron-web:latest
+          tags: |
+            nypl/patron-web:${{steps.autotagger.outputs.version}}
+            nypl/patron-web:latest
           # allows us to install the private axisnow package
           build-args: |
             github_token=${{ secrets.GH_PACKAGES_TOKEN }}
