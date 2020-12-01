@@ -2,6 +2,7 @@
 
 ### UNRELEASED CHANGES
 - Add: Button to go back to auth selection from basic auth if multiple methods are present.
+- Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
 
 ### 4.1.0
 - Add: Landing page for Open Ebooks

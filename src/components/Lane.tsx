@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
+import { AspectRatio } from "@theme-ui/components";
 import { Tabbable } from "reakit/Tabbable";
 import Book, { BOOK_HEIGHT, BOOK_WIDTH } from "./BookCard";
 import withErrorBoundary, { FallbackProps } from "./ErrorBoundary";
@@ -9,6 +10,7 @@ import { H2 } from "./Text";
 import { NavButton } from "./Button";
 import ArrowForward from "icons/ArrowForward";
 import Stack from "./Stack";
+import { Box } from "theme-ui";
 import { AnyBook, LaneData } from "interfaces";
 import Link from "components/Link";
 import { Text } from "components/Text";
@@ -219,33 +221,54 @@ const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
   return (
     <li
       sx={{
-        listStyle: "none",
-        border: "solid",
-        borderRadius: "card",
+        color: "ui.white",
         flex: `0 0 ${BOOK_WIDTH}px`,
         height: BOOK_HEIGHT,
-        mx: 2,
-        color: "ui.white"
+        listStyle: "none",
+        mx: 2
       }}
     >
-      <Link
-        collectionUrl={url}
+      <AspectRatio
+        ratio={2 / 3}
         sx={{
-          bg: "brand.primary",
-          display: "flex",
-          justifyContent: "center",
           alignItems: "center",
-          textAlign: "center",
+          display: "flex",
           flexDirection: "column",
           height: "100%",
-          p: 2
+          justifyContent: "center",
+          width: "100%"
         }}
       >
-        <Stack direction="column">
-          <Text>See All</Text>
-          <Text variant="text.headers.tertiary">{title}</Text>
-        </Stack>
-      </Link>
+        <Link
+          collectionUrl={url}
+          sx={{
+            bg: "brand.primary",
+            height: "100%",
+            p: 2,
+            textAlign: "center",
+            width: "100%",
+            "&:hover span": {
+              textDecoration: "underline"
+            }
+          }}
+        >
+          <Box
+            sx={{
+              left: 0,
+              p: 2,
+              position: "absolute",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: BOOK_WIDTH
+            }}
+          >
+            <Stack direction="column">
+              <Text>See All</Text>
+              <Text variant="text.headers.tertiary">{title}</Text>
+            </Stack>
+          </Box>
+        </Link>
+      </AspectRatio>
     </li>
   );
 };
@@ -259,12 +282,12 @@ const PrevNextButton: React.FC<{
     <Tabbable
       as="div"
       sx={{
-        flex: ["0 0 38px", "0 0 64px"],
-        fontSize: [2, 4],
-        display: "flex",
-        justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
+        display: "flex",
+        flex: ["0 0 38px", "0 0 64px"],
+        fontSize: [2, 4],
+        justifyContent: "center",
         "&:hover": {
           backgroundColor: "ui.gray.medium"
         },
@@ -289,15 +312,15 @@ const LaneErrorFallback: React.FC<FallbackProps> = () => {
   return (
     <div
       sx={{
-        display: "flex",
-        justifyContent: "center",
         alignItems: "center",
-        height: BOOK_HEIGHT,
-        py: 3,
-        px: 2,
         backgroundColor: lighten("warn", 0.35),
+        borderRadius: "card",
+        display: "flex",
+        height: BOOK_HEIGHT,
+        justifyContent: "center",
         m: 2,
-        borderRadius: "card"
+        px: 2,
+        py: 3
       }}
     >
       There was an error displaying this lane. We&apos;ve reported the error to
