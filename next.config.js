@@ -10,6 +10,7 @@ const chalk = require("chalk");
 const package = require("./package.json");
 const APP_VERSION = package.version;
 const { NODE_ENV, CONFIG_FILE, REACT_AXE } = process.env;
+const ALLOWED_IMAGE_DOMAINS = process.env.ALLOWED_IMAGE_DOMAINS ? process.env.ALLOWED_IMAGE_DOMAINS.split(",") : [];
 
 const log = (...message) =>
   console.log(chalk.blue("app info") + "  -", ...message);
@@ -85,6 +86,7 @@ const config = {
   env: {
     CONFIG_FILE: CONFIG_FILE,
     REACT_AXE: REACT_AXE,
+    ALLOWED_IMAGE_DOMAINS: ALLOWED_IMAGE_DOMAINS,
     APP_VERSION,
     BUILD_ID,
     GIT_BRANCH,
@@ -95,10 +97,7 @@ const config = {
   },
   //Next.JS Image Optimization config
   images: {
-    domains: [
-      'contentcafecloud.baker-taylor.com',
-      'covers.nypl.org'
-    ],
+    domains: ALLOWED_IMAGE_DOMAINS,
   },
   generateBuildId: async () => BUILD_ID,
   webpack: (config, { dev, isServer, _defaultLoaders, webpack }) => {

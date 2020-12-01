@@ -1,0 +1,8 @@
+instance_name: Kaplan Local
+companion_app: openebooks
+# bugsnag_api_key: 29e89150d092b98836edf0745bfdc677
+show_medium: false
+libraries: 
+  app: "https://qa-circulation.openebooks.us/USOEI/authentication_document"
+media_support: 
+  application/vnd.librarysimplified.axisnow+json: show
