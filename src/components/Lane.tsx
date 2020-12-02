@@ -14,6 +14,7 @@ import { Box } from "theme-ui";
 import { AnyBook, LaneData } from "interfaces";
 import Link from "components/Link";
 import { Text } from "components/Text";
+import { useInView } from "react-intersection-observer";
 
 type BookRefs = {
   [id: string]: React.RefObject<HTMLLIElement>;
@@ -21,9 +22,15 @@ type BookRefs = {
 type CurrentBook = {
   index: number;
   /**
-   * The following dictates whether we snap to a book
+   * The following dictates whether we snap to a book.
+   * "Snapping" to a book means we scroll the currentBook's
+   * left edge so that it is up against leftmost edge of the lane
    */
   snap: boolean;
+};
+type SeeMoreBlockProps = {
+  url: string;
+  title: string;
 };
 
 const getfilteredBooksAndRefs = (books: AnyBook[], omitIds?: string[]) => {
@@ -66,17 +73,19 @@ const Lane: React.FC<{
   const [isBrowserScrolling, setIsBrowserScrolling] = React.useState<boolean>(
     false
   );
+
   // we need a ref to the UL element so we can scroll it
   const scrollContainer = React.useRef<HTMLUListElement | null>(null);
 
-  // vars for when we are at beginning or end of lane
-  const isAtIndexEnd = currentBook.index === filteredBooks.length - 1;
-  const isAtScrollEnd = !!(
-    scrollContainer.current &&
-    scrollContainer.current.scrollLeft ===
-      scrollContainer.current.scrollWidth - scrollContainer.current.offsetWidth
-  );
-  const isAtEnd = !!(isAtIndexEnd || isAtScrollEnd);
+  //Set up an intersection observable for the "See More" card at the end of the lane.
+  //If the card isn't 100% visible in the lane, "inView" (and therefore "isAtEnd") will be false.
+  const { ref, inView: isAtEnd } = useInView({
+    root: scrollContainer.current,
+    threshold: 1
+  });
+
+  // vars for when we are at beginning of a lane
+
   const isAtStart = currentBook.index === 0;
 
   /** Handlers for button clicks */
@@ -205,7 +214,7 @@ const Lane: React.FC<{
           {filteredBooks.map(book => (
             <Book key={book.id} book={book} ref={bookRefs[book.id]} />
           ))}
-          <SeeMoreBlock url={url} title={title} />
+          <SeeMoreBlock url={url} title={title} ref={ref} />
         </ul>
 
         <PrevNextButton onClick={handleRightClick} disabled={isAtEnd} />
@@ -214,64 +223,64 @@ const Lane: React.FC<{
   );
 };
 
-const SeeMoreBlock: React.FC<{ url: string; title: string }> = ({
-  url,
-  title
-}) => {
-  return (
-    <li
-      sx={{
-        color: "ui.white",
-        flex: `0 0 ${BOOK_WIDTH}px`,
-        height: BOOK_HEIGHT,
-        listStyle: "none",
-        mx: 2
-      }}
-    >
-      <AspectRatio
-        ratio={2 / 3}
+const SeeMoreBlock = React.forwardRef<HTMLLIElement, SeeMoreBlockProps>(
+  (props, ref) => {
+    return (
+      <li
         sx={{
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          justifyContent: "center",
-          width: "100%"
+          color: "ui.white",
+          flex: `0 0 ${BOOK_WIDTH}px`,
+          height: BOOK_HEIGHT,
+          listStyle: "none",
+          mx: 2
         }}
+        ref={ref}
       >
-        <Link
-          collectionUrl={url}
+        <AspectRatio
+          ratio={2 / 3}
           sx={{
-            bg: "brand.primary",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
             height: "100%",
-            p: 2,
-            textAlign: "center",
-            width: "100%",
-            "&:hover span": {
-              textDecoration: "underline"
-            }
+            justifyContent: "center",
+            width: "100%"
           }}
         >
-          <Box
+          <Link
+            collectionUrl={props.url}
             sx={{
-              left: 0,
+              bg: "brand.primary",
+              height: "100%",
               p: 2,
-              position: "absolute",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: BOOK_WIDTH
+              textAlign: "center",
+              width: "100%",
+              "&:hover span": {
+                textDecoration: "underline"
+              }
             }}
           >
-            <Stack direction="column">
-              <Text>See All</Text>
-              <Text variant="text.headers.tertiary">{title}</Text>
-            </Stack>
-          </Box>
-        </Link>
-      </AspectRatio>
-    </li>
-  );
-};
+            <Box
+              sx={{
+                left: 0,
+                p: 2,
+                position: "absolute",
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: BOOK_WIDTH
+              }}
+            >
+              <Stack direction="column">
+                <Text>See All</Text>
+                <Text variant="text.headers.tertiary">{props.title}</Text>
+              </Stack>
+            </Box>
+          </Link>
+        </AspectRatio>
+      </li>
+    );
+  }
+);
 
 const PrevNextButton: React.FC<{
   onClick: () => void;
