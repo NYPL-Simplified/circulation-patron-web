@@ -23,6 +23,7 @@ const BookCover: React.FC<{
 
   const handleError = () => setState("error");
   const handleLoad = () => setState("success");
+  const coverImageref = React.useRef<HTMLImageElement | null>(null);
 
   return (
     <div

@@ -2,17 +2,9 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 
-interface LLImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-    title?: string;
-    showIcon?: boolean;
-}
-
-const LazyLoadImage: React.FC<LLImageProps> = ({ title, showIcon, ...props }) => {
-    const imageUrl = props.src;
-    delete props.src;
+const LazyLoadImage = ({src, ...otherProps}) => {
     return (
-    <img {...props} data-src={imageUrl}/>
-  );
-};
-
+        <img {...otherProps} data-src={src}/>
+    );
+}
 export default LazyLoadImage;
