@@ -23,7 +23,6 @@ const BookCover: React.FC<{
 
   const handleError = () => setState("error");
   const handleLoad = () => setState("success");
-  const coverImageref = React.useRef<HTMLImageElement | null>(null);
 
   return (
     <div
@@ -54,22 +53,22 @@ const BookCover: React.FC<{
         <MediumIcon book={book} sx={{ height: "30%", fill: "ui.gray.dark" }} />
       </AspectRatio>
       <LazyLoadImage
-          alt={`Cover of book: ${book.title}`}
-          src={imageUrl}
-          onError={handleError}
-          onLoad={handleLoad}
-          sx={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            opacity: state === "success" ? 1 : 0,
-            transition: "all 0.1s ease-in"
-          }}      
+        alt={`Cover of book: ${book.title}`}
+        src={imageUrl}
+        onError={handleError}
+        onLoad={handleLoad}
+        sx={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          opacity: state === "success" ? 1 : 0,
+          transition: "all 0.1s ease-in"
+        }}
       />
       {showMedium && (
         <MediumIcon
