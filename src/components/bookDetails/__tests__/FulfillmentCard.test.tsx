@@ -422,9 +422,7 @@ describe("FulfillableBook", () => {
     expect(fetchMock).toHaveBeenCalledTimes(0);
     userEvent.click(readOnline);
     await waitFor(() =>
-      expect(fetchMock).toHaveBeenCalledWith("http://track-open-book.com", {
-        method: "POST"
-      })
+      expect(fetchMock).toHaveBeenCalledWith("http://track-open-book.com")
     );
   });
 
@@ -450,9 +448,7 @@ describe("FulfillableBook", () => {
     userEvent.click(readOnline);
 
     await waitFor(() =>
-      expect(fetchMock).toHaveBeenCalledWith("http://track-open-book.com", {
-        method: "POST"
-      })
+      expect(fetchMock).toHaveBeenCalledWith("http://track-open-book.com")
     );
   });
 
