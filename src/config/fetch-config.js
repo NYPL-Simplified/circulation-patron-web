@@ -66,7 +66,7 @@ function parseConfig(raw) {
     gtmId: unparsed.gtmId || null,
     companionApp,
     showMedium,
-    openebooks: openebooks ? { defaultLibrary } : false
+    openebooks: openebooks ? { defaultLibrary } : null
   };
 }
 

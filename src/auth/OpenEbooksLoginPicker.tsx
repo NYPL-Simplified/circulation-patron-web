@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import Stack from "components/Stack";
-import { H2, Text } from "components/Text";
+import { Text } from "components/Text";
 import AuthButton from "auth/AuthButton";
 import { ClientBasicMethod, ClientCleverMethod, OPDS1 } from "interfaces";
 import useLibraryContext from "components/context/LibraryContext";
