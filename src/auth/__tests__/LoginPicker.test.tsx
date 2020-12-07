@@ -2,11 +2,11 @@ import { AppAuthMethod } from "interfaces";
 import * as React from "react";
 import { render, fixtures } from "test-utils";
 import userEvent from "@testing-library/user-event";
-import { LoginSelector } from "pages/[library]/login/index";
+import LoginPicker from "../LoginPicker";
 import { mockPush } from "test-utils/mockNextRouter";
 
 test("shows warning if there is no auth method configured", async () => {
-  const utils = render(<LoginSelector />, {
+  const utils = render(<LoginPicker />, {
     library: {
       ...fixtures.libraryData,
       libraryLinks: {
@@ -27,7 +27,7 @@ test("shows warning if there is no auth method configured", async () => {
 const oneAuthMethod: AppAuthMethod[] = [fixtures.basicAuthMethod];
 
 test("redirects to /[methodId] when only one method configured", () => {
-  render(<LoginSelector />, {
+  render(<LoginPicker />, {
     library: {
       ...fixtures.libraryData,
       authMethods: oneAuthMethod
@@ -50,7 +50,7 @@ test("redirects to /[methodId] when only one method configured", () => {
 });
 
 test("preserves nextUrl query param on redirection", () => {
-  render(<LoginSelector />, {
+  render(<LoginPicker />, {
     library: {
       ...fixtures.libraryData,
       authMethods: oneAuthMethod
@@ -85,7 +85,7 @@ const fourAuthMethods: AppAuthMethod[] = [
   fixtures.createSamlMethod(1)
 ];
 test("shows buttons with four auth methods configured", async () => {
-  const utils = render(<LoginSelector />, {
+  const utils = render(<LoginPicker />, {
     library: {
       ...fixtures.libraryData,
       authMethods: fourAuthMethods
@@ -115,7 +115,7 @@ test("shows buttons with four auth methods configured", async () => {
 });
 
 test("shows combobox with five auth methods configured", () => {
-  const utils = render(<LoginSelector />, {
+  const utils = render(<LoginPicker />, {
     library: {
       ...fixtures.libraryData,
       authMethods: [...fourAuthMethods, fixtures.createSamlMethod(2)]
