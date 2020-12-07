@@ -1,13 +1,13 @@
 import fetchWithHeaders from "dataflow/fetch";
 import download from "downloadjs";
 import { ServerError } from "errors";
-import { OPDS1 } from "interfaces";
+import { DownloadMediaType } from "types/opds1";
 import { generateFilename, typeMap } from "utils/file";
 
 export default async function downloadFile(
   url: string,
   title: string,
-  type: OPDS1.AnyBookMediaType,
+  type: DownloadMediaType,
   token?: string
 ) {
   const response = await fetchWithHeaders(url, token);
@@ -35,7 +35,7 @@ export default async function downloadFile(
 async function downloadBlob(
   response: Response,
   title: string,
-  type: OPDS1.AnyBookMediaType
+  type: DownloadMediaType
 ) {
   const blob = await response.blob();
   const extension = typeMap[type]?.extension ?? "";
