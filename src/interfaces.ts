@@ -24,7 +24,7 @@ export type AppConfig = {
   showMedium: boolean;
   gtmId: string | null;
   bugsnagApiKey: string | null;
-  openebooks: OpenEbooksConfig | null;
+  openebooks: OpenEbooksConfig | false;
 };
 
 export type OpenEbooksConfig = {
