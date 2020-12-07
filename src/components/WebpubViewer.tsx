@@ -5,7 +5,7 @@ import useLibraryContext from "./context/LibraryContext";
 import useUser from "components/context/UserContext";
 import fetchWithHeaders from "dataflow/fetch";
 import extractParam from "dataflow/utils";
-import ApplicationError, { PageNotFoundError, ServerError } from "errors";
+import { PageNotFoundError, ServerError } from "errors";
 import AuthProtectedRoute from "auth/AuthProtectedRoute";
 
 const initializeReader = async (
