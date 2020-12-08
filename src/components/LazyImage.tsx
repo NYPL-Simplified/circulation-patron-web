@@ -20,12 +20,7 @@ const LazyLoadImage: React.FC<LLImgProps> = ({ src, alt, ...otherProps }) => {
     triggerOnce: true
   });
   return (
-    <img
-      ref={ref}
-      src={inView ? src : undefined}
-      alt={alt}
-      {...otherProps}
-    />
+    <img ref={ref} src={inView ? src : undefined} alt={alt} {...otherProps} />
   );
 };
 export default LazyLoadImage;
