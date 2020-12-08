@@ -5,6 +5,7 @@
 - Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
 - Fix: Fix delay between when you reach the end of a lane and when the forward/back arrows turn gray (disabled).
 - Add: Lazy-loading of book cover images: A book cover image source will now only download once at least one pixel of the image's placeholder becomes visible in the viewport.
+- Refactor: Re-enabled Typescript's strict type checking to provide better runtime type safety guarantees, and keep type safety from deteriorating hrough development.
 
 ### 4.1.0
 - Add: Landing page for Open Ebooks

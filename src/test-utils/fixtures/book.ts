@@ -211,12 +211,12 @@ export const externalReadFulfillmentLink: FulfillmentLink = {
   url: "/read-online"
 };
 
-export const fulfillableBook: FulfillableBook = {
+export const fulfillableBook = {
   ...book,
   status: "fulfillable",
   revokeUrl: "/revoke",
   fulfillmentLinks: [epubFulfillmentLink]
-};
+} as const;
 
 export const unsupportedBook: UnsupportedBook = {
   ...book,

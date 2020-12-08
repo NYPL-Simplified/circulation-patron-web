@@ -21,7 +21,8 @@ WithAvailability.args = {
   book: {
     ...onHoldBook,
     availability: {
-      until: "10/20/1980"
+      until: "10/20/1980",
+      status: "available"
     }
   }
 };
