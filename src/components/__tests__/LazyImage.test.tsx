@@ -4,8 +4,8 @@ import * as React from "react";
 import { render, screen } from "@testing-library/react";
 
 import LazyImage from "../LazyImage";
-import { useInView } from 'react-intersection-observer';
-import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
+import { useInView } from "react-intersection-observer";
+import { mockAllIsIntersecting } from "react-intersection-observer/test-utils";
 
 const HookComponent = ({ options }) => {
   const [ref, inView] = useInView(options);
