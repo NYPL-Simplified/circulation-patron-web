@@ -29,11 +29,20 @@ test("Creates an inView hook which successfully respects the visibility ratio se
   screen.getByText("true");
 });
 
-test("should create a hook inView with threshold", () => {
-  render(<HookComponent options={{ threshold: 0.3 }} />);
-  mockAllIsIntersecting(0.1);
-  screen.getByText("false");
-  // Once the threshold has been passed, it will trigger inView.
-  mockAllIsIntersecting(0.3);
-  screen.getByText("true");
+test("Confirm the presence of the src attribute when lazy image component when inView is true", () => {
+  const testUrl = "http://www.yahoo.com";
+  render(<LazyImage src={testUrl} />);
+  const imgElement = document.querySelector("img");
+  // This causes all (existing) IntersectionObservers to be set as intersecting
+  mockAllIsIntersecting(true);
+  expect(imgElement).toHaveAttribute("src", testUrl);
+});
+
+test("Confirm the absence of the src attribute when lazy image component when inView is true", () => {
+  const testUrl = "http://www.yahoo.com";
+  render(<LazyImage src={testUrl} />);
+  const imgElement = document.querySelector("img");
+  // This causes all (existing) IntersectionObservers to be set as intersecting
+  mockAllIsIntersecting(false);
+  expect(imgElement).not.toHaveAttribute("src", testUrl);
 });
