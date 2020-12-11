@@ -7,7 +7,11 @@ import LazyImage from "../LazyImage";
 import { useInView } from "react-intersection-observer";
 import { mockAllIsIntersecting } from "react-intersection-observer/test-utils";
 
-const HookComponent = ({ options }) => {
+const HookComponent = ({
+  options
+}: {
+  options: Parameters<typeof useInView>[0];
+}) => {
   const [ref, inView] = useInView(options);
   return <div ref={ref}>{inView.toString()}</div>;
 };
