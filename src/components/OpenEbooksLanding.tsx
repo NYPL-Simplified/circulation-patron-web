@@ -50,7 +50,6 @@ const LandingPage: NextPage<AppProps> = ({ library, error }) => {
 };
 
 export const OpenEbooksLandingComponent = () => {
-
   return (
     <div
       sx={{

@@ -10,8 +10,7 @@ import { Text } from "components/Text";
 import LoadingIndicator from "components/LoadingIndicator";
 import useLogin from "auth/useLogin";
 
-
-export default function LoginPicker (): JSX.Element {
+export default function LoginPicker(): JSX.Element {
   const { authMethods } = useLibraryContext();
   const { initLogin } = useLogin();
 
@@ -50,7 +49,7 @@ export default function LoginPicker (): JSX.Element {
     case "buttons":
       return <Buttons authMethods={authMethods} />;
   }
-};
+}
 
 const NoAuth: React.FC = () => {
   const {

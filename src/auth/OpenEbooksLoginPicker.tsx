@@ -8,7 +8,6 @@ import { ClientBasicMethod, ClientCleverMethod, OPDS1 } from "interfaces";
 import useLibraryContext from "components/context/LibraryContext";
 import { AppSetupError } from "errors";
 
-
 export default function LoginRegion(): JSX.Element {
   const { authMethods } = useLibraryContext();
 
