@@ -21,7 +21,7 @@ const mockedSWR = useSWR as jest.MockedFunction<typeof useSWR>;
 const mockSwr: MockSwr<SearchData> = (
   value = makeSwrResponse({ data: fixtureData })
 ) => {
-  mockedSWR.mockImplementation(key => {
+  mockedSWR.mockImplementation((key: any) => {
     if (key?.[0] === "/collection")
       return makeSwrResponse({ data: fixtures.emptyCollection });
     return makeSwrResponse(value);

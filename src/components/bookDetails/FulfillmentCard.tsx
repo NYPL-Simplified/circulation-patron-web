@@ -78,7 +78,7 @@ const FulfillmentContent: React.FC<{
  */
 const AccessCard: React.FC<{
   book: FulfillableBook;
-  links: FulfillmentLink[];
+  links: readonly FulfillmentLink[];
 }> = ({ book, links }) => {
   const fulfillments = getFulfillmentsFromBook(book);
 
