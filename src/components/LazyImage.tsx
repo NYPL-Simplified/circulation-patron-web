@@ -13,7 +13,7 @@ interface LLImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {}
  * @param LLImgProps - extends from the default img tag props so that we can eventually add the ability for the developer to pass in a custom root element
  */
 
-const LazyLoadImage: React.FC<LLImgProps> = ({ src, alt, ...otherProps }) => {
+const LazyImage: React.FC<LLImgProps> = ({ src, alt, ...otherProps }) => {
   const { ref, inView } = useInView({
     rootMargin: `${BOOK_HEIGHT}px 0px`,
     threshold: 0,
@@ -23,4 +23,4 @@ const LazyLoadImage: React.FC<LLImgProps> = ({ src, alt, ...otherProps }) => {
     <img ref={ref} src={inView ? src : undefined} alt={alt} {...otherProps} />
   );
 };
-export default LazyLoadImage;
+export default LazyImage;
