@@ -140,7 +140,7 @@ describe("book details page", () => {
   test("shows recommendation lanes", () => {
     // we make a special mock so we can differentiate the book request
     // and the related collection request
-    mockedSWR.mockImplementation((key => {
+    mockedSWR.mockImplementation(((key: any) => {
       if (key === "/book-url") {
         return makeSwrResponse({
           data: {

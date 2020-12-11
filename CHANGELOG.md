@@ -5,6 +5,7 @@
 - Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
 - Fix: Fix delay between when you reach the end of a lane and when the forward/back arrows turn gray (disabled).
 - Add: Custom Open eBooks Login Picker page to show helpful documentation when choosing a login method.
+- Refactor: Re-enabled Typescript's strict type checking to provide better runtime type safety guarantees, and keep type safety from deteriorating hrough development.
 
 ### 4.1.0
 - Add: Landing page for Open Ebooks

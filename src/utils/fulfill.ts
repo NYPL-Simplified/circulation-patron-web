@@ -6,6 +6,7 @@ import {
   MediaSupportLevel,
   OPDS1
 } from "interfaces";
+import { DownloadMediaType } from "types/opds1";
 import { bookIsAudiobook } from "utils/book";
 import { APP_CONFIG, AXISNOW_DECRYPT } from "utils/env";
 import { typeMap } from "utils/file";
@@ -28,7 +29,7 @@ import { typeMap } from "utils/file";
 export type DownloadFulfillment = {
   type: "download";
   id: string;
-  contentType: OPDS1.AnyBookMediaType;
+  contentType: DownloadMediaType;
   getUrl: GetUrlWithIndirection;
   buttonLabel: string;
 };
@@ -141,7 +142,7 @@ const constructGetUrl = (
   indirectionType: OPDS1.IndirectAcquisitionType | undefined,
   contentType: OPDS1.AnyBookMediaType,
   url: string
-): GetUrlWithIndirection => async (catalogUrl: string, token: string) => {
+): GetUrlWithIndirection => async (catalogUrl: string, token?: string) => {
   /**
    * If there is OPDS Entry Indirection, we fetch the actual link
    * from within an entry
@@ -164,7 +165,7 @@ const constructGetUrl = (
   return url;
 };
 
-export function dedupeLinks(links: FulfillmentLink[]) {
+export function dedupeLinks(links: readonly FulfillmentLink[]) {
   return links.reduce<FulfillmentLink[]>((uniqueArr, current) => {
     const isDup = uniqueArr.find(
       uniqueLink => uniqueLink.contentType === current.contentType
@@ -193,7 +194,9 @@ export function getAppSupportLevel(
 /**
  * Check if any of the links is redirect or redirect-and-show support level
  */
-export function shouldRedirectToCompanionApp(links: FulfillmentLink[]) {
+export function shouldRedirectToCompanionApp(
+  links: readonly FulfillmentLink[]
+) {
   return links.reduce((prev, link) => {
     if (prev) return true;
     const supportLevel = link.supportLevel;

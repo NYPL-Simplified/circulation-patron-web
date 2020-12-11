@@ -21,22 +21,22 @@ const Template: Story<{ book: AnyBook }> = args => <BookListItem {...args} />;
 const redirectEpub = {
   ...epubFulfillmentLink,
   supportLevel: "redirect-and-show"
-};
+} as const;
 
 const redirectAxisNow = {
   ...axisnowFulfillmentLink,
   supportLevel: "redirect-and-show"
-};
+} as const;
 
 const redirectExternal = {
   ...externalReadFulfillmentLink,
   supportLevel: "redirect-and-show"
-};
+} as const;
 
 const redirectPdf = {
   ...pdfFulfillmentLink,
   supportLevel: "redirect-and-show"
-};
+} as const;
 
 export const DownloadEpub = Template.bind({});
 DownloadEpub.args = {
@@ -52,7 +52,8 @@ WithAvailability.args = {
     ...fulfillableBook,
     fulfillmentLinks: [redirectEpub],
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
@@ -64,7 +65,8 @@ AxisNow.args = {
     ...fulfillableBook,
     fulfillmentLinks: [redirectAxisNow],
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
@@ -76,7 +78,8 @@ ExternalReadOnline.args = {
     ...fulfillableBook,
     fulfillmentLinks: [redirectExternal],
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
@@ -87,7 +90,8 @@ MultipleOptions.args = {
   book: {
     ...fulfillableBook,
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     },
     fulfillmentLinks: [redirectExternal, redirectEpub, redirectPdf]
   }
@@ -100,7 +104,8 @@ WithoutRevokeUrl.args = {
     ...fulfillableBook,
     fulfillmentLinks: [redirectPdf],
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     },
     revokeUrl: null
   }
@@ -112,7 +117,8 @@ Unsupported.args = {
   book: {
     ...unsupportedBook,
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
