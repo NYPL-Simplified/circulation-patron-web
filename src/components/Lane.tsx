@@ -213,7 +213,12 @@ const Lane: React.FC<{
           onScroll={handleScroll}
         >
           {filteredBooks.map(book => (
-            <Book key={book.id} book={book} ref={bookRefs[book.id]} />
+            <Book
+              currentLane={title}
+              key={book.id}
+              book={book}
+              ref={bookRefs[book.id]}
+            />
           ))}
           <SeeMoreBlock url={url} title={title} ref={ref} />
         </ul>

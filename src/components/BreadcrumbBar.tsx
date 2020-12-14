@@ -10,7 +10,8 @@ const BreadcrumbBar: React.FC<{
   className?: string;
   currentLocation?: string;
   breadcrumbs?: LinkData[];
-}> = ({ children, className, currentLocation, breadcrumbs }) => {
+  currentLane?: string;
+}> = ({ children, className, currentLocation, breadcrumbs, currentLane }) => {
   const { catalogUrl, catalogName } = useLibraryContext();
 
   const breadcrumbsWithAtLeastOne =
@@ -48,13 +49,19 @@ const BreadcrumbBar: React.FC<{
             breadcrumb.text &&
             breadcrumb.url && (
               <ListItem key={breadcrumb.url}>
-                <Link collectionUrl={breadcrumb.url}>{breadcrumb.text}</Link>
+                <Link
+                  collectionUrl={breadcrumb.url}
+                >{`collection [${breadcrumb.text}]`}</Link>
                 &nbsp;/&nbsp;
               </ListItem>
             )
         )}
+        <ListItem aria-label={`current lane [${currentLane}]`}>
+          {`current lane [${currentLane}]`}
+          &nbsp;/&nbsp;
+        </ListItem>
         <ListItem aria-label={`Current location: ${lastItem}`}>
-          {lastItem}
+          {`Current location[ ${lastItem}]`}
         </ListItem>
       </List>
       {children}

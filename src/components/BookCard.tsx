@@ -16,8 +16,8 @@ const twoLines = 42;
 
 const BookCard = React.forwardRef<
   HTMLLIElement,
-  { book: AnyBook; className?: string }
->(({ book, className }, ref) => {
+  { book: AnyBook; collection: string; className?: string }
+>(({ book, className, currentLane }, ref) => {
   const authors = getAuthors(book, 2);
 
   // if the book url is undefined, there is no sense displaying it.
@@ -40,6 +40,7 @@ const BookCard = React.forwardRef<
         aria-label={`View ${book.title}`}
         sx={{ "&:hover": { textDecoration: "none" } }}
       >
+        {currentLane}
         <BookCover book={book} showMedium={APP_CONFIG.showMedium} />
         <div sx={{ flex: "1 1 auto" }} />
         <H3 sx={{ m: 0, mt: 1, fontSize: -1 }}>

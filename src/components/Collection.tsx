@@ -11,13 +11,12 @@ import computeBreadcrumbs from "computeBreadcrumbs";
 import useCollection from "hooks/useCollection";
 import ApplicationError from "errors";
 import ErrorComponent from "components/Error";
+import useBreadcrumbContext from "../components/context/BreadcrumbContext";
 
 export const Collection: React.FC<{
   title?: string;
 }> = ({ title }) => {
   const { collection, collectionUrl, isValidating, error } = useCollection();
-
-  if (error) return <ErrorComponent info={error?.info} />;
 
   const isLoading = !collection && isValidating;
 
@@ -26,6 +25,18 @@ export const Collection: React.FC<{
   const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
   const breadcrumbs = computeBreadcrumbs(collection);
+  //||||||||||||||||||||||||||||||||||||||||||||||||||||||
+  const { setBreadcrumbx } = useBreadcrumbContext();
+
+  React.useEffect(() => {
+    //send update breadcrumbs to context
+    setBreadcrumbx([{ url: "dfsd" }, { url: "bloo" }]);
+    console.log("test");
+  }, [breadcrumbs]);
+
+  //||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+  if (error) return <ErrorComponent info={error?.info} />;
 
   if (!collectionUrl)
     throw new ApplicationError({

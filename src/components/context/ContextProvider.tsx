@@ -5,6 +5,7 @@ import { Provider as ReakitProvider } from "reakit";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "../../theme";
 import { UserProvider } from "components/context/UserContext";
+import { BreadcrumbProvider } from "components/context/BreadcrumbContext";
 import { SWRConfig } from "swr";
 import swrConfig from "utils/swrConfig";
 import CatchFetchErrors from "auth/Catch401";
@@ -25,7 +26,9 @@ const AppContextProvider: React.FC<ProviderProps> = ({ children, library }) => {
         <ReakitProvider>
           <LibraryProvider library={library}>
             <UserProvider>
-              <CatchFetchErrors>{children}</CatchFetchErrors>
+              <BreadcrumbProvider>
+                <CatchFetchErrors>{children}</CatchFetchErrors>
+              </BreadcrumbProvider>
             </UserProvider>
           </LibraryProvider>
         </ReakitProvider>
