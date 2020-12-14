@@ -30,11 +30,14 @@ function pageview(page: PageData) {
 async function sendServerEvent(url: string | null) {
   if (url) {
     try {
-      await fetch(url, { method: "POST" });
+      await fetch(url);
       return true;
     } catch (e) {
-      console.warn("Error tracking server event");
-      console.warn(e);
+      error(e);
+      console.error(
+        "The previous error occurred while attempting to track a server event to: ",
+        url
+      );
     }
   }
   return true;
