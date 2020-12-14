@@ -13,7 +13,7 @@ const initializeReader = async (
   catalogName: string,
   token: string
 ) => {
-  const loadDecryptorParams = async (webpubManifestUrl: any) => {
+  const loadDecryptorParams = async (webpubManifestUrl: string) => {
     const response = await fetchWithHeaders(webpubManifestUrl, token);
     const data = await response.json();
     // there should never be a status code in the json

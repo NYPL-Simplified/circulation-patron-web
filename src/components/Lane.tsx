@@ -47,6 +47,7 @@ const getfilteredBooksAndRefs = (books: AnyBook[], omitIds?: string[]) => {
   }, {});
   return { filteredBooks, bookRefs };
 };
+
 /**
  * - scrolls automatically on button clicks
  * - allows the user to free scroll / swipe also
