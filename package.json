@@ -63,7 +63,7 @@
     "theme-ui": "^0.3.1"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.2"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.7",
