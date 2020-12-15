@@ -24,15 +24,20 @@ export const Collection: React.FC<{
   const hasBooks = collection?.books && collection.books.length > 0;
   const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
-  const breadcrumbs = computeBreadcrumbs(collection);
   //||||||||||||||||||||||||||||||||||||||||||||||||||||||
-  const { setBreadcrumbx } = useBreadcrumbContext();
+  //const breadcrumbs = computeBreadcrumbs(collection);
+  const breadcrumbItems = React.useMemo(() => computeBreadcrumbs(collection), [
+    collection
+  ]);
+
+  const { breadcrumbs, setBreadcrumbs } = useBreadcrumbContext();
 
   React.useEffect(() => {
     //send update breadcrumbs to context
-    setBreadcrumbx([{ url: "dfsd" }, { url: "bloo" }]);
-    console.log("test");
-  }, [breadcrumbs]);
+    setBreadcrumbs(breadcrumbItems);
+    console.log("breadcrumbs", breadcrumbs);
+    console.log("breadcrumbItems", breadcrumbItems);
+  }, [breadcrumbItems]);
 
   //||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

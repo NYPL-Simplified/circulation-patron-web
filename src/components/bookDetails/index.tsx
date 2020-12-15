@@ -29,7 +29,7 @@ export const BookDetails: React.FC = () => {
   const bookUrl = extractParam(query, "bookUrl");
   const { data, error } = useSWR(bookUrl ?? null, fetchBook);
   const { loans } = useUser();
-  const breadcrumbs = useBreadcrumbContext();
+  const { breadcrumbs } = useBreadcrumbContext();
   // use the loans version if it exists
   const book = loans?.find(loanedBook => data?.id === loanedBook.id) ?? data;
 
