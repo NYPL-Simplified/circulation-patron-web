@@ -16,7 +16,7 @@ const twoLines = 42;
 
 const BookCard = React.forwardRef<
   HTMLLIElement,
-  { book: AnyBook; collection: string; className?: string }
+  { book: AnyBook; className?: string }
 >(({ book, className }, ref) => {
   const authors = getAuthors(book, 2);
 
