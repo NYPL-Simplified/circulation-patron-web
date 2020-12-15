@@ -18,6 +18,7 @@
     "test": "TZ=UTC jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint \"*/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"*/**/*.{ts,tsx}\" --fix",
     "generate-icons": "npx @svgr/cli --template src/icons/_template.js --typescript --icon --ext tsx --svg-props 'fill=currentColor' -d src/icons src/icons",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
