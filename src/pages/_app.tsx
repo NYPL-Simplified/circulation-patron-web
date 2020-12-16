@@ -1,8 +1,8 @@
 import * as React from "react";
+import ReactDOM from "react-dom";
 import { AppProps, NextWebVitalsMetric } from "next/app";
-import { IS_SERVER, IS_DEVELOPMENT, REACT_AXE } from "../utils/env";
+import { IS_SERVER, REACT_AXE } from "../utils/env";
 import withErrorBoundary from "components/ErrorBoundary";
-import enableAxe from "utils/axe";
 import "system-font-css";
 import "@nypl/design-system-react-components/dist/styles.css";
 import "css-overrides.css";
@@ -14,8 +14,9 @@ const MyApp = (props: AppProps) => {
   return <Wrapped {...pageProps} />;
 };
 
-if (IS_DEVELOPMENT && !IS_SERVER && REACT_AXE) {
-  enableAxe();
+if (process.env.NODE_ENV === "development" && !IS_SERVER && REACT_AXE) {
+  const axe = require("@axe-core/react");
+  axe(React, ReactDOM, 1000, {});
 }
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
