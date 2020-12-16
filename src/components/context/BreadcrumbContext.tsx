@@ -1,15 +1,18 @@
 import * as React from "react";
 import { LinkData } from "../../interfaces";
 
-export type BreadcrumbContextType = {
-  breadcrumbs: Array<LinkData> | undefined;
-  setBreadcrumbs: (breadcrumbs: Array<LinkData>) => void;
-};
+export type BreadcrumbContextType =
+  | {
+      breadcrumbs: LinkData[];
+      setBreadcrumbs: (breadcrumbs: LinkData[]) => void;
+    }
+  | undefined;
 
 const BreadcrumbContext = React.createContext<BreadcrumbContextType>(undefined);
 
 export const BreadcrumbProvider: React.FC = ({ children }) => {
-  const [breadcrumbs, setBreadcrumbs] = React.useState();
+  const [breadcrumbs, setBreadcrumbs] = React.useState<LinkData[]>([]);
+
   return (
     <BreadcrumbContext.Provider value={{ breadcrumbs, setBreadcrumbs }}>
       {children}

@@ -25,7 +25,6 @@ export const Collection: React.FC<{
   const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
   //||||||||||||||||||||||||||||||||||||||||||||||||||||||
-  //const breadcrumbs = computeBreadcrumbs(collection);
   const breadcrumbItems = React.useMemo(() => computeBreadcrumbs(collection), [
     collection
   ]);
@@ -35,9 +34,7 @@ export const Collection: React.FC<{
   React.useEffect(() => {
     //send update breadcrumbs to context
     setBreadcrumbs(breadcrumbItems);
-    console.log("breadcrumbs", breadcrumbs);
-    console.log("breadcrumbItems", breadcrumbItems);
-  }, [breadcrumbItems]);
+  }, [breadcrumbItems, setBreadcrumbs]);
 
   //||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

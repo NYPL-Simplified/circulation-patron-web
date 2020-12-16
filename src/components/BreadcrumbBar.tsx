@@ -9,8 +9,12 @@ import useLibraryContext from "components/context/LibraryContext";
 const BreadcrumbBar: React.FC<{
   className?: string;
   currentLocation?: string;
-  breadcrumbs?: LinkData[];
-}> = ({ children, className, currentLocation, breadcrumbs }) => {
+  breadcrumbs?: Readonly<LinkData[]>;
+}> = ({ children, className, currentLocation, breadcrumbs: crumbsIn }) => {
+  // make a local copy so we can mutate this array without
+  // affecting the referenced value
+  const breadcrumbs = [...crumbsIn];
+
   const { catalogUrl, catalogName } = useLibraryContext();
 
   const breadcrumbsWithAtLeastOne =
@@ -19,7 +23,7 @@ const BreadcrumbBar: React.FC<{
       : [{ text: catalogName, url: catalogUrl }];
 
   const lastItem = currentLocation ?? breadcrumbs?.pop()?.text;
-  console.log("breadcrumbsWithAtLeastOne", breadcrumbsWithAtLeastOne);
+
   return (
     <div
       className={className}
