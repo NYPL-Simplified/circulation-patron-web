@@ -5,8 +5,9 @@ const trailingSlashRegex = /\/$/;
 export default function useLinkUtils() {
   const { slug, catalogUrl } = useLibraryContext();
 
-  function buildMultiLibraryLink(href: string) {
-    return `/${slug}${href}`.replace(trailingSlashRegex, "");
+  function buildMultiLibraryLink(href: string): string {
+    const fullPathname = `/${slug}${href}`.replace(trailingSlashRegex, "");
+    return fullPathname;
   }
 
   function buildCollectionLink(collectionUrl: string) {

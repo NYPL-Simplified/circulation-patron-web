@@ -6,6 +6,7 @@ export const config: AppConfig = {
   bugsnagApiKey: null,
   companionApp: "simplye",
   showMedium: true,
+  openebooks: null,
   libraries: {
     lib1: "http://lib1.com"
   },

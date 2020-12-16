@@ -2,13 +2,13 @@ import * as React from "react";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
 import useLibraryContext from "components/context/LibraryContext";
-import useAuthModalContext from "auth/AuthModalContext";
 import useError from "hooks/useError";
+import useLogin from "auth/useLogin";
 
 export default function useBorrow(isBorrow: boolean) {
   const { catalogUrl } = useLibraryContext();
   const { setBook, token } = useUser();
-  const { showModal } = useAuthModalContext();
+  const { initLogin } = useLogin();
   const isUnmounted = React.useRef(false);
   const [isLoading, setLoading] = React.useState(false);
   const { error, handleError, setErrorString, clearError } = useError();
@@ -19,8 +19,7 @@ export default function useBorrow(isBorrow: boolean) {
   const borrowOrReserve = async (url: string) => {
     clearError();
     if (!token) {
-      // TODO: register a callback to call if the sign in works
-      showModal();
+      initLogin();
       setErrorString("You must be signed in to borrow this book.");
       return;
     }

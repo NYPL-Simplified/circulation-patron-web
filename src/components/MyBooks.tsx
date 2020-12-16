@@ -10,7 +10,7 @@ import PageTitle from "./PageTitle";
 import SignOut from "./SignOut";
 import useUser from "components/context/UserContext";
 import { PageLoader } from "components/LoadingIndicator";
-import useAuthModalContext from "auth/AuthModalContext";
+import AuthProtectedRoute from "auth/AuthProtectedRoute";
 
 const availableUntil = (book: AnyBook) =>
   book.availability?.until ? new Date(book.availability.until) : "NaN";
@@ -40,35 +40,28 @@ function compareTitles(a: AnyBook, b: AnyBook): 0 | -1 | 1 {
 }
 
 export const MyBooks: React.FC = () => {
-  const { isAuthenticated, loans, isLoading } = useUser();
-  const { showModal } = useAuthModalContext();
-
-  // show the auth form if we are unauthenticated
-  React.useEffect(() => {
-    if (!isAuthenticated) showModal();
-  }, [isAuthenticated, showModal]);
-
+  const { loans, isLoading } = useUser();
   const sortedBooks = loans ? sortBooksByLoanExpirationDate(loans) : [];
   const noBooks = sortedBooks.length === 0;
 
   return (
-    <div sx={{ flex: 1, pb: 4 }}>
-      <Head>
-        <title>My Books</title>
-      </Head>
+    <AuthProtectedRoute>
+      <div sx={{ flex: 1, pb: 4 }}>
+        <Head>
+          <title>My Books</title>
+        </Head>
 
-      <BreadcrumbBar currentLocation="My Books" />
-      <PageTitle>My Books</PageTitle>
-      {noBooks && isLoading ? (
-        <PageLoader />
-      ) : isAuthenticated && noBooks ? (
-        <Empty />
-      ) : isAuthenticated ? (
-        <LoansContent books={sortedBooks} />
-      ) : (
-        <Unauthorized />
-      )}
-    </div>
+        <BreadcrumbBar currentLocation="My Books" />
+        <PageTitle>My Books</PageTitle>
+        {noBooks && isLoading ? (
+          <PageLoader />
+        ) : noBooks ? (
+          <Empty />
+        ) : (
+          <LoansContent books={sortedBooks} />
+        )}
+      </div>
+    </AuthProtectedRoute>
   );
 };
 
@@ -77,25 +70,6 @@ const LoansContent: React.FC<{ books: AnyBook[] }> = ({ books }) => {
     <React.Fragment>
       <BookList books={books} />
     </React.Fragment>
-  );
-};
-
-const Unauthorized = () => {
-  return (
-    <div
-      sx={{
-        flex: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column"
-      }}
-    >
-      <Head>
-        <title>My Books</title>
-      </Head>
-      <h4>You need to be signed in to view this page.</h4>
-    </div>
   );
 };
 

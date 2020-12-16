@@ -5,7 +5,6 @@ import { Provider as ReakitProvider } from "reakit";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "../../theme";
 import { UserProvider } from "components/context/UserContext";
-import AuthModal from "auth/AuthModal";
 import { SWRConfig } from "swr";
 import swrConfig from "utils/swrConfig";
 import CatchFetchErrors from "auth/Catch401";
@@ -26,9 +25,7 @@ const AppContextProvider: React.FC<ProviderProps> = ({ children, library }) => {
         <ReakitProvider>
           <LibraryProvider library={library}>
             <UserProvider>
-              <AuthModal>
-                <CatchFetchErrors>{children}</CatchFetchErrors>
-              </AuthModal>
+              <CatchFetchErrors>{children}</CatchFetchErrors>
             </UserProvider>
           </LibraryProvider>
         </ReakitProvider>

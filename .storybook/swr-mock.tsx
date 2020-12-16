@@ -1,13 +1,10 @@
-
-
 import { AppConfig } from "../src/interfaces";
-import { defaultMock } from "../src/test-utils/mockConfig"
 
 
 let nextSwr = {};
 export default function useSWR(key: string | string[], fetcher: () => void, options: Record<string, unknown>) {
   if (key) {
-    console.log(`Fetching key: ${key}, with ${fetcher.name} and ${options}`);
+    console.log(`Fetching key: ${key}, with ${fetcher.name} and options: ${options}`);
   }
   return {
     data: undefined,

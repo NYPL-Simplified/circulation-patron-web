@@ -107,7 +107,7 @@ describe("getAuthDocUrl", () => {
       const promise = getAuthDocUrl("library-uuid");
       expect(promise).rejects.toThrowError(ApplicationError);
       expect(promise).rejects.toThrow(
-        "Application Error: Could not fetch catalog entry for library: library-uuid at reg-base"
+        "Application Error: LibraryRegistryFeed returned by /catalog-template-url-library-uuid does not contain a CatalogEntry"
       );
     });
 

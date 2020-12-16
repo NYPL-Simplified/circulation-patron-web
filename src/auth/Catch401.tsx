@@ -1,17 +1,17 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import useAuthModalContext from "auth/AuthModalContext";
 import { keyInterface, SWRConfig } from "swr";
 import swrConfig from "utils/swrConfig";
 import { ServerError } from "errors";
 import track from "analytics/track";
+import useLogin from "auth/useLogin";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
-  const { showModal } = useAuthModalContext();
+  const { initLogin } = useLogin();
 
   function handle401() {
-    showModal();
+    initLogin();
   }
 
   const config = {
