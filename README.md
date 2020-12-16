@@ -59,6 +59,7 @@ Finally, every PR in this repository has a unique preview deployment so proposed
     + [Using `docker-compose`](#using--docker-compose-)
     + [Helpful commands](#helpful-commands)
     + [Credits](#credits)
+    
 # Configuring the App
 
 ## Configuration File
