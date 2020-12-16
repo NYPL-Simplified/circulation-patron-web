@@ -57,7 +57,7 @@ companion_app: simplye
 # REQUIRED LIBRARY CONFIG
 
 # if you would like to use a library registry, define the registry url
-# libraries: https://some-registry.com/
+# libraries: https://libraryregistry.librarysimplified.org/libraries/qa
 
 # Or define the catalog root and shortname for each library on this instance.
 # the homepage of the library will then be at https://domain.com/:library/
