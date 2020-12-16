@@ -13,7 +13,8 @@ const BreadcrumbBar: React.FC<{
 }> = ({ children, className, currentLocation, breadcrumbs: crumbsIn }) => {
   // make a local copy so we can mutate this array without
   // affecting the referenced value
-  const breadcrumbs = [...crumbsIn];
+
+  const breadcrumbs = crumbsIn ? [...crumbsIn] : [];
 
   const { catalogUrl, catalogName } = useLibraryContext();
 
