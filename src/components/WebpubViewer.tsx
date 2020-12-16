@@ -13,18 +13,15 @@ const initializeReader = async (
   catalogName: string,
   token: string
 ) => {
-  const loadDecryptorParams = async (webpubManifestUrl: string) => {
-    const response = await fetchWithHeaders(webpubManifestUrl, token);
-    const data = await response.json();
-    // there should never be a status code in the json
-    if (!response.ok || data.status) {
-      throw new ServerError(webpubManifestUrl, response.status, data);
-    }
-    return data;
-  };
+  // fetch the decryptor parameters from the entry url
+  const response = await fetchWithHeaders(entryUrl, token);
+  const data = await response.json();
+  // there should never be a status code in the json
+  if (!response.ok || data.status) {
+    throw new ServerError(entryUrl, response.status, data);
+  }
 
-  const decryptorParams = await loadDecryptorParams(entryUrl);
-  return await reader(entryUrl, token, catalogName, decryptorParams);
+  return await reader(entryUrl, token, catalogName, data);
 };
 
 const WebpubViewer = () => {
