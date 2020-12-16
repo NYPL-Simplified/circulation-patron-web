@@ -30,8 +30,35 @@ Finally, every PR in this repository has a unique preview deployment so proposed
 
 *If you would like to add your circulation manager to the community preview, make a PR to this repo: [TODO: ADD REPO]*
 
-## Table of Contents
+# Table of Contents
 
+- [circulation-patron-web](#circulation-patron-web)
+  * [Background](#background)
+  * [Demo](#demo)
+- [Configuring the App](#configuring-the-app)
+  * [Configuration File](#configuration-file)
+  * [Environment Variables](#environment-variables)
+  * [Manager, Registry, and Application Configurations](#manager--registry--and-application-configurations)
+- [Development](#development)
+  * [Contributing](#contributing)
+  * [Installing Dependencies](#installing-dependencies)
+  * [Running the Application](#running-the-application)
+    + [Running with Decryption](#running-with-decryption)
+    + [ENV Vars and Building](#env-vars-and-building)
+    + [Useful Scripts](#useful-scripts)
+  * [Testing](#testing)
+    + [Context and useful spies](#context-and-useful-spies)
+    + [Running tests](#running-tests)
+    + [Example](#example)
+  * [Links and Routing](#links-and-routing)
+- [Deploying](#deploying)
+  * [Build a docker container](#build-a-docker-container)
+    + [Building With AxisNow Decryptor](#building-with-axisnow-decryptor)
+    + [Running the docker container](#running-the-docker-container)
+    + [From the command line](#from-the-command-line)
+    + [Using `docker-compose`](#using--docker-compose-)
+    + [Helpful commands](#helpful-commands)
+    + [Credits](#credits)
 # Configuring the App
 
 ## Configuration File
