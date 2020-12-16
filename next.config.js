@@ -117,8 +117,9 @@ const config = {
     // ignore the axisnow decryptor if we don't have access
     if (!AXISNOW_DECRYPT) {
       config.plugins.push(
-        new webpack.IgnorePlugin(
-          /@nypl-simplified-packages\/axisnow-access-control-web/
+        new webpack.NormalModuleReplacementPlugin(
+          /@nypl-simplified-packages\/axisnow-access-control-web/,
+          "utils/mockDecryptor.ts"
         )
       );
     }

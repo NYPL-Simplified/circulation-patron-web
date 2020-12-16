@@ -72,7 +72,11 @@ function error(
 ) {
   // report it to the console
   console.error(e);
-  if (e instanceof ApplicationError || e instanceof AxisNowDecryptionError) {
+  if (
+    e instanceof ApplicationError ||
+    (typeof AxisNowDecryptionError !== "undefined" &&
+      e instanceof AxisNowDecryptionError)
+  ) {
     if (e.baseError) console.error(`Base Error:\n${e.baseError}`);
   }
   // track to bugsnag
@@ -89,7 +93,8 @@ function error(
       // add error info if there is any
       if (
         e instanceof ApplicationError ||
-        e instanceof AxisNowDecryptionError
+        (typeof AxisNowDecryptionError !== "undefined" &&
+          e instanceof AxisNowDecryptionError)
       ) {
         event.addMetadata("Error Info", { ...e.info, baseError: e.baseError });
         if (e instanceof ServerError) {
