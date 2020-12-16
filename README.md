@@ -28,8 +28,6 @@ In addition to the preview of the production branch, we also have previews of th
 
 Finally, every PR in this repository has a unique preview deployment so proposed changes can be previewed with any library in the community config file. 
 
-*If you would like to add your circulation manager to the community preview, make a PR to this repo: [TODO: ADD REPO]*
-
 # Table of Contents
 
 - [circulation-patron-web](#circulation-patron-web)
