@@ -1,6 +1,6 @@
 ## CHANGELOG
 
-### UNRELEASED CHANGES
+### 4.2.0
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
 - Add: Button to go back to auth selection from basic auth if multiple methods are present.
 - Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
