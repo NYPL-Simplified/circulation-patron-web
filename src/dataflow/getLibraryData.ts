@@ -205,14 +205,29 @@ function parseLinks(links: OPDS1.AuthDocumentLink[] | undefined): LibraryLinks {
  * Attempts to create an array of all the libraries available with the
  * current env settings.
  */
-export function getLibrarySlugs() {
+export async function getLibrarySlugs(): Promise<
+  { title: string; slug: string }[]
+> {
   const libraries = APP_CONFIG.libraries;
   if (typeof libraries === "string") {
-    console.warn(
-      "Cannot retrive library slugs for a Library Registry based setup."
-    );
-    return null;
+    // we are using a registry base
+    const response = await fetch(libraries);
+    const registryFeed = (await response.json()) as OPDS2.LibraryRegistryFeed;
+    if (!registryFeed.catalogs)
+      throw new ApplicationError({
+        title: "Library Registry Error",
+        detail:
+          "Registry feed did not contain any catalogs at url: " + libraries,
+        status: 500
+      });
+    return registryFeed.catalogs.map(catalog => {
+      const title = catalog.metadata.title;
+      const id = catalog.metadata.id;
+      return {
+        title,
+        slug: id
+      };
+    });
   }
-  const slugs = Object.keys(libraries);
-  return slugs;
+  return Object.keys(libraries).map(slug => ({ title: slug, slug }));
 }
