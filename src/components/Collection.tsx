@@ -30,7 +30,7 @@ export const Collection: React.FC<{
     [collection]
   );
 
-  const { breadcrumbs, setStoredBreadcrumbs } = useBreadcrumbContext();
+  const { storedBreadcrumbs, setStoredBreadcrumbs } = useBreadcrumbContext();
 
   React.useEffect(() => {
     //send update breadcrumbs to context
@@ -57,7 +57,7 @@ export const Collection: React.FC<{
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <BreadcrumbBar breadcrumbs={breadcrumbs} />
+      <BreadcrumbBar breadcrumbs={storedBreadcrumbs} />
       <PageTitle collection={collection}>{pageTitle}</PageTitle>
       {isLoading ? (
         <PageLoader />

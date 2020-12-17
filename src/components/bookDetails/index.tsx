@@ -29,7 +29,7 @@ export const BookDetails: React.FC = () => {
   const bookUrl = extractParam(query, "bookUrl");
   const { data, error } = useSWR(bookUrl ?? null, fetchBook);
   const { loans } = useUser();
-  const { breadcrumbs } = useBreadcrumbContext();
+  const { storedBreadcrumbs } = useBreadcrumbContext();
   // use the loans version if it exists
   const book = loans?.find(loanedBook => data?.id === loanedBook.id) ?? data;
 
@@ -46,7 +46,7 @@ export const BookDetails: React.FC = () => {
         <title>{book.title}</title>
       </Head>
       <BreadcrumbBar
-        breadcrumbs={breadcrumbs}
+        breadcrumbs={storedBreadcrumbs}
         currentLocation={truncateString(book.title, 60, false)}
       />
       <div sx={{ maxWidth: 1100, mx: "auto" }}>
