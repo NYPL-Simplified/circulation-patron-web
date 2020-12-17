@@ -1,6 +1,7 @@
 ## CHANGELOG
 
 ### UNRELEASED CHANGES
+- Refactor: Include browsing history in breadcrumbs
 
 ### 4.2.0
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
