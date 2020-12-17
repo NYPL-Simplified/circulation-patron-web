@@ -1,25 +1,14 @@
 import * as React from "react";
-import { APP_CONFIG } from "utils/env";
+import { IS_OPEN_EBOOKS } from "utils/env";
 import OpenEbooksLandingPage, {
   landingPageStaticProps
 } from "components/OpenEbooksLanding";
-import ErrorComponent from "components/Error";
+import MultiLibraryHome from "components/MultiLibraryHome";
 
-const hasHomePage = APP_CONFIG.companionApp === "openebooks";
+const HomePage = IS_OPEN_EBOOKS ? OpenEbooksLandingPage : MultiLibraryHome;
 
-const HomePage = hasHomePage
-  ? OpenEbooksLandingPage
-  : () => (
-      <ErrorComponent
-        info={{
-          title: "Page Not Found",
-          status: 404,
-          detail:
-            "This app does not have a home page. Url should contain a library slug: https://domain.com/<library>"
-        }}
-      />
-    );
-
-export const getStaticProps = hasHomePage ? landingPageStaticProps : undefined;
+export const getStaticProps = IS_OPEN_EBOOKS
+  ? landingPageStaticProps
+  : undefined;
 
 export default HomePage;

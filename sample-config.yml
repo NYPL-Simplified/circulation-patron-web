@@ -57,12 +57,12 @@ companion_app: simplye
 # REQUIRED LIBRARY CONFIG
 
 # if you would like to use a library registry, define the registry url
-# libraries: https://libraryregistry.librarysimplified.org/libraries/qa
+libraries: https://libraryregistry.librarysimplified.org/libraries/qa
 
 # Or define the catalog root and shortname for each library on this instance.
 # the homepage of the library will then be at https://domain.com/:library/
-libraries:
-  brazoria: https://simplye.amigos.org/txbrazoria/authentication_document
-  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib/authentication_document
-  openqa: https://qa-circulation.openebooks.us/USOEI/authentication_document
-  lyrasis: https://demo.lyrasistechnology.org/lyrasis/authentication_document
+# libraries:
+#   brazoria: https://simplye.amigos.org/txbrazoria/authentication_document
+#   xyzlib: http://simplye-dev-cm.amigos.org/xyzlib/authentication_document
+#   openqa: https://qa-circulation.openebooks.us/USOEI/authentication_document
+#   lyrasis: https://demo.lyrasistechnology.org/lyrasis/authentication_document
