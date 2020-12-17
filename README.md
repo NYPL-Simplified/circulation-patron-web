@@ -13,13 +13,13 @@ An OPDS web catalog client for library patrons.
 
 ## Background
 
-The `circulation-patron-web` application serves as a way for libraries to publish their collections to the web. A library *must* be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and *can* be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format. Registering with NYPL's Library Registry is how libraries can show up in the SimplyE mobile application, but tere is not a similar generic application for the web. In order to have a web version of your library catalog, you can deploy this app.
+The `circulation-patron-web` application serves as a way for libraries to publish their collections to the web. A library *must* be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and *can* be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format. Registering with NYPL's Library Registry is how libraries can show up in the SimplyE mobile application and the [Community Demo](#demo) of this app. In order to have a web version of your library catalog, you can deploy this app.
 
 This app can support many libraries, each at their own url: `http://example.com/library1` can be one library, and `http://example.com/library2` another library. You configure the libraries for the app in the [config file](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#configuration-file).
 
-## Demo
+## Community Demo
 
-- Community Preview - [https://prod-web.librarysimplified.org](https://prod-web.librarysimplified.org)
+- Community Preview - [https://web.librarysimplified.org](https://web.librarysimplified.org)
 
 In addition to the preview of the production branch, we also have previews of the `qa` and `dev` branches:
 
@@ -28,11 +28,13 @@ In addition to the preview of the production branch, we also have previews of th
 
 Finally, every PR in this repository has a unique preview deployment so proposed changes can be previewed with any library in the community config file. 
 
+__To have your library added to the demo, register it with NYPL's Library Registry.__
+
 # Table of Contents
 
 - [circulation-patron-web](#circulation-patron-web)
   * [Background](#background)
-  * [Demo](#demo)
+  * [Demo](#community-demo)
 - [Configuring the App](#configuring-the-app)
   * [Configuration File](#configuration-file)
   * [Environment Variables](#environment-variables)
