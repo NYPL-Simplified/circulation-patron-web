@@ -24,7 +24,6 @@ export const Collection: React.FC<{
   const hasBooks = collection?.books && collection.books.length > 0;
   const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
-  //||||||||||||||||||||||||||||||||||||||||||||||||||||||
   const collectionBreadcrumbs = React.useMemo(
     () => computeBreadcrumbs(collection),
     [collection]
@@ -33,11 +32,9 @@ export const Collection: React.FC<{
   const { storedBreadcrumbs, setStoredBreadcrumbs } = useBreadcrumbContext();
 
   React.useEffect(() => {
-    //send update breadcrumbs to context
+    //store the updated breadcrumbs in context
     setStoredBreadcrumbs(collectionBreadcrumbs);
   }, [collectionBreadcrumbs, setStoredBreadcrumbs]);
-
-  //||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
   if (error) return <ErrorComponent info={error?.info} />;
 

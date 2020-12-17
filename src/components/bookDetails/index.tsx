@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import * as React from "react";
-import { AnyBook, LinkData } from "interfaces";
+import { AnyBook } from "interfaces";
 import BookCover from "../BookCover";
 import Recommendations from "./Recommendations";
 import { PageLoader } from "../LoadingIndicator";
