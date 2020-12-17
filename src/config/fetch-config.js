@@ -59,16 +59,17 @@ async function fetchLibrariesFromRegistry(
   }
 
   return registryFeed.catalogs.reduce((record, catalog) => {
-    const authDocUrl = catalog.links.find(
+    const authDocLink = catalog.links.find(
       link => link.type === "application/vnd.opds.authentication.v1.0+json"
-    )?.href;
-    if (!authDocUrl) {
+    )
+    if (!authDocLink) {
       throw new ApplicationError({
         title: "Invalid Registry Feed",
         detail: `Catalog ${catalog.metadata.title} is missing an auth document link at registry url: ${registryBase}`,
         status: 500
       });
     }
+    const authDocUrl = authDocLink.href;
     const library = { title: catalog.metadata.title, authDocUrl };
     return {
       ...record,
