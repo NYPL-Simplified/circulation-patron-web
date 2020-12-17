@@ -12,7 +12,23 @@ declare module "@nypl-simplified-packages/axisnow-access-control-web" {
     decryptUrl(resourceUrl: string): Promise<Uint8Array>;
   }
 
-  declare const defaultExport: typeof Decryptor;
+  declare const defaultExport: typeof Decryptor | undefined;
 
   export default defaultExport;
+
+  declare type ErrorInfo = {
+    title: string;
+    detail: string;
+    status?: number;
+    url?: string;
+  };
+  declare class AxisNowDecryptionError extends Error {
+    info: ErrorInfo;
+    baseError?: Error;
+    constructor(info: Partial<ErrorInfo>, baseError?: Error);
+  }
+
+  export const AxisNowDecryptionError:
+    | undefined
+    | typeof AxisNowDecryptionError;
 }

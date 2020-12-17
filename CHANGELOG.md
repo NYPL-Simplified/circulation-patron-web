@@ -1,6 +1,9 @@
 ## CHANGELOG
 
 ### UNRELEASED CHANGES
+- Documentation: update README and remove `community-config.yml` in favor of `sample-config.yml`. The community config will be hosted elsewhere so it isn't tied to the release cycle of this repo.
+
+### 4.2.0
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
 - Add: Button to go back to auth selection from basic auth if multiple methods are present.
 - Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
@@ -9,6 +12,7 @@
 - Fix: Don't download react-axe in production. Shaves 60% off the first load bundle.
 - Add: Lazy-loading of book cover images: A book cover image source will now only download once at least one pixel of the image's placeholder becomes visible in the viewport.
 - Refactor: Re-enabled Typescript's strict type checking to provide better runtime type safety guarantees, and keep type safety from deteriorating hrough development.
+- Fix: Properly track AxisNow decryption errors to Bugsnag.
 
 ### 4.1.0
 - Add: Landing page for Open Ebooks
