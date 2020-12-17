@@ -66,7 +66,7 @@ Finally, every PR in this repository has a unique preview deployment so proposed
 
 To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured.
 
-The production configuration is defined in a YAML config file. You can find more details on the options in the `./sample-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. If you don't set anything, the sample config is used. See [environment variables](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#environment-variables) below for more information.
+The production configuration is defined in a YAML config file. You can find more details on the options in the `./community-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. If you don't set anything, the sample config is used. See [environment variables](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#environment-variables) below for more information.
 
 ## Environment Variables
 
