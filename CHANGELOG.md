@@ -1,7 +1,8 @@
 ## CHANGELOG
 
 ### UNRELEASED CHANGES
-- Documentation: update README and remove `community-config.yml` in favor of `sample-config.yml`. The community config will be hosted elsewhere so it isn't tied to the release cycle of this repo.
+- Documentation: update README.
+- Add: Support using a library registry in the CONFIG_FILE so that the community deployment can use the SimplyE library registry to display all libraries. 
 
 ### 4.2.0
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
