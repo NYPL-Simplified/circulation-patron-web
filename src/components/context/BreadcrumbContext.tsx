@@ -4,17 +4,17 @@ import { LinkData } from "../../interfaces";
 export type BreadcrumbContextType =
   | {
       breadcrumbs: LinkData[];
-      setBreadcrumbs: (breadcrumbs: LinkData[]) => void;
+      setStoredBreadcrumbs: (breadcrumbs: LinkData[]) => void;
     }
   | undefined;
 
 const BreadcrumbContext = React.createContext<BreadcrumbContextType>(undefined);
 
 export const BreadcrumbProvider: React.FC = ({ children }) => {
-  const [breadcrumbs, setBreadcrumbs] = React.useState<LinkData[]>([]);
+  const [breadcrumbs, setStoredBreadcrumbs] = React.useState<LinkData[]>([]);
 
   return (
-    <BreadcrumbContext.Provider value={{ breadcrumbs, setBreadcrumbs }}>
+    <BreadcrumbContext.Provider value={{ breadcrumbs, setStoredBreadcrumbs }}>
       {children}
     </BreadcrumbContext.Provider>
   );

@@ -30,12 +30,12 @@ export const Collection: React.FC<{
     [collection]
   );
 
-  const { breadcrumbs, setBreadcrumbs } = useBreadcrumbContext();
+  const { breadcrumbs, setStoredBreadcrumbs } = useBreadcrumbContext();
 
   React.useEffect(() => {
     //send update breadcrumbs to context
-    setBreadcrumbs(collectionBreadcrumbs);
-  }, [collectionBreadcrumbs, setBreadcrumbs]);
+    setStoredBreadcrumbs(collectionBreadcrumbs);
+  }, [collectionBreadcrumbs, setStoredBreadcrumbs]);
 
   //||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
