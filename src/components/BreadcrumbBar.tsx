@@ -54,16 +54,12 @@ const BreadcrumbBar: React.FC<{
             breadcrumb.text &&
             breadcrumb.url && (
               <ListItem key={breadcrumb.url}>
-                <Link
-                  collectionUrl={breadcrumb.url}
-                >{`collection [${breadcrumb.text}]`}</Link>
+                <Link collectionUrl={breadcrumb.url}>{breadcrumb.text}</Link>
                 &nbsp;/&nbsp;
               </ListItem>
             )
         )}
-        <ListItem aria-label={`Current location: [${lastItem}]`}>
-          {lastItem ? `Current location: [${lastItem}]` : ""}
-        </ListItem>
+        <ListItem aria-label={lastItem}>{lastItem ? lastItem : ""}</ListItem>
       </List>
       {children}
     </div>
