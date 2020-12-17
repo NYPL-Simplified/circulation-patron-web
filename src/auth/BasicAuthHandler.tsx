@@ -3,13 +3,15 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { Text } from "components/Text";
-import Button from "components/Button";
+import Button, { NavButton } from "components/Button";
 import FormInput from "components/form/FormInput";
 import { modalButtonStyles } from "components/Modal";
 import { ClientBasicMethod } from "interfaces";
 import { generateToken } from "auth/useCredentials";
 import useUser from "components/context/UserContext";
 import { ServerError } from "errors";
+import useLogin from "auth/useLogin";
+import useLibraryContext from "components/context/LibraryContext";
 
 type FormData = {
   [key: string]: string;
@@ -22,8 +24,9 @@ const BasicAuthHandler: React.FC<{ method: ClientBasicMethod }> = ({
   method
 }) => {
   const { signIn, error, isLoading } = useUser();
-
+  const { baseLoginUrl } = useLogin();
   const { register, handleSubmit, errors } = useForm<FormData>();
+  const { authMethods } = useLibraryContext();
 
   const usernameInputName = method.labels.login;
   const passwordInputName = method.labels.password;
@@ -37,6 +40,8 @@ const BasicAuthHandler: React.FC<{ method: ClientBasicMethod }> = ({
   });
 
   const serverError = error instanceof ServerError ? error : undefined;
+
+  const hasMultipleMethods = authMethods.length > 1;
 
   return (
     <form
@@ -82,6 +87,11 @@ const BasicAuthHandler: React.FC<{ method: ClientBasicMethod }> = ({
       >
         Login
       </Button>
+      {hasMultipleMethods && (
+        <NavButton href={baseLoginUrl} variant="link">
+          Use a different login method
+        </NavButton>
+      )}
     </form>
   );
 };

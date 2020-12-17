@@ -186,7 +186,7 @@ export type ReservedBook = Book<{
 
 export type FulfillableBook = Book<{
   status: "fulfillable";
-  fulfillmentLinks: FulfillmentLink[];
+  fulfillmentLinks: readonly FulfillmentLink[];
   revokeUrl: string | null;
 }>;
 

@@ -17,6 +17,7 @@ import { ThemeProvider } from "theme-ui";
 import makeTheme from "theme";
 import mockConfig from "test-utils/mockConfig";
 import track from "analytics/track";
+import "react-intersection-observer/test-utils";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);

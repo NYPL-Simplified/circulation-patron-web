@@ -8,10 +8,10 @@ import { fetchCollection } from "dataflow/opds1/fetch";
 jest.mock("swr");
 
 const mockedSWR = useSWR as jest.MockedFunction<typeof useSWR>;
-
+type CollectionResponse = responseInterface<CollectionData, any>;
 function makeSwrResponse(
-  value: Partial<responseInterface<CollectionData, any>>
-) {
+  value: Partial<CollectionResponse>
+): CollectionResponse {
   return {
     data: undefined,
     error: undefined,
@@ -22,12 +22,12 @@ function makeSwrResponse(
   };
 }
 function mockSwr(
-  value: Partial<responseInterface<CollectionData, any>> = {
+  value: Partial<CollectionResponse> = {
     isValidating: false,
     data: fixtures.recommendations
   }
 ) {
-  mockedSWR.mockReturnValue(makeSwrResponse(value));
+  mockedSWR.mockReturnValue(makeSwrResponse(value) as any);
 }
 
 test("shows recommendations loading state", async () => {
