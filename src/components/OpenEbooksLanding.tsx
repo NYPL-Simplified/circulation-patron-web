@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { H2, Text } from "./Text";
-import Button, { NavButton } from "./Button";
+import Button, { NavButton, AnchorButton } from "./Button";
 import Stack from "./Stack";
 import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
@@ -218,7 +218,7 @@ export const OpenEbooksLandingComponent = () => {
 
 const OpenEbooksHero: React.FC = () => {
   const { isAuthenticated } = useUser();
-  const { slug } = useLibraryContext();
+  const { slug, libraryLinks } = useLibraryContext();
 
   return (
     <div
@@ -240,7 +240,18 @@ const OpenEbooksHero: React.FC = () => {
       >
         <div sx={{ display: "flex", margin: 3, justifyContent: "flex-end" }}>
           {isAuthenticated ? (
-            <SignOut />
+            <>
+              <AnchorButton
+                variant="ghost"
+                color="ui.white"
+                href={libraryLinks.libraryWebsite?.href}
+                title="Catalog"
+                sx={{ mr: 1 }}
+              >
+                Catalog
+              </AnchorButton>
+              <SignOut />
+            </>
           ) : (
             <NavButton
               variant="filled"
