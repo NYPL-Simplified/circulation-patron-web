@@ -12,6 +12,17 @@ import {
 } from "interfaces";
 import { mergeBook, mockSetBook } from "test-utils/fixtures";
 
+let toDateStringSpy: any = undefined;
+beforeAll(() => {
+  toDateStringSpy = jest
+    .spyOn(Date.prototype, "toDateString")
+    .mockImplementation(() => "2020-06-16");
+});
+
+afterAll(() => {
+  toDateStringSpy?.mockRestore();
+});
+
 function expectReadMore(utils: ReturnType<typeof render>) {
   const link = utils.getByRole("link", { name: "Read more" });
   expect(link).toBeInTheDocument();
@@ -100,7 +111,7 @@ describe("OnHoldBook", () => {
     expectReadMore(utils);
     expect(utils.getByText("Ready to Borrow")).toBeInTheDocument();
     expect(
-      utils.getByText("You have this book on hold until Tue Jun 16 2020.")
+      utils.getByText("You have this book on hold until 2020-06-16.")
     ).toBeInTheDocument();
   });
 
