@@ -59,7 +59,9 @@ const BreadcrumbBar: React.FC<{
               </ListItem>
             )
         )}
-        <ListItem aria-label={lastItem}>{lastItem ? lastItem : ""}</ListItem>
+        <ListItem aria-label={`Current location: ${lastItem}`}>
+          {lastItem ? lastItem : ""}
+        </ListItem>
       </List>
       {children}
     </div>
