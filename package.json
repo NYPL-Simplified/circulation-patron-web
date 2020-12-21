@@ -15,7 +15,7 @@
     "build": "next build",
     "start": "next start",
     "build-and-start": "npm run build && npm run start",
-    "test": "cross-env TZ=UTC jest --watch",
+    "test": "cross-env TZ=\"UTC\" jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint \"*/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"*/**/*.{ts,tsx}\" --fix",

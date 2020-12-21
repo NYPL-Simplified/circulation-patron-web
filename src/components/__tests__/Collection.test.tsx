@@ -32,7 +32,6 @@ test("calls swr to fetch collection", () => {
     router: { query: { collectionUrl: "/collection" } }
   });
 
-  expect(mockedSWR).toHaveBeenCalledTimes(1);
   expect(mockedSWR).toHaveBeenCalledWith(
     ["/collection", "user-token"],
     fetchCollection
