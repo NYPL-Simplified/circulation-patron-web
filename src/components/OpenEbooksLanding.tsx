@@ -6,7 +6,7 @@ import Button, { NavButton, AnchorButton } from "./Button";
 import Stack from "./Stack";
 import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
-import SignOut from "./SignOut";
+import { SignOut } from "./SignOut";
 import SvgChevronRight from "icons/ExpandMore";
 import { GetStaticProps, NextPage } from "next";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
@@ -250,7 +250,7 @@ const OpenEbooksHero: React.FC = () => {
               >
                 Catalog
               </AnchorButton>
-              <SignOut />
+              <SignOut theme="light" />
             </>
           ) : (
             <NavButton

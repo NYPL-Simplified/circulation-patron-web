@@ -9,7 +9,7 @@ import BookIcon from "../icons/Book";
 import useLibraryContext from "./context/LibraryContext";
 import { Text } from "./Text";
 import Stack from "./Stack";
-import SignOut from "./SignOut";
+import { SignOut } from "./SignOut";
 import useUser from "components/context/UserContext";
 import useLogin from "auth/useLogin";
 
@@ -124,7 +124,9 @@ const HeaderLinks: React.FC<{ library: LibraryData }> = ({ library }) => {
       ) : isLoading ? (
         <Button loading />
       ) : (
-        <NavButton href={baseLoginUrl}>Sign In</NavButton>
+        <NavButton color="ui.black" href={baseLoginUrl}>
+          Sign In
+        </NavButton>
       )}
     </div>
   );
