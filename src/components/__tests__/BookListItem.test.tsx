@@ -12,11 +12,12 @@ import {
 } from "interfaces";
 import { mergeBook, mockSetBook } from "test-utils/fixtures";
 
+const MOCK_DATE_STRING = "mock-date-string";
 let toDateStringSpy: any = undefined;
 beforeAll(() => {
   toDateStringSpy = jest
     .spyOn(Date.prototype, "toDateString")
-    .mockImplementation(() => "2020-06-16");
+    .mockImplementation(() => MOCK_DATE_STRING);
 });
 
 afterAll(() => {
@@ -111,7 +112,7 @@ describe("OnHoldBook", () => {
     expectReadMore(utils);
     expect(utils.getByText("Ready to Borrow")).toBeInTheDocument();
     expect(
-      utils.getByText("You have this book on hold until 2020-06-16.")
+      utils.getByText(`You have this book on hold until ${MOCK_DATE_STRING}.`)
     ).toBeInTheDocument();
   });
 
@@ -332,7 +333,7 @@ describe("FulfillableBook", () => {
   test("displays correct title and subtitle and view details", () => {
     const utils = render(<BookListItem book={downloadableBook} />);
     expect(
-      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
+      utils.getByText(`You have this book on loan until ${MOCK_DATE_STRING}.`)
     ).toBeInTheDocument();
     expectReadMore(utils);
   });
