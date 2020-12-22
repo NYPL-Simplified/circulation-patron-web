@@ -11,18 +11,7 @@ import {
   ReservedBook
 } from "interfaces";
 import { mergeBook, mockSetBook } from "test-utils/fixtures";
-
-const MOCK_DATE_STRING = "mock-date-string";
-let toDateStringSpy: any = undefined;
-beforeAll(() => {
-  toDateStringSpy = jest
-    .spyOn(Date.prototype, "toDateString")
-    .mockImplementation(() => MOCK_DATE_STRING);
-});
-
-afterAll(() => {
-  toDateStringSpy?.mockRestore();
-});
+import { MOCK_DATE_STRING } from "test-utils/mockToDateString";
 
 function expectReadMore(utils: ReturnType<typeof render>) {
   const link = utils.getByRole("link", { name: "Read more" });

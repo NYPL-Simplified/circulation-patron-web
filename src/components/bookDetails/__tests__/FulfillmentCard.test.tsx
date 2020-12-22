@@ -18,6 +18,7 @@ import { mockPush } from "test-utils/mockNextRouter";
 import * as fetch from "dataflow/opds1/fetch";
 import { ServerError } from "errors";
 import * as env from "utils/env";
+import { MOCK_DATE_STRING } from "test-utils/mockToDateString";
 
 jest.mock("downloadjs");
 window.open = jest.fn();
@@ -91,7 +92,7 @@ describe("OnHoldBook", () => {
     const utils = render(<FulfillmentCard book={onHoldBook} />);
     expect(utils.getByText("Ready to Borrow")).toBeInTheDocument();
     expect(
-      utils.getByText("You have this book on hold until Tue Jun 16 2020.")
+      utils.getByText(`You have this book on hold until ${MOCK_DATE_STRING}.`)
     );
   });
 
@@ -456,7 +457,7 @@ describe("FulfillableBook", () => {
     const utils = render(<FulfillmentCard book={downloadableBook} />);
     expect(utils.getByText("Ready to Read!")).toBeInTheDocument();
     expect(
-      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
+      utils.getByText(`You have this book on loan until ${MOCK_DATE_STRING}.`)
     ).toBeInTheDocument();
     expect(
       utils.queryByText("You're ready to read this book in SimplyE!")

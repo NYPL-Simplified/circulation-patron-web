@@ -19,6 +19,7 @@ import makeTheme from "theme";
 import mockConfig from "test-utils/mockConfig";
 import track from "analytics/track";
 import "react-intersection-observer/test-utils";
+import "test-utils/mockToDateString";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);
