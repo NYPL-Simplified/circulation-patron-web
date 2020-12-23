@@ -332,6 +332,7 @@ const PopularBookSection: React.FC<{
         >
           {books.map(book => {
             return (
+              /*
               <div
                 key={book.imgHref}
                 sx={{
@@ -343,13 +344,20 @@ const PopularBookSection: React.FC<{
                   maxWidth: "30%",
                   height: "100%"
                 }}
-              >
-                <img
-                  sx={{ maxWidth: "100%", minWidth: "75px" }}
-                  alt={book.alt}
-                  src={book.imgHref}
-                />
-              </div>
+              >*/
+              <img
+                key={book.imgHref}
+                sx={{
+                  width: "100%",
+                  minWidth: "75px",
+                  flex: [1, 1, "auto"],
+                  boxShadow: "-10px 10px 0px 0px red",
+                  marginRight: "2rem"
+                }}
+                alt={book.alt}
+                src={book.imgHref}
+              />
+              /*</div>*/
             );
           })}
         </Stack>
