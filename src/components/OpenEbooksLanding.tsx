@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import { H2, Text } from "./Text";
-import Button, { NavButton, AnchorButton } from "./Button";
+import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
 import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
