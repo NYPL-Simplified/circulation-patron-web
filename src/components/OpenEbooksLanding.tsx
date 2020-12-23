@@ -218,7 +218,7 @@ export const OpenEbooksLandingComponent = () => {
 
 const OpenEbooksHero: React.FC = () => {
   const { isAuthenticated } = useUser();
-  const { slug, libraryLinks } = useLibraryContext();
+  const { slug } = useLibraryContext();
 
   return (
     <div
@@ -241,15 +241,17 @@ const OpenEbooksHero: React.FC = () => {
         <div sx={{ display: "flex", margin: 3, justifyContent: "flex-end" }}>
           {isAuthenticated ? (
             <>
-              <AnchorButton
+              <NavButton
                 variant="ghost"
                 color="ui.white"
-                href={libraryLinks.libraryWebsite?.href}
+                href={{
+                  pathname: `/${APP_CONFIG.openebooks?.defaultLibrary}`
+                }}
                 title="Catalog"
                 sx={{ mr: 1 }}
               >
                 Catalog
-              </AnchorButton>
+              </NavButton>
               <SignOut theme="light" />
             </>
           ) : (
