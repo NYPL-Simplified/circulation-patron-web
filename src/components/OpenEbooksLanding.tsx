@@ -247,7 +247,6 @@ const OpenEbooksHero: React.FC = () => {
                 href={{
                   pathname: `/${APP_CONFIG.openebooks?.defaultLibrary}`
                 }}
-                title="Catalog"
                 sx={{ mr: 1 }}
               >
                 Catalog
