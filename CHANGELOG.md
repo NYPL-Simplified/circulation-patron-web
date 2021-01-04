@@ -2,7 +2,6 @@
 
 ### UNRELEASED CHANGES
 - Add: Add catalog button on openE home page
-- Add: "theme" prop to SignOut component so that its color scheme can be configured at page level
 
 ### 4.2.0
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
