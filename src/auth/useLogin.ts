@@ -22,7 +22,13 @@ export default function useLogin() {
 
       // if no redirect is set, redirect to the current page
       if (!newQuery[LOGIN_REDIRECT_QUERY_PARAM]) {
-        newQuery[LOGIN_REDIRECT_QUERY_PARAM] = asPath;
+        // do not set the redirect if the asPath is a full url (instead of a path),
+        // as this will cause an invalid redirect url. This can happen when the page
+        // was pre-rendered on the server and has not finished hydrating on the client side
+        // see https://github.com/vercel/next.js/issues/8259
+        if (!asPath.includes("http")) {
+          newQuery[LOGIN_REDIRECT_QUERY_PARAM] = asPath;
+        }
       }
 
       return {
