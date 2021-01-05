@@ -244,9 +244,7 @@ const OpenEbooksHero: React.FC = () => {
               <NavButton
                 variant="ghost"
                 color="ui.white"
-                href={{
-                  pathname: `/${APP_CONFIG.openebooks?.defaultLibrary}`
-                }}
+                href="/"
                 sx={{ mr: 1 }}
               >
                 Catalog
