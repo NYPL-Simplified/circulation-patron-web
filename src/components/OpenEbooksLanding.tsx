@@ -4,7 +4,6 @@ import * as React from "react";
 import { H2, Text } from "./Text";
 import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
-import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
 import { SignOut } from "./SignOut";
 import SvgChevronRight from "icons/ExpandMore";
