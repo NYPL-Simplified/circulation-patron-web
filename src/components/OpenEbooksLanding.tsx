@@ -218,7 +218,6 @@ export const OpenEbooksLandingComponent = () => {
 
 const OpenEbooksHero: React.FC = () => {
   const { isAuthenticated } = useUser();
-  const { slug } = useLibraryContext();
 
   return (
     <div
