@@ -252,13 +252,7 @@ const OpenEbooksHero: React.FC = () => {
               <SignOut color="ui.white" />
             </>
           ) : (
-            <NavButton
-              variant="filled"
-              color="ui.white"
-              href={{
-                pathname: `/${slug}/login`
-              }}
-            >
+            <NavButton variant="filled" color="ui.white" href="/login">
               <span sx={{ color: "ui.black" }}>Log In</span>
             </NavButton>
           )}
