@@ -332,32 +332,19 @@ const PopularBookSection: React.FC<{
         >
           {books.map(book => {
             return (
-              /*
-              <div
-                key={book.imgHref}
-                sx={{
-                  flex: "[1, 0, 1]",
-                  mx: [0, 2],
-                  my: [2, 2, 0],
-                  paddingLeft: 1,
-                  backgroundColor: "brand.secondary",
-                  maxWidth: "30%",
-                  height: "100%"
-                }}
-              >*/
               <img
                 key={book.imgHref}
                 sx={{
                   width: "100%",
                   minWidth: "75px",
                   flex: [1, 1, "auto"],
-                  boxShadow: "-10px 10px 0px 0px red",
+                  boxShadow: theme =>
+                    `-5px 5px 0px 0px ${theme.colors.brand.secondary}`,
                   marginRight: "2rem"
                 }}
                 alt={book.alt}
                 src={book.imgHref}
               />
-              /*</div>*/
             );
           })}
         </Stack>
