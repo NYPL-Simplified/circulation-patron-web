@@ -33,7 +33,6 @@ export default function useLoginRedirectUrl() {
     ? ""
     : `${window.location.origin}${successPath}`;
 
-  console.log(fullSuccessUrl, successPath);
   return {
     fullSuccessUrl,
     successPath
