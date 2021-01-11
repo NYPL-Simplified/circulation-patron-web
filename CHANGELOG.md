@@ -1,6 +1,7 @@
 ## CHANGELOG
 
 ### UNRELEASED CHANGES
+- Add: Add catalog button on openE home page
 
 Fix: Improve the appearance of home page book thumbnails for larger viewports
 

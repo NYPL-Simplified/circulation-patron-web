@@ -4,9 +4,8 @@ import * as React from "react";
 import { H2, Text } from "./Text";
 import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
-import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
-import SignOut from "./SignOut";
+import { SignOut } from "./SignOut";
 import SvgChevronRight from "icons/ExpandMore";
 import { GetStaticProps, NextPage } from "next";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
@@ -218,7 +217,6 @@ export const OpenEbooksLandingComponent = () => {
 
 const OpenEbooksHero: React.FC = () => {
   const { isAuthenticated } = useUser();
-  const { slug } = useLibraryContext();
 
   return (
     <div
@@ -240,15 +238,19 @@ const OpenEbooksHero: React.FC = () => {
       >
         <div sx={{ display: "flex", margin: 3, justifyContent: "flex-end" }}>
           {isAuthenticated ? (
-            <SignOut />
+            <>
+              <NavButton
+                variant="ghost"
+                color="ui.white"
+                href="/"
+                sx={{ mr: 1 }}
+              >
+                Catalog
+              </NavButton>
+              <SignOut color="ui.white" />
+            </>
           ) : (
-            <NavButton
-              variant="filled"
-              color="ui.white"
-              href={{
-                pathname: `/${slug}/login`
-              }}
-            >
+            <NavButton variant="filled" color="ui.white" href="/login">
               <span sx={{ color: "ui.black" }}>Log In</span>
             </NavButton>
           )}
