@@ -7,7 +7,7 @@ import BreadcrumbBar from "./BreadcrumbBar";
 import { H3 } from "./Text";
 import { AnyBook } from "interfaces";
 import PageTitle from "./PageTitle";
-import SignOut from "./SignOut";
+import { SignOut } from "./SignOut";
 import useUser from "components/context/UserContext";
 import { PageLoader } from "components/LoadingIndicator";
 import AuthProtectedRoute from "auth/AuthProtectedRoute";

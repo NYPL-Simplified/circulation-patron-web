@@ -1,6 +1,8 @@
 ## CHANGELOG
 
 ### UNRELEASED CHANGES
+
+- Add: Add catalog button on openE home page
 - Fix: Protect against invalid redirect uris caused by mismatch in hydration.
 
 ### 4.2.0

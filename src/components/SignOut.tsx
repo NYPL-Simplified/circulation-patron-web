@@ -7,7 +7,13 @@ import Button from "./Button";
 import Stack from "./Stack";
 import useUser from "components/context/UserContext";
 
-export default function SignOut() {
+interface SignOutProps {
+  color?: string;
+}
+
+export const SignOut: React.FC<SignOutProps> = ({
+  color = "ui.black"
+}: SignOutProps) => {
   const dialog = useDialogState();
   const { signOut, isLoading } = useUser();
   function signOutAndClose() {
@@ -18,7 +24,7 @@ export default function SignOut() {
     <>
       <DialogDisclosure
         as={Button}
-        color="ui.black"
+        color={color}
         loading={isLoading}
         {...dialog}
       >
@@ -48,4 +54,4 @@ export default function SignOut() {
       </Modal>
     </>
   );
-}
+};
