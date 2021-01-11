@@ -15,6 +15,7 @@ import GlobalStyles from "components/GlobalStyles";
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { APP_CONFIG } from "utils/env";
 import OpenEbooksLoginPicker from "auth/OpenEbooksLoginPicker";
+import { flex } from "styled-system";
 
 type PopularBook = { alt: string; imgHref: string };
 
@@ -138,46 +139,37 @@ export const OpenEbooksLandingComponent = () => {
           </div>
         </div>
       </div>
-      <div
-        sx={{
-          mx: "auto",
-          my: 4,
-          textAlign: ["center", "center", "left"]
-        }}
+      <PopularBookSection books={popularBooks.HighSchool}>
+        <H2>Popular High School Books</H2>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </Text>
+      </PopularBookSection>
+      <PopularBookSection
+        books={popularBooks.MiddleGrades}
+        coverLocation="right"
       >
-        <Stack direction="column">
-          <PopularBookSection books={popularBooks.HighSchool}>
-            <H2>Popular High School Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-          <PopularBookSection
-            books={popularBooks.MiddleGrades}
-            coverLocation="right"
-          >
-            <H2>Popular Middle Grades Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-          <PopularBookSection books={popularBooks.EarlyGrades}>
-            <H2>Popular Early Grades Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-        </Stack>
-      </div>
+        <H2>Popular Middle Grades Books</H2>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </Text>
+      </PopularBookSection>
+      <PopularBookSection books={popularBooks.EarlyGrades}>
+        <H2>Popular Early Grades Books</H2>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </Text>
+      </PopularBookSection>
+
       <div sx={{ backgroundColor: "brand.primary" }}>
         <div
           sx={{
@@ -295,63 +287,50 @@ const PopularBookSection: React.FC<{
   coverLocation?: "left" | "right";
 }> = ({ children, books, coverLocation }) => {
   return (
-    <div
+    <section
+      className="popular-books-section"
       sx={{
-        m: 2,
+        px: "8.5%",
+        my: "35px",
         display: "flex",
-        flexDirection: [
-          "column",
-          "column",
-          coverLocation === "right" ? "row" : "row-reverse"
-        ]
+        flexDirection: coverLocation === "right" ? "row" : "row-reverse"
       }}
     >
-      <div
+      <aside
         sx={{
-          flex: "1",
-          display: "flex",
-          m: 2
+          flex: 1,
+          border: "1px solid red"
         }}
       >
-        <Stack
-          direction="column"
-          sx={{
-            flex: "1",
-            m: 2,
-            justifyContent: "center"
-          }}
-        >
-          {children}
-        </Stack>
-      </div>
+        {children}
+      </aside>
+
       {/* The three book covers */}
-      <div sx={{ m: 2, flex: "2" }}>
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: "space-around"
-          }}
-        >
-          {books.map(book => {
-            return (
-              <img
-                key={book.imgHref}
-                sx={{
-                  width: "100%",
-                  minWidth: "75px",
-                  flex: [1, 1, "auto"],
-                  boxShadow: theme =>
-                    `-5px 5px 0px 0px ${theme.colors.brand.secondary}`,
-                  marginRight: "2rem"
-                }}
-                alt={book.alt}
-                src={book.imgHref}
-              />
-            );
-          })}
-        </Stack>
+      <div
+        sx={{
+          display: "flex",
+          flex: 2,
+          flexWrap: "nowrap",
+          justifyContent: "space-between"
+        }}
+      >
+        {books.map(book => {
+          return (
+            <img
+              key={book.imgHref}
+              sx={{
+                boxShadow: theme =>
+                  `-5px 5px 0px 0px ${theme.colors.brand.secondary}`,
+                width: "32%",
+                alignSelf: "flex-start"
+              }}
+              alt={book.alt}
+              src={book.imgHref}
+            />
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
 
