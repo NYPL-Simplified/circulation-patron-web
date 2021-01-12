@@ -2,7 +2,7 @@
 
 ### UNRELEASED CHANGES
 
-- Refactor: Include browsing history in breadcrumbs
+- Add: Include browsing history in breadcrumbs
 - Add: Add catalog button on openE home page
 
 ### 4.2.0
