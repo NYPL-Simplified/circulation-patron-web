@@ -13,7 +13,7 @@ const httpsOptions = {
   cert: fs.readFileSync("./localhost.crt")
 };
 
-var test = Object.values(require("os").networkInterfaces()).reduce(
+var ipAddr = Object.values(require("os").networkInterfaces()).reduce(
   (r, list) =>
     r.concat(
       list.reduce(
@@ -31,6 +31,6 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   }).listen(port, "0.0.0.0", err => {
     if (err) throw err;
-    console.log(`> Ready on https://localhost:${port} and ${test}:${port}`);
+    console.log(`> Ready on https://localhost:${port} and ${ipAddr}:${port}`);
   });
 });
