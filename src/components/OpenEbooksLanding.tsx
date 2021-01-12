@@ -15,7 +15,6 @@ import GlobalStyles from "components/GlobalStyles";
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { APP_CONFIG } from "utils/env";
 import OpenEbooksLoginPicker from "auth/OpenEbooksLoginPicker";
-import { flex } from "styled-system";
 
 type PopularBook = { alt: string; imgHref: string };
 
@@ -215,7 +214,6 @@ const OpenEbooksHero: React.FC = () => {
       sx={{
         backgroundImage: `url('/img/HeroImage.jpg')`,
         minHeight: "350px",
-
         flexWrap: "nowrap",
         justifyContent: "center",
         alignItems: "center"
@@ -291,15 +289,26 @@ const PopularBookSection: React.FC<{
       className="popular-books-section"
       sx={{
         px: "8.5%",
-        my: "35px",
+        my: ["20px", "20px", "35px"],
         display: "flex",
-        flexDirection: coverLocation === "right" ? "row" : "row-reverse"
+        flexDirection: [
+          "column",
+          "column",
+          coverLocation === "right" ? "row" : "row-reverse"
+        ],
+        ":first-of-type": {
+          marginTop: ["28px", "28px", "70px"]
+        }
       }}
     >
       <aside
         sx={{
           flex: 1,
-          border: "1px solid red"
+          alignSelf: "center",
+          paddingLeft: [0, 0, coverLocation === "right" ? 0 : "53px"],
+          paddingRight: [0, 0, coverLocation === "right" ? "53px" : 0],
+          marginBottom: ["15px", "15px", 0],
+          textAlign: ["center", "center", "left"]
         }}
       >
         {children}
