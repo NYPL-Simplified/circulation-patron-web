@@ -1,6 +1,6 @@
 import * as React from "react";
 import { fixtures, render } from "../../test-utils";
-import SignOut from "components/SignOut";
+import { SignOut } from "components/SignOut";
 import userEvent from "@testing-library/user-event";
 
 // const mockCookie
