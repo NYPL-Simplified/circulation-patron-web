@@ -286,7 +286,6 @@ const PopularBookSection: React.FC<{
 }> = ({ children, books, coverLocation }) => {
   return (
     <section
-      className="popular-books-section"
       sx={{
         px: "8.5%",
         my: ["20px", "20px", "35px"],
