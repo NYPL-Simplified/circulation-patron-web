@@ -288,7 +288,7 @@ const PopularBookSection: React.FC<{
     <section
       sx={{
         px: "8.5%",
-        my: ["20px", "20px", "35px"],
+        my: [3, 3, 4],
         display: "flex",
         flexDirection: [
           "column",
@@ -296,7 +296,7 @@ const PopularBookSection: React.FC<{
           coverLocation === "right" ? "row" : "row-reverse"
         ],
         ":first-of-type": {
-          marginTop: ["28px", "28px", "70px"]
+          marginTop: [4, 4, 6]
         }
       }}
     >
@@ -304,9 +304,9 @@ const PopularBookSection: React.FC<{
         sx={{
           flex: 1,
           alignSelf: "center",
-          paddingLeft: [0, 0, coverLocation === "right" ? 0 : "53px"],
-          paddingRight: [0, 0, coverLocation === "right" ? "53px" : 0],
-          marginBottom: ["15px", "15px", 0],
+          paddingLeft: [0, 0, coverLocation === "right" ? 0 : 5],
+          paddingRight: [0, 0, coverLocation === "right" ? 5 : 0],
+          marginBottom: [3, 3, 0],
           textAlign: ["center", "center", "left"]
         }}
       >
