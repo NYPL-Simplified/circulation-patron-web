@@ -4,6 +4,7 @@
 
 - Add: Add catalog button on openE home page
 - Fix: Improve the appearance of home page book thumbnails for larger viewports
+- tests: Add a Github Workflow to trigger integration tests in NYPL-Simplified/integration-tests-web.
 
 ### 4.2.0
 
