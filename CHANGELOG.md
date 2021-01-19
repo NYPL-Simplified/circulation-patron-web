@@ -4,6 +4,7 @@
 
 - Add: Include browsing history in breadcrumbs
 - Add: Add catalog button on openE home page
+- Fix: Improve the appearance of home page book thumbnails for larger viewports
 
 ### 4.2.0
 
