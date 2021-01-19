@@ -21,23 +21,26 @@ This app can support many libraries, each at their own url: `http://example.com/
 
 ## Configuration File
 
-To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured. 
+To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured.
 
 The production configuration is defined in a YAML config file. You can find more details on the options in the `sample-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. See [environment variables](#environment-variables) below for more information.
 
 ## Environment Variables
 
-The main app configuration is done in the [config file](#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file. 
+The main app configuration is done in the [config file](#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file.
 
 Setting via the command line:
+
 ```
 > CONFIG_FILE=config.yml npm run start
 ```
 
 Setting in a `.env.local` file:
+
 ```
 CONFIG_FILE=config.yml
 ```
+
 The app can then be run with `npm run start`, and it will pick up the env from your env file.
 
 The following environment variables can be set to further configure the application.
@@ -50,7 +53,6 @@ The following environment variables can be set to further configure the applicat
 Any Circulation Manager you'll be using with the app also needs a configuration setting to turn on CORS headers. In the Circulation Manager interface, go to the Sitewide Settings section under System Configuration (`/admin/web/config/sitewideSettings`) and add a setting for "URL of the web catalog for patrons". For development, you can set this to "\*", but for production it should be the real URL where you will run the catalog.
 
 If you are using a Library Registry, this configuration will automatically be created when you register libraries with the Registry, but you need to configure the URL in the Library Registry by running `bin/configuration/configure_site_setting --setting="web_client_url=http://library.org/{uuid}"` (replace the URL with your web client URL). Otherwise, you'll need to create a sitewide setting for it in the Circulation Manager. Finally, make sure that the libraries are registered to the Library Registry you are using.
-
 
 # Development
 
@@ -68,13 +70,14 @@ Once the dependencies are installed and application environments configured, the
 - `npm run dev:https` - This will run the app in development with https enabled. This uses the `dev-server.js` script to load https keys. It's useful when developing features that require https to be enabled.
 - `npm run build` - This will build both the server and the client code into `./next`. You can then run `npm run start` to start the server.
 
-The application will start at the base URL of `localhost:3000`.
+The application will start at the base URL of `localhost:3000`. (NOTE: `npm run dev:https` will also make the site available using your computer's IP address. For example, https://192.168.1.15:3000.)
 
 ### Running with Decryption
 
 This app supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/NYPL-Simplified/axisnow-access-control-web)
 
-To run with decryption:  
+To run with decryption:
+
 - Run `npm login --registry=https://npm.pkg.github.com`. You will need a Github Personal Access Token to use as your password.
 - Run `npm install` as normal.
 - The app will automatically pick up the installed optional `@nypl-simplified-packages/axisnow-access-control-web` package, and run with decryption enabled.
@@ -82,6 +85,10 @@ To run with decryption:
 ### ENV Vars and Building
 
 When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.yml npm run start` will not work, you have to set them at build time.
+
+### Theme UI
+
+This project uses [Theme UI](https://theme-ui.com/) which provides a simple JavaScript-based method with which to apply visual styles to your components. During development, you should use preset values from the site's theme (src/theme/theme.ts) whenever possible. [Learn more](https://theme-ui.com/getting-started) about Theme UI.
 
 ### Useful Scripts
 
@@ -118,7 +125,7 @@ You can run `npm run test` to run the test suite once. Alternatively, and recomm
 
 ### Example
 
-An annotated example from `Search.text.tsx`:
+An annotated example from `Search.test.tsx`:
 
 ```js
 /**
@@ -131,19 +138,19 @@ test("fetches search description", async () => {
   /**
    * First mock the SWR data, which effectively mocks the network call to fetch
    * the search description. You can see details of how this works in the
-   * mockSwr function. 
+   * mockSwr function.
    */
   mockSwr({ data: fixtureData });
 
-  // then render the app. utils will contain the query functions provided by 
-  // react-testing-library 
+  // then render the app. utils will contain the query functions provided by
+  // react-testing-library
   const utils = render(<Search />, {
     router: {
       query: { collectionUrl: "/collection" }
     }
   });
   // we can then make sure that the mocked `useSWR` function was called as
-  // expected. In this case once for the collection, then for it's search 
+  // expected. In this case once for the collection, then for it's search
   // description.
   expect(mockedSWR).toHaveBeenCalledWith(
     ["/collection", "user-token"],
@@ -223,7 +230,7 @@ If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or prov
 
 #### Helpful commands
 
-- For debuggin purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
+- For debugging purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
   ```
   docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
   ```
