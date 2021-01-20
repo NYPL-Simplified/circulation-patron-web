@@ -21,4 +21,4 @@ jobs:
         with:
           url: https://api.github.com/repos/NYPL-Simplified/integration-tests-web/actions/workflows/3469469/dispatches
           headers: '{"Accept": "application/vnd.github.v3+json", "Authorization": "token ${{secrets.SIMPLIFIED_CI_TOKEN}}"}'
-          body: '{"ref":"main", "inputs":{"test_tag":"(@tier1 or @tier2 or @tier3)","build_name":"$GITHUB_REF.$GITHUB_SHA","browser_name":"chrome","browser_type":"desktop"}}'
+          body: '{"ref":"main", "inputs":{"test_tag":"(@tier1 or @tier2 or @tier3)","build_name":"${{github.ref}}.${{github.sha}}","browser_name":"chrome","browser_type":"desktop"}}'
