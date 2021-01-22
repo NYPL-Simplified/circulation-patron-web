@@ -5,6 +5,7 @@ import { CollectionData, LaneData } from "interfaces";
 import { makeSwrResponse, MockSwr } from "test-utils/mockSwr";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import useSWR, { useSWRInfinite } from "swr";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("swr");
 
@@ -156,7 +157,7 @@ test("when a collection is rendered, it properly sets the breadcrumbs context", 
   const laneData: LaneData = {
     title: "my lane",
     url: "/link-to-lane",
-    books: fixtures.makeBorrowableBooks(10)
+    books: fixtures.makeBorrowableBooks(1)
   };
   const raw = {
     "simplified:breadcrumbs": [
@@ -187,12 +188,14 @@ test("when a collection is rendered, it properly sets the breadcrumbs context", 
   const utils = render(<Collection />, {
     router: { query: { collectionUrl: "/collection" } }
   });
-  console.log(utils);
+  console.log(utils.debug());
 
   // then follow a book link
-  //const bookLink = utils.getByRole("link", {name: "Some book title..."});
-  //userEvent.click(bookLink);
+  const bookLink = utils.getByRole("link", { name: "View Book Title 0" });
+  userEvent.click(bookLink);
+  console.log(bookLink);
+
   // then make sure the breadcrumbs are updated to display the new thing we expect
 
-  expect(utils.getByText("All Books")).toBeInTheDocument();
+  expect(utils.getByText("breadcrumb title")).toBeInTheDocument();
 });
