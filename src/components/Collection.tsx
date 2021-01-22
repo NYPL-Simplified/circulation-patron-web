@@ -31,6 +31,8 @@ export const Collection: React.FC<{
 
   const { storedBreadcrumbs, setStoredBreadcrumbs } = useBreadcrumbContext();
 
+  //console.log(collection?.raw.toString());
+
   React.useEffect(() => {
     //store the updated breadcrumbs in context
     setStoredBreadcrumbs(collectionBreadcrumbs);
