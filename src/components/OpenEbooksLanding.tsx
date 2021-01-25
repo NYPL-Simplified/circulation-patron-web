@@ -4,9 +4,8 @@ import * as React from "react";
 import { H2, Text } from "./Text";
 import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
-import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
-import SignOut from "./SignOut";
+import { SignOut } from "./SignOut";
 import SvgChevronRight from "icons/ExpandMore";
 import { GetStaticProps, NextPage } from "next";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
@@ -139,46 +138,37 @@ export const OpenEbooksLandingComponent = () => {
           </div>
         </div>
       </div>
-      <div
-        sx={{
-          mx: "auto",
-          my: 4,
-          textAlign: ["center", "center", "left"]
-        }}
+      <PopularBookSection books={popularBooks.HighSchool}>
+        <H2>Popular High School Books</H2>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </Text>
+      </PopularBookSection>
+      <PopularBookSection
+        books={popularBooks.MiddleGrades}
+        coverLocation="right"
       >
-        <Stack direction="column">
-          <PopularBookSection books={popularBooks.HighSchool}>
-            <H2>Popular High School Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-          <PopularBookSection
-            books={popularBooks.MiddleGrades}
-            coverLocation="right"
-          >
-            <H2>Popular Middle Grades Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-          <PopularBookSection books={popularBooks.EarlyGrades}>
-            <H2>Popular Early Grades Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-        </Stack>
-      </div>
+        <H2>Popular Middle Grades Books</H2>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </Text>
+      </PopularBookSection>
+      <PopularBookSection books={popularBooks.EarlyGrades}>
+        <H2>Popular Early Grades Books</H2>
+        <Text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </Text>
+      </PopularBookSection>
+
       <div sx={{ backgroundColor: "brand.primary" }}>
         <div
           sx={{
@@ -218,14 +208,12 @@ export const OpenEbooksLandingComponent = () => {
 
 const OpenEbooksHero: React.FC = () => {
   const { isAuthenticated } = useUser();
-  const { slug } = useLibraryContext();
 
   return (
     <div
       sx={{
         backgroundImage: `url('/img/HeroImage.jpg')`,
         minHeight: "350px",
-
         flexWrap: "nowrap",
         justifyContent: "center",
         alignItems: "center"
@@ -240,15 +228,19 @@ const OpenEbooksHero: React.FC = () => {
       >
         <div sx={{ display: "flex", margin: 3, justifyContent: "flex-end" }}>
           {isAuthenticated ? (
-            <SignOut />
+            <>
+              <NavButton
+                variant="ghost"
+                color="ui.white"
+                href="/"
+                sx={{ mr: 1 }}
+              >
+                Catalog
+              </NavButton>
+              <SignOut color="ui.white" />
+            </>
           ) : (
-            <NavButton
-              variant="filled"
-              color="ui.white"
-              href={{
-                pathname: `/${slug}/login`
-              }}
-            >
+            <NavButton variant="filled" color="ui.white" href="/login">
               <span sx={{ color: "ui.black" }}>Log In</span>
             </NavButton>
           )}
@@ -293,68 +285,60 @@ const PopularBookSection: React.FC<{
   coverLocation?: "left" | "right";
 }> = ({ children, books, coverLocation }) => {
   return (
-    <div
+    <section
       sx={{
-        m: 2,
+        px: "8.5%",
+        my: [3, 3, 4],
         display: "flex",
         flexDirection: [
           "column",
           "column",
           coverLocation === "right" ? "row" : "row-reverse"
-        ]
+        ],
+        ":first-of-type": {
+          marginTop: [4, 4, 6]
+        }
       }}
     >
-      <div
+      <aside
         sx={{
-          flex: "1",
-          display: "flex",
-          m: 2
+          flex: 1,
+          alignSelf: "center",
+          paddingLeft: [0, 0, coverLocation === "right" ? 0 : 5],
+          paddingRight: [0, 0, coverLocation === "right" ? 5 : 0],
+          marginBottom: [3, 3, 0],
+          textAlign: ["center", "center", "left"]
         }}
       >
-        <Stack
-          direction="column"
-          sx={{
-            flex: "1",
-            m: 2,
-            justifyContent: "center"
-          }}
-        >
-          {children}
-        </Stack>
-      </div>
+        {children}
+      </aside>
+
       {/* The three book covers */}
-      <div sx={{ m: 2, flex: "2" }}>
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: "space-around"
-          }}
-        >
-          {books.map(book => {
-            return (
-              <div
-                key={book.imgHref}
-                sx={{
-                  flex: "[1, 0, 1]",
-                  mx: [0, 2],
-                  my: [2, 2, 0],
-                  paddingLeft: 1,
-                  backgroundColor: "brand.secondary",
-                  maxWidth: "30%",
-                  height: "100%"
-                }}
-              >
-                <img
-                  sx={{ maxWidth: "100%", minWidth: "75px" }}
-                  alt={book.alt}
-                  src={book.imgHref}
-                />
-              </div>
-            );
-          })}
-        </Stack>
+      <div
+        sx={{
+          display: "flex",
+          flex: 2,
+          flexWrap: "nowrap",
+          justifyContent: "space-between"
+        }}
+      >
+        {books.map(book => {
+          return (
+            <img
+              key={book.imgHref}
+              sx={{
+                boxShadow: theme =>
+                  `-5px 5px 0px 0px ${theme.colors.brand.secondary}`,
+                width: "32%",
+                alignSelf: "flex-start"
+              }}
+              alt={book.alt}
+              src={book.imgHref}
+            />
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
 

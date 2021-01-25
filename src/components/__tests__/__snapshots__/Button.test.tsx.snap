@@ -34,14 +34,14 @@ exports[`LinkButton renders correct element 1`] = `
   background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
-  color: white;
-  fill: white;
+  color: var(--theme-ui-colors-ui-white,#ffffff);
+  fill: var(--theme-ui-colors-ui-white,#ffffff);
 }
 
 .emotion-0:focus,
 .emotion-0:hover {
   background-color: #2d6da3;
-  color: white;
+  color: var(--theme-ui-colors-ui-white,#ffffff);
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -105,8 +105,8 @@ exports[`NavButton renders correct element 1`] = `
   background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
-  color: white;
-  fill: white;
+  color: var(--theme-ui-colors-ui-white,#ffffff);
+  fill: var(--theme-ui-colors-ui-white,#ffffff);
 }
 
 .emotion-0:hover {
@@ -118,7 +118,7 @@ exports[`NavButton renders correct element 1`] = `
 .emotion-0:focus,
 .emotion-0:hover {
   background-color: #2d6da3;
-  color: white;
+  color: var(--theme-ui-colors-ui-white,#ffffff);
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -179,14 +179,14 @@ exports[`variants filled (default) 1`] = `
   background-color: var(--theme-ui-colors-brand-primary,#337ab7);
   height: 32px;
   min-width: 32px;
-  color: white;
-  fill: white;
+  color: var(--theme-ui-colors-ui-white,#ffffff);
+  fill: var(--theme-ui-colors-ui-white,#ffffff);
 }
 
 .emotion-0:focus,
 .emotion-0:hover {
   background-color: #2d6da3;
-  color: white;
+  color: var(--theme-ui-colors-ui-white,#ffffff);
   -webkit-text-decoration: none;
   text-decoration: none;
 }

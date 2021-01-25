@@ -4,7 +4,11 @@
 - Documentation: update README.
 - Add: Support using a library registry in the CONFIG_FILE so that the community deployment can use the SimplyE library registry to display all libraries. 
 
+- Add: Add catalog button on openE home page
+- Fix: Improve the appearance of home page book thumbnails for larger viewports
+
 ### 4.2.0
+
 - Fix: The `open_book` event is now tracked by sending a `GET` request to the CM url instead of a `PUT` request, which was not accepted.
 - Add: Button to go back to auth selection from basic auth if multiple methods are present.
 - Fix: Refactor See More card to use the same sizing and aspect ratio of the book cover images.
@@ -16,23 +20,28 @@
 - Fix: Properly track AxisNow decryption errors to Bugsnag.
 
 ### 4.1.0
+
 - Add: Landing page for Open Ebooks
 - Fix: Fix our `APP_CONFIG` mocking in storybook so that `showMedium` and `companionApp` can be set via the toolbar once again.
-- Refactor: Made the login state a full page so that it can be navigated to directly. 
+- Refactor: Made the login state a full page so that it can be navigated to directly.
 
 ### 4.0.0
+
 - BREAKING CHANGE: Start app by fetching auth document first instead of catalog root. This means that the `libraries` key in the config file needs to be set with auth document urls instead of catalog root urls.
 - Feature: Support auth-protected collections.
 - Fix: Update webpub viewer.
 
 ### 3.1.3
+
 - Fix: Update the production docker publish Github Action to v2, allowing for use of private Github package registry for AxisNow Decryptor.
 - Fix: Book covers and titles in BookList now link to the book page
 
 ### v3.1.2
-- Bump to v3.1.2 in order to tricker Github Actions run. No changes, but renamed branches to `dev` `qa` and `production` from `beta` and `master`. 
+
+- Bump to v3.1.2 in order to tricker Github Actions run. No changes, but renamed branches to `dev` `qa` and `production` from `beta` and `master`.
 
 ### v3.1.1
+
 - Fix: Update github workflow files to properly publish new branches (production, qa, dev).
 
 ### v3.1.0
@@ -45,7 +54,6 @@
 - Fix: Deterministic `buildId` based on git commit SHA in order to allow running multiple instances of the application behind a load balancer.
 - Fix: Fetch the config file synchronously at startup so that the bugsnag api key can be used during the webpack setup.
 - Improvement: Application now tracks errors better by parsing them more precisely, and then recording them to bugsnag and console.
-
 
 ### v3.0.1
 
@@ -62,7 +70,7 @@
 - Feature: Add support for tracking app events via Google Tag Manager.
 - Fix: Update CleverAuth button to use AnchorButton for a11y and semantic reasons
 - Fix: Removed site-wide navigation from webpub-viewer pages, as it overlapped with the reader. Created a LayoutPage component to wrap pages that require site-wide navigation and update the Page to be used directly for pages that do not require site-wide navigation.
-- Fix: Environment variables can now be passed into the docker container, because the container is now building and running the app instead of just running it.  
+- Fix: Environment variables can now be passed into the docker container, because the container is now building and running the app instead of just running it.
 - Add: Remove books from local storage when a user logs out.
 - Add: Optional error reporting via [Bugsnag](https://www.bugsnag.com/).
 - Refactor: Complete rewrite of the data layer, removing opds-web-client and adding [swr](https://swr.vercel.app/) for data fetching. Includes many UX improvments.

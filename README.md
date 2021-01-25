@@ -15,7 +15,7 @@ An OPDS web catalog client for library patrons.
 
 The `circulation-patron-web` application serves as a way for libraries to publish their collections to the web. A library *must* be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and *can* be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format. Registering with NYPL's Library Registry is how libraries can show up in the SimplyE mobile application and the [Community Demo](#demo) of this app. In order to have a web version of your library catalog, you can deploy this app.
 
-This app can support many libraries, each at their own url: `http://example.com/library1` can be one library, and `http://example.com/library2` another library. You configure the libraries for the app in the [config file](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#configuration-file).
+This app can support many libraries, each at their own url: `http://example.com/library1` can be one library, and `http://example.com/library2` another library. You configure the libraries for the app in the [config file](#configuration-file).
 
 ## Community Demo
 
@@ -66,11 +66,11 @@ __To have your library added to the demo, register it with NYPL's Library Regist
 
 To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured.
 
-The production configuration is defined in a YAML config file. You can find more details on the options in the `./community-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. If you don't set anything, the sample config is used. See [environment variables](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#environment-variables) below for more information.
+The production configuration is defined in a YAML config file. You can find more details on the options in the `./community-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. If you don't set anything, the sample config is used. See [environment variables](#environment-variables) below for more information.
 
 ## Environment Variables
 
-The main app configuration is done in the [config file](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file.
+The main app configuration is done in the [config file](#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file.
 
 Setting via the command line:
 
@@ -130,7 +130,7 @@ Once the dependencies are installed and application environments configured, the
 - `npm run build` - This will build both the server and the client code into `./next`. You can then run `npm run start` to start the server.
 - `npm run storybook` - This will run the storybook application to preview and develop components in isolation.
 
-The application will start at the base URL of `localhost:3000`.
+The application will start at the base URL of `localhost:3000`. (NOTE: `npm run dev:https` will also make the site available using your computer's IP address. For example, https://192.168.1.15:3000.)
 
 ### Running with Decryption
 
@@ -145,6 +145,10 @@ To run with decryption:
 ### ENV Vars and Building
 
 When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.yml npm run start` will not work, you have to set them at build time.
+
+### Theme UI
+
+This project uses [Theme UI](https://theme-ui.com/) which provides a simple JavaScript-based method with which to apply visual styles to your components. During development, you should use preset values from the site's theme (src/theme/theme.ts) whenever possible. [Learn more](https://theme-ui.com/getting-started) about Theme UI.
 
 ### Useful Scripts
 
@@ -173,7 +177,7 @@ You can run `npm run test` to run the test suite once. Alternatively, and recomm
 
 ### Example
 
-An annotated example from `Search.text.tsx`:
+An annotated example from `Search.test.tsx`:
 
 ```
 /**
@@ -186,19 +190,19 @@ test("fetches search description", async () => {
   /**
    * First mock the SWR data, which effectively mocks the network call to fetch
    * the search description. You can see details of how this works in the
-   * mockSwr function. 
+   * mockSwr function.
    */
   mockSwr({ data: fixtureData });
 
-  // then render the app. utils will contain the query functions provided by 
-  // react-testing-library 
+  // then render the app. utils will contain the query functions provided by
+  // react-testing-library
   const utils = render(<Search />, {
     router: {
       query: { collectionUrl: "/collection" }
     }
   });
   // we can then make sure that the mocked `useSWR` function was called as
-  // expected. In this case once for the collection, then for it's search 
+  // expected. In this case once for the collection, then for it's search
   // description.
   expect(mockedSWR).toHaveBeenCalledWith(
     ["/collection", "user-token"],
@@ -217,7 +221,7 @@ When creating links using `<Link>`, you don't need to worry about whether it is 
 
 This repository includes a Dockerfile, and the master branch is built as an image in Docker Hub in the Hub repository [nypl/patron-web](https://hub.docker.com/r/nypl/patron-web). You can deploy the application simply by running the image from Docker Hub. You can either use the `latest` tag in Docker Hub, or a specific version tagged with the version number. There will also be an image tagged `beta` for the most recent code on the `beta` branch.
 
-Alternatively, you can build your own container from local changes as described below. If you would like to deploy from Docker Hub, skip to [Running a container from the image](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#running-a-container-from-the-image).
+Alternatively, you can build your own container from local changes as described below. If you would like to deploy from Docker Hub, skip to [Running a container from the image](#running-a-container-from-the-image).
 
 ## Build a docker container
 
@@ -246,7 +250,7 @@ This will set the correct permissions for when the app runs `npm install` while 
 
 ### Running the docker container
 
-Whether running the container from a Docker Hub image, or a local one, you will need to provide at least one environment variable to specify the circulation manager backend, as described in [Application Startup Configurations](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#Application-Startup-Configurations). You can also provide the other optional environment variables when running your docker container. There are two ways to run the container: (1) via the command line, and (2) via `docker-compose` with a `docker-compose.yml` file.
+Whether running the container from a Docker Hub image, or a local one, you will need to provide at least one environment variable to specify the circulation manager backend, as described in [Application Startup Configurations](#Application-Startup-Configurations). You can also provide the other optional environment variables when running your docker container. There are two ways to run the container: (1) via the command line, and (2) via `docker-compose` with a `docker-compose.yml` file.
 
 When running the image with the `CONFIG_FILE` option, you will want to provide the file's directory to the container as a volume, so the container can access the file on your host machine. When doing this, replace `$PATH_TO_LOCAL_VOLUME` with the absolute path to the `/config` directory on the host machine.
 
@@ -278,17 +282,15 @@ Instead of using the `docker run` command at the command line, it's also possibl
 
 To create the container using the `docker-compose.yml` file in this repository, simply run `docker-compose up`. This will build the image and start the container. To stop the container and remove it, run `docker-compose down`. Similarly you can run `docker-compose stop` to stop the container without removing it, and `docker-compose start` to restart a stopped container.
 
-If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or provide any of the other documented [ENV vars](notion://www.notion.so/CPW-Readme-b479eb66af884bf9ae6ea15048a9df2a#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
+If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
 
 ### Helpful commands
 
-- For debuggin purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
-
-    ```
-    docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
-
-    ```
+- For debugging purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
+  ```
+  docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
+  ```
 
 ### Credits
 
-<img alt="Bugsnag logo" src="[https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png](https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png)" width="200px"/>
+<img alt="Bugsnag logo" src="https://global-uploads.webflow.com/5c741219fd0819540590e785/5e29d884752bb0072e2a0e6d_bugsnag-logo-full.png" width="200px"/>
