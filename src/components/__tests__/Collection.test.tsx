@@ -152,8 +152,7 @@ test("renders empty state if no lanes or books", () => {
   expect(utils.getByText("This collection is empty.")).toBeInTheDocument();
 });
 
-test("when a collection is rendered, it properly sets the breadcrumbs context", () => {
-  // make sure the breadcrumbs display what you expect from the collection here
+test.only("when a collection is rendered, it properly sets the breadcrumbs context", () => {
   const laneData: LaneData = {
     title: "my lane",
     url: "/link-to-lane",
@@ -188,14 +187,16 @@ test("when a collection is rendered, it properly sets the breadcrumbs context", 
   const utils = render(<Collection />, {
     router: { query: { collectionUrl: "/collection" } }
   });
-  console.log(utils.debug());
+  utils.debug();
+  // make sure the breadcrumbs display what you expect from the collection here
+  expect(utils.getByText("breadcrumb title")).toBeInTheDocument();
 
   // then follow a book link
   const bookLink = utils.getByRole("link", { name: "View Book Title 0" });
   userEvent.click(bookLink);
-  console.log(bookLink);
+  utils.debug();
 
   // then make sure the breadcrumbs are updated to display the new thing we expect
 
-  expect(utils.getByText("breadcrumb title")).toBeInTheDocument();
+  expect(utils.getByText("Book Title 0")).toBeInTheDocument();
 });
