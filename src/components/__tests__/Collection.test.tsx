@@ -6,8 +6,11 @@ import { makeSwrResponse, MockSwr } from "test-utils/mockSwr";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import useSWR, { useSWRInfinite } from "swr";
 import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/router";
+import "../../test-utils/mockScrollTo";
 
 jest.mock("swr");
+jest.mock("next/router");
 
 const mockedSWR = useSWR as jest.MockedFunction<typeof useSWR>;
 const mockedSWRInfinite = useSWRInfinite as jest.MockedFunction<
@@ -153,6 +156,12 @@ test("renders empty state if no lanes or books", () => {
 });
 
 test.only("when a collection is rendered, it properly sets the breadcrumbs context", () => {
+  useRouter.mockReturnValue({
+    push: () => {},
+    query: {
+      collectionUrl: "/collection"
+    }
+  });
   const laneData: LaneData = {
     title: "my lane",
     url: "/link-to-lane",
@@ -194,9 +203,10 @@ test.only("when a collection is rendered, it properly sets the breadcrumbs conte
   // then follow a book link
   const bookLink = utils.getByRole("link", { name: "View Book Title 0" });
   userEvent.click(bookLink);
+  console.log("--------------------------------------");
   utils.debug();
 
   // then make sure the breadcrumbs are updated to display the new thing we expect
 
-  expect(utils.getByText("Book Title 0")).toBeInTheDocument();
+  //expect(utils.getByText("Current location: Book Title 0")).toBeInTheDocument();
 });
