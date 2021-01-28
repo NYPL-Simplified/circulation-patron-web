@@ -5,11 +5,8 @@ import { CollectionData, LaneData } from "interfaces";
 import { makeSwrResponse, MockSwr } from "test-utils/mockSwr";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import useSWR, { useSWRInfinite } from "swr";
-import userEvent from "@testing-library/user-event";
 import "test-utils/mockScrollTo";
-import useBreadcrumbContext, {
-  BreadcrumbContext
-} from "components/context/BreadcrumbContext";
+import { BreadcrumbContext } from "components/context/BreadcrumbContext";
 
 jest.mock("swr");
 
