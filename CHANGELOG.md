@@ -5,7 +5,9 @@
 - Add: Support using a library registry in the CONFIG_FILE so that the community deployment can use the SimplyE library registry to display all libraries. 
 
 - Add: Add catalog button on openE home page
+- Fix: Protect against invalid redirect uris caused by mismatch in hydration.
 - Fix: Improve the appearance of home page book thumbnails for larger viewports
+- tests: Add a Github Workflow to trigger integration tests in NYPL-Simplified/integration-tests-web.
 
 ### 4.2.0
 
