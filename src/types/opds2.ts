@@ -44,9 +44,9 @@ export interface LibraryRegistryFeed extends Feed<LibraryRegistryFeedMetadata> {
   /**
    * When you fetch a templated url from a LibraryRegistryFeed, you
    * get back another LibraryRegistryFeed, but with a single catalog
-   * in an array.
+   * in an array. A generic LibraryRegistryFeed has a list of all catalogs
    */
-  catalogs?: [CatalogEntry];
+  catalogs?: CatalogEntry[];
 }
 
 type CatalogEntryMetadata = {

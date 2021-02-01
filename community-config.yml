@@ -1,7 +1,7 @@
 # Set an instance name to be used in bug tracking and for other debugging purposes. 
 # This is not patron-facing, so call it something that will be meaningful to you when
 # reviewing bugs, especially if you operate multiple instances.
-instance_name: Patron Web Catalog
+instance_name: Patron Web Catalog - Community Demo
 
 # APP MEDIA SUPPORT
 # Each entry has a setting of "show", "redirect" or "show-and-redirect".
@@ -44,7 +44,10 @@ media_support:
 # default is "simplye"
 companion_app: simplye
 
-# defines the google tag manager id to integrate web analytics
+# BUGSNAG: defines the bugsnag api key to integrate error tracking
+# bugsnag_api_key: xxx
+
+# GOOGLE TAG MANAGER: defines the google tag manager id to integrate web analytics
 # gtm_id: xxx
 
 # There are also some environment variables that can be set in the .env.local
@@ -54,12 +57,12 @@ companion_app: simplye
 # REQUIRED LIBRARY CONFIG
 
 # if you would like to use a library registry, define the registry url
-# libraries: https://some-registry.com/
+libraries: https://libraryregistry.librarysimplified.org/libraries/qa
 
 # Or define the catalog root and shortname for each library on this instance.
 # the homepage of the library will then be at https://domain.com/:library/
-libraries:
-  brazoria: https://simplye.amigos.org/txbrazoria/authentication_document
-  xyzlib: http://simplye-dev-cm.amigos.org/xyzlib/authentication_document
-  openqa: https://qa-circulation.openebooks.us/USOEI/authentication_document
-  lyrasis: https://demo.lyrasistechnology.org/lyrasis/authentication_document
+# libraries:
+#   brazoria: https://simplye.amigos.org/txbrazoria/authentication_document
+#   xyzlib: http://simplye-dev-cm.amigos.org/xyzlib/authentication_document
+#   openqa: https://qa-circulation.openebooks.us/USOEI/authentication_document
+#   lyrasis: https://demo.lyrasistechnology.org/lyrasis/authentication_document

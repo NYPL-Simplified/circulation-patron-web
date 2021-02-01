@@ -19,7 +19,7 @@ export { OPDS1 };
 export type AppConfig = {
   instanceName: string;
   mediaSupport: MediaSupportConfig;
-  libraries: LibraryRegistryBase | LibrariesConfig;
+  libraries: LibrariesConfig;
   companionApp: "simplye" | "openebooks";
   showMedium: boolean;
   gtmId: string | null;
@@ -46,7 +46,10 @@ export type MediaSupportLevel =
   | "unsupported";
 
 export type LibraryRegistryBase = string;
-export type LibrariesConfig = Record<string, string | undefined>;
+export type LibrariesConfig = Record<
+  string,
+  { title: string; authDocUrl: string } | undefined
+>;
 
 export interface ComplaintData {
   type: string;

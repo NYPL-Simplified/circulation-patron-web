@@ -1,69 +1,7 @@
-import { OPDS2, LibraryData, LibraryLinks, OPDS1 } from "interfaces";
+import { LibraryData, LibraryLinks, OPDS1 } from "interfaces";
 import ApplicationError, { PageNotFoundError, ServerError } from "errors";
 import { flattenSamlMethod } from "utils/auth";
 import { APP_CONFIG } from "utils/env";
-
-/**
- * Returns a function to construct a registry catalog link, which leads to a
- * LibraryRegistryFeed containing a single CatalogEntry.
- */
-async function fetchCatalogLinkBuilder(
-  registryBase: string
-): Promise<(uuid: string) => string> {
-  try {
-    const response = await fetch(registryBase);
-    const registryCatalog = (await response.json()) as OPDS2.LibraryRegistryFeed;
-    const templateUrl = registryCatalog?.links.find(
-      link => link.rel === OPDS2.CatalogLinkTemplateRelation
-    )?.href;
-    if (!templateUrl) {
-      throw new ApplicationError({
-        detail: `Template not present in response from: ${registryBase}`
-      });
-    }
-    return uuid => templateUrl.replace("{uuid}", uuid);
-  } catch (e) {
-    throw new ApplicationError(
-      { detail: `Could not fetch the library template at: ${registryBase}` },
-      e
-    );
-  }
-}
-
-/**
- * Fetches a CatalogEntry from a library registry given an identifier
- * for the library.
- */
-async function fetchCatalogEntry(
-  librarySlug: string,
-  registryBase: string
-): Promise<OPDS2.CatalogEntry> {
-  const linkBuilder = await fetchCatalogLinkBuilder(registryBase);
-  const catalogFeedUrl = linkBuilder(librarySlug);
-  try {
-    const response = await fetch(catalogFeedUrl);
-    const catalogFeed = (await response.json()) as OPDS2.LibraryRegistryFeed;
-    const catalogEntry = catalogFeed?.catalogs?.[0];
-    if (!catalogEntry)
-      throw new ApplicationError({
-        detail: `LibraryRegistryFeed returned by ${catalogFeedUrl} does not contain a CatalogEntry.`
-      });
-    return catalogEntry;
-  } catch (e) {
-    if (e instanceof ApplicationError) throw e;
-    throw new ApplicationError(
-      {
-        detail: `Could not fetch catalog entry for library: ${librarySlug} at ${registryBase}`
-      },
-      e
-    );
-  }
-}
-
-function findAuthDocUrl(catalog: OPDS2.CatalogEntry) {
-  return catalog.links.find(link => link.rel === OPDS2.AuthDocumentRelation)
-    ?.href;
-}
 
 /**
  * Interprets the app config to return the auth document url.
@@ -71,21 +9,8 @@ function findAuthDocUrl(catalog: OPDS2.CatalogEntry) {
 export async function getAuthDocUrl(librarySlug: string): Promise<string> {
   const libraries = APP_CONFIG.libraries;
 
-  // we have a library registry url
-  if (typeof libraries === "string") {
-    const catalogEntry = await fetchCatalogEntry(librarySlug, libraries);
-    const authDocUrl = findAuthDocUrl(catalogEntry);
-    if (!authDocUrl)
-      throw new ApplicationError({
-        detail: `CatalogEntry did not contain a Authentication Document Url. Library UUID: ${librarySlug}`
-      });
-    return authDocUrl;
-  }
-  // we have a dictionary of libraries
-  // just get the url from the dictionary
-
   const authDocUrl =
-    librarySlug in libraries ? libraries[librarySlug] : undefined;
+    librarySlug in libraries ? libraries[librarySlug]?.authDocUrl : undefined;
   if (typeof authDocUrl !== "string") {
     throw new PageNotFoundError(
       `No authentication document url is configured for the library: ${librarySlug}.`
@@ -199,20 +124,4 @@ function parseLinks(links: OPDS1.AuthDocumentLink[] | undefined): LibraryLinks {
     }
   }, {});
   return parsed;
-}
-
-/**
- * Attempts to create an array of all the libraries available with the
- * current env settings.
- */
-export function getLibrarySlugs() {
-  const libraries = APP_CONFIG.libraries;
-  if (typeof libraries === "string") {
-    console.warn(
-      "Cannot retrive library slugs for a Library Registry based setup."
-    );
-    return null;
-  }
-  const slugs = Object.keys(libraries);
-  return slugs;
 }
