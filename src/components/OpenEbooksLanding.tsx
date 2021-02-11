@@ -73,12 +73,11 @@ export const OpenEbooksLandingComponent = () => {
             mx: [2, 4]
           }}
         >
-          <H2>Lorem Ipsum Secondary Headline Welcome Openebooks</H2>
+          <H2>Welcome to Open eBooks</H2>
           <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            Unlock access to 1000s of popular and award-winning books for
+            children in K–12th grades of participating schools. Login using your
+            Clever or FirstBook ID below. Now with more books to choose from!
           </Text>
         </div>
       </div>
@@ -127,45 +126,31 @@ export const OpenEbooksLandingComponent = () => {
                 color: "ui.white"
               }}
             >
-              <H2>Open e-Books Mobile Shoutout Here</H2>
-              <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </Text>
+              <H2>Download the Mobile App</H2>
+              <Text>Available on iOS and Android devices</Text>
             </Stack>
           </div>
         </div>
       </div>
       <PopularBookSection books={popularBooks.HighSchool}>
-        <H2>Popular High School Books</H2>
+        <H2>For Teens</H2>
         <Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+          Delve into new worlds, find your favorite stories, or learn about real
+          people and events with our books for Teens and Young Adults.
         </Text>
       </PopularBookSection>
       <PopularBookSection
         books={popularBooks.MiddleGrades}
         coverLocation="right"
       >
-        <H2>Popular Middle Grades Books</H2>
-        <Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </Text>
+        <H2>For Middle Schoolers</H2>
+        <Text>Relatable books and stories for middle grade kids.</Text>
       </PopularBookSection>
       <PopularBookSection books={popularBooks.EarlyGrades}>
-        <H2>Popular Early Grades Books</H2>
+        <H2>For Younger Kids</H2>
         <Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+          Read along with someone, or start reading on your own: Animals,
+          fairies, mysteries, action and adventure, and even some chapter books.
         </Text>
       </PopularBookSection>
 
@@ -182,10 +167,13 @@ export const OpenEbooksLandingComponent = () => {
           <Stack sx={{ m: 2 }} direction="column">
             <H2>FAQ</H2>
             <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.{" "}
+              If you would like to learn more about Open eBooks, as a parent or
+              teacher visit{" "}
+              <a href="https://openebooks.net/" sx={{ color: "ui.white" }}>
+                openebooks.net
+              </a>
+              . For help or questions about the app and this website visit our
+              FAQ.
             </Text>
 
             <Button
