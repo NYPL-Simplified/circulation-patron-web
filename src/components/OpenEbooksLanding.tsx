@@ -168,7 +168,7 @@ export const OpenEbooksLandingComponent = () => {
             <H2>FAQ</H2>
             <Text>
               If you would like to learn more about Open eBooks, as a parent or
-              teacher visit
+              teacher visit&nbsp;
               <a href="https://openebooks.net/" sx={{ color: "ui.white" }}>
                 openebooks.net
               </a>
