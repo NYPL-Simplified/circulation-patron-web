@@ -64,12 +64,8 @@ const column: SxProps["sx"] = {
   my: 4,
   justifyContent: "space-between",
   flexWrap: ["wrap", "nowrap"],
-  alignItems: ["center", "center", "flex-start"]
-};
-
-const description: SxProps["sx"] = {
-  flex: 1,
-  pb: 2
+  alignItems: "center",
+  width: ["100%", "100%", "50%"]
 };
 
 const loginButton: SxProps["sx"] = {
@@ -81,5 +77,5 @@ const logoHeader: SxProps["sx"] = {
   height: 86,
   display: "flex",
   alignItems: "center",
-  marginBottom: "25px"
+  marginBottom: ["10px", "10px", "25px"]
 };
