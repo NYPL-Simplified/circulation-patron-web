@@ -2,9 +2,10 @@
 
 ### UNRELEASED CHANGES
 
+### 4.3.0
+
 - Documentation: update README.
 - Add: Support using a library registry in the CONFIG_FILE so that the community deployment can use the SimplyE library registry to display all libraries.
-
 - Add: Include browsing history in breadcrumbs
 - Add: Add catalog button on openE home page
 - Fix: Protect against invalid redirect uris caused by mismatch in hydration.
