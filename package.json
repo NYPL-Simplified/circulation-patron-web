@@ -1,6 +1,6 @@
 {
   "name": "simplified-circulation-patron-web",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "patron UI for Circulation Manager",
   "repository": {
     "type": "git",
