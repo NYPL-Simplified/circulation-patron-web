@@ -2,6 +2,8 @@
 
 ### UNRELEASED CHANGES
 
+- Update: Update landing page copy.
+
 ### 4.3.0
 
 - Documentation: update README.
@@ -11,7 +13,6 @@
 - Fix: Protect against invalid redirect uris caused by mismatch in hydration.
 - Fix: Improve the appearance of home page book thumbnails for larger viewports
 - tests: Add a Github Workflow to trigger integration tests in NYPL-Simplified/integration-tests-web.
-- Update: Update landing page copy.
 - Fix: Improve UI in cases where server throws a 401 error
 
 ### 4.2.0
