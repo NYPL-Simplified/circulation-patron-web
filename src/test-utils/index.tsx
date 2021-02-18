@@ -12,12 +12,14 @@ import { MockNextRouterContextProvider } from "./mockNextRouter";
 import { NextRouter } from "next/router";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { LibraryProvider } from "components/context/LibraryContext";
+import { BreadcrumbProvider } from "components/context/BreadcrumbContext";
 import { UserContext, UserState } from "components/context/UserContext";
 import { ThemeProvider } from "theme-ui";
 import makeTheme from "theme";
 import mockConfig from "test-utils/mockConfig";
 import track from "analytics/track";
 import "react-intersection-observer/test-utils";
+import "test-utils/mockToDateString";
 
 enableFetchMocks();
 expect.addSnapshotSerializer(serializer);
@@ -71,7 +73,7 @@ const customRender = (ui: any, options?: CustomRenderOptions) => {
           <ReakitProvider>
             <LibraryProvider library={library}>
               <UserContext.Provider value={user}>
-                {children}
+                <BreadcrumbProvider>{children}</BreadcrumbProvider>
               </UserContext.Provider>
             </LibraryProvider>
           </ReakitProvider>

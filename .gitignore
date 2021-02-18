@@ -32,7 +32,6 @@ wallaby.js
 /config/
 /patron-web-configs/
 .vscode/
-
 .vercel
 
 # storybook

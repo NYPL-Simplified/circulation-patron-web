@@ -2,14 +2,13 @@
 import {
   fetchAuthDocument,
   buildLibraryData,
-  getLibrarySlugs,
   getAuthDocUrl
 } from "../getLibraryData";
 import fetchMock from "jest-fetch-mock";
 import ApplicationError, { PageNotFoundError } from "errors";
 import rawCatalog from "test-utils/fixtures/raw-opds-feed";
 import { fixtures } from "test-utils";
-import { OPDS1, OPDS2 } from "interfaces";
+import { OPDS1 } from "interfaces";
 import mockConfig from "test-utils/mockConfig";
 import { fetchFeed } from "dataflow/opds1/fetch";
 
@@ -49,7 +48,7 @@ describe("fetching catalog", () => {
 
 describe("getAuthDocUrl", () => {
   test("throws PageNotFoundError if no entry found in config file for library", async () => {
-    mockConfig({ libraries: { hello: "what" } });
+    mockConfig({ libraries: {} });
     const promise = getAuthDocUrl("not there slug");
     await expect(promise).rejects.toThrowError(PageNotFoundError);
     await expect(promise).rejects.toMatchInlineSnapshot(
@@ -58,84 +57,12 @@ describe("getAuthDocUrl", () => {
   });
 
   test("returns url for existing library in config file", async () => {
-    mockConfig({ libraries: { hello: "http://library.com" } });
+    mockConfig({
+      libraries: { hello: { title: "hello", authDocUrl: "http://library.com" } }
+    });
 
     const promise = getAuthDocUrl("hello");
     await expect(promise).resolves.toBe("http://library.com");
-  });
-
-  describe("with Registry Base", () => {
-    test("Works for Registry Base", async () => {
-      mockConfig({ libraries: "http://reg-base.com" });
-      fetchMock.mockResponses(
-        JSON.stringify(fixtures.opds2.feedWithoutCatalog),
-        JSON.stringify(fixtures.opds2.feedWithCatalog)
-      );
-      const url = await getAuthDocUrl("library-uuid");
-      expect(url).toBe("/auth-doc");
-    });
-
-    test("Throws ApplicationError if it doesn't find a catalogRootUrl", async () => {
-      mockConfig({ libraries: "reg-base" });
-      const missingCatalogRootUrl: OPDS2.LibraryRegistryFeed = {
-        ...fixtures.opds2.feedWithCatalog,
-        catalogs: [
-          {
-            ...(fixtures.opds2.feedWithCatalog
-              .catalogs?.[0] as OPDS2.CatalogEntry),
-            links: []
-          }
-        ]
-      };
-      fetchMock.mockResponses(
-        JSON.stringify(fixtures.opds2.feedWithoutCatalog),
-        JSON.stringify(missingCatalogRootUrl)
-      );
-      const promise = getAuthDocUrl("library-uuid");
-      expect(promise).rejects.toThrowError(ApplicationError);
-      expect(promise).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Application Error: CatalogEntry did not contain a Authentication Document Url. Library UUID: library-uuid"`
-      );
-    });
-
-    test("Throws an ApplicationError if the LibraryRegistryFeed doesn't have a CatalogEntry", async () => {
-      mockConfig({ libraries: "reg-base" });
-      fetchMock.mockResponses(
-        JSON.stringify(fixtures.opds2.feedWithoutCatalog),
-        JSON.stringify(fixtures.opds2.feedWithoutCatalog)
-      );
-      const promise = getAuthDocUrl("library-uuid");
-      expect(promise).rejects.toThrowError(ApplicationError);
-      expect(promise).rejects.toThrow(
-        "Application Error: LibraryRegistryFeed returned by /catalog-template-url-library-uuid does not contain a CatalogEntry"
-      );
-    });
-
-    test("Throws an ApplicationError if it can't fetch the catalog entry", async () => {
-      mockConfig({ libraries: "reg-base" });
-      fetchMock.mockResponseOnce(
-        JSON.stringify(fixtures.opds2.feedWithoutCatalog)
-      );
-      const promise = getAuthDocUrl("library-uuid");
-      expect(promise).rejects.toThrowError(ApplicationError);
-      expect(promise).rejects.toThrow(
-        "Could not fetch catalog entry for library: library-uuid at reg-base"
-      );
-    });
-
-    test("Throws an ApplicationError if the registry doesn't contain a template link", async () => {
-      mockConfig({ libraries: "reg-base" });
-      const missingTemplateLink: OPDS2.LibraryRegistryFeed = {
-        ...fixtures.opds2.feedWithoutCatalog,
-        links: []
-      };
-      fetchMock.mockResponseOnce(JSON.stringify(missingTemplateLink));
-      const promise = getAuthDocUrl("library-uuid");
-      expect(promise).rejects.toThrowError(ApplicationError);
-      expect(promise).rejects.toThrow(
-        "Could not fetch the library template at: reg-base"
-      );
-    });
   });
 });
 
@@ -288,24 +215,5 @@ describe("buildLibraryData", () => {
     });
 
     expect(library.logoUrl).toBe("/logo");
-  });
-});
-
-describe("getLibrarySlugs", () => {
-  test("returns keys of libraries in config file", async () => {
-    mockConfig({
-      libraries: {
-        somelibrary: "/somewhere",
-        anotherlib: "/another"
-      }
-    });
-    expect(await getLibrarySlugs()).toEqual(["somelibrary", "anotherlib"]);
-  });
-
-  test("returns an empty array when using a library registry", async () => {
-    mockConfig({
-      libraries: "http://reg-base.com"
-    });
-    expect(await getLibrarySlugs()).toEqual(null);
   });
 });

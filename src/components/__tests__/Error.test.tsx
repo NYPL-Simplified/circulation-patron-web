@@ -17,3 +17,14 @@ test("renders error info", () => {
     utils.getByText("The requested url is not available")
   ).toBeInTheDocument();
 });
+
+test("renders page loader when error code is 401", () => {
+  const error = {
+    status: 401,
+    title: "Invalid credentials",
+    detail: "A valid library card barcode number and PIN are required."
+  };
+  render(<Error info={error} />);
+  const headingEl = document.querySelector("h2");
+  expect(headingEl).toHaveTextContent("Loading...");
+});

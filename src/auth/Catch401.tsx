@@ -6,12 +6,14 @@ import swrConfig from "utils/swrConfig";
 import { ServerError } from "errors";
 import track from "analytics/track";
 import useLogin from "auth/useLogin";
+import useUser from "components/context/UserContext";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
   const { initLogin } = useLogin();
+  const { isLoading } = useUser();
 
   function handle401() {
-    initLogin();
+    if (!isLoading) initLogin();
   }
 
   const config = {

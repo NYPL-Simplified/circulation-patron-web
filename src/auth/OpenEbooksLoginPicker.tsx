@@ -2,7 +2,6 @@
 import { jsx, SxProps } from "theme-ui";
 import * as React from "react";
 import Stack from "components/Stack";
-import { Text } from "components/Text";
 import AuthButton from "auth/AuthButton";
 import { ClientBasicMethod, ClientCleverMethod, OPDS1 } from "interfaces";
 import useLibraryContext from "components/context/LibraryContext";
@@ -44,12 +43,6 @@ export default function LoginRegion(): JSX.Element {
           <div sx={logoHeader}>
             <img alt="Clever Logo" src={"/img/CleverLogo.png"} />
           </div>
-          <Text sx={description}>
-            Clever is the platform that powers technology in the classroom.
-            Today, one in three innovative K-12 schools in the U.S. trust Clever
-            to secure their student data as they adopt learning apps in the
-            classroom.
-          </Text>
           <div>
             <AuthButton sx={loginButton} method={cleverMethod} />
           </div>
@@ -58,11 +51,6 @@ export default function LoginRegion(): JSX.Element {
           <div sx={logoHeader}>
             <img alt="FirstBook Logo" src={"/img/FirstBookLogo.png"} />
           </div>
-          <Text sx={description}>
-            First Book is a nonprofit organization that provides access to high
-            quality, brand new books and educational resources - for free and at
-            low cost - to schools and programs serving children in need.
-          </Text>
           <AuthButton sx={loginButton} method={basicMethod} />
         </Stack>
       </div>
@@ -75,12 +63,8 @@ const column: SxProps["sx"] = {
   my: 4,
   justifyContent: "space-between",
   flexWrap: ["wrap", "nowrap"],
-  alignItems: ["center", "center", "flex-start"]
-};
-
-const description: SxProps["sx"] = {
-  flex: 1,
-  pb: 2
+  alignItems: "center",
+  width: ["100%", "100%", "50%"]
 };
 
 const loginButton: SxProps["sx"] = {
@@ -91,5 +75,6 @@ const loginButton: SxProps["sx"] = {
 const logoHeader: SxProps["sx"] = {
   height: 86,
   display: "flex",
-  alignItems: "center"
+  alignItems: "center",
+  marginBottom: ["10px", "10px", "25px"]
 };

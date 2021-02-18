@@ -53,7 +53,10 @@ const LoginWrapper: React.FC = ({ children }) => {
             <H2>{catalogName}</H2>
             <h4>Login</h4>
           </div>
-          {isLoading ? (
+          {/* when we just become authenticated, we display the
+              loading indicator until the page redirects away
+           */}
+          {isLoading || isAuthenticated ? (
             <Stack direction="column" sx={{ alignItems: "center" }}>
               <LoadingIndicator />
               Logging in...

@@ -4,9 +4,8 @@ import * as React from "react";
 import { H2, Text } from "./Text";
 import Button, { NavButton } from "./Button";
 import Stack from "./Stack";
-import useLibraryContext from "./context/LibraryContext";
 import useUser from "./context/UserContext";
-import SignOut from "./SignOut";
+import { SignOut } from "./SignOut";
 import SvgChevronRight from "icons/ExpandMore";
 import { GetStaticProps, NextPage } from "next";
 import withAppProps, { AppProps } from "dataflow/withAppProps";
@@ -74,12 +73,11 @@ export const OpenEbooksLandingComponent = () => {
             mx: [2, 4]
           }}
         >
-          <H2>Lorem Ipsum Secondary Headline Welcome Openebooks</H2>
+          <H2>Welcome to Open eBooks</H2>
           <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            Unlock access to 1000s of popular and award-winning books for
+            children in K–12th grades of participating schools. Login using your
+            Clever or FirstBook ID below. Now with more books to choose from!
           </Text>
         </div>
       </div>
@@ -128,57 +126,34 @@ export const OpenEbooksLandingComponent = () => {
                 color: "ui.white"
               }}
             >
-              <H2>Open e-Books Mobile Shoutout Here</H2>
-              <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </Text>
+              <H2>Download the Mobile App</H2>
+              <Text>Available on iOS and Android devices</Text>
             </Stack>
           </div>
         </div>
       </div>
-      <div
-        sx={{
-          mx: "auto",
-          my: 4,
-          textAlign: ["center", "center", "left"]
-        }}
+      <PopularBookSection books={popularBooks.HighSchool}>
+        <H2>For Teens</H2>
+        <Text>
+          Delve into new worlds, find your favorite stories, or learn about real
+          people and events with our books for Teens and Young Adults.
+        </Text>
+      </PopularBookSection>
+      <PopularBookSection
+        books={popularBooks.MiddleGrades}
+        coverLocation="right"
       >
-        <Stack direction="column">
-          <PopularBookSection books={popularBooks.HighSchool}>
-            <H2>Popular High School Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-          <PopularBookSection
-            books={popularBooks.MiddleGrades}
-            coverLocation="right"
-          >
-            <H2>Popular Middle Grades Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-          <PopularBookSection books={popularBooks.EarlyGrades}>
-            <H2>Popular Early Grades Books</H2>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </PopularBookSection>
-        </Stack>
-      </div>
+        <H2>For Middle Schoolers</H2>
+        <Text>Relatable books and stories for middle grade kids.</Text>
+      </PopularBookSection>
+      <PopularBookSection books={popularBooks.EarlyGrades}>
+        <H2>For Younger Kids</H2>
+        <Text>
+          Read along with someone, or start reading on your own: Animals,
+          fairies, mysteries, action and adventure, and even some chapter books.
+        </Text>
+      </PopularBookSection>
+
       <div sx={{ backgroundColor: "brand.primary" }}>
         <div
           sx={{
@@ -192,10 +167,13 @@ export const OpenEbooksLandingComponent = () => {
           <Stack sx={{ m: 2 }} direction="column">
             <H2>FAQ</H2>
             <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.{" "}
+              If you would like to learn more about Open eBooks, as a parent or
+              teacher visit&nbsp;
+              <a href="https://openebooks.net/" sx={{ color: "ui.white" }}>
+                openebooks.net
+              </a>
+              . For help or questions about the app and this website visit our
+              FAQ.
             </Text>
 
             <Button
@@ -218,14 +196,12 @@ export const OpenEbooksLandingComponent = () => {
 
 const OpenEbooksHero: React.FC = () => {
   const { isAuthenticated } = useUser();
-  const { slug } = useLibraryContext();
 
   return (
     <div
       sx={{
         backgroundImage: `url('/img/HeroImage.jpg')`,
         minHeight: "350px",
-
         flexWrap: "nowrap",
         justifyContent: "center",
         alignItems: "center"
@@ -240,15 +216,19 @@ const OpenEbooksHero: React.FC = () => {
       >
         <div sx={{ display: "flex", margin: 3, justifyContent: "flex-end" }}>
           {isAuthenticated ? (
-            <SignOut />
+            <>
+              <NavButton
+                variant="ghost"
+                color="ui.white"
+                href="/"
+                sx={{ mr: 1 }}
+              >
+                Catalog
+              </NavButton>
+              <SignOut color="ui.white" />
+            </>
           ) : (
-            <NavButton
-              variant="filled"
-              color="ui.white"
-              href={{
-                pathname: `/${slug}/login`
-              }}
-            >
+            <NavButton variant="filled" color="ui.white" href="/login">
               <span sx={{ color: "ui.black" }}>Log In</span>
             </NavButton>
           )}
@@ -293,68 +273,60 @@ const PopularBookSection: React.FC<{
   coverLocation?: "left" | "right";
 }> = ({ children, books, coverLocation }) => {
   return (
-    <div
+    <section
       sx={{
-        m: 2,
+        px: "8.5%",
+        my: [3, 3, 4],
         display: "flex",
         flexDirection: [
           "column",
           "column",
           coverLocation === "right" ? "row" : "row-reverse"
-        ]
+        ],
+        ":first-of-type": {
+          marginTop: [4, 4, 6]
+        }
       }}
     >
-      <div
+      <aside
         sx={{
-          flex: "1",
-          display: "flex",
-          m: 2
+          flex: 1,
+          alignSelf: "center",
+          paddingLeft: [0, 0, coverLocation === "right" ? 0 : 5],
+          paddingRight: [0, 0, coverLocation === "right" ? 5 : 0],
+          marginBottom: [3, 3, 0],
+          textAlign: ["center", "center", "left"]
         }}
       >
-        <Stack
-          direction="column"
-          sx={{
-            flex: "1",
-            m: 2,
-            justifyContent: "center"
-          }}
-        >
-          {children}
-        </Stack>
-      </div>
+        {children}
+      </aside>
+
       {/* The three book covers */}
-      <div sx={{ m: 2, flex: "2" }}>
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: "space-around"
-          }}
-        >
-          {books.map(book => {
-            return (
-              <div
-                key={book.imgHref}
-                sx={{
-                  flex: "[1, 0, 1]",
-                  mx: [0, 2],
-                  my: [2, 2, 0],
-                  paddingLeft: 1,
-                  backgroundColor: "brand.secondary",
-                  maxWidth: "30%",
-                  height: "100%"
-                }}
-              >
-                <img
-                  sx={{ maxWidth: "100%", minWidth: "75px" }}
-                  alt={book.alt}
-                  src={book.imgHref}
-                />
-              </div>
-            );
-          })}
-        </Stack>
+      <div
+        sx={{
+          display: "flex",
+          flex: 2,
+          flexWrap: "nowrap",
+          justifyContent: "space-between"
+        }}
+      >
+        {books.map(book => {
+          return (
+            <img
+              key={book.imgHref}
+              sx={{
+                boxShadow: theme =>
+                  `-5px 5px 0px 0px ${theme.colors.brand.secondary}`,
+                width: "32%",
+                alignSelf: "flex-start"
+              }}
+              alt={book.alt}
+              src={book.imgHref}
+            />
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,6 +1,6 @@
 {
   "name": "simplified-circulation-patron-web",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "patron UI for Circulation Manager",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "build": "next build",
     "start": "next start",
     "build-and-start": "npm run build && npm run start",
-    "test": "TZ=UTC jest --watch",
+    "test": "jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint \"*/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"*/**/*.{ts,tsx}\" --fix",
@@ -46,7 +46,7 @@
     "library-simplified-webpub-viewer": "^0.2.6",
     "lodash": "^4.17.20",
     "moment": "^2.24.0",
-    "next": "^10.0.2",
+    "next": "^10.0.5",
     "next-transpile-modules": "^4.0.0",
     "node-fetch": "^2.6.1",
     "opds-feed-parser": "0.0.18",

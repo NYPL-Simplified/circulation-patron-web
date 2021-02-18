@@ -12,10 +12,10 @@ const AuthProtectedRoute: React.FC = ({ children }) => {
   const { initLogin } = useLogin();
 
   React.useEffect(() => {
-    if (!token || error) {
+    if ((!token || error) && !isLoading) {
       initLogin();
     }
-  }, [initLogin, token, error]);
+  }, [initLogin, token, error, isLoading]);
 
   if (isAuthenticated) {
     return <>{children}</>;

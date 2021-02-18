@@ -6,7 +6,7 @@ test("renders", () => {
   const utils = render(<OpenEbooksLandingComponent />);
   expect(
     utils.getByRole("heading", {
-      name: "Lorem Ipsum Secondary Headline Welcome Openebooks"
+      name: "Welcome to Open eBooks"
     })
   ).toBeInTheDocument();
 });

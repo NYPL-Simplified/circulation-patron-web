@@ -9,6 +9,7 @@ import ReportProblem from "../ReportProblem";
 import { ServerError } from "errors";
 import useSWR from "swr";
 import mockConfig from "test-utils/mockConfig";
+import { BreadcrumbContext } from "components/context/BreadcrumbContext";
 
 jest.mock("swr");
 
@@ -161,6 +162,39 @@ describe("book details page", () => {
     expect(utils.getByText("Recommendations")).toBeInTheDocument();
     expect(
       utils.getByRole("heading", { name: "Lane Title" })
+    ).toBeInTheDocument();
+  });
+
+  test("displays breadcrumbs from context", () => {
+    mockSwr({
+      data: fixtures.book
+    });
+
+    // we render a context provider so we can control the value
+    const utils = render(
+      <BreadcrumbContext.Provider
+        value={{
+          setStoredBreadcrumbs: jest.fn(),
+          storedBreadcrumbs: [
+            { text: "breadcrumb title", url: "breadcrumb-url" },
+            { text: "breadcrumb title 2", url: "breadcrumb-url-2" }
+          ]
+        }}
+      >
+        <BookDetails />
+      </BreadcrumbContext.Provider>,
+      {
+        router: { query: { bookUrl: "/book-url" } }
+      }
+    );
+    expect(
+      utils.getByRole("link", { name: "breadcrumb title" })
+    ).toHaveAttribute("href", "/testlib/collection/breadcrumb-url");
+    expect(
+      utils.getByRole("link", { name: "breadcrumb title 2" })
+    ).toHaveAttribute("href", "/testlib/collection/breadcrumb-url-2");
+    expect(
+      utils.getByLabelText(`Current location: ${fixtures.book.title}`)
     ).toBeInTheDocument();
   });
 });
