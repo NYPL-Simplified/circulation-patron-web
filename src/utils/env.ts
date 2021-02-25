@@ -13,6 +13,7 @@ const appConfigString = process.env.APP_CONFIG;
 if (!appConfigString)
   throw new AppSetupError("process.env.APP_CONFIG is undefined.");
 export const APP_CONFIG: AppConfig = JSON.parse(appConfigString);
+export const IS_OPEN_EBOOKS = !!APP_CONFIG.openebooks;
 
 export const REACT_AXE = process.env.REACT_AXE;
 export const IS_DEVELOPMENT = process.env.NODE_ENV === "development";

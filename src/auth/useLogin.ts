@@ -6,7 +6,7 @@ import { IS_SERVER } from "utils/env";
 import useLibraryContext from "components/context/LibraryContext";
 
 export default function useLogin() {
-  const { query, push, asPath } = useRouter();
+  const { query, push, asPath, isReady } = useRouter();
   const { slug } = useLibraryContext();
 
   const getLoginUrl = React.useCallback(
@@ -22,7 +22,12 @@ export default function useLogin() {
 
       // if no redirect is set, redirect to the current page
       if (!newQuery[LOGIN_REDIRECT_QUERY_PARAM]) {
-        newQuery[LOGIN_REDIRECT_QUERY_PARAM] = asPath;
+        // do not set the redirect if the router is not yet ready and populated
+        // with client-side information. This would mean we are rendering server-side
+        // and would cause a full url to be put in the login redirect, which is invalid
+        if (isReady) {
+          newQuery[LOGIN_REDIRECT_QUERY_PARAM] = asPath;
+        }
       }
 
       return {
@@ -30,13 +35,16 @@ export default function useLogin() {
         query: newQuery
       };
     },
-    [query, asPath, slug]
+    [query, asPath, slug, isReady]
   );
 
   const initLogin = React.useCallback(
     (methodId?: string) => {
       const urlObject = getLoginUrl(methodId);
-      if (!IS_SERVER) push(urlObject, undefined, { shallow: true });
+      if (!IS_SERVER) {
+        // redirect to the login page
+        push(urlObject, undefined, { shallow: true });
+      }
     },
     [push, getLoginUrl]
   );

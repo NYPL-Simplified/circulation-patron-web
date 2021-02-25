@@ -51,14 +51,14 @@ export const InfiniteBookList: React.FC<{ firstPageUrl: string }> = ({
   firstPageUrl
 }) => {
   const { token } = useUser();
-  function getKey(pageIndex: number, previousData: CollectionData) {
+  const getKey = (pageIndex: number, previousData: CollectionData | null) => {
     // first page, no previous data
     if (pageIndex === 0) return [firstPageUrl, token];
     // reached the end
-    if (!previousData.nextPageUrl) return null;
+    if (!previousData?.nextPageUrl) return null;
     // otherwise return the next page url
     return [previousData.nextPageUrl, token];
-  }
+  };
   const { data, size, error, setSize } = useSWRInfinite(
     getKey,
     fetchCollection
@@ -72,7 +72,7 @@ export const InfiniteBookList: React.FC<{ firstPageUrl: string }> = ({
 
   // extract the books from the array of collections in data
   const books =
-    data?.reduce(
+    data?.reduce<AnyBook[]>(
       (total, current) => [...total, ...(current.books ?? [])],
       []
     ) ?? [];

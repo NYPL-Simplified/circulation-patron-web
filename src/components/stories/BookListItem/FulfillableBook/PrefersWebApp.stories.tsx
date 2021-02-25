@@ -36,7 +36,8 @@ WithAvailability.args = {
   book: {
     ...fulfillableBook,
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
@@ -48,7 +49,8 @@ AxisNow.args = {
     ...fulfillableBook,
     fulfillmentLinks: [axisnowFulfillmentLink],
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
@@ -60,7 +62,8 @@ ExternalReadOnline.args = {
     ...fulfillableBook,
     fulfillmentLinks: [externalReadFulfillmentLink],
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };
@@ -71,7 +74,8 @@ MultipleOptions.args = {
   book: {
     ...fulfillableBook,
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     },
     fulfillmentLinks: [
       externalReadFulfillmentLink,
@@ -87,7 +91,8 @@ WithoutRevokeUrl.args = {
   book: {
     ...fulfillableBook,
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     },
     revokeUrl: null
   }
@@ -99,7 +104,8 @@ Unsupported.args = {
   book: {
     ...unsupportedBook,
     availability: {
-      until: "Jun 10 1980"
+      until: "Jun 10 1980",
+      status: "available"
     }
   }
 };

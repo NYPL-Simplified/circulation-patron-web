@@ -1,0 +1,24 @@
+# this file will run integration tests when code is merged into any
+# of our release branches (dev, qa, production).
+# The workflow is currently in use by Lyrasis and this trigger was 
+# requested by Helen Suboch
+name: Integration
+
+on:
+  push:
+    branches: [dev, qa, production]
+
+jobs:
+  lyrasis:
+    name: Lyrasis Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Trigger test with webhook
+        uses: joelwmale/webhook-action@aed4f319dce44a4f73cdf0480b94df9e6dfc6cae
+        # based on the following curl command from A1QA
+        # curl -X POST -H "Accept:application/vnd.github.v3+json" https://api.github.com/repos/NYPL-Simplified/integration-tests-web/actions/workflows/3469469/dispatches -d '{"ref":"main", "inputs":{"test_tag":"(@tier1 or @tier2 or @tier3)","build_name":"BUILD_NAME","browser_name":"chrome","browser_type":"desktop"}}' -H "Authorization: token ${{secrets.PERSONAL_TOKEN}}" 
+        with:
+          url: https://api.github.com/repos/NYPL-Simplified/integration-tests-web/actions/workflows/3469469/dispatches
+          headers: '{"Accept": "application/vnd.github.v3+json", "Authorization": "token ${{secrets.SIMPLIFIED_CI_TOKEN}}"}'
+          body: '{"ref":"main", "inputs":{"test_tag":"(@tier1 or @tier2 or @tier3)","build_name":"${{github.ref}}.${{github.sha}}","browser_name":"chrome","browser_type":"desktop"}}'

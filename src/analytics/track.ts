@@ -3,6 +3,7 @@ import ApplicationError, { ServerError } from "errors";
 /* eslint-disable camelcase */
 import { NextWebVitalsMetric } from "next/app";
 import { APP_CONFIG } from "utils/env";
+import { AxisNowDecryptionError } from "@nypl-simplified-packages/axisnow-access-control-web";
 
 type PageData = {
   path: string;
@@ -30,11 +31,14 @@ function pageview(page: PageData) {
 async function sendServerEvent(url: string | null) {
   if (url) {
     try {
-      await fetch(url, { method: "POST" });
+      await fetch(url);
       return true;
     } catch (e) {
-      console.warn("Error tracking server event");
-      console.warn(e);
+      error(e);
+      console.error(
+        "The previous error occurred while attempting to track a server event to: ",
+        url
+      );
     }
   }
   return true;
@@ -59,7 +63,7 @@ function webVitals({ id, name, value, label }: NextWebVitalsMetric) {
 function error(
   e: Error,
   {
-    severity,
+    severity = "error",
     metadata
   }: {
     severity?: "info" | "warning" | "error";
@@ -68,14 +72,18 @@ function error(
 ) {
   // report it to the console
   console.error(e);
-  if (e instanceof ApplicationError) {
+  if (
+    e instanceof ApplicationError ||
+    (typeof AxisNowDecryptionError !== "undefined" &&
+      e instanceof AxisNowDecryptionError)
+  ) {
     if (e.baseError) console.error(`Base Error:\n${e.baseError}`);
   }
   // track to bugsnag
   if (APP_CONFIG.bugsnagApiKey) {
     Bugsnag.notify(e, event => {
       // set severity
-      if (severity) event.severity = severity;
+      event.severity = severity;
 
       // add custom metadata
       if (metadata) {
@@ -83,7 +91,11 @@ function error(
         keys.forEach(key => event.addMetadata(key, metadata[key]));
       }
       // add error info if there is any
-      if (e instanceof ApplicationError) {
+      if (
+        e instanceof ApplicationError ||
+        (typeof AxisNowDecryptionError !== "undefined" &&
+          e instanceof AxisNowDecryptionError)
+      ) {
         event.addMetadata("Error Info", { ...e.info, baseError: e.baseError });
         if (e instanceof ServerError) {
           event.addMetadata("Error Info", {

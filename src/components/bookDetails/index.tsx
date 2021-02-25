@@ -21,6 +21,7 @@ import extractParam from "dataflow/utils";
 import useSWR from "swr";
 import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
+import useBreadcrumbContext from "components/context/BreadcrumbContext";
 import { APP_CONFIG } from "utils/env";
 
 export const BookDetails: React.FC = () => {
@@ -28,6 +29,7 @@ export const BookDetails: React.FC = () => {
   const bookUrl = extractParam(query, "bookUrl");
   const { data, error } = useSWR(bookUrl ?? null, fetchBook);
   const { loans } = useUser();
+  const { storedBreadcrumbs } = useBreadcrumbContext();
   // use the loans version if it exists
   const book = loans?.find(loanedBook => data?.id === loanedBook.id) ?? data;
 
@@ -43,7 +45,10 @@ export const BookDetails: React.FC = () => {
       <Head>
         <title>{book.title}</title>
       </Head>
-      <BreadcrumbBar currentLocation={truncateString(book.title, 60, false)} />
+      <BreadcrumbBar
+        breadcrumbs={storedBreadcrumbs}
+        currentLocation={truncateString(book.title, 60, false)}
+      />
       <div sx={{ maxWidth: 1100, mx: "auto" }}>
         <div
           sx={{

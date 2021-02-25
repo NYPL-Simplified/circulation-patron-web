@@ -8,14 +8,14 @@ import React from "react";
  * page if they try to access a route they are not permitted to see.
  */
 const AuthProtectedRoute: React.FC = ({ children }) => {
-  const { isLoading, isAuthenticated } = useUser();
+  const { isLoading, isAuthenticated, token, error } = useUser();
   const { initLogin } = useLogin();
 
   React.useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if ((!token || error) && !isLoading) {
       initLogin();
     }
-  }, [initLogin, isLoading, isAuthenticated]);
+  }, [initLogin, token, error, isLoading]);
 
   if (isAuthenticated) {
     return <>{children}</>;

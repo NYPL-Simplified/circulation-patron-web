@@ -18,7 +18,8 @@ export const authButtonstyles = {
 
 const AuthButton: React.FC<{
   method: AppAuthMethod;
-}> = ({ method }) => {
+  className?: string;
+}> = ({ method, className }) => {
   const { description, links } = method;
   const imageUrl = links?.find(link => link.rel === "logo")?.href;
   const name = description ?? "Basic Auth";
@@ -29,6 +30,7 @@ const AuthButton: React.FC<{
     <NavButton
       aria-label={`Login with ${name}`}
       type="submit"
+      className={className}
       sx={{
         ...authButtonstyles,
         backgroundImage: `url(${imageUrl})`

@@ -1,43 +1,89 @@
 # circulation-patron-web
 
 <div>
-  <a aria-label="Docker images" href="https://hub.docker.com/r/nypl/patron-web/tags">
-    <img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/nypl/patron-web?label=Docker%20Hub&logo=docker&sort=semver">
-  </a>
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/CI?label=Tests&logo=github">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Production Release?label=Build%20%28master%29&logo=github">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Publish beta?label=Build%20%28beta%29&logo=github">
+<a aria-label="Docker images" href="[https://hub.docker.com/r/nypl/patron-web/tags](https://hub.docker.com/r/nypl/patron-web/tags)">
+<img alt="Docker Image Version (latest semver)" src="[https://img.shields.io/docker/v/nypl/patron-web?label=Docker Hub&logo=docker&sort=semver](https://img.shields.io/docker/v/nypl/patron-web?label=Docker%20Hub&logo=docker&sort=semver)">
+</a>
+<img alt="GitHub Workflow Status" src="[https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/CI?label=Tests&logo=github](https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/CI?label=Tests&logo=github)">
+<img alt="GitHub Workflow Status" src="[https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Production](https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Production) Release?label=Build%20%28master%29&logo=github">
+<img alt="GitHub Workflow Status" src="[https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Publish](https://img.shields.io/github/workflow/status/nypl-simplified/circulation-patron-web/Publish) beta?label=Build%20%28beta%29&logo=github">
 </div>
 
 An OPDS web catalog client for library patrons.
 
 ## Background
 
-The `circulation-patron-web` application serves as a way for libraries to publish their collections to the web. A library _must_ be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and _can_ be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). Currently, in order for a library to be part of Library Simplified and show up in the SimplyE application, they must register with NYPL's Library Registry. A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format.
+The `circulation-patron-web` application serves as a way for libraries to publish their collections to the web. A library *must* be part of a [Circulation Manager](https://github.com/NYPL-Simplified/circulation) and *can* be registered to a [Library Registry](https://github.com/NYPL-Simplified/library_registry). A Library Registry provides details about a library, and a Circulation Manager provides a library's collection of eBooks and audiobooks in OPDS format. Registering with NYPL's Library Registry is how libraries can show up in the SimplyE mobile application and the [Community Demo](#demo) of this app. In order to have a web version of your library catalog, you can deploy this app.
 
 This app can support many libraries, each at their own url: `http://example.com/library1` can be one library, and `http://example.com/library2` another library. You configure the libraries for the app in the [config file](#configuration-file).
 
-# Configuring the application
+## Community Demo
+
+- Community Preview - [https://web.librarysimplified.org](https://web.librarysimplified.org)
+
+In addition to the preview of the production branch, we also have previews of the `qa` and `dev` branches:
+
+- qa - [https://qa-web.librarysimplified.org](https://qa-web.librarysimplified.org)
+- dev - [https://dev-web.librarysimplified.org](https://dev-web.librarysimplified.org)
+
+Finally, every PR in this repository has a unique preview deployment so proposed changes can be previewed with any library in the community config file. 
+
+__To have your library added to the demo, register it with NYPL's Library Registry.__
+
+# Table of Contents
+
+- [circulation-patron-web](#circulation-patron-web)
+  * [Background](#background)
+  * [Demo](#community-demo)
+- [Configuring the App](#configuring-the-app)
+  * [Configuration File](#configuration-file)
+  * [Environment Variables](#environment-variables)
+  * [Manager, Registry, and Application Configurations](#manager--registry--and-application-configurations)
+- [Development](#development)
+  * [Contributing](#contributing)
+  * [Installing Dependencies](#installing-dependencies)
+  * [Running the Application](#running-the-application)
+    + [Running with Decryption](#running-with-decryption)
+    + [ENV Vars and Building](#env-vars-and-building)
+    + [Useful Scripts](#useful-scripts)
+  * [Testing](#testing)
+    + [Context and useful spies](#context-and-useful-spies)
+    + [Running tests](#running-tests)
+    + [Example](#example)
+  * [Links and Routing](#links-and-routing)
+- [Deploying](#deploying)
+  * [Build a docker container](#build-a-docker-container)
+    + [Building With AxisNow Decryptor](#building-with-axisnow-decryptor)
+    + [Running the docker container](#running-the-docker-container)
+    + [From the command line](#from-the-command-line)
+    + [Using `docker-compose`](#using--docker-compose-)
+    + [Helpful commands](#helpful-commands)
+    + [Credits](#credits)
+    
+# Configuring the App
 
 ## Configuration File
 
-To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured. 
+To deploy the application, there are a few configuration variables that need to be set up. Most notably, the app needs to know what libraries to support and the url for each library's Circulation Manager backend. This is called the authentication document url, and each library the app runs has a unique authentication document url. Additionally, the app needs to know which media formats to support, and how. Finally, there are a few other variables that can be configured.
 
-The production configuration is defined in a YAML config file. You can find more details on the options in the `sample-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. See [environment variables](#environment-variables) below for more information.
+The production configuration is defined in a YAML config file. You can find more details on the options in the `./community-config.yml` file. To run the app, you must tell it where to find the config file. This is done via the `CONFIG_FILE` environment variable. If you don't set anything, the sample config is used. See [environment variables](#environment-variables) below for more information.
 
 ## Environment Variables
 
-The main app configuration is done in the [config file](#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file. 
+The main app configuration is done in the [config file](#configuration-file), but where to find that file is defined as an environment variable, along with some other optional variables that may be useful for development. These can either be set at the command line when running the application, or in a `.env.local` file.
 
 Setting via the command line:
+
 ```
 > CONFIG_FILE=config.yml npm run start
 ```
 
 Setting in a `.env.local` file:
+
 ```
 CONFIG_FILE=config.yml
 ```
+
 The app can then be run with `npm run start`, and it will pick up the env from your env file.
 
 The following environment variables can be set to further configure the application.
@@ -51,10 +97,25 @@ Any Circulation Manager you'll be using with the app also needs a configuration 
 
 If you are using a Library Registry, this configuration will automatically be created when you register libraries with the Registry, but you need to configure the URL in the Library Registry by running `bin/configuration/configure_site_setting --setting="web_client_url=http://library.org/{uuid}"` (replace the URL with your web client URL). Otherwise, you'll need to create a sitewide setting for it in the Circulation Manager. Finally, make sure that the libraries are registered to the Library Registry you are using.
 
-
 # Development
 
-We use [Next.js](https://nextjs.org/) as our react framework. This handles build configuration as well as server management, providing simple APIs to allow server-rendering or even static-rendering
+We use [Next.js](https://nextjs.org/) as our react framework. This handles build configuration as well as server management, providing simple APIs to allow server-rendering or even static-rendering.
+
+## Contributing
+
+There are three protected branches in this repository: `dev`, `qa`, and `production`.
+
+- `production` is the most current code, used in production at NYPL. Any time a PR is merged in, a release is tagged and created. A Docker Image is then built by Github Actions, which is finally pushed to Docker Hub with the tag `latest` as well as the specific version tag of the release (ie `2.3.6`). Generally, we only make PRs to `production` from `qa` unless a hotfix is necessary.
+- `qa` is for staging release candidates when they are ready to be QA'd by the community. These will be pushed to docker with the tag `qa` as well as `qa.short_sha` where `short_sha` is from the most recent commit.
+- `dev` is the default branch. This is where PRs with development work should be made. Once determined it is ready for QA, we will make a PR to `qa`, then a subsequent PR to `production` if it is ready.
+
+We try to move code from `qa` to `production` and `dev` to `qa` once every two weeks.
+
+PRs to `dev` should include:
+
+- An entry in the `CHANGELOG` under `UNRELEASED CHANGES`
+- New/updated tests as appropriate
+- A link to the associated ticket in [NYPL's JIRA](https://nypl.jira.org) when possible
 
 ## Installing Dependencies
 
@@ -67,14 +128,16 @@ Once the dependencies are installed and application environments configured, the
 - `npm run dev` - This command will start the development server, which builds pages lazily (when you request them) to shorten the startup time.
 - `npm run dev:https` - This will run the app in development with https enabled. This uses the `dev-server.js` script to load https keys. It's useful when developing features that require https to be enabled.
 - `npm run build` - This will build both the server and the client code into `./next`. You can then run `npm run start` to start the server.
+- `npm run storybook` - This will run the storybook application to preview and develop components in isolation.
 
-The application will start at the base URL of `localhost:3000`.
+The application will start at the base URL of `localhost:3000`. (NOTE: `npm run dev:https` will also make the site available using your computer's IP address. For example, https://192.168.1.15:3000.)
 
 ### Running with Decryption
 
-This app supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/NYPL-Simplified/axisnow-access-control-web)
+This app supports read online for encrypted books only in the AxisNow format, and if you have access to the [Decryptor](https://github.com/nypl-simplified-packages/axisnow-access-control-web)
 
-To run with decryption:  
+To run with decryption:
+
 - Run `npm login --registry=https://npm.pkg.github.com`. You will need a Github Personal Access Token to use as your password.
 - Run `npm install` as normal.
 - The app will automatically pick up the installed optional `@nypl-simplified-packages/axisnow-access-control-web` package, and run with decryption enabled.
@@ -82,6 +145,10 @@ To run with decryption:
 ### ENV Vars and Building
 
 When building for production using `npm run build`, the env vars are set at build time. This means whatever you have in your `.env` or `.env.local` or set in the command line when running `npm run build` will be taken as the env for the app when you run it. Overriding env vars like this `CONFIG_FILE=config.yml npm run start` will not work, you have to set them at build time.
+
+### Theme UI
+
+This project uses [Theme UI](https://theme-ui.com/) which provides a simple JavaScript-based method with which to apply visual styles to your components. During development, you should use preset values from the site's theme (src/theme/theme.ts) whenever possible. [Learn more](https://theme-ui.com/getting-started) about Theme UI.
 
 ### Useful Scripts
 
@@ -91,14 +158,6 @@ When building for production using `npm run build`, the env vars are set at buil
 - `npm run lint` - Will lint all code and show errors/warnings in the console.
 - `npm run lint:ts:fix` - Will lint the ts and tsx files and apply automatic fixes where possible.
 - `npm run generate-icons` - You can place svg files in `src/icons` and then run this command, and it will generate react components that can be imported and rendered normally.
-
-## Contributing
-
-There are three protected branches in this repository: `dev`, `qa`, and `production`.
-
-- `production` is the most current production deployment code. Any time a PR is merged in, a release is tagged and created. A Docker Image is then built by Github Actions, which is finally pushed to Docker Hub with the tag `latest` as well as the specific version tag of the release (ie `2.3.6`). Generally, we only make PRs to `production` from `qa` unless a hotfix is necessary.
-- `qa` is for staging release candidates when they are ready to be QA'd by the community. These will be pushed to docker with the tag `qa` as well as `qa.short_sha` where `short_sha` is from the most recent commit.
-- `dev` is the default branch. This is where PRs with development work should be made. Once determined it is ready for QA, we will make a PR to `qa`, then a subsequent PR to `production` if it is ready.
 
 ## Testing
 
@@ -118,9 +177,9 @@ You can run `npm run test` to run the test suite once. Alternatively, and recomm
 
 ### Example
 
-An annotated example from `Search.text.tsx`:
+An annotated example from `Search.test.tsx`:
 
-```js
+```
 /**
  *  our custom render, our fixtures, the actions creator, and
  *  all other react-testing-library exports can be imported from test-utils
@@ -131,19 +190,19 @@ test("fetches search description", async () => {
   /**
    * First mock the SWR data, which effectively mocks the network call to fetch
    * the search description. You can see details of how this works in the
-   * mockSwr function. 
+   * mockSwr function.
    */
   mockSwr({ data: fixtureData });
 
-  // then render the app. utils will contain the query functions provided by 
-  // react-testing-library 
+  // then render the app. utils will contain the query functions provided by
+  // react-testing-library
   const utils = render(<Search />, {
     router: {
       query: { collectionUrl: "/collection" }
     }
   });
   // we can then make sure that the mocked `useSWR` function was called as
-  // expected. In this case once for the collection, then for it's search 
+  // expected. In this case once for the collection, then for it's search
   // description.
   expect(mockedSWR).toHaveBeenCalledWith(
     ["/collection", "user-token"],
@@ -151,6 +210,7 @@ test("fetches search description", async () => {
   );
   expect(mockedSWR).toHaveBeenCalledWith("/search-data-url", expect.anything());
 });
+
 ```
 
 ## Links and Routing
@@ -168,11 +228,12 @@ Alternatively, you can build your own container from local changes as described 
 When you have code changes you wish to review locally, you will need to build a local Docker image with your changes included. There are a few steps to get a working build:
 
 1. Clone this repository and make some changes.
-
 2. Build the image
-   ```
-   docker build -t patronweb  .
-   ```
+
+    ```
+    docker build -t patronweb  .
+
+    ```
 
 If you wanted to customize the image, you could create an additional Dockerfile (e.g., Dockerfile.second) and simply specify its name in the docker build commands. The Docker file you specify will guide the image build. For this image, the build takes about 4-6 minutes, depending on your Internet speed and load on the Node package servers, to complete the final image. Eg: `docker build -f Dockerfile.second -t patronweb .`
 
@@ -182,6 +243,7 @@ To build the docker image with the AxisNow Decryptor included, you must provide 
 
 ```
 docker build --build-arg github_token=xxx .
+
 ```
 
 This will set the correct permissions for when the app runs `npm install` while building the image.
@@ -192,28 +254,29 @@ Whether running the container from a Docker Hub image, or a local one, you will 
 
 When running the image with the `CONFIG_FILE` option, you will want to provide the file's directory to the container as a volume, so the container can access the file on your host machine. When doing this, replace `$PATH_TO_LOCAL_VOLUME` with the absolute path to the `/config` directory on the host machine.
 
-#### From the command line
+### From the command line
 
 This command will download the image from NYPL's Docker Hub repo, and then run it with the `CONFIG_FILE` option (using a file named `cm_libraries.txt`) and the name `patronweb`. If you would like to run your locally built image, substitute `nypl/patron-web` with the tag of the image you built previously (just `patronweb` in the example above).
 
 ```
-docker run -d --name patronweb -p 3000:3000\
-  --restart=unless-stopped \
-  -e "CONFIG_FILE=/config_volume/config.yml" \
-  -v $PATH_TO_LOCAL_VOLUME:/config_volume \
+docker run -d --name patronweb -p 3000:3000\\
+  --restart=unless-stopped \\
+  -e "CONFIG_FILE=/config_volume/config.yml" \\
+  -v $PATH_TO_LOCAL_VOLUME:/config_volume \\
   nypl/patronweb
+
 ```
 
 What are these commands doing?
 
-- `--name` - allows you to name your docker container
-- `-d` - detatches the docker container from the terminal. If running locally, you can still view the container with Docker Desktop.
-- `-p 3000:3000` - the default port exposed in the image during the build is 3000. This command maps that to port 3000 on the host machine so it can be accessed there.
-- `--restart=unless-stopped` - this will make the container restart if it exits erroneously.
-- `-e` - define environment variable(s).
-- `-v $PATH_TO_LOCAL_VOLUME:/config` - allows you to specify which directory on the host machine will contain your config.
+- `-name` - allows you to name your docker container
+- `d` - detatches the docker container from the terminal. If running locally, you can still view the container with Docker Desktop.
+- `p 3000:3000` - the default port exposed in the image during the build is 3000. This command maps that to port 3000 on the host machine so it can be accessed there.
+- `-restart=unless-stopped` - this will make the container restart if it exits erroneously.
+- `e` - define environment variable(s).
+- `v $PATH_TO_LOCAL_VOLUME:/config` - allows you to specify which directory on the host machine will contain your config.
 
-#### Using `docker-compose`
+### Using `docker-compose`
 
 Instead of using the `docker run` command at the command line, it's also possible to use the `docker-compose` utility to create the container. Using docker-compose provides the advantage of encapsulating the run parameters in a configuration file that can be committed to source control. We've added an example `docker-compose.yml` file in this repository, which you can adjust as needed with parameters that fit your development.
 
@@ -221,9 +284,9 @@ To create the container using the `docker-compose.yml` file in this repository, 
 
 If you would like to use a `SIMPLIFIED_CATALOG_BASE` or `REGISTRY_BASE`, or provide any of the other documented [ENV vars](#Application-Startup-Configurations), simply replace the `CONFIG_FILE` setting in `docker-compose.yml`.
 
-#### Helpful commands
+### Helpful commands
 
-- For debuggin purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
+- For debugging purposes, you can run the container and skip the command to start the app, instead launching it directly into a shell. To do so, use this command:
   ```
   docker run -it --name patronweb -v $PATH_TO_LOCAL_VOLUME:/config --rm --entrypoint=/bin/sh patronweb
   ```

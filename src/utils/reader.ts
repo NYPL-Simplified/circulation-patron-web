@@ -16,6 +16,7 @@ import {
 } from "library-simplified-webpub-viewer";
 import fetchWithHeaders from "dataflow/fetch";
 import Decryptor from "@nypl-simplified-packages/axisnow-access-control-web";
+import ApplicationError from "errors";
 
 export default async function reader(
   bookUrl: string,
@@ -83,7 +84,14 @@ async function initBookSettings(
   const paginator = new ColumnsPaginatedBookView();
   const scroller = new ScrollingBookView();
 
-  const decryptor = await Decryptor.createDecryptor(decryptorParams);
+  const decryptor = await Decryptor?.createDecryptor(decryptorParams);
+
+  if (!decryptor)
+    throw new ApplicationError({
+      title: "Unauthorized Access",
+      detail:
+        "The AxisNow Decryptor package required to render this page is not installed."
+    });
 
   const entryUrl: URL = decryptor
     ? new URL(decryptor.getEntryUrl())

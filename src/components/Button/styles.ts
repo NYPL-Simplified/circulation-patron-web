@@ -40,17 +40,19 @@ export const styleProps = (
 ): SystemStyleObject => {
   switch (variant) {
     case "filled":
+      //Prevent text color from being white if the background is set to white.
+      const textColor = color === "ui.white" ? "ui.black" : "ui.white";
       return {
         // sets the text style
         variant: "text.body.regular",
         ...buttonBase,
         ...sizes[size],
         bg: color,
-        color: "white",
-        fill: "white",
+        color: textColor,
+        fill: textColor,
         "&:focus,&:hover": {
           bg: darken(color, 0.05),
-          color: "white",
+          color: textColor,
           textDecoration: "none"
         },
         "&:focus": {

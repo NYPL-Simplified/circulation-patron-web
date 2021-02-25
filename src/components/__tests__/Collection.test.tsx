@@ -5,6 +5,8 @@ import { CollectionData, LaneData } from "interfaces";
 import { makeSwrResponse, MockSwr } from "test-utils/mockSwr";
 import { fetchCollection } from "dataflow/opds1/fetch";
 import useSWR, { useSWRInfinite } from "swr";
+import "test-utils/mockScrollTo";
+import { BreadcrumbContext } from "components/context/BreadcrumbContext";
 
 jest.mock("swr");
 
@@ -32,7 +34,6 @@ test("calls swr to fetch collection", () => {
     router: { query: { collectionUrl: "/collection" } }
   });
 
-  expect(mockedSWR).toHaveBeenCalledTimes(1);
   expect(mockedSWR).toHaveBeenCalledWith(
     ["/collection", "user-token"],
     fetchCollection
@@ -150,4 +151,88 @@ test("renders empty state if no lanes or books", () => {
   });
 
   expect(utils.getByText("This collection is empty.")).toBeInTheDocument();
+});
+
+describe("breadcrumbs", () => {
+  const laneData: LaneData = {
+    title: "my lane",
+    url: "/link-to-lane",
+    books: fixtures.makeBorrowableBooks(1)
+  };
+  // the breadcrumbs are currently extracted from "raw". This
+  // is from legacy code and should be changed in the future to
+  // extract them during parsing into the typed Collection object.
+  const raw = {
+    "simplified:breadcrumbs": [
+      {
+        link: [
+          {
+            $: {
+              href: { value: "breadcrumb-url" },
+              title: { value: "breadcrumb title" }
+            }
+          },
+          {
+            $: {
+              href: { value: "breadcrumb-url-2" },
+              title: { value: "breadcrumb title 2" }
+            }
+          }
+        ]
+      }
+    ]
+  };
+  const responseWithBreadcrumbs = {
+    data: {
+      id: "id",
+      url: "url",
+      title: "title",
+      navigationLinks: [],
+      books: [],
+      lanes: [laneData],
+      searchDataUrl: "/search-data-url",
+      raw: raw
+    }
+  };
+
+  test("collection view properly shows breadcrumbs from the collection", () => {
+    mockSwr(responseWithBreadcrumbs);
+    const utils = render(<Collection />, {
+      router: { query: { collectionUrl: "/collection" } }
+    });
+
+    // make sure the breadcrumbs display what you expect from the collection here
+    expect(
+      utils.getByRole("link", { name: "breadcrumb title" })
+    ).toHaveAttribute("href", "/testlib/collection/breadcrumb-url");
+    expect(
+      utils.getByRole("link", { name: "breadcrumb title 2" })
+    ).toHaveAttribute("href", "/testlib/collection/breadcrumb-url-2");
+  });
+
+  test("collection sets its breadcrumbs in BreadcrumbsContext", () => {
+    mockSwr(responseWithBreadcrumbs);
+
+    // we use the BreadcrumbsContext.Provider to pass in a custom value
+    // with a mocked setStoredBreadcrumbs
+    const mockSetBreadcrumbs = jest.fn();
+    render(
+      <BreadcrumbContext.Provider
+        value={{
+          setStoredBreadcrumbs: mockSetBreadcrumbs,
+          storedBreadcrumbs: []
+        }}
+      >
+        <Collection />
+      </BreadcrumbContext.Provider>,
+      {
+        router: { query: { collectionUrl: "/collection" } }
+      }
+    );
+    expect(mockSetBreadcrumbs).toHaveBeenCalledWith([
+      { text: "breadcrumb title", url: "breadcrumb-url" },
+      { text: "breadcrumb title 2", url: "breadcrumb-url-2" },
+      { text: "title", url: "url" }
+    ]);
+  });
 });

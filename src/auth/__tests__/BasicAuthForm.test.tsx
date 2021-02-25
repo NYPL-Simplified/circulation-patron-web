@@ -7,6 +7,7 @@ import fetchMock from "jest-fetch-mock";
 import Cookie from "js-cookie";
 import { generateCredentials } from "utils/auth";
 import { UserProvider } from "components/context/UserContext";
+import { basicAuthMethod, cleverAuthMethod } from "test-utils/fixtures";
 
 const mockCookie = Cookie as any;
 const method: ClientBasicMethod = {
@@ -147,4 +148,34 @@ test("accepts different input labels", async () => {
 
   expect(utils.getByLabelText("Username input")).toBeInTheDocument();
   expect(utils.getByLabelText("Password input")).toBeInTheDocument();
+});
+
+describe("choose a different method NavButton", () => {
+  test("displays if multiple library has multiple methods", async () => {
+    const utils = render(<BasicAuthHandler method={method} />, {
+      library: {
+        authMethods: [basicAuthMethod, cleverAuthMethod]
+      }
+    });
+    const chooseAnother = utils.getByRole("link", {
+      name: "Use a different login method"
+    });
+    expect(chooseAnother).toBeInTheDocument();
+    expect(chooseAnother).toHaveAttribute(
+      "href",
+      "/testlib/login?nextUrl=%2Ftestlib"
+    );
+  });
+
+  test("doesn't display if library only has one method", () => {
+    const utils = render(<BasicAuthHandler method={method} />, {
+      library: {
+        authMethods: [basicAuthMethod]
+      }
+    });
+    const chooseAnother = utils.queryByRole("link", {
+      name: "Use a different login method"
+    });
+    expect(chooseAnother).not.toBeInTheDocument();
+  });
 });

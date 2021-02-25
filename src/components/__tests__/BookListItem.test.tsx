@@ -11,6 +11,7 @@ import {
   ReservedBook
 } from "interfaces";
 import { mergeBook, mockSetBook } from "test-utils/fixtures";
+import { MOCK_DATE_STRING } from "test-utils/mockToDateString";
 
 function expectReadMore(utils: ReturnType<typeof render>) {
   const link = utils.getByRole("link", { name: "Read more" });
@@ -100,7 +101,7 @@ describe("OnHoldBook", () => {
     expectReadMore(utils);
     expect(utils.getByText("Ready to Borrow")).toBeInTheDocument();
     expect(
-      utils.getByText("You have this book on hold until Tue Jun 16 2020.")
+      utils.getByText(`You have this book on hold until ${MOCK_DATE_STRING}.`)
     ).toBeInTheDocument();
   });
 
@@ -321,7 +322,7 @@ describe("FulfillableBook", () => {
   test("displays correct title and subtitle and view details", () => {
     const utils = render(<BookListItem book={downloadableBook} />);
     expect(
-      utils.getByText("You have this book on loan until Thu Jun 18 2020.")
+      utils.getByText(`You have this book on loan until ${MOCK_DATE_STRING}.`)
     ).toBeInTheDocument();
     expectReadMore(utils);
   });

@@ -1,6 +1,7 @@
 import useCredentials from "auth/useCredentials";
 import useLibraryContext from "components/context/LibraryContext";
 import { fetchCollection } from "dataflow/opds1/fetch";
+import { ServerError } from "errors";
 import { AppAuthMethod, AnyBook } from "interfaces";
 import * as React from "react";
 import useSWR from "swr";
@@ -36,7 +37,8 @@ export const UserProvider: React.FC = ({ children }) => {
   const { credentials, setCredentials, clearCredentials } = useCredentials(
     slug
   );
-  const { data, mutate, isValidating, error } = useSWR(
+  const [error, setError] = React.useState<ServerError | null>(null);
+  const { data, mutate, isValidating } = useSWR(
     // pass null if there are no credentials or shelfUrl to tell SWR not to fetch at all.
     credentials && shelfUrl
       ? [shelfUrl, credentials?.token, credentials?.methodType]
@@ -45,13 +47,14 @@ export const UserProvider: React.FC = ({ children }) => {
     {
       shouldRetryOnError: false,
       revalidateOnFocus: false,
-      revalidateOnReconnect: false
-      // clear credentials whenever we receive a 401
-      // onError: err => {
-      //   if (err instanceof ServerError && err?.status === 401) {
-      //     clearCredentials();
-      //   }
-      // }
+      revalidateOnReconnect: false,
+      // clear credentials whenever we receive a 401, but save the error so it sticks around.
+      onError: err => {
+        if (err instanceof ServerError && err?.info.status === 401) {
+          setError(err);
+          clearCredentials();
+        }
+      }
     }
   );
 
@@ -98,6 +101,7 @@ export const UserProvider: React.FC = ({ children }) => {
     token: credentials?.token,
     clearCredentials
   };
+
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
 

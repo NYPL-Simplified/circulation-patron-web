@@ -11,13 +11,12 @@ import computeBreadcrumbs from "computeBreadcrumbs";
 import useCollection from "hooks/useCollection";
 import ApplicationError from "errors";
 import ErrorComponent from "components/Error";
+import useBreadcrumbContext from "../components/context/BreadcrumbContext";
 
 export const Collection: React.FC<{
   title?: string;
 }> = ({ title }) => {
   const { collection, collectionUrl, isValidating, error } = useCollection();
-
-  if (error) return <ErrorComponent info={error?.info} />;
 
   const isLoading = !collection && isValidating;
 
@@ -25,7 +24,19 @@ export const Collection: React.FC<{
   const hasBooks = collection?.books && collection.books.length > 0;
   const pageTitle = isLoading ? "" : title ?? collection?.title ?? "Collection";
 
-  const breadcrumbs = computeBreadcrumbs(collection);
+  const collectionBreadcrumbs = React.useMemo(
+    () => computeBreadcrumbs(collection),
+    [collection]
+  );
+
+  const { storedBreadcrumbs, setStoredBreadcrumbs } = useBreadcrumbContext();
+
+  React.useEffect(() => {
+    //store the updated breadcrumbs in context
+    setStoredBreadcrumbs(collectionBreadcrumbs);
+  }, [collectionBreadcrumbs, setStoredBreadcrumbs]);
+
+  if (error) return <ErrorComponent info={error?.info} />;
 
   if (!collectionUrl)
     throw new ApplicationError({
@@ -43,7 +54,7 @@ export const Collection: React.FC<{
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <BreadcrumbBar breadcrumbs={breadcrumbs} />
+      <BreadcrumbBar breadcrumbs={storedBreadcrumbs} />
       <PageTitle collection={collection}>{pageTitle}</PageTitle>
       {isLoading ? (
         <PageLoader />
