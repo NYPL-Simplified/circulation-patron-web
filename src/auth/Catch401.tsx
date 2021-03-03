@@ -7,12 +7,30 @@ import { ServerError } from "errors";
 import track from "analytics/track";
 import useLogin from "auth/useLogin";
 import useUser from "components/context/UserContext";
+import { useRouter } from "next/router";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
   const { initLogin } = useLogin();
   const { isLoading } = useUser();
+  const router = useRouter();
 
   function handle401() {
+    const parsedHash = new URLSearchParams(
+      window.location.hash.substr(1) // skip the first char (#)
+    );
+    const errorObject = JSON.parse(parsedHash.get("error"));
+    if (errorObject) {
+      console.log(errorObject.detail);
+      router.push(
+        {
+          query: { ...router.query, loginError: errorObject.detail }
+        },
+        undefined,
+        {
+          shallow: true
+        }
+      );
+    }
     if (!isLoading) initLogin();
   }
 

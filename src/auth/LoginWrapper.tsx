@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import useLibraryContext from "../components/context/LibraryContext";
-import { H2 } from "../components/Text";
+import { Text, H2 } from "../components/Text";
 import Stack from "../components/Stack";
 import useUser from "components/context/UserContext";
 import LoadingIndicator from "components/LoadingIndicator";
@@ -20,7 +20,9 @@ const LoginWrapper: React.FC = ({ children }) => {
   const { isAuthenticated, isLoading } = useUser();
   const { catalogName } = useLibraryContext();
   const { push } = useRouter();
+  const router = useRouter();
   const { successPath } = useLoginRedirectUrl();
+  const [error, setError] = React.useState<string | null>(null);
 
   /**
    * If the user becomes authenticated, we can redirect
@@ -31,6 +33,15 @@ const LoginWrapper: React.FC = ({ children }) => {
       push(successPath, undefined, { shallow: true });
     }
   }, [isAuthenticated, push, successPath]);
+
+  React.useEffect(() => {
+    const queryParams = router.query;
+    const nextUrl = queryParams.nextUrl;
+    if (nextUrl) {
+      const errObj = nextUrl.split("#")[1];
+      setError(errObj);
+    }
+  }, [router.query]);
 
   return (
     <div
@@ -56,6 +67,12 @@ const LoginWrapper: React.FC = ({ children }) => {
           {/* when we just become authenticated, we display the
               loading indicator until the page redirects away
            */}
+          {error && (
+            <Text variant="text.callouts.regular" sx={{ color: "ui.error" }}>
+              {error}
+            </Text>
+          )}
+
           {isLoading || isAuthenticated ? (
             <Stack direction="column" sx={{ alignItems: "center" }}>
               <LoadingIndicator />
