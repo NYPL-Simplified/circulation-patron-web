@@ -18,8 +18,9 @@ const CatchFetchErrors: React.FC = ({ children }) => {
     const parsedHash = new URLSearchParams(
       window.location.hash.substr(1) // skip the first char (#)
     );
-    const errorObject = JSON.parse(parsedHash.get("error"));
-    if (errorObject) {
+    const test = parsedHash.get("error");
+    if (test) {
+      const errorObject = JSON.parse(test);
       console.log(errorObject.detail);
       router.push(
         {
