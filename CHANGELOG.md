@@ -2,6 +2,7 @@
 
 ### UNRELEASED CHANGES
 
+- Add: Allow Clever log-in issues to display properly on the site.
 
 ### 4.3.0
 
