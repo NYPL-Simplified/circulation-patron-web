@@ -50,6 +50,6 @@ function extractCleverError(): string | undefined {
   const parsedHash = new URLSearchParams(
     window.location.hash.substr(1) // skip the first char (#)
   );
-  const test = parsedHash.get("error");
-  if (test) return JSON.parse(test).detail;
+  const errObj = parsedHash.get("error");
+  if (errObj) return JSON.parse(errObj).detail;
 }

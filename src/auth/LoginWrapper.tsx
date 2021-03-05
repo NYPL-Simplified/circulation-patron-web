@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui";
 import * as React from "react";
 import useLibraryContext from "../components/context/LibraryContext";
-import { Text, H2 } from "../components/Text";
+import { H2 } from "../components/Text";
 import Stack from "../components/Stack";
 import useUser from "components/context/UserContext";
 import LoadingIndicator from "components/LoadingIndicator";
