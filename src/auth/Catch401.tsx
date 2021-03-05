@@ -7,32 +7,20 @@ import { ServerError } from "errors";
 import track from "analytics/track";
 import useLogin from "auth/useLogin";
 import useUser from "components/context/UserContext";
-import { useRouter } from "next/router";
 
 const CatchFetchErrors: React.FC = ({ children }) => {
   const { initLogin } = useLogin();
   const { isLoading } = useUser();
-  const router = useRouter();
 
   function handle401() {
-    const parsedHash = new URLSearchParams(
-      window.location.hash.substr(1) // skip the first char (#)
-    );
-    const test = parsedHash.get("error");
-    if (test) {
-      const errorObject = JSON.parse(test);
-      console.log(errorObject.detail);
-      router.push(
-        {
-          query: { ...router.query, loginError: errorObject.detail }
-        },
-        undefined,
-        {
-          shallow: true
-        }
-      );
+    // if a clever error is detected, we set that in the url
+    // while redirecting
+    const cleverError = extractCleverError();
+    if (cleverError) {
+      initLogin(undefined, cleverError);
+    } else {
+      if (!isLoading) initLogin();
     }
-    if (!isLoading) initLogin();
   }
 
   const config = {
@@ -53,3 +41,15 @@ const CatchFetchErrors: React.FC = ({ children }) => {
 };
 
 export default CatchFetchErrors;
+
+/**
+ * Attempts to find an error in the url hash that was set by
+ * Clever.
+ */
+function extractCleverError(): string | undefined {
+  const parsedHash = new URLSearchParams(
+    window.location.hash.substr(1) // skip the first char (#)
+  );
+  const test = parsedHash.get("error");
+  if (test) return JSON.parse(test).detail;
+}
