@@ -15,7 +15,6 @@ const ErrorComponent: React.FC<{ info?: OPDS1.ProblemDocument }> = ({
 
   const router = useRouter();
   const library = extractParam(router.query, "library");
-  console.log("query", router.query);
 
   return (
     //It isn't necessary to show an error page for 401 (Unauthorized) errors since the user will be redirected to the login page
