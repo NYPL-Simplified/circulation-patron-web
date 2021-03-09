@@ -93,6 +93,7 @@ const config = {
     AXISNOW_DECRYPT,
     APP_CONFIG: JSON.stringify(APP_CONFIG)
   },
+  productionBrowserSourceMaps: true,
   generateBuildId: async () => BUILD_ID,
   webpack: (config, { dev, isServer, _defaultLoaders, webpack }) => {
     console.log(

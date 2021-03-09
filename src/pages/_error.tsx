@@ -22,7 +22,7 @@ Error.getInitialProps = ({ res, err }) => {
   return {
     errorInfo: {
       status: statusCode,
-      title: "Something went wrong",
+      title: "Something went wrong rendering the page.",
       detail: "An unexpected error occurred."
     }
   };
