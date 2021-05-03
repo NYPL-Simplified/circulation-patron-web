@@ -15,6 +15,7 @@
 - Fix: Protect against invalid redirect uris caused by mismatch in hydration.
 - Fix: Improve the appearance of home page book thumbnails for larger viewports
 - tests: Add a Github Workflow to trigger integration tests in NYPL-Simplified/integration-tests-web.
+- Fix: Serve the sw.js file from library-simplified-webpub-viewer in /public so that it can actually be used by the webpub viewer.
 - Fix: Improve UI in cases where server throws a 401 error
 - Fix: Clear tokens that result in a 401 response from the server.
 - Update: Update landing page copy.
