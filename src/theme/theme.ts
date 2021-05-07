@@ -14,6 +14,7 @@ const borders = {
 
 const breakpoints = ["40em", "52em", "64em"];
 
+//zero-based.  example: 0 = 0, 4 = 32, etc...
 const space = [0, 4, 8, 16, 32, 64, 72, 128, 256, 512];
 
 const sizes = {

@@ -6,9 +6,16 @@ import AuthButton from "auth/AuthButton";
 import { ClientBasicMethod, ClientCleverMethod, OPDS1 } from "interfaces";
 import useLibraryContext from "components/context/LibraryContext";
 import { AppSetupError } from "errors";
+import { useRouter } from "next/router";
+import extractParam from "dataflow/utils";
+import { LOGIN_ERROR_QUERY_PARAM } from "utils/constants";
+import { Text } from "../components/Text";
 
 export default function LoginRegion(): JSX.Element {
   const { authMethods } = useLibraryContext();
+  const { query } = useRouter();
+
+  const loginError = extractParam(query, LOGIN_ERROR_QUERY_PARAM);
 
   const cleverMethod = authMethods.find(
     method => method.type === OPDS1.CleverAuthType
@@ -46,6 +53,14 @@ export default function LoginRegion(): JSX.Element {
           <div>
             <AuthButton sx={loginButton} method={cleverMethod} />
           </div>
+          {loginError && (
+            <Text
+              variant="text.callouts.regular"
+              sx={{ color: "ui.error", mt: 3 }}
+            >
+              {loginError}
+            </Text>
+          )}
         </Stack>
         <Stack direction="column" sx={column}>
           <div sx={logoHeader}>
@@ -61,7 +76,7 @@ export default function LoginRegion(): JSX.Element {
 const column: SxProps["sx"] = {
   mx: [3, 5],
   my: 4,
-  justifyContent: "space-between",
+  justifyContent: "flex-start",
   flexWrap: ["wrap", "nowrap"],
   alignItems: "center",
   width: ["100%", "100%", "50%"]

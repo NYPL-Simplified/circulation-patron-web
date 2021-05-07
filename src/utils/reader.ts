@@ -53,7 +53,7 @@ async function initBookSettings(
   const cacher = new ServiceWorkerCacher({
     store: store,
     manifestUrl: webpubManifestUrl,
-    serviceWorkerUrl: new URL("sw.js", window.location.href),
+    serviceWorkerUrl: new URL("/sw.js", window.location.origin),
     staticFileUrls: [
       new URL(window.location.href),
       new URL("index.html", window.location.href),

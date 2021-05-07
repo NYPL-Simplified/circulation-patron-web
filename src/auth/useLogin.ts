@@ -10,7 +10,7 @@ export default function useLogin() {
   const { slug } = useLibraryContext();
 
   const getLoginUrl = React.useCallback(
-    (methodId?: string): UrlObject => {
+    (methodId?: string, error?: string): UrlObject => {
       const pathname = methodId
         ? "/[library]/login/[methodId]"
         : "/[library]/login";
@@ -19,6 +19,9 @@ export default function useLogin() {
       const newQuery = methodId ? { ...query, methodId } : query;
       // make sure that library is set (it is not already set on home page).
       newQuery.library = slug;
+
+      // sets the login error if there is one
+      if (error) newQuery.loginError = error;
 
       // if no redirect is set, redirect to the current page
       if (!newQuery[LOGIN_REDIRECT_QUERY_PARAM]) {
@@ -38,9 +41,11 @@ export default function useLogin() {
     [query, asPath, slug, isReady]
   );
 
+  // an error can be passed in from a previous login attempt to show on
+  // the login screen. It will be passed to the page as a url query param.
   const initLogin = React.useCallback(
-    (methodId?: string) => {
-      const urlObject = getLoginUrl(methodId);
+    (methodId?: string, error?: string) => {
+      const urlObject = getLoginUrl(methodId, error);
       if (!IS_SERVER) {
         // redirect to the login page
         push(urlObject, undefined, { shallow: true });

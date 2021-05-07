@@ -54,7 +54,10 @@ export default function withAppProps(
           : new ApplicationError(
               {
                 title: "App Startup Failure",
-                detail: "Static props could not be fetched.",
+                detail:
+                  e instanceof Error
+                    ? `${e.name}: ${e.message}`
+                    : "Unknown error occurred fetching static props",
                 status: 500
               },
               e

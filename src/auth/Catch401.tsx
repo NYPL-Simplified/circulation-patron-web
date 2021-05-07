@@ -13,7 +13,14 @@ const CatchFetchErrors: React.FC = ({ children }) => {
   const { isLoading } = useUser();
 
   function handle401() {
-    if (!isLoading) initLogin();
+    // if a clever error is detected, we set that in the url
+    // while redirecting
+    const cleverError = extractCleverError();
+    if (cleverError) {
+      initLogin(undefined, cleverError);
+    } else {
+      if (!isLoading) initLogin();
+    }
   }
 
   const config = {
@@ -34,3 +41,15 @@ const CatchFetchErrors: React.FC = ({ children }) => {
 };
 
 export default CatchFetchErrors;
+
+/**
+ * Attempts to find an error in the url hash that was set by
+ * Clever.
+ */
+function extractCleverError(): string | undefined {
+  const parsedHash = new URLSearchParams(
+    window.location.hash.substr(1) // skip the first char (#)
+  );
+  const errObj = parsedHash.get("error");
+  if (errObj) return JSON.parse(errObj).detail;
+}
