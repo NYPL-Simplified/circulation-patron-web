@@ -3,6 +3,7 @@ import Cookie from "js-cookie";
 import { AuthCredentials, OPDS1 } from "interfaces";
 import { IS_SERVER } from "utils/env";
 import { NextRouter, useRouter } from "next/router";
+import { SAML_LOGIN_QUERY_PARAM } from "utils/constants";
 
 /**
  * This hook:
@@ -99,13 +100,11 @@ function getUrlCredentials(router: NextRouter) {
   /* TODO: throw error if samlAccessToken and cleverAccessToken exist at the same time as this is an invalid state that shouldn't be reached */
   return IS_SERVER
     ? undefined
-    : lookForCleverCredentials(router) ?? lookForSamlCredentials(router);
+    : lookForCleverCredentials() ?? lookForSamlCredentials(router);
 }
 
 // check for clever credentials
-function lookForCleverCredentials(
-  router: NextRouter
-): AuthCredentials | undefined {
+function lookForCleverCredentials(): AuthCredentials | undefined {
   if (!IS_SERVER) {
     const accessTokenKey = "access_token=";
     if (window?.location?.hash) {
@@ -117,12 +116,10 @@ function lookForCleverCredentials(
           .split("&")[0];
         const token = `Bearer ${accessToken}`;
 
-        // clear the url hash
-        router.replace(
-          window.location.href.replace(window.location.hash, ""),
-          undefined,
-          { shallow: true }
-        );
+        // clear the url hash with replaceState
+        const url = new URL(window.location.href);
+        url.hash = "";
+        window.history.replaceState(null, document.title, url.toString());
 
         return { token, methodType: OPDS1.CleverAuthType };
       }
@@ -134,16 +131,17 @@ function lookForCleverCredentials(
 function lookForSamlCredentials(
   router: NextRouter
 ): AuthCredentials | undefined {
-  const { access_token: samlAccessToken } = router.query;
+  const { [SAML_LOGIN_QUERY_PARAM]: samlAccessToken } = router.query;
   if (samlAccessToken) {
-    // clear the browser query
-    if (!IS_SERVER) {
-      router.replace(
-        window.location.href.replace(window.location.search, ""),
-        undefined,
-        { shallow: true }
-      );
+    if (!IS_SERVER && typeof window !== "undefined") {
+      // clear the browser query using replaceState
+      const url = new URL(window.location.href);
+      if (url.searchParams.has(SAML_LOGIN_QUERY_PARAM)) {
+        url.searchParams.delete(SAML_LOGIN_QUERY_PARAM);
+        window.history.replaceState(null, document.title, url.toString());
+      }
     }
+
     return {
       token: `Bearer ${samlAccessToken}`,
       methodType: OPDS1.SamlAuthType
