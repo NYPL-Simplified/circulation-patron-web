@@ -3,12 +3,12 @@ import { jsx } from "theme-ui";
 import * as React from "react";
 import { truncateString, stripHTML } from "../utils/string";
 import {
-  getAuthors,
   bookIsBorrowable,
   bookIsFulfillable,
   bookIsReservable,
   bookIsReserved,
-  bookIsOnHold
+  bookIsOnHold,
+  getAuthorsString
 } from "../utils/book";
 import Lane from "./Lane";
 import Button, { NavButton } from "./Button";
@@ -117,6 +117,10 @@ export const BookListItem: React.FC<{
   // if the book exists in loans, use that version
   const loanedBook = loans?.find(loan => loan.id === collectionBook.id);
   const book = loanedBook ?? collectionBook;
+
+  // uses contributors if there are no authors
+  const authors = getAuthorsString(book);
+
   return (
     <li
       sx={{
@@ -160,10 +164,7 @@ export const BookListItem: React.FC<{
               </Text>
             )}
             <Text aria-label="Authors" sx={{ display: "block" }}>
-              {getAuthors(book, 2).join(", ")}
-              {book.authors?.length &&
-                book.authors.length > 2 &&
-                ` & ${book.authors?.length - 2} more`}
+              {authors}
             </Text>
           </div>
 

@@ -50,7 +50,7 @@ test("truncates authors", () => {
   );
   const utils = render(<BookList books={[longBook]} />);
 
-  expect(utils.getByText("one, two & 3 more"));
+  expect(utils.getByText("one, two, & 3 more"));
   expect(utils.queryByText("one, two, three")).toBeFalsy();
 });
 

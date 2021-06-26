@@ -38,6 +38,16 @@ describe("get authors", () => {
     expect(getAuthors(book)).toStrictEqual(someAuthors);
   });
 
+  test("accepts contributors with special characters", () => {
+    const book = {
+      ...bookFixture,
+      authors: [],
+      contributors: ["J&#xF3;zsef Illy"]
+    };
+
+    expect(getAuthors(book)).toStrictEqual(["J&#xF3;zsef Illy"]);
+  });
+
   test("returns 'Authors unknown' when neither authors nor contributors provided", () => {
     const book = {
       ...bookFixture,

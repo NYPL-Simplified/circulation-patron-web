@@ -155,9 +155,11 @@ function findRevokeUrl(links: OPDSLink[]) {
  */
 
 export function entryToBook(entry: OPDSEntry, feedUrl: string): AnyBook {
-  const authors = entry.authors.map(author => {
-    return author.name;
-  });
+  const authors = entry.authors
+    .map(author => {
+      return author.name;
+    })
+    .filter(name => name !== undefined);
 
   const contributors = entry.contributors.map(contributor => {
     return contributor.name;

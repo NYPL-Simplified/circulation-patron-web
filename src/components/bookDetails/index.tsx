@@ -23,6 +23,7 @@ import { fetchBook } from "dataflow/opds1/fetch";
 import useUser from "components/context/UserContext";
 import useBreadcrumbContext from "components/context/BreadcrumbContext";
 import { APP_CONFIG } from "utils/env";
+import { getAuthors } from "utils/book";
 
 export const BookDetails: React.FC = () => {
   const { query } = useRouter();
@@ -80,7 +81,7 @@ export const BookDetails: React.FC = () => {
 
             <Text variant="text.callouts.regular">
               by&nbsp;
-              {book.authors?.join(", ") ?? "Unknown"}
+              {getAuthors(book)?.join(", ") ?? "Unknown"}
             </Text>
             {APP_CONFIG.showMedium && <MediumIndicator book={book} />}
             <FulfillmentCard book={book} sx={{ mt: 3 }} />

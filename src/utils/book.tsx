@@ -28,6 +28,18 @@ export function getAuthors(book: AnyBook, lim?: number): string[] {
   return allAuth;
 }
 
+export function getAuthorsString(book: AnyBook): string {
+  const { authors } = book;
+  if (!authors) return "Unknown Author";
+  const authorsArray = getAuthors(book, 2);
+
+  if (authors.length > 2) {
+    authorsArray.push(`& ${authors.length - 2} more`);
+  }
+
+  return authorsArray.join(", ");
+}
+
 export function availabilityString(book: AnyBook) {
   const status = book.status;
 

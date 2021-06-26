@@ -362,6 +362,20 @@ test("includes open access links with fulfillable book", () => {
   });
 });
 
+test("does not allow authors with undefined name", () => {
+  mockConfig();
+  const author = factory.contributor({ name: undefined, role: "author" });
+  const entry = factory.entry({
+    ...basicInfo,
+    authors: [author],
+    links: [detailLink]
+  });
+
+  const book = entryToBook(entry, "http://test-url.com");
+
+  expect(book.authors).toStrictEqual([]);
+});
+
 test("extracts reserved book", () => {
   mockConfig();
   const borrowLink = factory.acquisitionLink({
